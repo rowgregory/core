@@ -151,7 +151,7 @@ const BeaconActions = () => {
         showToast({
           type: 'error',
           message: 'Update Failed',
-          description: error.message || 'Unable to update navigator settings'
+          description: error.data.message || 'Unable to update navigator settings'
         })
       )
     } finally {

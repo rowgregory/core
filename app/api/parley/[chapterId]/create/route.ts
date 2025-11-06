@@ -48,6 +48,11 @@ export async function POST(req: NextRequest, { params }: any) {
     })
 
     if (!recipient) {
+      await createLog('warn', 'Parley creation failed: Recipient not found', {
+        requesterId,
+        recipientId,
+        chapterId
+      })
       return NextResponse.json(
         {
           message: 'Recipient not found or not in the same chapter'
@@ -84,9 +89,60 @@ export async function POST(req: NextRequest, { params }: any) {
     })
 
     if (existingMeeting) {
+      // Determine who has the conflict
+      const conflictUser =
+        existingMeeting.requesterId === requesterId || existingMeeting.recipientId === requesterId
+          ? 'You'
+          : recipient.name || 'The other crew member'
+
+      const conflictWith =
+        existingMeeting.requesterId === requesterId
+          ? await prisma.user.findUnique({
+              where: { id: existingMeeting.recipientId },
+              select: { name: true }
+            })
+          : await prisma.user.findUnique({
+              where: { id: existingMeeting.requesterId },
+              select: { name: true }
+            })
+
+      await createLog('warn', 'Parley creation failed: Time conflict', {
+        requesterId,
+        recipientId,
+        scheduledAt,
+        existingMeetingId: existingMeeting.id
+      })
+
       return NextResponse.json(
         {
-          message: 'One of the participants already has a meeting scheduled at this time'
+          message: `${conflictUser} already ${conflictUser === 'You' ? 'have' : 'has'} a parley scheduled at ${new Date(scheduledAt).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })}${conflictWith ? ` with ${conflictWith.name}` : ''}. Please choose a different time.`
+        },
+        { status: 409 }
+      )
+    }
+
+    // Check for exact duplicate parley
+    const duplicateParley = await prisma.parley.findUnique({
+      where: {
+        requesterId_recipientId_scheduledAt: {
+          requesterId: requesterId,
+          recipientId: recipientId,
+          scheduledAt: scheduledDate
+        }
+      }
+    })
+
+    if (duplicateParley) {
+      await createLog('warn', 'Parley creation failed: Duplicate parley', {
+        requesterId,
+        recipientId,
+        scheduledAt,
+        existingParleyId: duplicateParley.id
+      })
+      return NextResponse.json(
+        {
+          message: 'A parley between you and this crew member at this time already exists',
+          parleyId: duplicateParley.id
         },
         { status: 409 }
       )
@@ -134,26 +190,6 @@ export async function POST(req: NextRequest, { params }: any) {
         }
       }
     })
-
-    // if (status === 'COMPLETED') {
-    //   notificationFactory.parley.completed(
-    //     parley.requester.name,
-    //     parley.scheduledAt,
-    //     chapterId,
-    //     parley.id,
-    //     userAuth.user.id,
-    //     parley.recipientId
-    //   )
-    // } else {
-    //   notificationFactory.parley.request(
-    //     parley.requester.name,
-    //     parley.scheduledAt,
-    //     chapterId,
-    //     parley.id,
-    //     userAuth.user.id,
-    //     parley.recipientId
-    //   )
-    // }
 
     const meetingTypes = [
       { value: 'DECK_TO_DECK', description: 'In-person meeting' },
@@ -218,6 +254,6 @@ export async function POST(req: NextRequest, { params }: any) {
       { status: 201 }
     )
   } catch (error) {
-    handleApiError({ error, req, action: 'create parley', sliceName: sliceParley })
+    return await handleApiError({ error, req, action: 'create parley', sliceName: sliceParley })
   }
 }

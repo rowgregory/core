@@ -106,7 +106,7 @@ const AnchorDrawer = () => {
         showToast({
           type: 'error',
           message: `${inputs?.isUpdating ? 'Update' : 'Create'} Anchor Failed`,
-          description: error.message || 'Unable to process request.'
+          description: error.data.message || 'Unable to process request.'
         })
       )
     }

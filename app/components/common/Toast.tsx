@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, CheckCircle, AlertCircle, Info, AlertTriangle } from 'lucide-react'
 // import UIfx from 'uifx'
-import { RootState, useAppDispatch, useAppSelector } from '@/app/redux/store'
+import { useAppDispatch, useToastSelector } from '@/app/redux/store'
 import { hideToast } from '@/app/redux/features/toastSlice'
 
 // Import your sound files
@@ -12,7 +12,7 @@ import { hideToast } from '@/app/redux/features/toastSlice'
 
 const Toast: React.FC = () => {
   const dispatch = useAppDispatch()
-  const { isVisible, type, message, description, duration } = useAppSelector((state: RootState) => state.toast)
+  const { isVisible, type, message, description, duration } = useToastSelector()
 
   useEffect(() => {
     if (isVisible) {

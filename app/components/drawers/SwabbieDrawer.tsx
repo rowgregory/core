@@ -63,7 +63,7 @@ const SwabbieDrawer = () => {
         showToast({
           type: 'error',
           message: `${isUpdating ? 'Update' : 'Create'} Swabbie Failed`,
-          description: error.message || 'Unable to process request.'
+          description: error.data.message || 'Unable to process request.'
         })
       )
     }
