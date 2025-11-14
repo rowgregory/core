@@ -12,7 +12,7 @@ const asyncFetch = async (apiPath: string, fetchOptions: any) => {
 
 const AdminLayout: FC<{ children: ReactNode }> = async ({ children }) => {
   const cookieStore = await cookies()
-  const session = await auth() // Add this
+  const session = await auth()
 
   const fetchOptions = {
     cache: 'no-store' as RequestCache,
@@ -20,7 +20,6 @@ const AdminLayout: FC<{ children: ReactNode }> = async ({ children }) => {
       'Content-Type': 'application/json',
       Cookie: cookieStore.toString(),
       'x-user': JSON.stringify({
-        // Add this
         id: session?.user?.id,
         email: session?.user?.email,
         name: session?.user?.name,

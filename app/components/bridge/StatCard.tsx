@@ -1,6 +1,6 @@
 import { useDashboardSelector } from '@/app/redux/store'
 import { AnimatePresence, motion } from 'framer-motion'
-import { TrendingUp } from 'lucide-react'
+import { TrendingDown, TrendingUp } from 'lucide-react'
 import HorizontalLoader from '../common/HorizontalLoader'
 import TooltipWrapper from '../common/TooltipWrapper'
 
@@ -28,9 +28,15 @@ const StatCard = ({ title, value, change, icon: Icon, color, tooltip, isFetching
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                className="text-green-400 text-sm font-medium flex items-center"
+                className={`${
+                  parseFloat(change) >= 0 ? 'text-green-400' : 'text-red-400'
+                } text-sm font-medium flex items-center`}
               >
-                <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+                {parseFloat(change) >= 0 ? (
+                  <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+                ) : (
+                  <TrendingDown className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+                )}
                 {change}
               </motion.span>
             )}

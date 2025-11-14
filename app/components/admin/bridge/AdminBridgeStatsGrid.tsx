@@ -8,7 +8,7 @@ const AdminBridgeStatsGrid: FC<{ data: any }> = ({ data }) => {
       <StatCard
         title="TOTAL MEMBERS"
         value={data?.totalMembers}
-        change={`+${data?.totalMembersChange}`}
+        change={data?.totalMembersChange}
         icon={Users}
         color="from-blue-500 to-blue-600"
         tooltip={`Total Members shows the count of all registered users in your system, including active members, trial users, and those with suspended, expired, or cancelled memberships. The monthly change represents the net difference for the current month, calculated by subtracting members who left (those whose status changed to suspended, expired, or cancelled) from new members who joined this month.`}
@@ -16,7 +16,7 @@ const AdminBridgeStatsGrid: FC<{ data: any }> = ({ data }) => {
       <StatCard
         title="TOTAL REVENUE"
         value={`$${Number(data?.totalRevenue).toLocaleString()}`}
-        change={`+${data?.totalRevenueChange}%`}
+        change={`${data?.totalRevenueChange}%`}
         icon={DollarSign}
         color="from-emerald-500 to-emerald-600"
         tooltip={`Total Revenue represents the sum of all business values from your anchors across all time periods. The monthly change shows the percentage difference between this month's revenue and last month's revenue. If there was no revenue last month, the change is shown as 100% for the current month's performance.`}
@@ -24,7 +24,7 @@ const AdminBridgeStatsGrid: FC<{ data: any }> = ({ data }) => {
       <StatCard
         title="CONVERSION RATE"
         value={`${data?.conversionRate}%`}
-        change={`+${data?.conversionChangePercent}%`}
+        change={`${data?.conversionChangePercent}%`}
         icon={Target}
         color="from-purple-500 to-purple-600"
         tooltip={`Conversion Rate measures the percentage of active users who have sent at least one treasure map. It's calculated by dividing users who sent maps by total active users, then multiplying by 100. The monthly change compares this month's conversion rate to last month's rate, showing the percentage improvement or decline in user engagement`}
@@ -32,7 +32,7 @@ const AdminBridgeStatsGrid: FC<{ data: any }> = ({ data }) => {
       <StatCard
         title="CHAPTER HEALTH"
         value={`${data?.chapterHealth}%`}
-        change={`+${data?.healthChangePercent}%`}
+        change={`${data?.healthChangePercent}%`}
         icon={Activity}
         color="from-pink-500 to-pink-600"
         tooltip={`Chapter Health measures overall community engagement by tracking users who participated in any activity (sending/receiving treasure maps, giving/receiving anchors, or requesting/receiving parleys) within the last 7 days. The score averages engagement rates across all three activity types, with equal weighting given to anchor activity, treasure map activity, and parley activity. The monthly change compares this month's engagement percentage to last month's, showing how community participation is trending.`}

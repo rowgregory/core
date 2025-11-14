@@ -32,7 +32,6 @@ export default async function RootLayout({
 
   try {
     const cookieStore = await cookies()
-    console.log('Fetching from:', `${process.env.NEXTAUTH_URL}/api/user/${chapterId}/get-users-list`)
 
     const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/${chapterId}/get-users-list`, {
       cache: 'no-store',
@@ -41,8 +40,6 @@ export default async function RootLayout({
         Cookie: cookieStore.toString()
       }
     })
-
-    console.log('Response status:', response.status)
 
     if (response.ok) {
       initialData = await response.json()

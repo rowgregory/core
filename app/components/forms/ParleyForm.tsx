@@ -234,12 +234,12 @@ const ParleyForm: FC<IForm> = ({
                 </h3>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-3">Have ye already parleyed?</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-3">Have you already met?</label>
                   <div className="grid grid-cols-2 gap-3">
                     {[
-                      { label: 'Aye', value: 'COMPLETED', description: 'Marks yer parley as completed' },
+                      { label: 'Yes', value: 'COMPLETED', description: 'Marks yer parley as completed' },
                       {
-                        label: 'Nay',
+                        label: 'No',
                         value: inputs?.status === 'CONFIRMED' ? 'CONFIRMED' : 'REQUESTED',
                         description:
                           inputs?.status === 'CONFIRMED'
@@ -288,22 +288,23 @@ const ParleyForm: FC<IForm> = ({
               <div className="flex flex-wrap gap-2 mb-3">
                 {[
                   // Past dates (for completed parleys)
-                  { label: 'Yesterday', days: -1, hour: 14, color: 'slate' },
-                  { label: 'Two Days Ago', days: -2, hour: 10, color: 'slate' },
-                  { label: 'Three Days Ago', days: -3, hour: 15, color: 'slate' },
-                  { label: 'Last Week', days: -7, hour: 11, color: 'slate' },
-                  { label: 'Two Weeks Ago', days: -14, hour: 13, color: 'slate' },
-                  { label: 'Last Month', days: -30, hour: 12, color: 'slate' },
+                  { label: 'Yesterday', days: -1, hour: 14, color: 'indigo' },
+                  { label: 'Two Days Ago', days: -2, hour: 10, color: 'teal' },
+                  { label: 'Three Days Ago', days: -3, hour: 15, color: 'blue' },
+                  { label: 'Four Days Ago', days: -4, hour: 15, color: 'cyan' },
+                  { label: 'Last Week', days: -7, hour: 11, color: 'purple' },
+                  { label: 'Two Weeks Ago', days: -14, hour: 13, color: 'indigo' },
+                  { label: 'Last Month', days: -30, hour: 12, color: 'teal' },
 
                   // Future dates (for upcoming parleys)
-                  { label: 'Later Today (5 PM)', days: 0, hour: 17, color: 'teal' },
-                  { label: 'Tomorrow Morning (9 AM)', days: 1, hour: 9, color: 'blue' },
-                  { label: 'Tomorrow Afternoon (2 PM)', days: 1, hour: 14, color: 'cyan' },
-                  { label: 'Two Days From Now (10 AM)', days: 2, hour: 10, color: 'purple' },
-                  { label: 'This Weekend (Saturday 10 AM)', days: 5, hour: 10, color: 'indigo' },
-                  { label: 'Next Week (Monday 11 AM)', days: 7, hour: 11, color: 'emerald' },
-                  { label: 'Two Weeks From Now', days: 14, hour: 14, color: 'emerald' },
-                  { label: 'Next Month', days: 30, hour: 10, color: 'emerald' }
+                  { label: 'Later Today (5 PM)', days: 0, hour: 17, color: 'blue' },
+                  { label: 'Tomorrow Morning (9 AM)', days: 1, hour: 9, color: 'cyan' },
+                  { label: 'Tomorrow Afternoon (2 PM)', days: 1, hour: 14, color: 'purple' },
+                  { label: 'Two Days From Now (10 AM)', days: 2, hour: 10, color: 'indigo' },
+                  { label: 'This Weekend (Saturday 10 AM)', days: 5, hour: 10, color: 'teal' },
+                  { label: 'Next Week (Monday 11 AM)', days: 7, hour: 11, color: 'blue' },
+                  { label: 'Two Weeks From Now', days: 14, hour: 14, color: 'cyan' },
+                  { label: 'Next Month', days: 30, hour: 10, color: 'purple' }
                 ].map((preset, index) => (
                   <button
                     key={index}
