@@ -91,8 +91,8 @@ export const metadata: Metadata = {
   },
 
   authors: [{ name: 'Sqysh' }],
-  creator: 'CORE',
-  publisher: 'CORE',
+  creator: 'Sqysh',
+  publisher: 'Sqysh',
 
   formatDetection: {
     email: false,
@@ -101,10 +101,6 @@ export const metadata: Metadata = {
   },
 
   metadataBase: new URL('https://www.coastal-referral-exchange.com'), // Replace with your actual URL
-
-  alternates: {
-    canonical: 'https://www.coastal-referral-exchange.com'
-  },
 
   openGraph: {
     title: 'CORE - Professional Networking & Business Connections',
