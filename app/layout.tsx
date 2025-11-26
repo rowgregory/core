@@ -100,13 +100,13 @@ export const metadata: Metadata = {
     telephone: false
   },
 
-  metadataBase: new URL('https://www.coastal-referral-exchange.com'), // Replace with your actual URL
+  metadataBase: new URL('https://coastal-referral-exchange.com'), // Replace with your actual URL
 
   openGraph: {
     title: 'CORE - Professional Networking & Business Connections',
     description:
       'Discover meaningful connections with a fresh take on networking. Match, collaborate, and grow your influence on a platform built for real interactions.',
-    url: 'https://www.coastal-referral-exchange.com',
+    url: 'https://coastal-referral-exchange.com',
     siteName: 'CORE',
     images: [
       {
