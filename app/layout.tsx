@@ -6,6 +6,7 @@ import { SessionProvider } from 'next-auth/react'
 import { Sora } from 'next/font/google'
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://coastal-referral-exchange.com'),
   title: 'CORE - Professional Networking & Business Connections',
   description:
     'Discover meaningful connections with a fresh take on networking. Match, collaborate, and grow your influence on a platform built for real interactions. Join professionals building authentic business relationships.',
@@ -100,7 +101,9 @@ export const metadata: Metadata = {
     telephone: false
   },
 
-  metadataBase: new URL('https://coastal-referral-exchange.com'), // Replace with your actual URL
+  alternates: {
+    canonical: 'https://coastal-referral-exchange.com'
+  },
 
   openGraph: {
     title: 'CORE - Professional Networking & Business Connections',
