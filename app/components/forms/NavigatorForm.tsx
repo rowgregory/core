@@ -202,6 +202,12 @@ const NavigatorForm: FC<INavigatorForm> = ({
           >
             {/* Admin Settings */}
             <Switch name="isAdmin" checked={inputs.isAdmin ?? false} onChange={handleToggle} label="Admin privileges" />
+            <Switch
+              name="isMembership"
+              checked={inputs.isMembership ?? false}
+              onChange={handleToggle}
+              label="Membership privileges"
+            />
           </motion.div>
         </form>
       </div>

@@ -24,8 +24,7 @@ const MemberLayout: FC<{ children: ReactNode }> = async ({ children }) => {
         email: session?.user?.email,
         name: session?.user?.name,
         role: session?.user?.role,
-        isAdmin: session?.user?.isAdmin,
-        isSuperUser: session?.user?.isSuperUser
+        isAdmin: session?.user?.isAdmin
       })
     }
   }

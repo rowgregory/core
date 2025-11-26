@@ -3,7 +3,7 @@ import { X } from 'lucide-react'
 import { addParleyToState, setCloseParleyDrawer, updateParleyInState } from '@/app/redux/features/parleySlice'
 import { useAppDispatch, useFormSelector, useParleySelector, useUserSelector } from '@/app/redux/store'
 import Backdrop from '../common/Backdrop'
-import { createFormActions } from '@/app/redux/features/formSlice'
+import { clearErrors, clearInputs, createFormActions } from '@/app/redux/features/formSlice'
 import Drawer from '../common/Drawer'
 import { useCreateParleyMutation, useUpdateParleyMutation } from '@/app/redux/services/parleyApi'
 import { showToast } from '@/app/redux/features/toastSlice'
@@ -54,6 +54,9 @@ const ParleyDrawer = () => {
       }
 
       onClose()
+
+      dispatch(clearInputs({ formName: 'parleyForm' }))
+      dispatch(clearErrors({ formName: 'parleyForm' }))
 
       dispatch(
         showToast({

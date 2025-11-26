@@ -2,7 +2,7 @@
 
 import useCustomPathname from '@/hooks/useCustomPathname'
 import { useSession } from 'next-auth/react'
-import React, { FC, ReactNode, useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import getCurrentPageId from '../lib/utils/common/getCurrentPageId'
 import { adminNavLinks } from '../lib/constants/navigation/adminNavLinks'
 import MobileNavigationDrawer from '../components/drawers/MobileNavigationDrawer'
@@ -16,13 +16,9 @@ import { setTreasureMaps } from '../redux/features/treasureMapSlice'
 import { setAnchors } from '../redux/features/anchorSlice'
 import { setRendezvous } from '../redux/features/rendezvousSlice'
 import { setHydrateDashboard } from '../redux/features/dashboardSlice'
+import { ILayoutClient } from '@/types/common'
 
-interface IAdminLayoutClient {
-  data: any
-  children: ReactNode
-}
-
-const AdminLayoutClient: FC<IAdminLayoutClient> = ({ data, children }) => {
+const AdminLayoutClient: FC<ILayoutClient> = ({ data, children }) => {
   const [isNavigationCollapsed, setIsNavigationCollapsed] = useState(false)
   const path = useCustomPathname()
   const session = useSession()

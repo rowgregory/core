@@ -83,6 +83,7 @@ export const metadata: Metadata = {
   ],
 
   other: {
+    'fb:app_id': '2265167933990680',
     'og:type': 'website',
     'og:locale': 'en_US',
     'business:contact_data:street_address': '25 N Common St',
@@ -153,7 +154,7 @@ export const metadata: Metadata = {
   icons: {
     icon: [{ url: '/favicon.ico' }, { url: '/icon.png', type: 'image/png', sizes: '32x32' }],
     shortcut: '/favicon.ico',
-    apple: [{ url: '/apple-icon.png' }, { url: '/apple-icon-180x180.png', sizes: '180x180', type: 'image/png' }]
+    apple: [{ url: '/icon-180.png' }, { url: '/icon-180.png', sizes: '180x180', type: 'image/png' }]
   },
 
   manifest: '/manifest.json',

@@ -11,8 +11,19 @@ export async function PUT(req: NextRequest, { params }: any) {
     const userId = parameters.userId
 
     const body = await req.json()
-    const { name, email, phone, company, industry, membershipStatus, joinedAt, expiresAt, isAdmin, rejectionReason } =
-      body
+    const {
+      name,
+      email,
+      phone,
+      company,
+      industry,
+      membershipStatus,
+      joinedAt,
+      expiresAt,
+      isAdmin,
+      isMembership,
+      rejectionReason
+    } = body
 
     // Check if user exists and user has permission to update
     const existingUser = await prisma.user.findFirst({
@@ -42,6 +53,7 @@ export async function PUT(req: NextRequest, { params }: any) {
       joinedAt,
       expiresAt,
       isAdmin,
+      isMembership,
       role: isAdmin ? 'ADMIN' : 'MEMBER',
       ...(rejectionReason && { rejectionReason })
     }

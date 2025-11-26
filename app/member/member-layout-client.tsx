@@ -2,7 +2,7 @@
 
 import useCustomPathname from '@/hooks/useCustomPathname'
 import { useSession } from 'next-auth/react'
-import React, { FC, ReactNode, useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import getCurrentPageId from '../lib/utils/common/getCurrentPageId'
 import { memberNavLinks } from '../lib/constants/navigation/memberNavLinks'
 import { useAppDispatch } from '../redux/store'
@@ -15,13 +15,10 @@ import { setParleys } from '../redux/features/parleySlice'
 import { setTreasureMaps } from '../redux/features/treasureMapSlice'
 import { setAnchors } from '../redux/features/anchorSlice'
 import { setRendezvous } from '../redux/features/rendezvousSlice'
+import { setHydrateDashboard } from '../redux/features/dashboardSlice'
+import { ILayoutClient } from '@/types/common'
 
-interface IMemberLayoutClient {
-  data: any
-  children: ReactNode
-}
-
-const MemberLayoutClient: FC<IMemberLayoutClient> = ({ data, children }) => {
+const MemberLayoutClient: FC<ILayoutClient> = ({ data, children }) => {
   const [isNavigationCollapsed, setIsNavigationCollapsed] = useState(false)
   const path = useCustomPathname()
   const session = useSession()
@@ -36,6 +33,7 @@ const MemberLayoutClient: FC<IMemberLayoutClient> = ({ data, children }) => {
       dispatch(setTreasureMaps(data?.treasureMaps))
       dispatch(setAnchors(data?.anchors))
       dispatch(setRendezvous(data?.rendezvous))
+      dispatch(setHydrateDashboard(data))
     }
   }, [dispatch, data])
 

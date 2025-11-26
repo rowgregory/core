@@ -31,7 +31,6 @@ const AdminLayout: FC<{ children: ReactNode }> = async ({ children }) => {
   }
 
   const adminOverviewResponse = await asyncFetch('overview', fetchOptions)
-  console.log('Admin overview response status:', adminOverviewResponse.status)
 
   if (!adminOverviewResponse.ok) {
     const errorText = await adminOverviewResponse.text()
