@@ -41,6 +41,7 @@ export async function getMyProfile(req: NextRequest, chapterId: string, userId: 
         createdAt: true,
         updatedAt: true,
         isAdmin: true,
+        isMembership: true,
         isSuperUser: true,
         isLicensed: true,
 

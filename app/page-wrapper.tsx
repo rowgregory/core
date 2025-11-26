@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect } from 'react'
+import React, { ReactNode } from 'react'
 import Toast from './components/common/Toast'
 import Header from './components/header/Header'
 import useCustomPathname from '@/hooks/useCustomPathname'
@@ -11,36 +11,19 @@ import SwabbieDrawer from './components/drawers/SwabbieDrawer'
 import TreasureMapDrawer from './components/drawers/TreasureMapDrawer'
 import GrogDrawer from './components/drawers/GrogDrawer'
 import StowawayDrawer from './components/drawers/StowawayDrawer'
-import { useAppDispatch } from './redux/store'
-import { showToast } from './redux/features/toastSlice'
-import { setHydrateUsers } from './redux/features/userSlice'
 import Footer from './components/Footer'
 import NavigationDrawer from './components/NavigationDrawer'
+import { useGetUsersQuery } from './redux/services/userApi'
+import { chapterId } from './lib/constants/api/chapterId'
 
 interface PageWrapperProps {
-  children: React.ReactNode
-  initialData?: any
-  error?: { status: number; message: string } | null
+  children: ReactNode
 }
 
-export default function PageWrapper({ children, initialData, error }: PageWrapperProps) {
-  const dispatch = useAppDispatch()
+export default function PageWrapper({ children }: PageWrapperProps) {
   const path = useCustomPathname()
   const showLink = !['/admin', '/member', '/swabbie/port', '/auth/custom-callback'].some((str) => path.includes(str))
-
-  useEffect(() => {
-    if (error) {
-      dispatch(
-        showToast({
-          type: 'error',
-          message: 'Failed to load data',
-          description: error.message
-        })
-      )
-    } else if (initialData) {
-      dispatch(setHydrateUsers(initialData?.users))
-    }
-  }, [dispatch, initialData, error])
+  useGetUsersQuery({ chapterId })
 
   return (
     <>

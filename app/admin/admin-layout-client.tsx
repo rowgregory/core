@@ -15,6 +15,7 @@ import { setParleys } from '../redux/features/parleySlice'
 import { setTreasureMaps } from '../redux/features/treasureMapSlice'
 import { setAnchors } from '../redux/features/anchorSlice'
 import { setRendezvous } from '../redux/features/rendezvousSlice'
+import { setHydrateDashboard } from '../redux/features/dashboardSlice'
 
 interface IAdminLayoutClient {
   data: any
@@ -36,6 +37,7 @@ const AdminLayoutClient: FC<IAdminLayoutClient> = ({ data, children }) => {
       dispatch(setTreasureMaps(data?.treasureMaps))
       dispatch(setAnchors(data?.anchors))
       dispatch(setRendezvous(data?.rendezvous))
+      dispatch(setHydrateDashboard(data))
     }
   }, [dispatch, data])
 

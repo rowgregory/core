@@ -7,16 +7,12 @@ import PageWrapper from './page-wrapper'
 
 interface ReduxWrapperProps {
   children: React.ReactNode
-  initialData?: any
-  error?: { status: number; message: string } | null
 }
 
-export default function ReduxWrapper({ children, initialData, error }: ReduxWrapperProps) {
+export default function ReduxWrapper({ children }: ReduxWrapperProps) {
   return (
     <Provider store={store}>
-      <PageWrapper initialData={initialData} error={error}>
-        {children}
-      </PageWrapper>
+      <PageWrapper>{children}</PageWrapper>
     </Provider>
   )
 }

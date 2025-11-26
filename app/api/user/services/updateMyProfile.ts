@@ -26,6 +26,7 @@ export async function updateMyProfile(req: NextRequest, chapterId: string, userI
       interests,
       isPublic,
       isAdmin,
+      isMembership,
       profileImage,
       profileImageFilename,
       bio,
@@ -139,6 +140,7 @@ export async function updateMyProfile(req: NextRequest, chapterId: string, userI
     if (interests !== undefined) updateData.interests = interests
     if (isPublic !== undefined) updateData.isPublic = Boolean(isPublic)
     if (isAdmin !== undefined) updateData.isAdmin = Boolean(isAdmin)
+    if (isMembership !== undefined) updateData.isMembership = Boolean(isMembership)
     if (profileImage !== undefined) updateData.profileImage = profileImage
     if (profileImageFilename !== undefined) updateData.profileImageFilename = profileImageFilename
     if (bio !== undefined) updateData.bio = bio
@@ -201,6 +203,7 @@ export async function updateMyProfile(req: NextRequest, chapterId: string, userI
         isPublic: true,
         isActive: true,
         isAdmin: true,
+        isMembership: true,
         isSuperUser: true,
         membershipStatus: true,
         joinedAt: true,

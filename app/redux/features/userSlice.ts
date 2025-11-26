@@ -1,6 +1,7 @@
 import { PayloadAction, Reducer, createSlice } from '@reduxjs/toolkit'
 import { User, UserStats } from '@/types/user'
 import { initialUserFormState } from '@/app/lib/constants/user/initialUserFormState'
+import { userApi } from '../services/userApi'
 
 export interface UserState {
   // Core data
@@ -114,6 +115,21 @@ export const userSlice = createSlice({
     setHydrateUsers: (state, { payload }) => {
       state.users = payload
     }
+  },
+  extraReducers: (builder) => {
+    builder
+      .addMatcher(userApi.endpoints.getUsers.matchFulfilled, (state, { payload }: any) => {
+        state.users = payload.users
+        state.loading = false
+      })
+
+      .addMatcher(
+        (action) => action.type.endsWith('rejected') && action.payload?.data?.sliceName === 'userApi',
+        (state, { payload }: any) => {
+          state.loading = false
+          state.error = payload?.data?.message
+        }
+      )
   }
 })
 
