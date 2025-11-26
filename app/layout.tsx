@@ -83,7 +83,6 @@ export const metadata: Metadata = {
   ],
 
   other: {
-    'fb:app_id': '2265167933990680',
     'og:type': 'website',
     'og:locale': 'en_US',
     'business:contact_data:street_address': '25 N Common St',
@@ -202,6 +201,9 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
+      <head>
+        <meta property="fb:app_id" content="2265167933990680" />
+      </head>
       <body className={`${sora.variable} antialiased`}>
         <SessionProvider session={session}>
           <ReduxWrapper>{children}</ReduxWrapper>
