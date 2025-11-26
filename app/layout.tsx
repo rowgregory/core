@@ -102,6 +102,10 @@ export const metadata: Metadata = {
 
   metadataBase: new URL('https://coastal-referral-exchange.com'), // Replace with your actual URL
 
+  alternates: {
+    canonical: 'https://www.coastal-referral-exchange.com'
+  },
+
   openGraph: {
     title: 'CORE - Professional Networking & Business Connections',
     description:
