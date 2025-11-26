@@ -83,8 +83,6 @@ export const metadata: Metadata = {
   ],
 
   other: {
-    'og:type': 'website',
-    'og:locale': 'en_US',
     'business:contact_data:street_address': '25 N Common St',
     'business:contact_data:locality': 'Lynn',
     'business:contact_data:region': 'Massachusetts',
