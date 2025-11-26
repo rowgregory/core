@@ -111,6 +111,7 @@ model User {
   location                   String?            @default("")
   tempId                     String             @default("")
   isAdmin                    Boolean            @default(false)
+  isMembership               Boolean            @default(false)
   isSuperUser                Boolean            @default(false)
   bio                        String?            @default("")
   businessLicenseNumber      String?            @default("")
