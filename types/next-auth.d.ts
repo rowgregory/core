@@ -1,30 +1,40 @@
-import { DefaultSession, DefaultUser } from 'next-auth'
+import { DefaultSession } from 'next-auth'
+import { AdapterUser as BaseAdapterUser } from '@auth/core/adapters'
 
 declare module 'next-auth' {
+  interface User {
+    id: string
+    role?: string
+    isAdmin?: boolean
+    isSuperUser?: boolean
+    membershipStatus?: string
+  }
+
   interface Session {
     user: {
       id: string
-      email: string
-      name?: string
-      role: string
-      isAdmin: boolean
-      isSuperUser: boolean
+      role?: string
+      isAdmin?: boolean
+      isSuperUser?: boolean
     } & DefaultSession['user']
-  }
-
-  interface User extends DefaultUser {
-    id: string
-    role: string
-    isAdmin: boolean
-    isSuperUser: boolean
   }
 }
 
-declare module 'next-auth/jwt' {
+declare module '@auth/core/adapters' {
+  interface AdapterUser extends BaseAdapterUser {
+    role?: string
+    isAdmin?: boolean
+    isSuperUser?: boolean
+    membershipStatus?: string
+    lastLoginAt?: Date
+  }
+}
+
+declare module '@auth/core/jwt' {
   interface JWT {
-    userId: string
-    role: string
-    isAdmin: boolean
-    isSuperUser: boolean
+    userId?: string
+    role?: string
+    isAdmin?: boolean
+    isSuperUser?: boolean
   }
 }
