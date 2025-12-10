@@ -3,28 +3,28 @@ import React from 'react'
 import Backdrop from '../common/Backdrop'
 import Drawer from '../common/Drawer'
 import { X } from 'lucide-react'
-import { useSession } from 'next-auth/react'
-import { useAnchorSelector, useAppDispatch, useFormSelector } from '@/app/redux/store'
+import { useAnchorSelector, useAppDispatch, useFormSelector, useUserSelector } from '@/app/redux/store'
 import { addAnchorToState, setCloseAnchorDrawer, updateAnchorInState } from '@/app/redux/features/anchorSlice'
 import { useCreateAnchorMutation, useUpdateAnchorMutation } from '@/app/redux/services/anchorApi'
-import { clearInputs, createFormActions } from '@/app/redux/features/formSlice'
+import { createFormActions, resetForm } from '@/app/redux/features/formSlice'
 import AnchorForm from '../forms/AnchorForm'
 import { chapterId } from '@/app/lib/constants/api/chapterId'
 import { showToast } from '@/app/redux/features/toastSlice'
 import validateAnchorForm from '../forms/validations/validateAnchorForm'
+import { recomputeAnchorCard } from '@/app/redux/features/dashboardSlice'
+import { recomputeDashboardStats } from '@/app/lib/utils/common/recomputeDashboardStats'
 
 const AnchorDrawer = () => {
-  const session = useSession()
   const dispatch = useAppDispatch()
   const onClose = () => dispatch(setCloseAnchorDrawer())
   const { anchorDrawer } = useAnchorSelector()
+  const { user } = useUserSelector()
   const { anchorForm } = useFormSelector()
   const inputs = anchorForm?.inputs
   const errors = anchorForm?.errors
   const [createAnchor, { isLoading: isCreating }] = useCreateAnchorMutation()
   const [updateAnchor, { isLoading: isUpdating }] = useUpdateAnchorMutation()
   const isLoading = isCreating || isUpdating
-  const user = session?.data?.user
 
   const { handleInput, setErrors } = createFormActions('anchorForm', dispatch)
 
@@ -80,11 +80,13 @@ const AnchorDrawer = () => {
       } else {
         const created = await createAnchor(submitData).unwrap()
         dispatch(addAnchorToState(created?.anchor))
+        dispatch(recomputeAnchorCard(created?.anchor))
       }
 
-      onClose()
+      recomputeDashboardStats({ id: user?.id, isAdmin: user?.isAdmin })
 
-      dispatch(clearInputs({ formName: 'anchorForm' }))
+      dispatch(resetForm('anchorForm'))
+      onClose()
 
       // Determine participant types for success message
       const giverType = isExternalGiver ? 'external' : 'internal'
@@ -128,7 +130,7 @@ const AnchorDrawer = () => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2, duration: 0.4 }}
               >
-                <h2 className="text-xl font-bold bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">
+                <h2 className="text-xl font-bold bg-linear-to-r from-teal-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">
                   Drop Anchor
                 </h2>
                 <p className="text-sm text-gray-500 mt-1">Thank a fellow navigator for their successful treasure map</p>

@@ -91,8 +91,8 @@ const SwabbieCard: FC<{ swabbie: any; index: number }> = ({ swabbie, index }) =>
           <div
             className={`h-12 w-12 rounded-full flex items-center justify-center shadow-lg ${
               isRejected
-                ? 'bg-gradient-to-r from-red-600 to-red-700 shadow-red-900/50'
-                : 'bg-gradient-to-r from-cyan-600 to-blue-700 shadow-cyan-900/50'
+                ? 'bg-linear-to-r from-red-600 to-red-700 shadow-red-900/50'
+                : 'bg-linear-to-r from-cyan-600 to-blue-700 shadow-cyan-900/50'
             }`}
           >
             <Sailboat className="h-6 w-6 text-white" />
@@ -592,14 +592,14 @@ const SwabbieCard: FC<{ swabbie: any; index: number }> = ({ swabbie, index }) =>
           </div>
 
           <div className="space-y-2 max-h-32 overflow-y-auto">
-            {user.signals.map((signal: any, index) => (
+            {user.signals.map((signal: { createdAt: string; message: string; chapterId: string }, index: number) => (
               <div key={index} className="bg-slate-800/30 rounded-lg p-3 border border-slate-600/20">
                 <div className="flex items-start justify-between mb-1">
                   <span className="text-xs text-amber-300 font-medium">To Quartermaster</span>
                   <span className="text-xs text-slate-400">{new Date(signal.createdAt).toLocaleDateString()}</span>
                 </div>
 
-                <p className="text-xs text-slate-300 break-words">{signal.message}</p>
+                <p className="text-xs text-slate-300 wrap-break-word">{signal.message}</p>
 
                 {signal.chapterId && (
                   <div className="text-xs text-slate-500 mt-1">Chapter: {signal.chapterId.slice(-8)}</div>

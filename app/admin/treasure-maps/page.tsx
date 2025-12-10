@@ -139,11 +139,11 @@ const AdminTreasureMaps = () => {
           <EmptyState
             searchQuery={searchQuery}
             statusFilter={statusFilter}
-            typeFilter={''}
+            typeFilter="all"
             title="Treasure Map"
             advice="Mark the spot — help other navigators discover the X"
             func={setOpenTreasureMapDrawer}
-            action="Treasure Map"
+            action="Send Treasure Map"
           />
         )}
       </motion.div>

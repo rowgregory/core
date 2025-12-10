@@ -29,9 +29,9 @@ const MainSection: FC<{ user: User | null; session: any }> = ({ user, session })
       <div className="space-y-6">
         {/* Weekly Treasure Wishlist */}
         {user?.weeklyTreasureWishlist && (
-          <div className="bg-gradient-to-r from-emerald-500/20 to-green-500/20 border border-emerald-400/30 rounded-xl p-6 shadow-lg">
+          <div className="bg-linear-to-r from-emerald-500/20 to-green-500/20 border border-emerald-400/30 rounded-xl p-6 shadow-lg">
             <div className="flex items-start gap-3">
-              <div className="p-2 bg-gradient-to-br from-emerald-500 to-green-500 rounded-lg flex-shrink-0">
+              <div className="p-2 bg-linear-to-br from-emerald-500 to-green-500 rounded-lg shrink-0">
                 <Star className="w-5 h-5 text-white" />
               </div>
               <div className="flex-1">
@@ -69,12 +69,12 @@ const MainSection: FC<{ user: User | null; session: any }> = ({ user, session })
         )}
 
         {/* Career Achievements */}
-        {user?.careerAchievements && user.careerAchievements.length > 0 && (
+        {user?.careerAchievements && Array.isArray(user.careerAchievements) && user.careerAchievements.length > 0 && (
           <div className="bg-slate-800 rounded-xl p-6 shadow-lg border border-slate-700 mb-6">
             <h3 className="font-semibold text-white text-lg mb-4">Career Achievements</h3>
 
             <div className="space-y-3">
-              {user.careerAchievements.map((careerAchievement: any, index: number) => (
+              {(user.careerAchievements as Array<{ title: string; year: string }>).map((careerAchievement, index) => (
                 <motion.div
                   key={index}
                   whileHover={{ x: 4 }}
@@ -126,7 +126,7 @@ const MainSection: FC<{ user: User | null; session: any }> = ({ user, session })
               {/* Link Preview */}
               {post.link && (
                 <div className="bg-slate-700/50 rounded-lg overflow-hidden mb-4">
-                  <div className="h-40 bg-gradient-to-br from-slate-600 to-slate-700 flex items-center justify-center">
+                  <div className="h-40 bg-linear-to-br from-slate-600 to-slate-700 flex items-center justify-center">
                     <div className="text-center text-slate-400">
                       <div className="text-2xl font-bold">Sqysh</div>
                       <Play className="w-12 h-12 mx-auto mt-2" />

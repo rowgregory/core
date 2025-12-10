@@ -30,7 +30,7 @@ export interface IForm {
   handleToggle?: any
   uploadingVideo?: boolean
   isUpdating?: boolean
-  user?: User | null | undefined
+  user?: User | null
   users?: User[] | null | undefined
   ref?: any
 }

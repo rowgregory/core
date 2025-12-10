@@ -134,7 +134,7 @@ const RightSidebar: FC<{ user: User | null; setSelectedIndex: any; setLightboxOp
         <div className="grid grid-cols-6 gap-2">
           {users?.map((friend) => (
             <MotionLink
-              href={`/navigators/${friend.id}/profile`}
+              href={`/navigators/${friend.id}`}
               key={friend.id}
               whileHover={{ scale: 1.1 }}
               className="w-8 h-8 rounded-full overflow-hidden cursor-pointer"

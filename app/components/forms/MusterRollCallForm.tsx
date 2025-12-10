@@ -264,7 +264,7 @@ const MusterRollCallForm: React.FC = () => {
                   >
                     {/* Member Info */}
                     <div className="flex items-center space-x-4">
-                      <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center">
+                      <div className="flex-shrink-0 w-12 h-12 bg-linear-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center">
                         <span className="text-white font-semibold">
                           {member.name
                             .split(' ')

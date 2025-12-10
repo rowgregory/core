@@ -22,6 +22,7 @@ export async function PUT(req: NextRequest, { params }: any) {
       expiresAt,
       isAdmin,
       isMembership,
+      isPublic,
       rejectionReason
     } = body
 
@@ -54,6 +55,7 @@ export async function PUT(req: NextRequest, { params }: any) {
       expiresAt,
       isAdmin,
       isMembership,
+      isPublic,
       role: isAdmin ? 'ADMIN' : 'MEMBER',
       ...(rejectionReason && { rejectionReason })
     }

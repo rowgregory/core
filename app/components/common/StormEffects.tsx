@@ -30,7 +30,7 @@ const StormEffects = () => {
             repeatDelay: 3,
             times: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 1]
           }}
-          className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-blue-300/20 via-cyan-200/10 to-transparent pointer-events-none"
+          className="absolute top-0 left-0 w-full h-full bg-linear-to-b from-blue-300/20 via-cyan-200/10 to-transparent pointer-events-none"
         />
 
         {/* Rain effect */}
@@ -38,7 +38,7 @@ const StormEffects = () => {
           {[...Array(50)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute w-px h-16 bg-gradient-to-b from-cyan-200/60 to-transparent"
+              className="absolute w-px h-16 bg-linear-to-b from-cyan-200/60 to-transparent"
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `-10%`
@@ -62,7 +62,7 @@ const StormEffects = () => {
           <motion.div
             animate={{ x: [-100, 0] }}
             transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-            className="absolute bottom-0 left-0 w-[200%] h-full bg-gradient-to-r from-cyan-900/20 via-slate-700/30 to-cyan-900/20"
+            className="absolute bottom-0 left-0 w-[200%] h-full bg-linear-to-r from-cyan-900/20 via-slate-700/30 to-cyan-900/20"
             style={{
               clipPath: 'polygon(0 60%, 25% 80%, 50% 60%, 75% 85%, 100% 65%, 100% 100%, 0% 100%)'
             }}

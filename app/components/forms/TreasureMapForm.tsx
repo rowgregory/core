@@ -1,49 +1,22 @@
-import React from 'react'
+import React, { FC } from 'react'
 import { AlertCircle, Building2, CheckCircle, FileText, Mail, MapPin, Phone, User } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useAppDispatch, useUserSelector } from '@/app/redux/store'
 import { setInputs } from '@/app/redux/features/formSlice'
 import getServiceTags from '@/app/lib/constants/navigator/getServiceTags'
+import { IForm } from '@/types/forms'
+import genericNoteOptions from '@/app/lib/constants/treasure-map/genericNoteOptions'
 
-const genericNoteOptions = [
-  'This is time-sensitive',
-  'Flexible timeline',
-  'Budget-conscious preferred',
-  'Looking for long-term partnership',
-  'One-time project',
-  'Local provider preferred',
-  'Remote service preferred',
-  'Need detailed proposal first',
-  'Previous positive experience',
-  'New to this service',
-  'High quality/premium service desired',
-  'References would be helpful',
-
-  'This treasure be time-sensitive, matey!',
-  'Flexible timeline, whenever the wind blows right',
-  'Seeking budget-friendly treasure, not breaking the bank',
-  'Looking for a long-term crew partnership',
-  'This be a one-time voyage',
-  'Local port preferred, no long journeys',
-  'Remote service works, can sail from afar',
-  'Need a detailed map before we set sail',
-  'Had smooth sailing with similar services before',
-  'New to these waters, need a trustworthy guide',
-  'Premium quality service desired, spare no expense',
-  'References from other captains would be helpful',
-  'All hands on deck - urgent mission!',
-  'Seeking the finest treasure in the seven seas',
-  'Need someone who knows these treacherous waters',
-  'Looking for a crew member who speaks plain English',
-  'This bounty may lead to more adventures',
-  'Discretion required - keep this treasure secret',
-  'Fair winds and following seas timeline',
-  'Seeking a seasoned navigator for this quest',
-  'Small treasure hunt, quick and simple',
-  'Major expedition requiring experienced crew'
-]
-
-const TreasureMapForm = ({ inputs, errors, handleInput, isLoading, handleSubmit, user, isUpdating, onClose }: any) => {
+const TreasureMapForm: FC<IForm> = ({
+  inputs,
+  errors,
+  handleInput,
+  isLoading,
+  handleSubmit,
+  user,
+  isUpdating,
+  onClose
+}) => {
   const { users } = useUserSelector()
   const dispatch = useAppDispatch()
 
@@ -151,10 +124,10 @@ const TreasureMapForm = ({ inputs, errors, handleInput, isLoading, handleSubmit,
                     </label>
                     <div className="w-full px-4 py-3 bg-gray-700/30 border border-gray-600 rounded-lg">
                       <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 bg-gradient-to-r from-teal-500 via-cyan-500 to-blue-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                        <div className="w-10 h-10 bg-linear-to-r from-teal-500 via-cyan-500 to-blue-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
                           {user?.name
                             ?.split(' ')
-                            .map((n: any[]) => n[0])
+                            .map((n) => n[0])
                             .join('')}
                         </div>
                         <div>
@@ -209,10 +182,10 @@ const TreasureMapForm = ({ inputs, errors, handleInput, isLoading, handleSubmit,
                     </label>
                     <div className="w-full px-4 py-3 bg-gray-700/30 border border-gray-600 rounded-lg">
                       <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 bg-gradient-to-r from-purple-500 via-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                        <div className="w-10 h-10 bg-linear-to-r from-purple-500 via-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
                           {user?.name
                             ?.split(' ')
-                            .map((n: any[]) => n[0])
+                            .map((n) => n[0])
                             .join('')}
                         </div>
                         <div>
@@ -577,7 +550,7 @@ const TreasureMapForm = ({ inputs, errors, handleInput, isLoading, handleSubmit,
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             disabled={isLoading}
-            className="flex-1 px-6 py-3 bg-gradient-to-r from-teal-600 via-cyan-600 to-blue-600 text-white rounded-lg hover:from-teal-500 hover:to-blue-500 transition-all flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 px-6 py-3 bg-linear-to-r from-teal-600 via-cyan-600 to-blue-600 text-white rounded-lg hover:from-teal-500 hover:to-blue-500 transition-all flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? (
               <>

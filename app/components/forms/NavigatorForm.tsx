@@ -39,11 +39,11 @@ const NavigatorForm: FC<INavigatorForm> = ({
             <Input
               name="name"
               label="Full Name"
-              value={inputs.name || ''}
+              value={inputs?.name || ''}
               onChange={handleInput}
               placeholder="Enter member's full name"
               icon={<User className="w-5 h-5" />}
-              error={errors.name}
+              error={errors?.name}
               isRequired
             />
 
@@ -52,11 +52,11 @@ const NavigatorForm: FC<INavigatorForm> = ({
               name="email"
               type="email"
               label="Email Address"
-              value={inputs.email || ''}
+              value={inputs?.email || ''}
               onChange={handleInput}
               placeholder="member@example.com"
               icon={<Mail className="w-5 h-5" />}
-              error={errors.email}
+              error={errors?.email}
               isRequired
             />
 
@@ -65,7 +65,7 @@ const NavigatorForm: FC<INavigatorForm> = ({
               name="phone"
               type="tel"
               label="Phone Number"
-              value={inputs.phone || ''}
+              value={inputs?.phone || ''}
               onChange={handleInput}
               placeholder="(555) 123-4567"
               icon={<Phone className="w-5 h-5" />}
@@ -76,11 +76,11 @@ const NavigatorForm: FC<INavigatorForm> = ({
             <Input
               name="company"
               label="Company"
-              value={inputs.company || ''}
+              value={inputs?.company || ''}
               onChange={handleInput}
               placeholder="Company name"
               icon={<Building className="w-5 h-5" />}
-              error={errors.company}
+              error={errors?.company}
               isRequired
             />
 
@@ -88,12 +88,12 @@ const NavigatorForm: FC<INavigatorForm> = ({
             <Select
               name="industry"
               label="Industry"
-              value={inputs.industry || ''}
+              value={inputs?.industry || ''}
               onChange={handleInput}
               options={industryList.map((industry) => ({ value: industry, label: industry }))}
               placeholder="Select industry..."
               icon={<Briefcase className="w-5 h-5" />}
-              error={errors.industry}
+              error={errors?.industry}
               isRequired
             />
           </motion.div>
@@ -114,7 +114,7 @@ const NavigatorForm: FC<INavigatorForm> = ({
             <div className="bg-cyan-500/10 border border-cyan-500/20 rounded-lg p-4">
               <label className="block text-sm font-medium text-cyan-300 mb-3">Assigning to Chapter</label>
               <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-gradient-to-r from-cyan-500 via-blue-500 to-teal-500 rounded-full flex items-center justify-center shadow-lg">
+                <div className="w-12 h-12 bg-linear-to-r from-cyan-500 via-blue-500 to-teal-500 rounded-full flex items-center justify-center shadow-lg">
                   <span className="text-white font-bold text-lg">L</span>
                 </div>
                 <div>
@@ -135,7 +135,7 @@ const NavigatorForm: FC<INavigatorForm> = ({
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     className={`relative flex flex-col p-3 border rounded-lg cursor-pointer transition-all ${
-                      inputs.membershipStatus === status.value
+                      inputs?.membershipStatus === status.value
                         ? 'border-cyan-500 bg-cyan-500/10'
                         : 'border-gray-600 hover:border-gray-500'
                     }`}
@@ -144,7 +144,7 @@ const NavigatorForm: FC<INavigatorForm> = ({
                       type="radio"
                       name="membershipStatus"
                       value={status.value}
-                      checked={inputs.membershipStatus === status.value}
+                      checked={inputs?.membershipStatus === status.value}
                       onChange={() => {
                         // Explicitly pass the status value instead of the event's checked state
                         handleToggle({
@@ -158,7 +158,7 @@ const NavigatorForm: FC<INavigatorForm> = ({
                     />
                     <div
                       className={`font-medium text-sm ${
-                        inputs.membershipStatus === status.value ? 'text-white' : 'text-gray-300'
+                        inputs?.membershipStatus === status.value ? 'text-white' : 'text-gray-300'
                       }`}
                     >
                       {status.label}
@@ -175,10 +175,10 @@ const NavigatorForm: FC<INavigatorForm> = ({
                 name="joinedAt"
                 type="date"
                 label="Join Date"
-                value={convertToDateFormat(inputs.joinedAt) || ''}
+                value={convertToDateFormat(inputs?.joinedAt) || ''}
                 onChange={handleInput}
                 icon={<Calendar className="w-5 h-5" />}
-                error={errors.joinedAt}
+                error={errors?.joinedAt}
                 isRequired
               />
 
@@ -186,7 +186,7 @@ const NavigatorForm: FC<INavigatorForm> = ({
                 name="expiresAt"
                 type="date"
                 label="Expires At"
-                value={convertToDateFormat(inputs.expiresAt) || ''}
+                value={convertToDateFormat(inputs?.expiresAt) || ''}
                 onChange={handleInput}
                 icon={<Calendar className="w-5 h-5" />}
               />
@@ -201,12 +201,23 @@ const NavigatorForm: FC<INavigatorForm> = ({
             className="space-y-4"
           >
             {/* Admin Settings */}
-            <Switch name="isAdmin" checked={inputs.isAdmin ?? false} onChange={handleToggle} label="Admin privileges" />
+            <Switch
+              name="isAdmin"
+              checked={inputs?.isAdmin ?? false}
+              onChange={handleToggle}
+              label="Admin privileges"
+            />
             <Switch
               name="isMembership"
-              checked={inputs.isMembership ?? false}
+              checked={inputs?.isMembership ?? false}
               onChange={handleToggle}
               label="Membership privileges"
+            />
+            <Switch
+              name="isPublic"
+              checked={inputs?.isPublic ?? false}
+              onChange={handleToggle}
+              label="Toggle public visibility"
             />
           </motion.div>
         </form>
@@ -234,7 +245,7 @@ const NavigatorForm: FC<INavigatorForm> = ({
             whileTap={{ scale: 0.98 }}
             onClick={handleSubmit}
             disabled={isLoading}
-            className="flex-1 px-6 py-3 bg-gradient-to-r from-cyan-600 via-blue-600 to-teal-600 text-white rounded-lg hover:from-cyan-500 hover:via-blue-500 hover:to-teal-500 transition-all flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 px-6 py-3 bg-linear-to-r from-cyan-600 via-blue-600 to-teal-600 text-white rounded-lg hover:from-cyan-500 hover:via-blue-500 hover:to-teal-500 transition-all flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? (
               <>

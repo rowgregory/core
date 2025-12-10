@@ -16,7 +16,7 @@ const StatCard = ({ title, value, change, icon: Icon, color, tooltip, isFetching
       >
         {/* Mobile-first header with icon and change indicator */}
         <div className="flex items-start justify-between mb-3 sm:mb-4">
-          <div className={`p-2 sm:p-2.5 rounded-lg bg-gradient-to-br ${color} shadow-lg`}>
+          <div className={`p-2 sm:p-2.5 rounded-lg bg-linear-to-br ${color} shadow-lg`}>
             <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
           </div>
 
@@ -64,7 +64,7 @@ const StatCard = ({ title, value, change, icon: Icon, color, tooltip, isFetching
         </div>
 
         {/* Subtle mobile enhancement - bottom accent */}
-        <div className={`mt-4 h-1 rounded-full bg-gradient-to-r ${color} opacity-60`} />
+        <div className={`mt-4 h-1 rounded-full bg-linear-to-r ${color} opacity-60`} />
       </motion.div>
     </TooltipWrapper>
   )

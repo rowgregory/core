@@ -24,7 +24,15 @@ const AnchorCard: FC<{ anchor: IAnchor; index: number }> = ({ anchor, index }) =
 
   // Helper functions to get participant info with null handling
   const getGiverInfo = () => {
-    if (anchor.giver && anchor.giverId) {
+    // Check for fleet dividends first
+    if (anchor.externalGiverName === 'Fleet Earnings' || anchor.externalGiverCompany === 'Chapter Revenue') {
+      return {
+        name: 'Fleet Earnings',
+        company: 'Chapter Revenue',
+        profileImage: null,
+        type: 'fleet-earnings'
+      }
+    } else if (anchor.giver && anchor.giverId) {
       return {
         name: anchor.giver.name || 'Unknown User',
         company: anchor.giver.company || 'Unknown Company',
@@ -87,8 +95,8 @@ const AnchorCard: FC<{ anchor: IAnchor; index: number }> = ({ anchor, index }) =
         formName: 'anchorForm',
         data: {
           ...anchor,
-          // Set giverId based on whether it's external or internal
-          giverId: anchor.giverId || 'external',
+          // Set giverId based on whether it's external, fleet-dividends, or internal
+          giverId: anchor.externalGiverName === 'Fleet Earnings' ? 'fleet-earnings' : anchor.giverId || 'external',
           // Set receiverId based on whether it's external or internal
           receiverId: anchor.receiverId || 'external',
           // Keep external fields as they are
@@ -179,6 +187,11 @@ const AnchorCard: FC<{ anchor: IAnchor; index: number }> = ({ anchor, index }) =
           <div className="flex items-center space-x-2">
             <User className="w-4 h-4 text-gray-400" />
             <span className="text-gray-400 text-sm">Giver</span>
+            {giverInfo.type === 'fleet-earnings' && (
+              <span className="px-1.5 py-0.5 bg-emerald-500/20 text-emerald-400 text-xs rounded border border-emerald-500/30">
+                Fleet Earnings
+              </span>
+            )}
             {giverInfo.type === 'external' && (
               <span className="px-1.5 py-0.5 bg-orange-500/20 text-orange-400 text-xs rounded border border-orange-500/30">
                 External

@@ -6,7 +6,7 @@ const getCurrentPageId = (path: string, links: any) => {
   if (path.includes('/treasure-maps')) return 'treasure-maps'
 
   // Find matching navigation item
-  const matchingItem = links.find((item: any) => item.linkKey === path || item.id === lastSegment)
+  const matchingItem = links?.find((item: any) => item.linkKey === path || item.id === lastSegment)
 
   return matchingItem?.id || 'dashboard'
 }

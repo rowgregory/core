@@ -22,15 +22,15 @@ export const adminWeeklyActivityFactory = {
       dayEnd.setDate(dayStart.getDate() + 1)
 
       const parleys = await prisma.parley.count({
-        where: { createdAt: { gte: dayStart, lt: dayEnd } }
+        where: { scheduledAt: { gte: dayStart, lt: dayEnd } }
       })
 
       const treasureMaps = await prisma.treasureMap.count({
-        where: { createdAt: { gte: dayStart, lt: dayEnd } }
+        where: { closedAt: { gte: dayStart, lt: dayEnd } }
       })
 
       const anchors = await prisma.anchor.count({
-        where: { createdAt: { gte: dayStart, lt: dayEnd } }
+        where: { closedDate: { gte: dayStart, lt: dayEnd } }
       })
 
       weeklyActivity.push({

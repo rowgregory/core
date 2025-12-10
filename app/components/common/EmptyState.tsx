@@ -1,7 +1,7 @@
 import { useAppDispatch } from '@/app/redux/store'
 import React, { FC } from 'react'
 import { motion } from 'framer-motion'
-import { Anchor, Plus, Users } from 'lucide-react'
+import { Anchor, Layers, Scroll, Users } from 'lucide-react'
 import { setInputs } from '@/app/redux/features/formSlice'
 import { useSession } from 'next-auth/react'
 
@@ -22,6 +22,10 @@ const EmptyState: FC<{
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-12">
       {title === 'Anchor' ? (
         <Anchor className="w-16 h-16 text-gray-600 mx-auto mb-4" />
+      ) : title === 'Parley' ? (
+        <Scroll className="w-16 h-16 text-gray-600 mx-auto mb-4" />
+      ) : title === 'Treasure Map' ? (
+        <Layers className="w-16 h-16 text-gray-600 mx-auto mb-4" />
       ) : (
         <Users className="w-16 h-16 text-gray-600 mx-auto mb-4" />
       )}
@@ -44,9 +48,8 @@ const EmptyState: FC<{
         }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="px-6 py-3 bg-gradient-to-r from-teal-600 via-cyan-600 to-blue-600 text-white rounded-lg hover:from-teal-500 hover:via-cyan-500 hover:to-blue-500 transition-all flex items-center space-x-2 font-semibold mx-auto"
+        className="px-6 py-3 bg-linear-to-r from-teal-600 via-cyan-600 to-blue-600 text-white rounded-lg hover:from-teal-500 hover:via-cyan-500 hover:to-blue-500 transition-all font-semibold mx-auto cursor-pointer"
       >
-        <Plus className="w-5 h-5" />
         <span>{action}</span>
       </motion.button>
     </motion.div>

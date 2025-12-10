@@ -85,11 +85,13 @@ const SwabbieDrawer = () => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2, duration: 0.4 }}
               >
-                <h2 className="text-xl font-bold bg-gradient-to-r from-cyan-400 via-blue-400 to-teal-400 bg-clip-text text-transparent">
+                <h2 className="text-xl font-bold bg-linear-to-r from-cyan-400 via-blue-400 to-teal-400 bg-clip-text text-transparent">
                   {inputs?.isUpdating ? 'Update Swabbie' : 'Draft Swabbie'}
                 </h2>
                 <p className="text-sm text-gray-500 mt-1">
-                  Sends email to swabbie upon submission where they can view their application from port.
+                  Sends email to Swabbie upon submission where they can view their application from the portal. This is
+                  the same as if they were to fill out the application themselves — this represents a user who knows
+                  they want to join and are ready for the team to start the process.
                 </p>
               </motion.div>
 

@@ -6,7 +6,7 @@ const QuickActionButton = ({ title, icon: Icon, color, onClick }: any) => (
     flex items-center justify-center space-x-3 
     w-full px-6 py-4 
     rounded-lg border border-transparent
-    bg-gradient-to-r ${color}
+    bg-linear-to-r ${color}
     text-white font-semibold text-sm tracking-wide
     shadow-lg shadow-black/10
     transition-all duration-200 ease-out
@@ -20,7 +20,7 @@ const QuickActionButton = ({ title, icon: Icon, color, onClick }: any) => (
 
     {/* Subtle shine effect on hover */}
     <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+      <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
     </div>
   </button>
 )

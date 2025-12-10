@@ -86,7 +86,7 @@ const StowawayDrawer = () => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2, duration: 0.4 }}
               >
-                <h2 className="text-xl font-bold bg-gradient-to-r from-cyan-400 via-blue-400 to-teal-400 bg-clip-text text-transparent">
+                <h2 className="text-xl font-bold bg-linear-to-r from-cyan-400 via-blue-400 to-teal-400 bg-clip-text text-transparent">
                   {stowawayForm?.inputs?.isUpdating ? 'Update Stowaway' : 'Draft Stowaway'}
                 </h2>
                 <p className="text-sm text-gray-500 mt-1">

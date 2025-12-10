@@ -24,12 +24,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       id: 'email',
       name: 'Email',
       type: 'email',
-      maxAge: 15 * 60, // 15 mins
+      maxAge: 60 * 60, // 60 mins
       from: process.env.RESEND_FROM_EMAIL!,
       sendVerificationRequest: async ({ identifier: email, url, provider }) => {
-        console.log('Sending magic link to:', email)
-        console.log('🔗 Magic link URL:', url)
-        console.log('PROVIDER:', provider)
         try {
           const result = await resend.emails.send({
             from: `Navigator Access <${provider.from!}>`,
@@ -142,6 +139,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             token.role = dbUser.role
             token.isAdmin = dbUser.isAdmin
             token.isSuperUser = dbUser.isSuperUser
+            token.isMembership = dbUser.isMembership
           }
         } catch (error) {
           await createLog('error', 'Sign-in callback error', {
@@ -162,6 +160,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         session.user.role = token.role as string
         session.user.isAdmin = token.isAdmin as boolean
         session.user.isSuperUser = token.isSuperUser as boolean
+        session.user.isMembership = token.isMembership as boolean
       } else {
         await createLog('error', 'Sign-in callback error', {
           location: ['auth.ts - session callback - error'],

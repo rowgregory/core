@@ -81,7 +81,7 @@ const GrogDrawer = () => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2, duration: 0.4 }}
               >
-                <h2 className="text-xl font-bold bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">
+                <h2 className="text-xl font-bold bg-linear-to-r from-teal-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">
                   Launch Grog
                 </h2>
                 <p className="text-sm text-gray-500 mt-1">Plan a Grog for your crew and set sail for adventure</p>

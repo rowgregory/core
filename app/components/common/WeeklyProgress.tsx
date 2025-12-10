@@ -72,7 +72,7 @@ const WeeklyProgress: React.FC<WeeklyProgressProps> = ({ treasureMapCompleted, a
             initial={{ width: 0 }}
             animate={{ width: `${progressPercentage}%` }}
             transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
-            className="h-full bg-gradient-to-r from-purple-500 via-blue-500 to-emerald-500 rounded-full"
+            className="h-full bg-linear-to-r from-purple-500 via-blue-500 to-emerald-500 rounded-full"
           />
         </div>
       </div>
@@ -135,7 +135,7 @@ const WeeklyProgress: React.FC<WeeklyProgressProps> = ({ treasureMapCompleted, a
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mt-6 p-4 bg-gradient-to-r from-emerald-500/10 to-green-500/10 border border-emerald-500/30 rounded-xl"
+          className="mt-6 p-4 bg-linear-to-r from-emerald-500/10 to-green-500/10 border border-emerald-500/30 rounded-xl"
         >
           <p className="text-emerald-400 text-sm font-medium text-center">
             🎉 Excellent work! You&apos;ve completed all weekly activities!

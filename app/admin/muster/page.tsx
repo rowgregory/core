@@ -512,7 +512,7 @@ const AdminMusterPage: React.FC = () => {
                       >
                         <td className="px-6 py-4">
                           <div className="flex items-center space-x-3">
-                            <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center">
+                            <div className="flex-shrink-0 w-10 h-10 bg-linear-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center">
                               <span className="text-white font-semibold text-sm">
                                 {member.memberName
                                   .split(' ')
@@ -748,7 +748,7 @@ const AdminMusterPage: React.FC = () => {
                         className="flex items-center justify-between p-4 bg-gray-700/20 rounded-lg hover:bg-gray-700/30 transition-colors"
                       >
                         <div className="flex items-center space-x-4">
-                          <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center">
+                          <div className="flex-shrink-0 w-12 h-12 bg-linear-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center">
                             <span className="text-white font-semibold">
                               {member.memberName
                                 .split(' ')
@@ -846,7 +846,7 @@ const AdminMusterPage: React.FC = () => {
                 >
                   <div className="flex items-start justify-between mb-6">
                     <div className="flex items-center space-x-4">
-                      <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center">
+                      <div className="w-16 h-16 bg-linear-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center">
                         <span className="text-white font-bold text-lg">
                           {member.memberName
                             .split(' ')

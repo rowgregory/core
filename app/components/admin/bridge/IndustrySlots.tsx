@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { ArrowUpDown, Users, Circle } from 'lucide-react'
 import industryList from '@/app/lib/constants/navigator/industryList'
 
-const IndustrySlots: FC<{ industrySlots: any[]; capacityPercent: string }> = ({ industrySlots, capacityPercent }) => {
+const IndustrySlots: FC<{ industrySlots: any[]; capacityPercent: number }> = ({ industrySlots, capacityPercent }) => {
   const [sortFilledFirst, setSortFilledFirst] = useState(false)
 
   const industryListCount = industryList.length
@@ -88,7 +88,7 @@ const IndustrySlots: FC<{ industrySlots: any[]; capacityPercent: string }> = ({ 
 
       <div className="mt-4 bg-gray-700/30 rounded-lg h-2">
         <div
-          className="bg-gradient-to-r from-pink-500 via-amber-500 to-lime-500 h-2 rounded-lg transition-all duration-300"
+          className="bg-linear-to-r from-pink-500 via-amber-500 to-lime-500 h-2 rounded-lg transition-all duration-300"
           style={{ width: `${capacityPercent}%` }}
         ></div>
       </div>

@@ -290,7 +290,7 @@ const SwabbiePort = () => {
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden pb-20">
         <Link
           href="/"
-          className="bg-gradient-to-r from-cyan-400 via-blue-400 to-teal-400 bg-clip-text text-transparent uppercase text-2xl font-bold cursor-pointer hover:bg-gradient-to-r hover:from-teal-400 hover:via-blue-400 hover:to-cyan-400 flex items-center absolute left-4 lg:left-6 top-2"
+          className="bg-linear-to-r from-cyan-400 via-blue-400 to-teal-400 bg-clip-text text-transparent uppercase text-2xl font-bold cursor-pointer hover:bg-linear-to-r hover:from-teal-400 hover:via-blue-400 hover:to-cyan-400 flex items-center absolute left-4 lg:left-6 top-2"
         >
           C
           <span>
@@ -314,7 +314,7 @@ const SwabbiePort = () => {
               repeatDelay: 3,
               times: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 1]
             }}
-            className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-blue-300/20 via-cyan-200/10 to-transparent pointer-events-none"
+            className="absolute top-0 left-0 w-full h-full bg-linear-to-b from-blue-300/20 via-cyan-200/10 to-transparent pointer-events-none"
           />
           <motion.div
             animate={{
@@ -334,7 +334,7 @@ const SwabbiePort = () => {
             {[...Array(150)].map((_, i) => (
               <motion.div
                 key={i}
-                className="absolute w-px h-16 bg-gradient-to-b from-cyan-200/60 to-transparent"
+                className="absolute w-px h-16 bg-linear-to-b from-cyan-200/60 to-transparent"
                 style={{
                   left: `${Math.random() * 100}%`,
                   top: `-10%`
@@ -358,7 +358,7 @@ const SwabbiePort = () => {
             <motion.div
               animate={{ x: [-100, 0] }}
               transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-              className="absolute bottom-0 left-0 w-[200%] h-full bg-gradient-to-r from-cyan-900/20 via-slate-700/30 to-cyan-900/20"
+              className="absolute bottom-0 left-0 w-[200%] h-full bg-linear-to-r from-cyan-900/20 via-slate-700/30 to-cyan-900/20"
               style={{
                 clipPath: 'polygon(0 60%, 25% 80%, 50% 60%, 75% 85%, 100% 65%, 100% 100%, 0% 100%)'
               }}
@@ -375,8 +375,8 @@ const SwabbiePort = () => {
               exit={{ y: -100, opacity: 0 }}
               className={`relative z-50 text-white px-6 py-3 border-b ${
                 data?.user?.membershipStatus === 'ACTIVE'
-                  ? 'bg-gradient-to-r from-amber-900 to-yellow-900 border-amber-600/50'
-                  : 'bg-gradient-to-r from-emerald-700 to-teal-700 border-emerald-600/50'
+                  ? 'bg-linear-to-r from-amber-900 to-yellow-900 border-amber-600/50'
+                  : 'bg-linear-to-r from-emerald-700 to-teal-700 border-emerald-600/50'
               }`}
             >
               <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -413,8 +413,8 @@ const SwabbiePort = () => {
               <div
                 className={`h-10 w-1 sm:h-12 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0 ${
                   data?.user?.membershipStatus === 'ACTIVE'
-                    ? 'bg-gradient-to-r from-amber-600 to-amber-700 shadow-amber-900/50'
-                    : 'bg-gradient-to-r from-cyan-600 to-blue-700 shadow-cyan-900/50'
+                    ? 'bg-linear-to-r from-amber-600 to-amber-700 shadow-amber-900/50'
+                    : 'bg-linear-to-r from-cyan-600 to-blue-700 shadow-cyan-900/50'
                 }`}
               />
               <div className="min-w-0">
@@ -505,8 +505,8 @@ const SwabbiePort = () => {
                   transition={{ duration: 0.4, delay: 0.5 }}
                   className={`mt-6 p-4 rounded-xl border shadow-inner ${
                     data?.user?.membershipStatus === 'ACTIVE'
-                      ? 'bg-gradient-to-r from-amber-800/20 to-yellow-800/20 border-amber-400/30'
-                      : 'bg-gradient-to-r from-cyan-800/20 to-blue-800/20 border-cyan-400/30'
+                      ? 'bg-linear-to-r from-amber-800/20 to-yellow-800/20 border-amber-400/30'
+                      : 'bg-linear-to-r from-cyan-800/20 to-blue-800/20 border-cyan-400/30'
                   }`}
                 >
                   <div className="flex items-center justify-between">
@@ -586,7 +586,7 @@ const SwabbiePort = () => {
                             className={`h-7 w-7 sm:h-8 sm:w-8 rounded-lg flex items-center justify-center transition-colors shadow-lg flex-shrink-0 ${
                               step.disabled
                                 ? 'bg-slate-600/30 shadow-slate-800/50'
-                                : 'bg-gradient-to-r from-cyan-600 to-blue-600 group-hover:from-cyan-500 group-hover:to-blue-500 shadow-cyan-900/50'
+                                : 'bg-linear-to-r from-cyan-600 to-blue-600 group-hover:from-cyan-500 group-hover:to-blue-500 shadow-cyan-900/50'
                             }`}
                           >
                             <step.icon className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-white" />
@@ -751,7 +751,7 @@ const SwabbiePort = () => {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
-                className="bg-gradient-to-r from-slate-800/20 to-slate-700/20 backdrop-blur-md rounded-2xl border border-slate-500/30 p-4 sm:p-6 shadow-xl shadow-slate-900/50"
+                className="bg-linear-to-r from-slate-800/20 to-slate-700/20 backdrop-blur-md rounded-2xl border border-slate-500/30 p-4 sm:p-6 shadow-xl shadow-slate-900/50"
               >
                 <div className="flex items-center space-x-3 mb-4">
                   <LifeBuoy className="h-6 w-6 text-slate-400" />

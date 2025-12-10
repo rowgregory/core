@@ -72,8 +72,8 @@ const ApplicationTimeline = ({ user }: { user: User }) => {
 
       // Get completion flags
       const completionFlags: Record<string, boolean> = {
-        INITIAL_REVIEW: user?.isInitialReviewCompleted,
-        BACKGROUND_CHECK: user?.isBackgroudCheckCompleted,
+        INITIAL_REVIEW: user?.isInitialReviewCompleted ?? false,
+        BACKGROUND_CHECK: user?.isBackgroudCheckCompleted ?? false,
         FINAL_DECISION: user?.isFinalDecisionMade || user?.membershipStatus === 'ACTIVE'
       }
 
@@ -237,7 +237,7 @@ const ApplicationTimeline = ({ user }: { user: User }) => {
               className="flex items-start space-x-2"
             >
               {/* Timeline indicator */}
-              <div className="relative flex flex-col items-center flex-shrink-0">
+              <div className="relative flex flex-col items-center shrink-0">
                 <div
                   className={`h-6 w-6 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${styles.circle}`}
                 >
@@ -255,14 +255,14 @@ const ApplicationTimeline = ({ user }: { user: User }) => {
                   <h4 className={`font-medium text-xs leading-tight mb-1 lg:mb-0 ${styles.text}`}>{step.title}</h4>
 
                   {/* Badge - right side on desktop */}
-                  <div className="mb-1 lg:mb-0 lg:ml-4 lg:flex-shrink-0">
+                  <div className="mb-1 lg:mb-0 lg:ml-4 lg:shrink-0">
                     <span className={`inline-block px-2 py-0.5 text-xs font-medium rounded-full ${styles.badge}`}>
                       {getStatusLabel(step.status)}
                     </span>
                   </div>
                 </div>
 
-                <p className="text-xs text-slate-400 mb-1 leading-tight break-words overflow-wrap-anywhere">
+                <p className="text-xs text-slate-400 mb-1 leading-tight wrap-break-word overflow-wrap-anywhere">
                   {step.description}
                 </p>
 
@@ -271,7 +271,7 @@ const ApplicationTimeline = ({ user }: { user: User }) => {
                   {/* Estimated date (with strikethrough if completed) */}
                   {step.estimatedDate && (
                     <div className="flex items-center space-x-1">
-                      <Clock className="h-2.5 w-2.5 text-slate-500 flex-shrink-0" />
+                      <Clock className="h-2.5 w-2.5 text-slate-500 shrink-0" />
                       <span
                         className={`text-xs text-slate-500 truncate ${
                           step.completedDate ? 'line-through opacity-60' : ''
@@ -285,7 +285,7 @@ const ApplicationTimeline = ({ user }: { user: User }) => {
                   {/* Actual completion date - inline on desktop */}
                   {step.completedDate && (
                     <div className="flex items-center space-x-1">
-                      <div className="w-2 h-2 bg-green-500 rounded-full flex-shrink-0"></div>
+                      <div className="w-2 h-2 bg-green-500 rounded-full shrink-0"></div>
                       <span className="text-xs text-green-400 truncate font-medium">{step.completedDate}</span>
                     </div>
                   )}

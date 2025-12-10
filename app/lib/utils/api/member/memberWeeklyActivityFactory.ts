@@ -24,21 +24,21 @@ export const memberWeeklyActivityFactory = {
       const parleys = await prisma.parley.count({
         where: {
           requesterId: id,
-          createdAt: { gte: dayStart, lt: dayEnd }
+          scheduledAt: { gte: dayStart, lt: dayEnd }
         }
       })
 
       const treasureMaps = await prisma.treasureMap.count({
         where: {
           giverId: id,
-          createdAt: { gte: dayStart, lt: dayEnd }
+          closedAt: { gte: dayStart, lt: dayEnd }
         }
       })
 
       const anchors = await prisma.anchor.count({
         where: {
           giverId: id,
-          createdAt: { gte: dayStart, lt: dayEnd }
+          closedDate: { gte: dayStart, lt: dayEnd }
         }
       })
 

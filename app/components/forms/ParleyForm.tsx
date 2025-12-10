@@ -109,7 +109,7 @@ const ParleyForm: FC<IForm> = ({
                   <label className="block text-sm font-medium text-gray-300 mb-2">You are requesting this parley</label>
                   <div className="w-full px-4 py-3 bg-gray-700/30 border border-gray-600 rounded-lg">
                     <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-gradient-to-r from-teal-500 via-cyan-500 to-blue-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                      <div className="w-10 h-10 bg-linear-to-r from-teal-500 via-cyan-500 to-blue-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
                         {user?.name
                           ?.split(' ')
                           .map((n) => n[0])
@@ -138,7 +138,7 @@ const ParleyForm: FC<IForm> = ({
                     value={inputs?.recipientId || ''}
                     onChange={(e) => handleInput({ target: { name: 'recipientId', value: e.target.value } })}
                     className={`w-full px-4 py-3 bg-gray-800/50 border rounded-lg text-white focus:ring-2 focus:ring-teal-400 focus:border-teal-400 transition-all ${
-                      errors.recipientId ? 'border-red-500' : 'border-gray-600'
+                      errors?.recipientId ? 'border-red-500' : 'border-gray-600'
                     }`}
                   >
                     <option value="">Select a crew member...</option>
@@ -150,10 +150,10 @@ const ParleyForm: FC<IForm> = ({
                         </option>
                       ))}
                   </select>
-                  {errors.recipientId && (
+                  {errors?.recipientId && (
                     <p className="text-red-400 text-sm mt-1 flex items-center space-x-1">
                       <AlertCircle className="w-4 h-4" />
-                      <span>{errors.recipientId}</span>
+                      <span>{errors?.recipientId}</span>
                     </p>
                   )}
                 </div>
@@ -167,7 +167,7 @@ const ParleyForm: FC<IForm> = ({
                   </label>
                   <div className="w-full px-4 py-3 bg-gray-700/30 border border-gray-600 rounded-lg">
                     <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-gradient-to-r from-purple-500 via-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                      <div className="w-10 h-10 bg-linear-to-r from-purple-500 via-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
                         {user?.name
                           ?.split(' ')
                           .map((n) => n[0])
@@ -196,7 +196,7 @@ const ParleyForm: FC<IForm> = ({
                     value={inputs?.requesterId || ''}
                     onChange={(e) => handleInput({ target: { name: 'requesterId', value: e.target.value } })}
                     className={`w-full px-4 py-3 bg-gray-800/50 border rounded-lg text-white focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-all ${
-                      errors.requesterId ? 'border-red-500' : 'border-gray-600'
+                      errors?.requesterId ? 'border-red-500' : 'border-gray-600'
                     }`}
                   >
                     <option value="">Select who requested the parley...</option>
@@ -208,10 +208,10 @@ const ParleyForm: FC<IForm> = ({
                         </option>
                       ))}
                   </select>
-                  {errors.requesterId && (
+                  {errors?.requesterId && (
                     <p className="text-red-400 text-sm mt-1 flex items-center space-x-1">
                       <AlertCircle className="w-4 h-4" />
-                      <span>{errors.requesterId}</span>
+                      <span>{errors?.requesterId}</span>
                     </p>
                   )}
                 </div>
@@ -328,13 +328,13 @@ const ParleyForm: FC<IForm> = ({
                 value={formatDateTimeForInput(inputs?.scheduledAt) || ''}
                 onChange={handleInput}
                 className={`w-full px-4 py-3 bg-gray-800/50 border rounded-lg text-white focus:ring-2 focus:ring-teal-400 focus:border-teal-400 transition-all ${
-                  errors.scheduledAt ? 'border-red-500' : 'border-gray-600'
+                  errors?.scheduledAt ? 'border-red-500' : 'border-gray-600'
                 }`}
               />
-              {errors.scheduledAt && (
+              {errors?.scheduledAt && (
                 <p className="text-red-400 text-sm mt-1 flex items-center space-x-1">
                   <AlertCircle className="w-4 h-4" />
-                  <span>{errors.scheduledAt}</span>
+                  <span>{errors?.scheduledAt}</span>
                 </p>
               )}
             </div>
@@ -376,10 +376,10 @@ const ParleyForm: FC<IForm> = ({
                   </motion.button>
                 ))}
               </div>
-              {errors.duration && (
+              {errors?.duration && (
                 <p className="text-red-400 text-sm mt-2 flex items-center space-x-1">
                   <AlertCircle className="w-4 h-4" />
-                  <span>{errors.duration}</span>
+                  <span>{errors?.duration}</span>
                 </p>
               )}
             </div>
@@ -420,10 +420,10 @@ const ParleyForm: FC<IForm> = ({
                   </motion.label>
                 ))}
               </div>
-              {errors.meetingType && (
+              {errors?.meetingType && (
                 <p className="text-red-400 text-sm mt-2 flex items-center space-x-1">
                   <AlertCircle className="w-4 h-4" />
-                  <span>{errors.meetingType}</span>
+                  <span>{errors?.meetingType}</span>
                 </p>
               )}
             </div>
@@ -539,13 +539,13 @@ const ParleyForm: FC<IForm> = ({
                       : 'e.g., Zoom link or platform details'
                   }
                   className={`w-full px-4 py-3 bg-gray-800/50 border rounded-lg text-white focus:ring-2 focus:ring-teal-400 focus:border-teal-400 transition-all ${
-                    errors.location ? 'border-red-500' : 'border-gray-600'
+                    errors?.location ? 'border-red-500' : 'border-gray-600'
                   }`}
                 />
-                {errors.location && (
+                {errors?.location && (
                   <p className="text-red-400 text-sm mt-1 flex items-center space-x-1">
                     <AlertCircle className="w-4 h-4" />
-                    <span>{errors.location}</span>
+                    <span>{errors?.location}</span>
                   </p>
                 )}
               </div>
@@ -578,14 +578,14 @@ const ParleyForm: FC<IForm> = ({
                 rows={3}
                 maxLength={1000}
                 className={`w-full px-4 py-3 bg-gray-800/50 border rounded-lg text-white focus:ring-2 focus:ring-teal-400 focus:border-teal-400 transition-all resize-none ${
-                  errors.notes ? 'border-red-500' : 'border-gray-600'
+                  errors?.notes ? 'border-red-500' : 'border-gray-600'
                 }`}
               />
               <div className="flex justify-between items-center mt-1">
-                {errors.notes && (
+                {errors?.notes && (
                   <p className="text-red-400 text-sm flex items-center space-x-1">
                     <AlertCircle className="w-4 h-4" />
-                    <span>{errors.notes}</span>
+                    <span>{errors?.notes}</span>
                   </p>
                 )}
                 <p className="text-xs text-gray-500 ml-auto">{inputs?.notes?.length || 0}/1000 characters</p>
@@ -627,7 +627,7 @@ const ParleyForm: FC<IForm> = ({
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             disabled={isLoading}
-            className="flex-1 px-6 py-3 bg-gradient-to-r from-teal-600 via-cyan-600 to-blue-600 text-white rounded-lg hover:from-teal-500 hover:to-blue-500 transition-all flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 px-6 py-3 bg-linear-to-r from-teal-600 via-cyan-600 to-blue-600 text-white rounded-lg hover:from-teal-500 hover:to-blue-500 transition-all flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? (
               <>

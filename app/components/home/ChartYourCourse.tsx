@@ -83,7 +83,7 @@ export default function ChartYourCourse({ creValues }: { creValues: any[] }) {
               </div>
 
               <div
-                className={`inline-flex items-center justify-center w-16 h-16 rounded-xl bg-gradient-to-r ${value.color} text-white mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg relative z-10`}
+                className={`inline-flex items-center justify-center w-16 h-16 rounded-xl bg-linear-to-r ${value.color} text-white mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg relative z-10`}
               >
                 {value.icon}
               </div>
@@ -95,14 +95,14 @@ export default function ChartYourCourse({ creValues }: { creValues: any[] }) {
               <p className="text-gray-300 text-lg leading-relaxed relative z-10">{value.description}</p>
 
               {/* Coastal accent border */}
-              <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent group-hover:via-cyan-400/80 transition-all duration-300"></div>
+              <div className="absolute bottom-0 left-0 right-0 h-1 bg-linear-to-r from-transparent via-cyan-400/50 to-transparent group-hover:via-cyan-400/80 transition-all duration-300"></div>
             </motion.div>
           ))}
         </motion.div>
 
         {/* Call to action with nautical theme */}
         <motion.div variants={fadeInUp} className="text-center mt-16">
-          <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-cyan-600/20 to-blue-600/20 border border-cyan-400/30 rounded-full text-cyan-300 font-medium">
+          <div className="inline-flex items-center px-6 py-3 bg-linear-to-r from-cyan-600/20 to-blue-600/20 border border-cyan-400/30 rounded-full text-cyan-300 font-medium">
             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
             </svg>

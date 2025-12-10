@@ -17,7 +17,7 @@ const RequestedActionButtons: FC<{ handleStatusUpdate: any; parley: IParley; isU
           whileTap={{ scale: 0.98 }}
           onClick={() => handleStatusUpdate(parley.id, 'CONFIRMED')}
           disabled={isUpdating}
-          className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-emerald-600 to-green-600 text-white rounded-lg hover:from-emerald-500 hover:to-green-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
+          className="flex items-center space-x-2 px-4 py-2 bg-linear-to-r from-emerald-600 to-green-600 text-white rounded-lg hover:from-emerald-500 hover:to-green-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
         >
           <Check className="w-4 h-4" />
           <span>Confirm</span>

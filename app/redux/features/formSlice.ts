@@ -28,6 +28,10 @@ interface HandleInputProps {
   value: any
 }
 
+const joinedAt = new Date()
+const expiresAt = new Date()
+expiresAt.setFullYear(joinedAt.getFullYear() + 1)
+
 export const navigatorInputs = {
   name: '',
   email: '',
@@ -35,8 +39,8 @@ export const navigatorInputs = {
   company: '',
   industry: '',
   chapterId: '',
-  joinedAt: new Date().toISOString().split('T')[0],
-  expiresAt: '',
+  joinedAt: joinedAt.toISOString().split('T')[0],
+  expiresAt: expiresAt.toISOString().split('T')[0],
   membershipStatus: 'PENDING',
   isAdmin: false
 }

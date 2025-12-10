@@ -78,7 +78,7 @@ export const adminStatCardFactory = {
 
       const revenueChange = currentRevenue - previousRevenue
       const totalRevenueChange = previousRevenue ? (revenueChange / previousRevenue) * 100 : 100 // if no revenue last month, consider 100%
-      return { totalRevenue, totalRevenueChange: totalRevenueChange.toFixed(2) }
+      return { totalRevenue, totalRevenueChange: totalRevenueChange }
     },
     conversion: async () => {
       // === Calculate conversion rate (users who sent at least one treasure map) ===

@@ -125,11 +125,11 @@ const Applications = () => {
           <EmptyState
             searchQuery={searchQuery}
             statusFilter={statusFilter}
-            typeFilter={''}
+            typeFilter="all"
             title="Swabbie'"
             advice="No Swabbie Applications yet — chart the course and find yer crew."
             func={setOpenSwabbieDrawer}
-            action="Swabbie"
+            action="Draft Swabbie"
           />
         )}
       </motion.div>

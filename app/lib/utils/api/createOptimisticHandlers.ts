@@ -1,5 +1,3 @@
-import { setLastTempId } from '@/app/redux/features/appSlice'
-
 // utils/optimisticUpdates.js
 export const createOptimisticHandlers = (entityConfig: {
   responseKey?: any
@@ -17,9 +15,6 @@ export const createOptimisticHandlers = (entityConfig: {
       const optimisticEntity = { ...data, id: tempId }
 
       dispatch(addAction(optimisticEntity))
-      if (optimisticEntity.id?.toString().startsWith('temp-')) {
-        dispatch(setLastTempId(optimisticEntity.id))
-      }
 
       try {
         const { data: response } = await queryFulfilled

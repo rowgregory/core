@@ -1,5 +1,16 @@
 import HiddenCoveSVG from '@/public/svg/HiddenCoveSVG'
-import { TowerControl, Ship, Anchor, Scroll, Layers, Sailboat, Crosshair, Flag } from 'lucide-react'
+import {
+  TowerControl,
+  Ship,
+  Anchor,
+  Scroll,
+  Layers,
+  Sailboat,
+  Crosshair,
+  Flag,
+  ClipboardList,
+  BookOpenText
+} from 'lucide-react'
 
 export const memberNavLinks = (isMembership: boolean) => [
   {
@@ -61,11 +72,11 @@ export const memberNavLinks = (isMembership: boolean) => [
   ...(isMembership
     ? [
         {
-          id: 'beacon',
-          label: 'Beacon',
-          icon: TowerControl,
-          description: 'The Lighthouse',
-          linkKey: '/member/beacon'
+          id: 'applications',
+          label: 'Applications',
+          icon: ClipboardList,
+          description: 'Visitor Requests',
+          linkKey: '/member/applications'
         }
       ]
     : []),
@@ -75,5 +86,12 @@ export const memberNavLinks = (isMembership: boolean) => [
     icon: HiddenCoveSVG,
     description: 'Special tools, features, and perks waiting to be discovered',
     linkKey: '/member/hidden-cove'
+  },
+  {
+    id: 'lore-and-lingo',
+    label: 'Lore & Lingo',
+    icon: BookOpenText,
+    description: 'Decode the crew’s language — your map to every parley, anchor, and treasure maps.',
+    linkKey: '/member/lore-and-lingo'
   }
 ]

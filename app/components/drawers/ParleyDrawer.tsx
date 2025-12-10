@@ -3,7 +3,7 @@ import { X } from 'lucide-react'
 import { addParleyToState, setCloseParleyDrawer, updateParleyInState } from '@/app/redux/features/parleySlice'
 import { useAppDispatch, useFormSelector, useParleySelector, useUserSelector } from '@/app/redux/store'
 import Backdrop from '../common/Backdrop'
-import { clearErrors, clearInputs, createFormActions } from '@/app/redux/features/formSlice'
+import { createFormActions, resetForm } from '@/app/redux/features/formSlice'
 import Drawer from '../common/Drawer'
 import { useCreateParleyMutation, useUpdateParleyMutation } from '@/app/redux/services/parleyApi'
 import { showToast } from '@/app/redux/features/toastSlice'
@@ -11,6 +11,8 @@ import validateParleyForm from '../forms/validations/validateParleyForm'
 import { chapterId } from '@/app/lib/constants/api/chapterId'
 import ParleyForm from '../forms/ParleyForm'
 import { useRef } from 'react'
+import { recomputeParleyCard } from '@/app/redux/features/dashboardSlice'
+import { recomputeDashboardStats } from '@/app/lib/utils/common/recomputeDashboardStats'
 
 const ParleyDrawer = () => {
   const dispatch = useAppDispatch()
@@ -23,7 +25,7 @@ const ParleyDrawer = () => {
   const [createParley, { isLoading: isCreating }] = useCreateParleyMutation()
   const [updateParley, { isLoading: isUpdating }] = useUpdateParleyMutation()
   const isLoading = isCreating || isUpdating
-  const { user, users } = useUserSelector()
+  const { users, user } = useUserSelector()
   const drawerRef = useRef(null) as any
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
@@ -33,7 +35,6 @@ const ParleyDrawer = () => {
       return drawerRef.current.scrollTo({ behavior: 'smooth', top: 0 })
 
     try {
-      // Combine date and time into scheduledAt
       const scheduledAt = new Date(inputs?.scheduledAt)
 
       const parleyData = {
@@ -51,12 +52,13 @@ const ParleyDrawer = () => {
       } else {
         const created = await createParley(parleyData).unwrap()
         dispatch(addParleyToState(created?.parley))
+        dispatch(recomputeParleyCard())
       }
 
-      onClose()
+      recomputeDashboardStats({ id: user?.id, isAdmin: user?.isAdmin })
 
-      dispatch(clearInputs({ formName: 'parleyForm' }))
-      dispatch(clearErrors({ formName: 'parleyForm' }))
+      dispatch(resetForm('parleyForm'))
+      onClose()
 
       dispatch(
         showToast({
@@ -94,7 +96,7 @@ const ParleyDrawer = () => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2, duration: 0.4 }}
               >
-                <h2 className="text-xl font-bold bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">
+                <h2 className="text-xl font-bold bg-linear-to-r from-teal-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">
                   {inputs?.isUpdating ? 'Update' : 'Schedule'} Parley
                 </h2>
                 <p className="text-sm text-gray-500 mt-1">
@@ -116,7 +118,6 @@ const ParleyDrawer = () => {
             </div>
 
             {/* Form */}
-            {/* <div ref={drawerRef} className="flex-1 overflow-y-auto"> */}
             <ParleyForm
               errors={errors}
               handleInput={handleInput}
@@ -129,7 +130,6 @@ const ParleyDrawer = () => {
               isUpdating={inputs?.isUpdating}
               ref={drawerRef}
             />
-            {/* </div> */}
           </Drawer>
         </>
       )}

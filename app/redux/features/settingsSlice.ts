@@ -1,16 +1,33 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { settingsApi } from '../services/settingsApi'
 
 interface SettingsState {
   loading: boolean
   error: string | null
-  settings: { name: string; location: string; meetingDay: string; meetingTime: string; meetingFrequency: string }
+  settings: {
+    name: string
+    location: string
+    meetingDay: string
+    meetingTime: string
+    meetingFrequency: string
+    hasUnlockedGrog: boolean
+    hasUnlockedMuster: boolean
+    hasUnlockedBooty: boolean
+  }
 }
 
 const initialState: SettingsState = {
   loading: false,
   error: null,
-  settings: { name: '', location: '', meetingDay: '', meetingTime: '', meetingFrequency: 'WEEKKLY' }
+  settings: {
+    name: '',
+    location: '',
+    meetingDay: '',
+    meetingTime: '',
+    meetingFrequency: 'WEEKKLY',
+    hasUnlockedGrog: false,
+    hasUnlockedMuster: false,
+    hasUnlockedBooty: false
+  }
 }
 
 export const settingsSlice = createSlice({
@@ -19,26 +36,12 @@ export const settingsSlice = createSlice({
   reducers: {
     resetSettingsError: (state) => {
       state.error = null
+    },
+    setChapter: (state, { payload }) => {
+      state.settings = payload
     }
-  },
-  extraReducers: (builder) => {
-    builder
-      .addMatcher(settingsApi.endpoints.getChapterSettings.matchFulfilled, (state, { payload }: any) => {
-        state.settings = payload.settings
-        state.loading = false
-      })
-      .addMatcher(settingsApi.endpoints.updateChapterSettings.matchFulfilled, (state, { payload }: any) => {
-        state.settings = payload
-      })
-      .addMatcher(
-        (action) => action.type.endsWith('rejected') && action.payload?.data?.sliceName === 'memberApi',
-        (state, { payload }: any) => {
-          state.loading = false
-          state.error = payload?.data?.message
-        }
-      )
   }
 })
 
-export const { resetSettingsError } = settingsSlice.actions
+export const { resetSettingsError, setChapter } = settingsSlice.actions
 export const settingsReducer = settingsSlice.reducer

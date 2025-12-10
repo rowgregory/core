@@ -10,7 +10,7 @@ const Navigators = () => {
   const [selectedIndustry, setSelectedIndustry] = useState('All')
   const [expandedMember, setExpandedMember] = useState(null) as any
   const { users } = useUserSelector()
-  const navigators = users ?? []
+  const navigators = users?.filter((user) => user.membershipStatus === 'ACTIVE') ?? []
 
   const industries = ['All', ...new Set(navigators?.map?.((navigator) => navigator.industry))]
 
@@ -26,7 +26,7 @@ const Navigators = () => {
   return (
     <div className="min-h-dvh bg-gray-900 pb-20">
       {/* Header Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-teal-600 py-12 md:py-16">
+      <div className="bg-linear-to-r from-blue-600 to-teal-600 py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 md:mb-4 leading-tight">
             Our Professional Network
@@ -37,11 +37,11 @@ const Navigators = () => {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 text-blue-100 text-sm md:text-base">
             <div className="flex items-center">
-              <Users className="w-4 h-4 md:w-5 md:h-5 mr-2 flex-shrink-0" />
+              <Users className="w-4 h-4 md:w-5 md:h-5 mr-2 shrink-0" />
               <span>{navigators?.length} Professional Members</span>
             </div>
             <div className="flex items-center">
-              <Award className="w-4 h-4 md:w-5 md:h-5 mr-2 flex-shrink-0" />
+              <Award className="w-4 h-4 md:w-5 md:h-5 mr-2 shrink-0" />
               <span>Vetted & Certified</span>
             </div>
           </div>
@@ -58,7 +58,7 @@ const Navigators = () => {
               placeholder="Search by name, company, or specialty..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:outline-none"
             />
           </div>
           <select

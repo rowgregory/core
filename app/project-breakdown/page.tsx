@@ -234,9 +234,7 @@ const ProjectBreakdown = () => {
           <div className="text-center">
             <h1 className="text-4xl lg:text-6xl font-bold text-white mb-4 leading-tight">
               Coastal Referral Exchange{' '}
-              <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-                Platform
-              </span>
+              <span className="bg-linear-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">Platform</span>
             </h1>
             <p className="text-lg lg:text-2xl text-gray-300 max-w-3xl mx-auto">
               Development breakdown for our local business networking chapter
@@ -255,11 +253,11 @@ const ProjectBreakdown = () => {
                 <div className="grid md:grid-cols-2 gap-6 mb-12">
                   {/* Simple Option */}
                   <div className="bg-gray-900 border-2 border-blue-500 rounded-2xl p-6">
-                    <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium inline-block mb-4">
+                    <div className="bg-linear-to-r from-blue-500 to-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium inline-block mb-4">
                       SPARK
                     </div>
                     <h3 className="text-xl font-bold text-white mb-3">Boot Sequence</h3>
-                    <div className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-blue-500 bg-clip-text text-transparent mb-3">
+                    <div className="text-3xl font-bold bg-linear-to-r from-blue-400 to-blue-500 bg-clip-text text-transparent mb-3">
                       $1000
                     </div>
                     <div className="text-base text-gray-300 mb-6">
@@ -298,11 +296,11 @@ const ProjectBreakdown = () => {
 
                   {/* Mix & Match Option */}
                   <div className="bg-gray-900 border-2 border-green-500 rounded-2xl p-6 ring-green-400">
-                    <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-3 py-1 rounded-full text-sm font-medium inline-block mb-4">
+                    <div className="bg-linear-to-r from-green-500 to-emerald-600 text-white px-3 py-1 rounded-full text-sm font-medium inline-block mb-4">
                       SURGE
                     </div>
                     <h3 className="text-xl font-bold text-white mb-3">Mix & Match</h3>
-                    <div className="text-3xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent mb-3">
+                    <div className="text-3xl font-bold bg-linear-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent mb-3">
                       ${totalPrice.toLocaleString()}+
                     </div>
                     <div className="text-base text-gray-300 mb-6">
@@ -553,7 +551,7 @@ const ProjectBreakdown = () => {
                             disabled={selectedFeatures.length === 0}
                             className={`flex-1 font-bold py-3 px-4 rounded-lg transition-all ${
                               selectedFeatures.length > 0
-                                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white'
+                                ? 'bg-linear-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white'
                                 : 'bg-gray-800 text-gray-500 cursor-not-allowed'
                             }`}
                           >
@@ -579,7 +577,7 @@ const ProjectBreakdown = () => {
                     <div className="text-sm font-medium line-through text-gray-400 mb-1">
                       Regular: ${totalPrice.toLocaleString()}
                     </div>
-                    <div className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent mb-3">
+                    <div className="text-3xl font-bold bg-linear-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent mb-3">
                       ${((calculateSelectedTotal() + totalPrice) * 0.85).toLocaleString()}
                     </div>
                     <div className="text-lg font-bold bg-yellow-400 text-black px-4 py-2 rounded-lg">

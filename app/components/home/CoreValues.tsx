@@ -122,7 +122,7 @@ export default function CoreValues({ coreValues }: { coreValues: any[] }) {
 
                       {/* Decorative rope border */}
                       <div
-                        className={`absolute ${isEven ? 'bottom-0 right-0' : 'bottom-0 left-0'} w-full h-2 bg-gradient-to-r from-transparent via-amber-600/30 to-transparent`}
+                        className={`absolute ${isEven ? 'bottom-0 right-0' : 'bottom-0 left-0'} w-full h-2 bg-linear-to-r from-transparent via-amber-600/30 to-transparent`}
                       >
                         <div className="w-full h-full bg-[repeating-linear-gradient(90deg,transparent,transparent_4px,rgba(245,158,11,0.3)_4px,rgba(245,158,11,0.3)_8px)]"></div>
                       </div>
@@ -145,7 +145,7 @@ export default function CoreValues({ coreValues }: { coreValues: any[] }) {
                     >
                       <div className="w-8 h-8 bg-white rounded-full"></div>
                       {/* Buoy reflection */}
-                      <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-12 h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent rounded-full"></div>
+                      <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-12 h-1 bg-linear-to-r from-transparent via-white/20 to-transparent rounded-full"></div>
                     </motion.div>
                   </div>
                 </div>
@@ -156,7 +156,7 @@ export default function CoreValues({ coreValues }: { coreValues: any[] }) {
 
         {/* Bottom wave accent */}
         <motion.div variants={fadeInUp} className="mt-20 text-center">
-          <div className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-cyan-600/20 to-blue-600/20 border border-cyan-400/30 rounded-full text-cyan-300 font-medium backdrop-blur-sm">
+          <div className="inline-flex items-center px-8 py-4 bg-linear-to-r from-cyan-600/20 to-blue-600/20 border border-cyan-400/30 rounded-full text-cyan-300 font-medium backdrop-blur-sm">
             <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"

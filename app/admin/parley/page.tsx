@@ -159,6 +159,7 @@ const AdminParleys = () => {
               advice="Schedule your first parley to get started"
               func={setOpenParleyDrawer}
               action="Schedule Parley"
+              formName="parleyForm"
             />
           )}
         </motion.div>

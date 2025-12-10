@@ -63,14 +63,14 @@ const HeroSection: FC<{ isVisible: boolean }> = ({ isVisible }) => {
       <div className="relative z-20 max-w-7xl mx-auto px-4 md:px-6 text-center">
         <motion.div variants={fadeInUp} className="flex items-center justify-center flex-col">
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[80px] font-bold mb-4 md:mb-6 font-sora leading-tight">
-            <span className="bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent drop-shadow-2xl">
+            <span className="bg-linear-to-r from-white to-blue-200 bg-clip-text text-transparent drop-shadow-2xl">
               Where business meets
             </span>
             <br />
             the{' '}
             <span className="relative inline-block">
-              <span className="absolute inset-0 bg-gradient-to-r from-blue-600/40 to-cyan-600/40 -z-10 transform -skew-x-2 rounded-lg"></span>
-              <span className="relative bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent drop-shadow-2xl px-3 md:px-6 py-1 md:py-2">
+              <span className="absolute inset-0 bg-linear-to-r from-blue-600/40 to-cyan-600/40 -z-10 transform -skew-x-2 rounded-lg"></span>
+              <span className="relative bg-linear-to-r from-white to-blue-100 bg-clip-text text-transparent drop-shadow-2xl px-3 md:px-6 py-1 md:py-2">
                 horizon
               </span>
             </span>

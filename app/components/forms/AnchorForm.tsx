@@ -93,7 +93,7 @@ const AnchorForm = ({ inputs, errors, handleInput, isLoading, handleSubmit, user
                   </label>
                   <div className="w-full px-4 py-3 bg-gray-700/30 border border-gray-600 rounded-lg">
                     <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-gradient-to-r from-teal-500 via-cyan-500 to-blue-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                      <div className="w-10 h-10 bg-linear-to-r from-teal-500 via-cyan-500 to-blue-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
                         {user?.name
                           ?.split(' ')
                           .map((n: any[]) => n[0])
@@ -122,7 +122,7 @@ const AnchorForm = ({ inputs, errors, handleInput, isLoading, handleSubmit, user
                     value={inputs?.receiverId || ''}
                     onChange={(e) => handleInput({ target: { name: 'receiverId', value: e.target.value } })}
                     className={`w-full px-4 py-3 bg-gray-800/50 border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-teal-400 transition-all ${
-                      errors.receiverId ? 'border-red-500' : 'border-gray-600'
+                      errors?.receiverId ? 'border-red-500' : 'border-gray-600'
                     }`}
                   >
                     <option value="">Select who closed the business...</option>
@@ -135,10 +135,10 @@ const AnchorForm = ({ inputs, errors, handleInput, isLoading, handleSubmit, user
                         </option>
                       ))}
                   </select>
-                  {errors.receiverId && (
+                  {errors?.receiverId && (
                     <p className="text-red-400 text-sm mt-1 flex items-center space-x-1">
                       <AlertCircle className="w-4 h-4" />
-                      <span>{errors.receiverId}</span>
+                      <span>{errors?.receiverId}</span>
                     </p>
                   )}
                 </div>
@@ -162,14 +162,14 @@ const AnchorForm = ({ inputs, errors, handleInput, isLoading, handleSubmit, user
                         value={inputs?.externalReceiverName || ''}
                         onChange={handleInput}
                         placeholder="Enter their full name"
-                        className={`w-full px-4 py-3 bg-gray-800/50 border rounded-lg text-white focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-all ${
-                          errors.externalReceiverName ? 'border-red-500' : 'border-gray-600'
+                        className={`w-full px-4 py-3 bg-gray-800/50 border rounded-lg text-white focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-all focus:outline-none ${
+                          errors?.externalReceiverName ? 'border-red-500' : 'border-gray-600'
                         }`}
                       />
-                      {errors.externalReceiverName && (
+                      {errors?.externalReceiverName && (
                         <p className="text-red-400 text-sm mt-1 flex items-center space-x-1">
                           <AlertCircle className="w-4 h-4" />
-                          <span>{errors.externalReceiverName}</span>
+                          <span>{errors?.externalReceiverName}</span>
                         </p>
                       )}
                     </div>
@@ -183,14 +183,14 @@ const AnchorForm = ({ inputs, errors, handleInput, isLoading, handleSubmit, user
                         value={inputs?.externalReceiverEmail || ''}
                         onChange={handleInput}
                         placeholder="their.email@company.com"
-                        className={`w-full px-4 py-3 bg-gray-800/50 border rounded-lg text-white focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-all ${
-                          errors.externalReceiverEmail ? 'border-red-500' : 'border-gray-600'
+                        className={`w-full px-4 py-3 bg-gray-800/50 border rounded-lg text-white focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-all focus:outline-none ${
+                          errors?.externalReceiverEmail ? 'border-red-500' : 'border-gray-600'
                         }`}
                       />
-                      {errors.externalReceiverEmail && (
+                      {errors?.externalReceiverEmail && (
                         <p className="text-red-400 text-sm mt-1 flex items-center space-x-1">
                           <AlertCircle className="w-4 h-4" />
-                          <span>{errors.externalReceiverEmail}</span>
+                          <span>{errors?.externalReceiverEmail}</span>
                         </p>
                       )}
                     </div>
@@ -204,14 +204,14 @@ const AnchorForm = ({ inputs, errors, handleInput, isLoading, handleSubmit, user
                         value={inputs?.externalReceiverCompany || ''}
                         onChange={handleInput}
                         placeholder="Their company or organization name"
-                        className={`w-full px-4 py-3 bg-gray-800/50 border rounded-lg text-white focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-all ${
-                          errors.externalReceiverCompany ? 'border-red-500' : 'border-gray-600'
+                        className={`w-full px-4 py-3 bg-gray-800/50 border rounded-lg text-white focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-all focus:outline-none ${
+                          errors?.externalReceiverCompany ? 'border-red-500' : 'border-gray-600'
                         }`}
                       />
-                      {errors.externalReceiverCompany && (
+                      {errors?.externalReceiverCompany && (
                         <p className="text-red-400 text-sm mt-1 flex items-center space-x-1">
                           <AlertCircle className="w-4 h-4" />
-                          <span>{errors.externalReceiverCompany}</span>
+                          <span>{errors?.externalReceiverCompany}</span>
                         </p>
                       )}
                     </div>
@@ -227,7 +227,7 @@ const AnchorForm = ({ inputs, errors, handleInput, isLoading, handleSubmit, user
                   </label>
                   <div className="w-full px-4 py-3 bg-gray-700/30 border border-gray-600 rounded-lg">
                     <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-gradient-to-r from-purple-500 via-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                      <div className="w-10 h-10 bg-linear-to-r from-purple-500 via-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
                         {user?.name
                           ?.split(' ')
                           .map((n: any[]) => n[0])
@@ -256,11 +256,12 @@ const AnchorForm = ({ inputs, errors, handleInput, isLoading, handleSubmit, user
                     value={inputs?.giverId || ''}
                     onChange={(e) => handleInput({ target: { name: 'giverId', value: e.target.value } })}
                     className={`w-full px-4 py-3 bg-gray-800/50 border rounded-lg focus:outline-none text-white focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-all ${
-                      errors.giverId ? 'border-red-500' : 'border-gray-600'
+                      errors?.giverId ? 'border-red-500' : 'border-gray-600'
                     }`}
                   >
                     <option value="">Select who gave you the referral...</option>
                     <option value="external">Out of chaper member</option>
+                    <option value="fleet-earnings">Fleet earnings</option>
                     {users
                       ?.filter((navigator) => navigator.id !== user?.id && navigator?.membershipStatus === 'ACTIVE')
                       .map((navigator) => (
@@ -269,10 +270,10 @@ const AnchorForm = ({ inputs, errors, handleInput, isLoading, handleSubmit, user
                         </option>
                       ))}
                   </select>
-                  {errors.giverId && (
+                  {errors?.giverId && (
                     <p className="text-red-400 text-sm mt-1 flex items-center space-x-1">
                       <AlertCircle className="w-4 h-4" />
-                      <span>{errors.giverId}</span>
+                      <span>{errors?.giverId}</span>
                     </p>
                   )}
                 </div>
@@ -297,14 +298,14 @@ const AnchorForm = ({ inputs, errors, handleInput, isLoading, handleSubmit, user
                         value={inputs?.externalGiverName || ''}
                         onChange={handleInput}
                         placeholder="Enter their full name"
-                        className={`w-full px-4 py-3 bg-gray-800/50 border rounded-lg text-white focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-all ${
-                          errors.externalGiverName ? 'border-red-500' : 'border-gray-600'
+                        className={`w-full px-4 py-3 bg-gray-800/50 border rounded-lg text-white focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-all focus:outline-none ${
+                          errors?.externalGiverName ? 'border-red-500' : 'border-gray-600'
                         }`}
                       />
-                      {errors.externalGiverName && (
+                      {errors?.externalGiverName && (
                         <p className="text-red-400 text-sm mt-1 flex items-center space-x-1">
                           <AlertCircle className="w-4 h-4" />
-                          <span>{errors.externalGiverName}</span>
+                          <span>{errors?.externalGiverName}</span>
                         </p>
                       )}
                     </div>
@@ -318,14 +319,14 @@ const AnchorForm = ({ inputs, errors, handleInput, isLoading, handleSubmit, user
                         value={inputs?.externalGiverEmail || ''}
                         onChange={handleInput}
                         placeholder="their.email@company.com"
-                        className={`w-full px-4 py-3 bg-gray-800/50 border rounded-lg text-white focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-all ${
-                          errors.externalGiverEmail ? 'border-red-500' : 'border-gray-600'
+                        className={`w-full px-4 py-3 bg-gray-800/50 border rounded-lg text-white focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-all focus:outline-none ${
+                          errors?.externalGiverEmail ? 'border-red-500' : 'border-gray-600'
                         }`}
                       />
-                      {errors.externalGiverEmail && (
+                      {errors?.externalGiverEmail && (
                         <p className="text-red-400 text-sm mt-1 flex items-center space-x-1">
                           <AlertCircle className="w-4 h-4" />
-                          <span>{errors.externalGiverEmail}</span>
+                          <span>{errors?.externalGiverEmail}</span>
                         </p>
                       )}
                     </div>
@@ -339,14 +340,14 @@ const AnchorForm = ({ inputs, errors, handleInput, isLoading, handleSubmit, user
                         value={inputs?.externalGiverCompany || ''}
                         onChange={handleInput}
                         placeholder="Their company or organization name"
-                        className={`w-full px-4 py-3 bg-gray-800/50 border rounded-lg text-white focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-all ${
-                          errors.externalGiverCompany ? 'border-red-500' : 'border-gray-600'
+                        className={`w-full px-4 py-3 bg-gray-800/50 border rounded-lg text-white focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-all focus:outline-none ${
+                          errors?.externalGiverCompany ? 'border-red-500' : 'border-gray-600'
                         }`}
                       />
-                      {errors.externalGiverCompany && (
+                      {errors?.externalGiverCompany && (
                         <p className="text-red-400 text-sm mt-1 flex items-center space-x-1">
                           <AlertCircle className="w-4 h-4" />
-                          <span>{errors.externalGiverCompany}</span>
+                          <span>{errors?.externalGiverCompany}</span>
                         </p>
                       )}
                     </div>
@@ -373,7 +374,7 @@ const AnchorForm = ({ inputs, errors, handleInput, isLoading, handleSubmit, user
                 onChange={handleInput}
                 placeholder="0.00"
                 step="0.01"
-                className={`flex-1 bg-gray-800/50 border rounded-lg px-3 py-2.5 text-white focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 ${errors?.businessValue ? 'border-red-500' : 'border-gray-600'}`}
+                className={`flex-1 bg-gray-800/50 border rounded-lg px-3 py-2.5 text-white focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 focus:outline-none ${errors?.businessValue ? 'border-red-500' : 'border-gray-600'}`}
               />
             </div>
             {inputs?.businessValue && (
@@ -395,7 +396,7 @@ const AnchorForm = ({ inputs, errors, handleInput, isLoading, handleSubmit, user
                 value={inputs?.clientName || ''}
                 onChange={handleInput}
                 placeholder="Client or company name"
-                className="w-full bg-gray-800/50 border border-gray-600 rounded-lg px-3 py-2.5 text-white focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+                className="w-full bg-gray-800/50 border border-gray-600 rounded-lg px-3 py-2.5 text-white focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 focus:outline-none "
               />
             </div>
           )}
@@ -412,7 +413,7 @@ const AnchorForm = ({ inputs, errors, handleInput, isLoading, handleSubmit, user
               value={formatDateForInput(inputs?.closedDate) || ''}
               onChange={handleInput}
               max={new Date().toISOString().split('T')[0]}
-              className={`w-full bg-gray-800/50 border rounded-lg px-3 py-2.5 text-white focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 ${errors?.closedDate ? 'border-red-500' : 'border-gray-600'}`}
+              className={`w-full bg-gray-800/50 border rounded-lg px-3 py-2.5 text-white focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 focus:outline-none  ${errors?.closedDate ? 'border-red-500' : 'border-gray-600'}`}
             />
             {errors?.closedDate && <p className="mt-1 text-sm text-red-400">{errors?.closedDate}</p>}
           </div>
@@ -429,7 +430,7 @@ const AnchorForm = ({ inputs, errors, handleInput, isLoading, handleSubmit, user
               onChange={handleInput}
               placeholder="Describe the business that was closed (services provided, project details, etc.)"
               rows={4}
-              className={`w-full bg-gray-800/50 border rounded-lg px-3 py-2.5 text-white focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 resize-none ${errors?.description ? 'border-red-500' : 'border-gray-600'}`}
+              className={`w-full bg-gray-800/50 border rounded-lg px-3 py-2.5 text-white focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 resize-none focus:outline-none  ${errors?.description ? 'border-red-500' : 'border-gray-600'}`}
             />
             {errors?.description && <p className="mt-1 text-sm text-red-400">{errors?.description}</p>}
           </div>
@@ -440,7 +441,7 @@ const AnchorForm = ({ inputs, errors, handleInput, isLoading, handleSubmit, user
               <AlertCircle className="w-4 h-4 inline mr-2" />
               Status
             </label>
-            <div className="w-full bg-gradient-to-r from-gray-800/50 to-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 relative overflow-hidden">
+            <div className="w-full bg-linear-to-r from-gray-800/50 to-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 relative overflow-hidden">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <div className={`w-3 h-3 rounded-full ${getAnchorStatusColor(inputs?.status)}`}></div>
@@ -448,7 +449,7 @@ const AnchorForm = ({ inputs, errors, handleInput, isLoading, handleSubmit, user
                 </div>
                 <div className="text-xs text-gray-400 bg-gray-600/30 px-2 py-1 rounded">Read Only</div>
               </div>
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent transform -skew-x-12 -translate-x-full animate-pulse"></div>
+              <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/5 to-transparent transform -skew-x-12 -translate-x-full animate-pulse"></div>
             </div>
           </div>
 
@@ -461,7 +462,7 @@ const AnchorForm = ({ inputs, errors, handleInput, isLoading, handleSubmit, user
               onChange={handleInput}
               placeholder="Any additional details about this closed business..."
               rows={3}
-              className="w-full bg-gray-800/50 border border-gray-600 rounded-lg px-3 py-2.5 text-white focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 resize-none"
+              className="w-full bg-gray-800/50 border border-gray-600 rounded-lg px-3 py-2.5 text-white focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 resize-none focus:outline-none "
             />
           </div>
         </div>
@@ -489,7 +490,7 @@ const AnchorForm = ({ inputs, errors, handleInput, isLoading, handleSubmit, user
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             disabled={isLoading || session.data?.user?.id !== user?.id}
-            className="flex-1 px-6 py-3 bg-gradient-to-r from-teal-600 via-cyan-600 to-blue-600 text-white rounded-lg hover:from-teal-500 hover:to-blue-500 transition-all flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 px-6 py-3 bg-linear-to-r from-teal-600 via-cyan-600 to-blue-600 text-white rounded-lg hover:from-teal-500 hover:to-blue-500 transition-all flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? (
               <>

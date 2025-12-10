@@ -44,7 +44,7 @@ const SwabbieApplicationForm: FC<IForm> = ({ inputs, errors, handleInput, handle
             {/* Personal Information */}
             <section>
               <div className="flex items-center mb-6">
-                <div className="bg-gradient-to-b from-teal-600 to-teal-700 p-2 rounded-lg mr-4 shadow-lg shadow-cyan-900/50">
+                <div className="bg-linear-to-b from-teal-600 to-teal-700 p-2 rounded-lg mr-4 shadow-lg shadow-cyan-900/50">
                   <User className="w-5 h-5 text-white" />
                 </div>
                 <h2 className="text-2xl font-semibold text-white">Visitor Details</h2>
@@ -113,7 +113,7 @@ const SwabbieApplicationForm: FC<IForm> = ({ inputs, errors, handleInput, handle
             {/* Maritime Information */}
             <section>
               <div className="flex items-center mb-6">
-                <div className="bg-gradient-to-r from-cyan-600 to-cyan-700 p-2 rounded-lg mr-4 shadow-lg shadow-emerald-900/50">
+                <div className="bg-linear-to-r from-cyan-600 to-cyan-700 p-2 rounded-lg mr-4 shadow-lg shadow-emerald-900/50">
                   <Ship className="w-5 h-5 text-white" />
                 </div>
                 <h2 className="text-2xl font-semibold text-white">Business Credentials</h2>
@@ -188,7 +188,7 @@ const SwabbieApplicationForm: FC<IForm> = ({ inputs, errors, handleInput, handle
             {/* Harbor Selection */}
             <section>
               <div className="flex items-center mb-6">
-                <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-2 rounded-lg mr-4 shadow-lg shadow-purple-900/50">
+                <div className="bg-linear-to-r from-blue-600 to-blue-700 p-2 rounded-lg mr-4 shadow-lg shadow-purple-900/50">
                   <Compass className="w-5 h-5 text-white" />
                 </div>
                 <h2 className="text-2xl font-semibold text-white">Storm Harbor Watch Chapter</h2>
@@ -285,7 +285,7 @@ const SwabbieApplicationForm: FC<IForm> = ({ inputs, errors, handleInput, handle
               disabled={isLoading}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 disabled:from-slate-700 disabled:to-slate-600 px-8 py-3 rounded-lg font-semibold text-white transition-all inline-flex items-center gap-2 disabled:cursor-not-allowed cursor-pointer group whitespace-nowrap shadow-lg shadow-cyan-900/50"
+              className="bg-linear-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 disabled:from-slate-700 disabled:to-slate-600 px-8 py-3 rounded-lg font-semibold text-white transition-all inline-flex items-center gap-2 disabled:cursor-not-allowed cursor-pointer group whitespace-nowrap shadow-lg shadow-cyan-900/50"
             >
               {isLoading ? (
                 <>

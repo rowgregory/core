@@ -1,7 +1,6 @@
-import { PayloadAction, Reducer, createSlice } from '@reduxjs/toolkit'
+import { Reducer, createSlice } from '@reduxjs/toolkit'
 import { User, UserStats } from '@/types/user'
 import { initialUserFormState } from '@/app/lib/constants/user/initialUserFormState'
-import { userApi } from '../services/userApi'
 
 export interface UserState {
   // Core data
@@ -91,7 +90,7 @@ export const userSlice = createSlice({
       state.error = null
       state.user = null
     },
-    setUsers: (state, { payload }: any) => {
+    setUsers: (state, { payload }) => {
       state.users = payload
       state.stats.total = payload?.length
       state.noUsers = payload?.length === 0
@@ -99,37 +98,19 @@ export const userSlice = createSlice({
     setUser: (state, { payload }) => {
       state.user = payload
     },
-    addUserToState: (state, action: PayloadAction<any>) => {
-      state.users.push(action.payload)
+    addUserToState: (state, { payload }) => {
+      state.users.push(payload)
     },
-    updateUserInState: (state, action: PayloadAction<{ id: string; data: any }>) => {
-      const index = state.users.findIndex((p) => p.id === action.payload.id)
+    updateUserInState: (state, { payload }) => {
+      const index = state.users.findIndex((p) => p.id === payload.id)
 
       if (index !== -1) {
-        state.users[index] = { ...state.users[index], ...action.payload.data }
+        state.users[index] = payload
       }
     },
-    removeUserFromState: (state, action) => {
-      state.users = state.users.filter((user: { id: string }) => user?.id !== action.payload)
-    },
-    setHydrateUsers: (state, { payload }) => {
-      state.users = payload
+    removeUserFromState: (state, { payload }) => {
+      state.users = state.users.filter((user: { id: string }) => user?.id !== payload)
     }
-  },
-  extraReducers: (builder) => {
-    builder
-      .addMatcher(userApi.endpoints.getUsers.matchFulfilled, (state, { payload }: any) => {
-        state.users = payload.users
-        state.loading = false
-      })
-
-      .addMatcher(
-        (action) => action.type.endsWith('rejected') && action.payload?.data?.sliceName === 'userApi',
-        (state, { payload }: any) => {
-          state.loading = false
-          state.error = payload?.data?.message
-        }
-      )
   }
 })
 
@@ -146,7 +127,6 @@ export const {
   addUserToState,
   updateUserInState,
   removeUserFromState,
-  setHydrateUsers,
   setOpenStowawayDrawer,
   setCloseStowawayDrawer
 } = userSlice.actions

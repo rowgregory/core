@@ -77,11 +77,7 @@ const BeaconActions = () => {
       // Handle image deletions
       if (inputs?.imagesToDelete && inputs.imagesToDelete.length > 0) {
         for (const imageToDelete of inputs.imagesToDelete) {
-          try {
-            await deleteFileFromFirebase(imageToDelete.filename)
-          } catch (error) {
-            console.error('Failed to delete image:', imageToDelete.filename, error)
-          }
+          await deleteFileFromFirebase(imageToDelete.filename)
         }
       }
 

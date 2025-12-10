@@ -11,7 +11,7 @@ const ParticipantsWithDirectionArrow: FC<{ parley: IParley }> = ({ parley }) => 
       <div className="flex-1 min-w-0">
         <p className="text-xs text-gray-500 uppercase tracking-wide mb-2">Requester</p>
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+          <div className="w-10 h-10 bg-linear-to-r from-teal-500 to-cyan-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
             {parley.requester.profileImage ? (
               <Picture
                 src={parley.requester.profileImage}
@@ -39,7 +39,7 @@ const ParticipantsWithDirectionArrow: FC<{ parley: IParley }> = ({ parley }) => 
       <div className="flex-1 min-w-0">
         <p className="text-xs text-gray-500 uppercase tracking-wide mb-2">Recipient</p>
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+          <div className="w-10 h-10 bg-linear-to-r from-cyan-500 to-blue-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
             {parley.recipient.profileImage ? (
               <Picture
                 src={parley.recipient.profileImage}

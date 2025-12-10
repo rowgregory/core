@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 enum MembershipStatus {
@@ -88,11 +89,11 @@ model VerificationToken {
 }
 
 model User {
-  id                         String             @id @default(cuid())
-  createdAt                  DateTime           @default(now())
-  updatedAt                  DateTime           @updatedAt
+  id                         String                     @id @default(cuid())
+  createdAt                  DateTime                   @default(now())
+  updatedAt                  DateTime                   @updatedAt
   name                       String
-  email                      String             @unique
+  email                      String                     @unique
   phone                      String?
   company                    String
   chapterId                  String
@@ -100,38 +101,38 @@ model User {
   expiresAt                  DateTime?
   image                      String?
   interests                  String[]
-  isActive                   Boolean            @default(true)
-  isPublic                   Boolean            @default(true)
+  isActive                   Boolean                    @default(true)
+  isPublic                   Boolean                    @default(true)
   joinedAt                   DateTime?
   lastLoginAt                DateTime?
-  membershipStatus           MembershipStatus   @default(PENDING)
+  membershipStatus           MembershipStatus           @default(PENDING)
   profileImage               String?
   profileImageFilename       String?
   role                       String
-  location                   String?            @default("")
-  tempId                     String             @default("")
-  isAdmin                    Boolean            @default(false)
-  isMembership               Boolean            @default(false)
-  isSuperUser                Boolean            @default(false)
-  bio                        String?            @default("")
-  businessLicenseNumber      String?            @default("")
-  isLicensed                 Boolean?           @default(false)
-  industry                   String             @default("")
-  title                      String?            @default("")
-  website                    String?            @default("")
-  yearsInBusiness            String?            @default("")
-  hasCompletedApplication    Boolean            @default(false)
-  rejectedAt                 String?            @default("")
-  rejectionReason            String?            @default("")
-  backgroundCheckCompletedAt String?            @default("")
-  finalDecisionAt            String?            @default("")
-  initialReviewCompletedAt   String?            @default("")
-  rejectedStep               String?            @default("")
-  isBackgroudCheckCompleted  Boolean            @default(false)
-  isInitialReviewCompleted   Boolean            @default(false)
-  signals                    Json?              @default("[]")
-  isFinalDecisionMade        Boolean            @default(false)
-  isRejected                 Boolean            @default(false)
+  location                   String?                    @default("")
+  tempId                     String                     @default("")
+  isAdmin                    Boolean                    @default(false)
+  isMembership               Boolean                    @default(false)
+  isSuperUser                Boolean                    @default(false)
+  bio                        String?                    @default("")
+  businessLicenseNumber      String?                    @default("")
+  isLicensed                 Boolean?                   @default(false)
+  industry                   String                     @default("")
+  title                      String?                    @default("")
+  website                    String?                    @default("")
+  yearsInBusiness            String?                    @default("")
+  hasCompletedApplication    Boolean                    @default(false)
+  rejectedAt                 String?                    @default("")
+  rejectionReason            String?                    @default("")
+  backgroundCheckCompletedAt String?                    @default("")
+  finalDecisionAt            String?                    @default("")
+  initialReviewCompletedAt   String?                    @default("")
+  rejectedStep               String?                    @default("")
+  isBackgroudCheckCompleted  Boolean                    @default(false)
+  isInitialReviewCompleted   Boolean                    @default(false)
+  signals                    Json?                      @default("[]")
+  isFinalDecisionMade        Boolean                    @default(false)
+  isRejected                 Boolean                    @default(false)
   askMeAbout                 Json?
   careerAchievements         Json?
   collage                    Json?
@@ -154,17 +155,16 @@ model User {
   youtubeUrl                 String?
   weeklyTreasureWishlist     String?
   accounts                   Account[]
-  givenCredits               Anchor[]           @relation("AnchorGiver")
-  receivedCredits            Anchor[]           @relation("AnchorReceiver")
+  givenCredits               Anchor[]                   @relation("AnchorGiver")
+  receivedCredits            Anchor[]                   @relation("AnchorReceiver")
   logs                       Log[]
-  sentNotifications          Notification[]     @relation("SentNotifications")
-  notificationsRead          NotificationRead[]
-  receivedMeetings           Parley[]           @relation("ParleyRecipient")
-  requestedMeetings          Parley[]           @relation("ParleyRequester")
+  receivedMeetings           Parley[]                   @relation("ParleyRecipient")
+  requestedMeetings          Parley[]                   @relation("ParleyRequester")
   sessions                   Session[]
-  giver                      TreasureMap[]      @relation("TreasureMapGiver")
-  receiver                   TreasureMap[]      @relation("TreasureMapReceiver")
-  chapter                    Chapter            @relation(fields: [chapterId], references: [id])
+  giver                      TreasureMap[]              @relation("TreasureMapGiver")
+  receiver                   TreasureMap[]              @relation("TreasureMapReceiver")
+  reporter                   SuspiciousActivityReport[] @relation("ReportedBy")
+  chapter                    Chapter                    @relation(fields: [chapterId], references: [id])
 }
 
 model Parley {
@@ -231,24 +231,24 @@ model Anchor {
 }
 
 model Chapter {
-  id                String         @id @default(cuid())
-  name              String
-  location          String
-  meetingDay        String
-  meetingTime       String
-  createdAt         DateTime       @default(now())
-  updatedAt         DateTime       @updatedAt
-  meetingFrequency  String         @default("WEEKLY")
-  hasUnlockedBooty  Boolean        @default(false)
-  hasUnlockedGrog   Boolean        @default(false)
-  hasUnlockedMuster Boolean        @default(false)
-  anchors           Anchor[]
-  grogs             Grog[]
-  notifications     Notification[]
-  parleys           Parley[]
-  rendezvous        Rendezvous[]
-  treasureMaps      TreasureMap[]
-  users             User[]
+  id                        String                     @id @default(cuid())
+  name                      String
+  location                  String
+  meetingDay                String
+  meetingTime               String
+  createdAt                 DateTime                   @default(now())
+  updatedAt                 DateTime                   @updatedAt
+  meetingFrequency          String                     @default("WEEKLY")
+  hasUnlockedBooty          Boolean                    @default(false)
+  hasUnlockedGrog           Boolean                    @default(false)
+  hasUnlockedMuster         Boolean                    @default(false)
+  anchors                   Anchor[]
+  grogs                     Grog[]
+  parleys                   Parley[]
+  rendezvous                Rendezvous[]
+  treasureMaps              TreasureMap[]
+  users                     User[]
+  suspiciousActivityReports SuspiciousActivityReport[]
 }
 
 model Newsletter {
@@ -270,35 +270,6 @@ model Log {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   user      User?    @relation(fields: [userId], references: [id])
-}
-
-model Notification {
-  id         String             @id @default(cuid())
-  title      String
-  message    String
-  type       NotificationType
-  isRead     Boolean            @default(false)
-  entityId   String?
-  entityType String?
-  createdAt  DateTime           @default(now())
-  updatedAt  DateTime           @updatedAt
-  chapterId  String
-  senderId   String
-  chapter    Chapter            @relation(fields: [chapterId], references: [id], onDelete: Cascade)
-  sender     User               @relation("SentNotifications", fields: [senderId], references: [id])
-  readBy     NotificationRead[]
-}
-
-model NotificationRead {
-  id             String       @id @default(cuid())
-  notificationId String
-  userId         String
-  readAt         DateTime     @default(now())
-  isRead         Boolean      @default(false)
-  notification   Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
-  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([notificationId, userId])
 }
 
 model TreasureMap {
@@ -376,4 +347,17 @@ model Rendezvous {
   chapterId         String
   status            RendezvousStatus @default(ACTIVE)
   chapter           Chapter          @relation(fields: [chapterId], references: [id])
+}
+
+model SuspiciousActivityReport {
+  id          String   @id @default(cuid())
+  reportType  String // SPAM, INAPPROPRIATE, FRAUD, HARASSMENT, OTHER
+  description String
+  reporterId  String
+  reporter    User     @relation("ReportedBy", fields: [reporterId], references: [id])
+  chapterId   String
+  chapter     Chapter  @relation(fields: [chapterId], references: [id])
+  status      String   @default("PENDING") // PENDING, REVIEWED, RESOLVED
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

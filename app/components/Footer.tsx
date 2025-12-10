@@ -83,7 +83,7 @@ const Footer = () => {
         </div>
 
         {/* Divider */}
-        <div className="h-px bg-gradient-to-r from-transparent via-blue-400/30 to-transparent mb-8 sm:mb-6 md:mb-8"></div>
+        <div className="h-px bg-linear-to-r from-transparent via-blue-400/30 to-transparent mb-8 sm:mb-6 md:mb-8"></div>
 
         {/* Bottom Section */}
         <div className="flex flex-col sm:flex-row justify-between items-center gap-6 sm:gap-4 md:gap-6">
@@ -91,7 +91,7 @@ const Footer = () => {
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}>
             <Link
               href="/"
-              className="flex items-center gap-2 text-xl sm:text-lg md:text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent text-center"
+              className="flex items-center gap-2 text-xl sm:text-lg md:text-2xl font-bold bg-linear-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent text-center"
             >
               Coastal Referral Exchange
             </Link>

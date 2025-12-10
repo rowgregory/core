@@ -1,43 +1,23 @@
-import { PayloadAction, Reducer, createSlice } from '@reduxjs/toolkit'
+import { Reducer, createSlice } from '@reduxjs/toolkit'
 
 export interface AppStatePayload {
-  lastTempId: string
-  tempApplication: {
-    tempId: string
-    submittedDate: string
-    formData: any
-  } | null
   handbookDrawer: boolean
   mobileNavigation: boolean
   navigationDrawer: boolean
+  isNavigationCollapsed: boolean
 }
 
 const initialAppState: AppStatePayload = {
-  lastTempId: '',
-  tempApplication: null,
   handbookDrawer: false,
   mobileNavigation: false,
-  navigationDrawer: false
+  navigationDrawer: false,
+  isNavigationCollapsed: false
 }
 
 export const appSlice = createSlice({
   name: 'app',
   initialState: initialAppState,
   reducers: {
-    setLastTempId: (state, action) => {
-      state.lastTempId = action.payload
-    },
-    setTempApplication: (state, action: PayloadAction<any>) => {
-      const { tempId, ...rest } = action.payload
-      state.tempApplication = {
-        tempId,
-        submittedDate: new Date().toLocaleDateString(),
-        formData: rest
-      }
-    },
-    clearTempApplication: (state) => {
-      state.tempApplication = null
-    },
     setOpenHandbookDrawer: (state) => {
       state.handbookDrawer = true
     },
@@ -55,6 +35,9 @@ export const appSlice = createSlice({
     },
     setCloseNavigationDrawer: (state) => {
       state.navigationDrawer = false
+    },
+    setIsNavigationCollapsed: (state, payload) => {
+      state.isNavigationCollapsed = !payload
     }
   }
 })
@@ -62,13 +45,11 @@ export const appSlice = createSlice({
 export const appReducer = appSlice.reducer as Reducer<AppStatePayload>
 
 export const {
-  setLastTempId,
-  setTempApplication,
-  clearTempApplication,
   setOpenHandbookDrawer,
   setCloseHandbookDrawer,
   setOpenMobileNavigation,
   setCloseMobileNavigation,
   setOpenNavigationDrawer,
-  setCloseNavigationDrawer
+  setCloseNavigationDrawer,
+  setIsNavigationCollapsed
 } = appSlice.actions

@@ -61,7 +61,7 @@ const Swabbie = () => {
           className="text-center mb-8"
         >
           <div className="flex items-center justify-center space-x-3 mb-4">
-            <div className="md:flex h-12 w-12 bg-gradient-to-r from-teal-500 via-cyan-600 to-blue-700 rounded-xl hidden items-center justify-center shadow-lg shadow-cyan-900/50">
+            <div className="md:flex h-12 w-12 bg-linear-to-r from-teal-500 via-cyan-600 to-blue-700 rounded-xl hidden items-center justify-center shadow-lg shadow-cyan-900/50">
               <ShipWheel className="h-6 w-6 text-white" />
             </div>
             <h1 className="text-3xl font-bold text-white">Coastal Referral Exchange</h1>

@@ -20,7 +20,7 @@ const PurposeOverview = () => {
             variants={fadeInUp}
             className="text-center p-6 bg-gray-700/30 rounded-xl border border-gray-600/30"
           >
-            <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-blue-500/25">
+            <div className="w-16 h-16 bg-linear-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-blue-500/25">
               <Handshake className="w-8 h-8 text-white" />
             </div>
             <h3 className="text-xl font-semibold text-white mb-2">Share Opportunities</h3>
@@ -33,7 +33,7 @@ const PurposeOverview = () => {
             variants={fadeInUp}
             className="text-center p-6 bg-gray-700/30 rounded-xl border border-gray-600/30"
           >
-            <div className="w-16 h-16 bg-gradient-to-r from-cyan-500 to-cyan-600 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-purple-500/25">
+            <div className="w-16 h-16 bg-linear-to-r from-cyan-500 to-cyan-600 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-purple-500/25">
               <Users className="w-8 h-8 text-white" />
             </div>
             <h3 className="text-xl font-semibold text-white mb-2">Offer Advice</h3>
@@ -44,7 +44,7 @@ const PurposeOverview = () => {
             variants={fadeInUp}
             className="text-center p-6 bg-gray-700/30 rounded-xl border border-gray-600/30"
           >
-            <div className="w-16 h-16 bg-gradient-to-r from-teal-500 to-teal-600 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-indigo-500/25">
+            <div className="w-16 h-16 bg-linear-to-r from-teal-500 to-teal-600 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-indigo-500/25">
               <Calendar className="w-8 h-8 text-white" />
             </div>
             <h3 className="text-xl font-semibold text-white mb-2">Schedule Meetings</h3>

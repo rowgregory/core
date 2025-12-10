@@ -14,18 +14,18 @@ const NavigatorCard: FC<INavigatorCard> = ({ navigator }) => {
 
   return (
     <div
-      onClick={() => push(`/navigators/${navigator.id}/profile`)}
+      onClick={() => push(`/navigators/${navigator.id}`)}
       className="bg-slate-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border border-slate-700 cursor-pointer group"
     >
       {/* Member Image */}
-      <div className="h-[400px] bg-gradient-to-br from-blue-500 to-teal-500 relative overflow-hidden">
+      <div className="h-[400px] bg-linear-to-br from-blue-500 to-teal-500 relative overflow-hidden">
         <Picture
           priority={true}
           src={navigator?.profileImage}
           alt={navigator?.name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/50 to-transparent" />
         {navigator?.yearsInBusiness && (
           <div className="absolute bottom-4 left-4">
             <div className="bg-white/90 px-3 py-1 rounded-full text-sm font-medium text-slate-900">

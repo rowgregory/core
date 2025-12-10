@@ -2,34 +2,34 @@
 
 import { motion, AnimatePresence } from 'framer-motion'
 import { X } from 'lucide-react'
-import { useAppDispatch, useFormSelector, useTreasureMapSelector } from '@/app/redux/store'
+import { useAppDispatch, useFormSelector, useTreasureMapSelector, useUserSelector } from '@/app/redux/store'
 import Backdrop from '../common/Backdrop'
 import Drawer from '../common/Drawer'
-import { useSession } from 'next-auth/react'
 import {
   addTreasureMapToState,
   setCloseTreasureMapDrawer,
   updateTreasureMapInState
 } from '@/app/redux/features/treasureMapSlice'
 import TreasureMapForm from '../forms/TreasureMapForm'
-import { createFormActions } from '@/app/redux/features/formSlice'
+import { createFormActions, resetForm } from '@/app/redux/features/formSlice'
 import { showToast } from '@/app/redux/features/toastSlice'
 import { chapterId } from '@/app/lib/constants/api/chapterId'
 import { useCreateTreasureMapMutation, useUpdateTreasureMapMutation } from '@/app/redux/services/treasureMapApi'
 import validateTreasureMapForm from '../forms/validations/validateTreasureMapForm'
+import { recomputeTreasureMapCard } from '@/app/redux/features/dashboardSlice'
+import { recomputeDashboardStats } from '@/app/lib/utils/common/recomputeDashboardStats'
 
 const TreasureMapDrawer = () => {
-  const session = useSession()
   const dispatch = useAppDispatch()
   const onClose = () => dispatch(setCloseTreasureMapDrawer())
   const { treasureMapForm } = useFormSelector()
+  const { user } = useUserSelector()
   const inputs = treasureMapForm?.inputs
   const errors = treasureMapForm?.errors
   const { handleInput, setErrors } = createFormActions('treasureMapForm', dispatch)
   const [createTreasureMap, { isLoading: isCreating }] = useCreateTreasureMapMutation()
   const [updateTreasureMap, { isLoading: isUpdating }] = useUpdateTreasureMapMutation()
   const isLoading = isCreating || isUpdating
-  const user = session?.data?.user
   const { treasureMapDrawer } = useTreasureMapSelector()
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
@@ -50,8 +50,11 @@ const TreasureMapDrawer = () => {
       } else {
         const created = await createTreasureMap({ ...treasureMapData }).unwrap()
         dispatch(addTreasureMapToState(created?.treasureMap))
+        dispatch(recomputeTreasureMapCard())
       }
+      recomputeDashboardStats({ id: user?.id, isAdmin: user?.isAdmin })
 
+      dispatch(resetForm('treasureMapForm'))
       onClose()
 
       dispatch(
@@ -88,8 +91,8 @@ const TreasureMapDrawer = () => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2, duration: 0.4 }}
               >
-                <h2 className="text-xl font-bold bg-gradient-to-r from-cyan-400 via-blue-400 to-teal-400 bg-clip-text text-transparent">
-                  {treasureMapForm?.inputs?.isUpdating ? 'Update Treasure Map' : 'Generate Treasure Map'}
+                <h2 className="text-xl font-bold bg-linear-to-r from-cyan-400 via-blue-400 to-teal-400 bg-clip-text text-transparent">
+                  {treasureMapForm?.inputs?.isUpdating ? 'Update Treasure Map' : 'Send Treasure Map'}
                 </h2>
               </motion.div>
 

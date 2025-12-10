@@ -1,13 +1,24 @@
-import React from 'react'
+import React, { FC } from 'react'
 import ActionButtonWithDropdown from '../header/ActionButtonWithDropdown'
 import MobileMenuButton from '../header/MobileMenuButton'
 import LogoutButton from '../header/LogoutButton'
 import BeaconActions from '../beacon/BeaconActions'
+import { useApplicationSelector } from '@/app/redux/store'
 
-const FixedHeader = ({ isNavigationCollapsed, selectedPage, links }: any) => {
+interface IFixedHeader {
+  selectedPage: string
+  links: { id: string; label: string; description: string }[]
+}
+
+const FixedHeader: FC<IFixedHeader> = ({ selectedPage, links }) => {
+  const { isNavigationCollapsed } = useApplicationSelector()
   const getPageDisplayName = (page: string) => {
     const item = links?.find((nav: { id: string }) => nav.id === page)
     return item?.label || page
+  }
+  const getPageDisplayDescription = (page: string) => {
+    const item = links?.find((nav: { id: string }) => nav.id === page)
+    return item?.description
   }
 
   return (
@@ -21,13 +32,13 @@ const FixedHeader = ({ isNavigationCollapsed, selectedPage, links }: any) => {
         {/* Header Left */}
         <div className="flex items-center space-x-4">
           <div>
-            <h1 className="text-xl font-bold bg-gradient-to-r from-cyan-400 via-cyan-400 to-fuchsia-400 bg-clip-text text-transparent">
+            <h1 className="text-xl font-bold bg-linear-to-r from-cyan-400 via-blue-400 to-teal-400 bg-clip-text text-transparent">
               {getPageDisplayName(selectedPage)}
             </h1>
-            <p className="text-gray-400 text-sm hidden lg:block">
+            <p className="text-gray-400 text-sm hidden md:block">
               {selectedPage === 'bridge'
                 ? 'Complete chapter management and analytics'
-                : `Currently viewing: ${getPageDisplayName(selectedPage)}`}
+                : `Currently viewing: ${getPageDisplayDescription(selectedPage)}`}
             </p>
           </div>
         </div>

@@ -3,43 +3,44 @@
 import React, { FC, useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Save, Edit2, X, Settings2, MapPin, Calendar, Clock, CheckCircle, Sliders } from 'lucide-react'
-import { createFormActions, setInputs } from '@/app/redux/features/formSlice'
-import { RootState, useAppDispatch, useAppSelector } from '@/app/redux/store'
+import { createFormActions, resetForm, setInputs } from '@/app/redux/features/formSlice'
+import { useAppDispatch, useFormSelector, useSettingsSelector } from '@/app/redux/store'
 import { showToast } from '@/app/redux/features/toastSlice'
-import { useGetChapterSettingsQuery, useUpdateChapterSettingsMutation } from '@/app/redux/services/settingsApi'
+import { useUpdateChapterSettingsMutation } from '@/app/redux/services/settingsApi'
 import { Input } from '@/app/components/ui/Input'
 import { Select } from '@/app/components/ui/Select'
 import { validateChapterSettingsForm } from '@/app/lib/utils/validations/validateChapterSettingsForm'
 import { MEETING_FREQUENCIES } from '@/app/lib/constants/settings/meetingFrequencies'
 import { MEETING_DAYS } from '@/app/lib/constants/settings/meetingDay'
 import { chapterId } from '@/app/lib/constants/api/chapterId'
+import { setChapter } from '@/app/redux/features/settingsSlice'
 import { normalizeTimeFormat } from '@/app/lib/utils/time/normalizeTimeFormat'
 
 const Rigging: FC = () => {
   const dispatch = useAppDispatch()
-  const { settingsForm } = useAppSelector((state: RootState) => state.form)
+  const { settingsForm } = useFormSelector()
+  const { settings } = useSettingsSelector()
   const { handleInput, setErrors } = createFormActions('settingsForm', dispatch)
   const [updateChapterSettings, { isLoading }] = useUpdateChapterSettingsMutation()
   const [isEditing, setIsEditing] = useState(false)
-  const { data } = useGetChapterSettingsQuery(chapterId)
   const inputs = settingsForm?.inputs
 
   useEffect(() => {
-    if (data?.settings) {
+    if (settings) {
       dispatch(
         setInputs({
           formName: 'settingsForm',
           data: {
-            name: data?.settings.name,
-            location: data?.settings.location,
-            meetingDay: data?.settings.meetingDay,
-            meetingTime: normalizeTimeFormat(data?.settings.meetingTime),
-            meetingFrequency: data?.settings.meetingFrequency
+            name: settings.name,
+            location: settings.location,
+            meetingDay: settings.meetingDay,
+            meetingTime: normalizeTimeFormat(settings.meetingTime),
+            meetingFrequency: settings.meetingFrequency
           }
         })
       )
     }
-  }, [dispatch, data?.settings])
+  }, [dispatch, settings])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -47,9 +48,8 @@ const Rigging: FC = () => {
     try {
       if (!validateChapterSettingsForm(inputs, setErrors)) return
 
-      await updateChapterSettings({ chapterId, settings: inputs }).unwrap()
-
-      // Show success toast
+      const response = await updateChapterSettings({ chapterId, settings: inputs }).unwrap()
+      dispatch(setChapter(response.chapter))
       dispatch(
         showToast({
           type: 'success',
@@ -60,7 +60,6 @@ const Rigging: FC = () => {
 
       setIsEditing(false)
     } catch (error: any) {
-      // Show error toast
       dispatch(
         showToast({
           type: 'error',
@@ -73,8 +72,7 @@ const Rigging: FC = () => {
 
   const handleCancel = () => {
     setIsEditing(false)
-    // Reset form if needed
-    // dispatch(clearInputs({ formName: 'settingsForm' }))
+    dispatch(resetForm('settingsForm'))
   }
 
   return (
@@ -89,7 +87,7 @@ const Rigging: FC = () => {
         <>
           <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-y-6 px-8 py-6 border-b border-gray-700/50">
             <div className="flex items-center space-x-4">
-              <div className="w-16 h-16 bg-gradient-to-br from-teal-500 via-cyan-600 to-blue-600 rounded-xl flex items-center justify-center">
+              <div className="w-16 h-16 bg-linear-to-br from-teal-500 via-cyan-600 to-blue-600 rounded-xl flex items-center justify-center">
                 <Sliders className="w-8 h-8 text-white" />
               </div>
               <div>
@@ -137,7 +135,7 @@ const Rigging: FC = () => {
             {/* Chapter Information */}
             <div className="space-y-6">
               <div className="flex items-center space-x-3 mb-6">
-                <div className="w-2 h-8 bg-gradient-to-b from-cyan-400 to-cyan-400 rounded-full"></div>
+                <div className="w-2 h-8 bg-linear-to-b from-cyan-400 to-cyan-400 rounded-full"></div>
                 <h3 className="text-lg font-semibold text-white">Chapter Information</h3>
               </div>
 
@@ -167,7 +165,7 @@ const Rigging: FC = () => {
             {/* Meeting Schedule */}
             <div className="space-y-6">
               <div className="flex items-center space-x-3 mb-6">
-                <div className="w-2 h-8 bg-gradient-to-b from-cyan-400 to-fuchsia-400 rounded-full"></div>
+                <div className="w-2 h-8 bg-linear-to-b from-cyan-400 to-fuchsia-400 rounded-full"></div>
                 <h3 className="text-lg font-semibold text-white">Meeting Schedule</h3>
               </div>
 
@@ -221,7 +219,7 @@ const Rigging: FC = () => {
           >
             <div className="flex items-start space-x-4">
               <motion.div
-                className="p-2 bg-green-500/10 rounded-lg flex-shrink-0"
+                className="p-2 bg-green-500/10 rounded-lg shrink-0"
                 animate={{
                   scale: [1, 1.1, 1],
                   rotate: [0, 5, -5, 0]

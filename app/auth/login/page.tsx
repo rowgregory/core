@@ -57,7 +57,7 @@ const LoginPage = () => {
             className="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-xl backdrop-blur-sm"
           >
             <div className="flex items-start space-x-3">
-              <div className="flex-shrink-0">
+              <div className="shrink-0">
                 <ShieldX className="w-5 h-5 text-red-400" />
               </div>
               <div>

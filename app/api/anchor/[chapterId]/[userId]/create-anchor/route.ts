@@ -40,8 +40,10 @@ export async function POST(req: NextRequest, { params }: any) {
       externalReceiverCompany
     } = body
 
+    const isFleetEarnings = giverId === 'fleet-earnings'
+
     // Validation: ensure at least one participant is internal
-    if (!giverId && !receiverId) {
+    if (!isFleetEarnings && !giverId && !receiverId) {
       return NextResponse.json(
         { message: 'At least one participant (giver or receiver) must be a registered user' },
         { status: 400 }
@@ -49,13 +51,13 @@ export async function POST(req: NextRequest, { params }: any) {
     }
 
     // Prevent self-referral (only applies to internal users)
-    if (giverId && receiverId && giverId === receiverId) {
+    if (!isFleetEarnings && giverId && receiverId && giverId === receiverId) {
       return NextResponse.json({ message: 'Cannot drop anchor for yourself' }, { status: 400 })
     }
 
     // Validate internal giver if provided
     let giver = null
-    if (giverId) {
+    if (!isFleetEarnings && giverId) {
       giver = await prisma.user.findFirst({
         where: {
           id: giverId,
@@ -84,7 +86,7 @@ export async function POST(req: NextRequest, { params }: any) {
     }
 
     // Validate external participant data
-    if (!giverId && !externalGiverName?.trim()) {
+    if (!isFleetEarnings && !giverId && !externalGiverName?.trim()) {
       return NextResponse.json(
         { message: 'External giver name is required when no internal giver is selected' },
         { status: 400 }
@@ -106,29 +108,30 @@ export async function POST(req: NextRequest, { params }: any) {
         description,
         notes,
         chapterId,
-        giverId: giverId || null,
+        giverId: isFleetEarnings ? null : giverId || null,
         receiverId: receiverId || null,
         status,
-        // External giver fields (only when no internal giver)
-        externalGiverName: !giverId ? externalGiverName?.trim() : null,
-        externalGiverEmail: !giverId ? externalGiverEmail?.trim() : null,
-        externalGiverCompany: !giverId ? externalGiverCompany?.trim() : null,
+        // External giver fields
+        externalGiverName: isFleetEarnings ? 'Fleet Earnings' : !giverId ? externalGiverName?.trim() : null,
+        externalGiverEmail: isFleetEarnings ? null : !giverId ? externalGiverEmail?.trim() : null,
+        externalGiverCompany: isFleetEarnings ? 'Chapter Revenue' : !giverId ? externalGiverCompany?.trim() : null,
         // External receiver fields (only when no internal receiver)
         externalReceiverName: !receiverId ? externalReceiverName?.trim() : null,
         externalReceiverEmail: !receiverId ? externalReceiverEmail?.trim() : null,
         externalReceiverCompany: !receiverId ? externalReceiverCompany?.trim() : null
       },
       include: {
-        ...(giverId && {
-          giver: {
-            select: {
-              id: true,
-              name: true,
-              email: true,
-              image: true
+        ...(!isFleetEarnings &&
+          giverId && {
+            giver: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                image: true
+              }
             }
-          }
-        }),
+          }),
         ...(receiverId && {
           receiver: {
             select: {

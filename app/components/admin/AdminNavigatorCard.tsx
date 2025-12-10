@@ -4,7 +4,7 @@ import { useAppDispatch } from '@/app/redux/store'
 import { setInputs } from '@/app/redux/features/formSlice'
 import { setOpenAddUserDrawer } from '@/app/redux/features/userSlice'
 import { User } from '@/types/user'
-import { Building, Crown, Edit, Mail, Phone } from 'lucide-react'
+import { Crown, Edit, Mail, Phone } from 'lucide-react'
 import { formatDate } from '@/app/lib/utils/date/formatDate'
 import { getNavigatorStatusIcon } from '@/app/lib/utils/navigator/getNavigatorStatusIcon'
 import getNavigatorStatusColor from '@/app/lib/utils/navigator/getNavigatorStatusColor'
@@ -66,7 +66,7 @@ const AdminNavigatorCard: FC<{ navigator: User; index: number; viewMode: string 
             {navigator?.profileImage ? (
               <Picture src={navigator?.profileImage} priority={false} className="w-12 h-12 rounded-full object-cover" />
             ) : (
-              <div className="w-12 h-12 bg-gradient-to-r from-violet-500 to-fuchsia-500 rounded-full flex items-center justify-center text-white font-semibold">
+              <div className="w-12 h-12 bg-linear-to-r from-blue-500 to-sky-500 rounded-full flex items-center justify-center text-white font-semibold">
                 {getInitials(navigator.name)}
               </div>
             )}
@@ -84,6 +84,25 @@ const AdminNavigatorCard: FC<{ navigator: User; index: number; viewMode: string 
             </div>
             <p className="text-sm text-gray-400 truncate">{navigator.company}</p>
             <p className="text-xs text-gray-500">{navigator.industry}</p>
+
+            {/* Badges Row */}
+            <div className="flex items-center gap-1.5 mt-2">
+              {navigator.isPublic && (
+                <span className="px-2 py-0.5 bg-blue-500/20 text-blue-400 border border-blue-500/30 rounded text-xs font-medium">
+                  Public
+                </span>
+              )}
+              {navigator.isMembership && (
+                <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded text-xs font-medium">
+                  Memberhip
+                </span>
+              )}
+              {navigator.isAdmin && (
+                <span className="px-2 py-0.5 bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded text-xs font-medium">
+                  Admin
+                </span>
+              )}
+            </div>
           </div>
         </div>
 
@@ -101,10 +120,6 @@ const AdminNavigatorCard: FC<{ navigator: User; index: number; viewMode: string 
                   <span>{navigator.phone}</span>
                 </div>
               )}
-              <div className="flex items-center space-x-2 text-gray-300 text-sm">
-                <Building className="w-4 h-4 text-violet-400" />
-                <span className="truncate">{navigator?.chapter?.name}</span>
-              </div>
             </div>
 
             {/* Navigatorship Info */}
@@ -181,5 +196,4 @@ const AdminNavigatorCard: FC<{ navigator: User; index: number; viewMode: string 
     </motion.div>
   )
 }
-
 export default AdminNavigatorCard

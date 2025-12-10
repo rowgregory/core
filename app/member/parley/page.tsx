@@ -138,7 +138,7 @@ const MemberParleys = () => {
               searchQuery={searchQuery}
               statusFilter={statusFilter}
               typeFilter={typeFilter}
-              title="Parleys"
+              title="Parley"
               advice="Schedule your first parley to get started"
               func={setOpenParleyDrawer}
               action="Schedule Parley"

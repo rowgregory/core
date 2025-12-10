@@ -1,6 +1,6 @@
 'use client'
 
-import React, { ReactNode } from 'react'
+import React, { useEffect } from 'react'
 import Toast from './components/common/Toast'
 import Header from './components/header/Header'
 import useCustomPathname from '@/hooks/useCustomPathname'
@@ -13,17 +13,22 @@ import GrogDrawer from './components/drawers/GrogDrawer'
 import StowawayDrawer from './components/drawers/StowawayDrawer'
 import Footer from './components/Footer'
 import NavigationDrawer from './components/NavigationDrawer'
-import { useGetUsersQuery } from './redux/services/userApi'
-import { chapterId } from './lib/constants/api/chapterId'
+import { setUsers } from './redux/features/userSlice'
+import { useAppDispatch } from './redux/store'
+import { PageWrapperProps } from '@/types/common'
 
-interface PageWrapperProps {
-  children: ReactNode
-}
+const showLink = (path: string) =>
+  !['/admin', '/member', '/swabbie/port', '/auth/custom-callback'].some((str) => path.includes(str))
 
-export default function PageWrapper({ children }: PageWrapperProps) {
+export default function PageWrapper({ children, users }: PageWrapperProps) {
   const path = useCustomPathname()
-  const showLink = !['/admin', '/member', '/swabbie/port', '/auth/custom-callback'].some((str) => path.includes(str))
-  useGetUsersQuery({ chapterId })
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    if (users) {
+      dispatch(setUsers(users))
+    }
+  }, [dispatch, users])
 
   return (
     <>
@@ -36,9 +41,10 @@ export default function PageWrapper({ children }: PageWrapperProps) {
       <GrogDrawer />
       <StowawayDrawer />
       <NavigationDrawer />
-      {showLink && <Header />}
+
+      {showLink(path) && <Header />}
       {children}
-      {showLink && <Footer />}
+      {showLink(path) && <Footer />}
     </>
   )
 }

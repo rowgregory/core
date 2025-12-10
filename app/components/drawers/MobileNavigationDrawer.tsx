@@ -98,7 +98,7 @@ const MobileNavigationDrawer: FC<{ links: any }> = ({ links }) => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.4 }}
               >
-                <h2 className="text-xl font-bold bg-gradient-to-r from-cyan-400 via-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
+                <h2 className="text-xl font-bold bg-linear-to-r from-cyan-400 via-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
                   Admin Panel
                 </h2>
                 <p className="text-xs text-gray-500 mt-1">Modern Chapter Management</p>
@@ -135,7 +135,7 @@ const MobileNavigationDrawer: FC<{ links: any }> = ({ links }) => {
                       whileTap={{ scale: 0.98 }}
                       className={`group w-full flex items-center justify-between p-4 rounded-xl font-medium transition-all duration-300 text-left ${
                         selectedPage === item.id
-                          ? 'bg-gradient-to-r from-violet-600/20 to-fuchsia-600/20 text-white border border-violet-500/30 shadow-lg'
+                          ? 'bg-linear-to-r from-violet-600/20 to-fuchsia-600/20 text-white border border-violet-500/30 shadow-lg'
                           : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
                       }`}
                     >
@@ -189,7 +189,7 @@ const MobileNavigationDrawer: FC<{ links: any }> = ({ links }) => {
               transition={{ delay: 0.6, duration: 0.4 }}
             >
               <div className="flex items-center space-x-3 p-3 bg-gray-800/30 rounded-lg">
-                <div className="w-10 h-10 bg-gradient-to-r from-violet-500 to-fuchsia-500 rounded-full flex items-center justify-center">
+                <div className="w-10 h-10 bg-linear-to-r from-violet-500 to-fuchsia-500 rounded-full flex items-center justify-center">
                   <User className="w-5 h-5 text-white" />
                 </div>
                 <div className="flex-1">

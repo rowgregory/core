@@ -1,8 +1,8 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { FC, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Search, Mail, Phone, MapPin, Building2, Briefcase, Calendar, Sailboat, User } from 'lucide-react'
+import { Search, Mail, Phone, MapPin, Building2, Briefcase, Calendar, Sailboat } from 'lucide-react'
 import { useUserSelector } from '@/app/redux/store'
 import { formatDate } from '@/app/lib/utils/date/formatDate'
 import getApplicationStatusOptions from '@/app/lib/utils/application/getApplicationStatusOptions'
@@ -13,8 +13,9 @@ import { useSession } from 'next-auth/react'
 import EmptyState from '@/app/components/common/EmptyState'
 import { setOpenSwabbieDrawer } from '@/app/redux/features/userSlice'
 import Link from 'next/link'
+import { User as IUser } from '@/types/user'
 
-const SwabbieCard = ({ swabbie, index }: any) => {
+const SwabbieCard: FC<{ swabbie: IUser; index: number }> = ({ swabbie, index }) => {
   const StatusIcon: any = statusIcons[swabbie.membershipStatus]
   const isRejected = swabbie.membershipStatus === 'SUSPENDED' || swabbie.membershipStatus === 'CANCELLED'
 
@@ -34,15 +35,14 @@ const SwabbieCard = ({ swabbie, index }: any) => {
           <div
             className={`h-12 w-12 rounded-full flex items-center justify-center shadow-lg ${
               isRejected
-                ? 'bg-gradient-to-r from-red-600 to-red-700 shadow-red-900/50'
-                : 'bg-gradient-to-r from-cyan-600 to-blue-700 shadow-cyan-900/50'
+                ? 'bg-linear-to-r from-red-600 to-red-700 shadow-red-900/50'
+                : 'bg-linear-to-r from-cyan-600 to-blue-700 shadow-cyan-900/50'
             }`}
           >
             <Sailboat className="h-6 w-6 text-white" />
           </div>
           <div>
             <h3 className={`text-lg font-semibold ${isRejected ? 'text-red-200' : 'text-white'}`}>{swabbie.name}</h3>
-            {/* <p className="text-sm text-gray-400">Added by {swabbie?.addedBy?.name}</p> */}
           </div>
         </div>
         <div className="flex items-center space-x-2">
@@ -111,12 +111,6 @@ const SwabbieCard = ({ swabbie, index }: any) => {
             {swabbie.businessLicenseNumber ? `Licensed (${swabbie.businessLicenseNumber})` : 'No License'}
           </span>
         </div>
-        <div className="flex items-center space-x-2">
-          <div className="flex items-center space-x-1 text-xs text-gray-400">
-            <User className="h-3 w-3" />
-            <span>{swabbie?.addedBy?.name}</span>
-          </div>
-        </div>
       </div>
 
       <Link
@@ -137,19 +131,15 @@ const SwabbiesPage = () => {
 
   const filteredSwabbies = users
     ?.filter((user) => {
-      const hasCompletedApplication = user.hasCompletedApplication === true
-
-      const isAddedByLoggedInUser = user.addedBy === session.data?.user.id
-
-      const isApplicationStatus =
-        ['PENDING', 'INITIAL_REVIEW', 'BACKGROUND_CHECK', 'REJECTED'].includes(user.membershipStatus) ||
-        (user.membershipStatus === 'ACTIVE' && hasCompletedApplication)
+      const isApplicationStatus = ['PENDING', 'INITIAL_REVIEW', 'BACKGROUND_CHECK', 'REJECTED'].includes(
+        user.membershipStatus
+      )
 
       const matchesSearch = searchQuery === '' || user.name.toLowerCase().includes(searchQuery.toLowerCase())
 
       const matchesStatus = statusFilter === 'all' || user.membershipStatus === statusFilter
 
-      return isApplicationStatus && matchesSearch && matchesStatus && isAddedByLoggedInUser
+      return isApplicationStatus && matchesSearch && matchesStatus
     })
     .sort((a, b) => {
       // Get current user ID
@@ -229,24 +219,17 @@ const SwabbiesPage = () => {
           </div>
         </div>
 
-        {/* Results Count */}
-        {/* <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="mb-6">
-          <p className="text-gray-400">
-            Showing {filteredSwabbies.length} of {filteredSwabbies?.length} swabbies
-          </p>
-        </motion.div> */}
-
         {/* Swabbies Grid */}
         <div className="grid grid-cols-1 2xl:grid-cols-2 3xl:grid-cols-3 gap-7">
           <AnimatePresence>
-            {filteredSwabbies.map((swabbie, index) => (
+            {filteredSwabbies?.map((swabbie, index) => (
               <SwabbieCard key={swabbie.id} swabbie={swabbie} index={index} />
             ))}
           </AnimatePresence>
         </div>
 
         {/* Empty State */}
-        {filteredSwabbies.length === 0 && (
+        {filteredSwabbies?.length === 0 && (
           <EmptyState
             searchQuery={searchQuery}
             statusFilter={statusFilter}

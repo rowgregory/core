@@ -65,7 +65,7 @@ const HiddenCove = () => {
                   <div className="space-y-6">
                     {/* Icon + Status */}
                     <div className="flex items-center justify-between">
-                      <div className={`p-3 rounded-xl bg-gradient-to-r ${feature.gradient} shadow-lg`}>
+                      <div className={`p-3 rounded-xl bg-linear-to-r ${feature.gradient} shadow-lg`}>
                         <IconComponent className="w-6 h-6 text-white" />
                       </div>
                       <div className={`px-3 py-1 border rounded-full text-xs font-medium ${statusBadge.color}`}>
@@ -117,7 +117,7 @@ const HiddenCove = () => {
                         View Details Coming Soon
                       </div>
                       <div
-                        className={`text-center w-full px-4 py-2 rounded-lg bg-gradient-to-r ${feature.gradient} hover:shadow-lg hover:shadow-${feature.accentColor}/25 text-sm font-medium text-white transition-all duration-200`}
+                        className={`text-center w-full px-4 py-2 rounded-lg bg-linear-to-r ${feature.gradient} hover:shadow-lg hover:shadow-${feature.accentColor}/25 text-sm font-medium text-white transition-all duration-200`}
                       >
                         {feature.name}
                       </div>

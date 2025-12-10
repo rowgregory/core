@@ -17,7 +17,7 @@ const AuthCustomCallback = () => {
       const user = session?.user
       if (status === 'authenticated' && user?.id) {
         try {
-          if ((user?.isAdmin || user?.isSuperUser) && user?.role === 'ADMIN') {
+          if ((user?.isAdmin || user?.isSuperUser) && (user?.role === 'ADMIN' || user?.role === 'Super-User')) {
             push('/admin/bridge')
           } else {
             push('/member/bridge')
@@ -47,7 +47,7 @@ const AuthCustomCallback = () => {
       >
         {/* Icon with nautical theme */}
         <motion.div
-          className="w-16 h-16 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-full mx-auto mb-6 flex items-center justify-center relative"
+          className="w-16 h-16 bg-linear-to-br from-blue-600 to-cyan-600 rounded-full mx-auto mb-6 flex items-center justify-center relative"
           animate={{ rotate: 360 }}
           transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
         >
@@ -63,7 +63,7 @@ const AuthCustomCallback = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent mb-3"
+          className="text-2xl font-bold bg-linear-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent mb-3"
         >
           Coastal Referral Exchange
         </motion.h2>

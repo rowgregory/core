@@ -57,7 +57,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
           relative inline-flex items-center ${track} rounded-full transition-all duration-200 ease-in-out
           focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-gray-900
           ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
-          ${checked ? 'bg-gradient-to-r from-cyan-600 via-blue-600 to-teal-600 shadow-lg' : 'bg-gray-600 hover:bg-gray-500'}
+          ${checked ? 'bg-linear-to-r from-cyan-600 via-blue-600 to-teal-600 shadow-lg' : 'bg-gray-600 hover:bg-gray-500'}
         `}
           style={checked ? { boxShadow: '0 0 20px rgba(139, 92, 246, 0.4)' } : {}}
         >
@@ -100,7 +100,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-600 to-teal-600 blur-md opacity-50 -z-10"
+              className="absolute inset-0 rounded-full bg-linear-to-r from-cyan-600 to-teal-600 blur-md opacity-50 -z-10"
             />
           )}
         </button>

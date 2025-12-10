@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { X } from 'lucide-react'
-import { clearInputs, createFormActions } from '@/app/redux/features/formSlice'
+import { createFormActions, resetForm } from '@/app/redux/features/formSlice'
 import { useAppDispatch, useFormSelector, useUserSelector } from '@/app/redux/store'
 import { addUserToState, setCloseAddUserDrawer, updateUserInState } from '@/app/redux/features/userSlice'
 import { useCreateUserMutation, useUpdateUserMutation } from '@/app/redux/services/userApi'
@@ -10,12 +10,14 @@ import NavigatorForm from '../forms/NavigatorForm'
 import Backdrop from '../common/Backdrop'
 import Drawer from '../common/Drawer'
 import validateNavigatorForm from '../forms/validations/validateNavigatorForm'
+import { recomputeMemberCard } from '@/app/redux/features/dashboardSlice'
+import { recomputeDashboardStats } from '@/app/lib/utils/common/recomputeDashboardStats'
 
 const NavigatorDrawer = () => {
   const dispatch = useAppDispatch()
   const { handleInput, setErrors, handleToggle } = createFormActions('navigatorForm', dispatch)
   const { navigatorForm } = useFormSelector()
-  const { addUserDrawer } = useUserSelector()
+  const { addUserDrawer, user } = useUserSelector()
   const onClose = () => dispatch(setCloseAddUserDrawer())
   const [createUser, { isLoading: isCreating }] = useCreateUserMutation()
   const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation()
@@ -33,8 +35,8 @@ const NavigatorDrawer = () => {
       const memberData = {
         ...inputs,
         chapterId,
-        joinedAt: inputs?.joinedAt,
-        expiresAt: inputs?.expiresAt
+        joinedAt: new Date(inputs?.joinedAt),
+        expiresAt: new Date(inputs?.expiresAt)
       }
 
       if (navigatorForm?.inputs?.isUpdating) {
@@ -43,9 +45,11 @@ const NavigatorDrawer = () => {
       } else {
         const created = await createUser(memberData).unwrap()
         dispatch(addUserToState(created?.user))
+        dispatch(recomputeMemberCard())
       }
+      recomputeDashboardStats({ id: user?.id, isAdmin: user?.isAdmin })
 
-      dispatch(clearInputs({ formName: 'navigatorForm' }))
+      dispatch(resetForm('navigatorForm'))
       onClose()
 
       dispatch(
@@ -82,7 +86,7 @@ const NavigatorDrawer = () => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2, duration: 0.4 }}
               >
-                <h2 className="text-xl font-bold bg-gradient-to-r from-cyan-400 via-blue-400 to-teal-400 bg-clip-text text-transparent">
+                <h2 className="text-xl font-bold bg-linear-to-r from-cyan-400 via-blue-400 to-teal-400 bg-clip-text text-transparent">
                   {navigatorForm?.inputs?.isUpdating ? 'Update Navigator' : 'Add New Navigator'}
                 </h2>
                 <p className="text-sm text-gray-500 mt-1">Create a new navigator profile</p>

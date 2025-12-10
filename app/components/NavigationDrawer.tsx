@@ -81,7 +81,7 @@ const NavigationDrawer = () => {
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-blue-400/20">
               <div className="flex items-center gap-2">
-                <span className="text-xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
+                <span className="text-xl font-bold bg-linear-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
                   Coastal Referral Exchange
                 </span>
               </div>
@@ -107,7 +107,7 @@ const NavigationDrawer = () => {
                         onClick={onClose}
                         className={`block px-6 py-4 rounded-xl text-lg font-semibold transition-all ${
                           isActive
-                            ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg'
+                            ? 'bg-linear-to-r from-cyan-500 to-blue-500 text-white shadow-lg'
                             : 'text-gray-300 hover:bg-slate-800 hover:text-white'
                         }`}
                       >

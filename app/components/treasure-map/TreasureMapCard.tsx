@@ -99,7 +99,7 @@ const TreasureMapCard: FC<{ treasureMap: ITreasureMap; index: number }> = ({ tre
 
       {/* Service Needed */}
       <div className="flex items-center space-x-2 mb-4">
-        <div className="p-2 bg-gradient-to-r from-cyan-600/20 to-violet-600/20 rounded-lg">
+        <div className="p-2 bg-linear-to-r from-cyan-600/20 to-violet-600/20 rounded-lg">
           <Building2 className="w-4 h-4 text-cyan-400" />
         </div>
         <div>

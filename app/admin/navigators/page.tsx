@@ -15,7 +15,7 @@ const Navigators = () => {
   const [viewMode, setViewMode] = useState('grid') // 'grid' or 'list'
   const { users } = useUserSelector()
 
-  const filteredNavigators = users.filter((navigator) => {
+  const filteredNavigators = users?.filter((navigator) => {
     const matchesSearch =
       searchQuery === '' ||
       navigator.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -121,7 +121,7 @@ const Navigators = () => {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-6 py-3 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white rounded-lg hover:from-violet-500 hover:to-fuchsia-500 transition-all flex items-center space-x-2 font-semibold mx-auto"
+                  className="px-6 py-3 bg-linear-to-r from-violet-600 to-fuchsia-600 text-white rounded-lg hover:from-violet-500 hover:to-fuchsia-500 transition-all flex items-center space-x-2 font-semibold mx-auto"
                 >
                   <Plus className="w-5 h-5" />
                   <span>Add New Navigator</span>

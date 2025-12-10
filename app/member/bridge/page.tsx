@@ -1,24 +1,19 @@
 'use client'
 
 import React from 'react'
-import { Anchor, FileText, Layers3, MessageSquare, MoreHorizontal, Sailboat, Scroll, Users } from 'lucide-react'
-import QuickActionButton from '@/app/components/bridge/QuickActionButton'
+import { MessageSquare, MoreHorizontal, Users } from 'lucide-react'
 import CircularProgress from '@/app/components/common/CircularProgress'
 import { formatDate } from '@/app/lib/utils/date/formatDate'
 import { IParley } from '@/types/parley'
-import { setOpenAnchorDrawer } from '@/app/redux/features/anchorSlice'
-import { setOpenParleyDrawer } from '@/app/redux/features/parleySlice'
-import { useAppDispatch, useDashboardSelector } from '@/app/redux/store'
 import MemberBridgeStatsGrid from '@/app/components/member/MemberBridgeStatsGrid'
 import WeeklyActivityChart from '@/app/components/bridge/WeeklyActivityChart'
-import { setOpenTreasureMapDrawer } from '@/app/redux/features/treasureMapSlice'
-import { setOpenSwabbieDrawer } from '@/app/redux/features/userSlice'
-import Link from 'next/link'
 import TooltipWrapper from '@/app/components/common/TooltipWrapper'
+import { useDashboardSelector } from '@/app/redux/store'
+import MemberQuickActions from '@/app/components/member/MemberQuickActions'
 
 const MemberBridge = () => {
   const data = useDashboardSelector()
-  const dispatch = useAppDispatch()
+
   return (
     <div className="bg-gray-900">
       {/* Main Layout */}
@@ -30,35 +25,7 @@ const MemberBridge = () => {
           <WeeklyActivityChart weeklyActivity={data?.weeklyActivity} />
 
           {/* Quick Actions */}
-          <div className="bg-gray-800/40 border border-gray-700/50 rounded-2xl p-6">
-            <h3 className="text-xl font-semibold text-white mb-6">Quick Actions</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-4 gap-4">
-              <QuickActionButton
-                title="Call a Parley"
-                icon={Scroll}
-                color="from-teal-500 to-teal-600 text-white rounded-lg hover:from-teal-400 hover:to-teal-500"
-                onClick={() => dispatch(setOpenParleyDrawer())}
-              />
-              <QuickActionButton
-                title="Send Treasure Map"
-                icon={Layers3}
-                color="from-cyan-500 to-cyan-600 text-white rounded-lg hover:from-cyan-400 hover:to-cyan-500"
-                onClick={() => dispatch(setOpenTreasureMapDrawer())}
-              />
-              <QuickActionButton
-                title="Drop Anchor"
-                icon={Anchor}
-                color="from-sky-500 to-sky-600 text-white rounded-lg hover:from-sky-400 hover:to-sky-500"
-                onClick={() => dispatch(setOpenAnchorDrawer())}
-              />
-              <QuickActionButton
-                title="Invite Swabbie"
-                icon={Sailboat}
-                color="from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-400 hover:to-blue-500"
-                onClick={() => dispatch(setOpenSwabbieDrawer())}
-              />
-            </div>
-          </div>
+          <MemberQuickActions />
         </div>
 
         {/* Right Sidebar */}
@@ -116,34 +83,8 @@ const MemberBridge = () => {
                 <Users className="w-4 h-4 text-cyan-400" />
                 <span className="text-gray-300 text-sm">Report Suspicious Activity</span>
               </button>
-              <Link
-                href="/member/hidden-cove"
-                className="w-full flex items-center space-x-3 p-3 bg-gray-800/40 border border-gray-700/50 rounded-lg hover:bg-gray-700/30 transition-all text-left"
-              >
-                <FileText className="w-4 h-4 text-green-400" />
-                <span className="text-gray-300 text-sm">Share Treasure Discovery</span>
-              </Link>
             </div>
           </div>
-
-          {/* My Stats */}
-          {/* <div className="bg-gray-800/40 border border-gray-700/50 rounded-xl p-4">
-            <h4 className="text-white font-semibold mb-3">My Stats Past 30 days</h4>
-            <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <span className="text-gray-400 text-sm">Parley Requests</span>
-                <span className="text-white">{data?.totalRequestedParleyCountThisMonth || 0}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-gray-400 text-sm">Treasure Maps Given</span>
-                <span className="text-green-400 font-medium">{data?.totalGivenTreasureMapCountThisMonth || 0}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-gray-400 text-sm">Anchors Closed</span>
-                <span className="text-green-400 font-medium">{data?.totalClosedAnchorCountThisMonth || 0}</span>
-              </div>
-            </div>
-          </div> */}
         </div>
       </div>
     </div>

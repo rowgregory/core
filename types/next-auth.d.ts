@@ -7,6 +7,7 @@ declare module 'next-auth' {
     role?: string
     isAdmin?: boolean
     isSuperUser?: boolean
+    isMembership?: boolean
     membershipStatus?: string
   }
 
@@ -16,6 +17,7 @@ declare module 'next-auth' {
       role?: string
       isAdmin?: boolean
       isSuperUser?: boolean
+      isMembership
     } & DefaultSession['user']
   }
 }
@@ -25,6 +27,7 @@ declare module '@auth/core/adapters' {
     role?: string
     isAdmin?: boolean
     isSuperUser?: boolean
+    isMembership
     membershipStatus?: string
     lastLoginAt?: Date
   }
@@ -36,5 +39,6 @@ declare module '@auth/core/jwt' {
     role?: string
     isAdmin?: boolean
     isSuperUser?: boolean
+    isMembership
   }
 }

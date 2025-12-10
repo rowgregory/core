@@ -164,6 +164,7 @@ const industryList = [
   'Massage Therapist',
   'Personal Trainer',
   'Life Coach',
+  'Life Insurance',
   'Wedding Planner',
   'Personal Chef',
   'Cleaning Service',

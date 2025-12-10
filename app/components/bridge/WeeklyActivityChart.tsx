@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { motion } from 'framer-motion'
-import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import { Area, AreaChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import TooltipWrapper from '../common/TooltipWrapper'
 import { MoreHorizontal } from 'lucide-react'
 
@@ -80,30 +80,29 @@ const WeeklyActivityChart: FC<{ weeklyActivity: any[] }> = ({ weeklyActivity }) 
             }}
           />
 
-          <Area
-            type="monotone"
-            dataKey="parleys"
-            stackId="1"
-            stroke="#0D9488"
-            fill="url(#gradientParleys)"
-            fillOpacity={0.6}
+          <Legend
+            verticalAlign="top"
+            height={36}
+            iconType="square"
+            formatter={(value) => {
+              const names = {
+                parleys: 'Parleys',
+                treasureMaps: 'Treasure Maps',
+                anchors: 'Anchors'
+              }
+              return names[value as keyof typeof names] || value
+            }}
           />
+
+          <Area type="monotone" dataKey="parleys" stroke="#0D9488" fill="url(#gradientParleys)" fillOpacity={0.6} />
           <Area
             type="monotone"
             dataKey="treasureMaps"
-            stackId="1"
             stroke="#2563EB"
             fill="url(#gradientTreasureMaps)"
             fillOpacity={0.6}
           />
-          <Area
-            type="monotone"
-            dataKey="anchors"
-            stackId="1"
-            stroke="#0891B2"
-            fill="url(#gradientAnchors)"
-            fillOpacity={0.6}
-          />
+          <Area type="monotone" dataKey="anchors" stroke="#0891B2" fill="url(#gradientAnchors)" fillOpacity={0.6} />
         </AreaChart>
       </ResponsiveContainer>
     </motion.div>

@@ -177,7 +177,7 @@ const EventsPage = () => {
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center space-x-3 mb-4">
-            <div className="h-12 w-12 bg-gradient-to-r from-teal-500 via-cyan-600 to-blue-700 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-900/50">
+            <div className="h-12 w-12 bg-linear-to-r from-teal-500 via-cyan-600 to-blue-700 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-900/50">
               <Calendar className="h-6 w-6 text-white" />
             </div>
             <h1 className="text-4xl font-bold text-white">Harbor Events</h1>
@@ -228,7 +228,7 @@ const EventsPage = () => {
           {/* Upcoming Events */}
           <div className="space-y-6">
             <div className="flex items-center mb-6">
-              <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 p-2 rounded-lg mr-4 shadow-lg shadow-emerald-900/50">
+              <div className="bg-linear-to-r from-emerald-600 to-emerald-700 p-2 rounded-lg mr-4 shadow-lg shadow-emerald-900/50">
                 <Navigation className="w-5 h-5 text-white" />
               </div>
               <h2 className="text-2xl font-semibold text-white">Upcoming Voyages</h2>
@@ -249,7 +249,7 @@ const EventsPage = () => {
                   >
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-center space-x-3">
-                        <div className="bg-gradient-to-r from-cyan-600 to-blue-600 p-2 rounded-lg shadow-lg shadow-cyan-900/50">
+                        <div className="bg-linear-to-r from-cyan-600 to-blue-600 p-2 rounded-lg shadow-lg shadow-cyan-900/50">
                           <EventIcon className="w-4 h-4 text-white" />
                         </div>
                         <div>
@@ -299,7 +299,7 @@ const EventsPage = () => {
                       </div>
                       <button
                         onClick={() => handleExternalLink(event.registrationUrl)}
-                        className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 text-white text-sm font-medium rounded-lg hover:from-cyan-500 hover:to-blue-500 transition-all shadow-lg shadow-cyan-900/50 group"
+                        className="inline-flex items-center px-4 py-2 bg-linear-to-r from-cyan-600 to-blue-600 text-white text-sm font-medium rounded-lg hover:from-cyan-500 hover:to-blue-500 transition-all shadow-lg shadow-cyan-900/50 group"
                       >
                         Set Sail
                         <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
@@ -314,7 +314,7 @@ const EventsPage = () => {
           {/* Past Events */}
           <div className="space-y-6">
             <div className="flex items-center mb-6">
-              <div className="bg-gradient-to-r from-slate-600 to-slate-700 p-2 rounded-lg mr-4 shadow-lg">
+              <div className="bg-linear-to-r from-slate-600 to-slate-700 p-2 rounded-lg mr-4 shadow-lg">
                 <Anchor className="w-5 h-5 text-white" />
               </div>
               <h2 className="text-2xl font-semibold text-white">Completed Voyages</h2>

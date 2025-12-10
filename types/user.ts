@@ -1,102 +1,107 @@
 import { Anchor, Parley } from '@prisma/client'
+import { JsonValue } from '@prisma/client/runtime/library'
 
 // Base User interface matching your Prisma User model
 export interface User {
-  businessLicenseNumber: any
-  addedBy: string | undefined
-  isFinalDecisionMade: any
-  rejectionReason: string
-  finalDecisionAt: any
-  backgroundCheckCompletedAt: any
-  initialReviewCompletedAt: any
-  isBackgroudCheckCompleted: any
-  isInitialReviewCompleted: any
-  rejectedStep: any
-  rejectedAt: string
-  hasCompletedApplication: boolean
   id: string
-  createdAt: string
-  updatedAt: string
-  role: string
+  createdAt: Date
+  updatedAt: Date
 
   // Basic info
   name: string
   email: string
-  phone: string | null
+  phone?: string | null
   company: string
   industry: string
-  location: string
-  bio: string
-  title: string
-  website: string
-  yearsInBusiness: string
+  location?: string | null
+  bio?: string | null
+  title?: string | null
+  website?: string | null
+  yearsInBusiness?: string | null
+  businessLicenseNumber?: string | null
+  isLicensed?: boolean | null
 
-  // Coastal Referral Exchange membership
+  // Membership & Chapter
   chapterId: string
-  chapter?: Chapter
-  joinedAt?: Date
-  expiresAt?: Date
   membershipStatus: MembershipStatus
+  joinedAt?: Date | null
+  expiresAt?: Date | null
+
+  // Verification & workflow
+  hasCompletedApplication: boolean
+  rejectedAt?: string | null
+  rejectionReason?: string | null
+  backgroundCheckCompletedAt?: string | null
+  finalDecisionAt?: string | null
+  initialReviewCompletedAt?: string | null
+  rejectedStep?: string | null
+  isBackgroudCheckCompleted?: boolean
+  isInitialReviewCompleted?: boolean
+  isFinalDecisionMade?: boolean
+  isRejected?: boolean
+
+  // Role & Permissions
+  role: string
+  isAdmin?: boolean
+  isSuperUser?: boolean
+  isMembership?: boolean
 
   // Profile & Networking
   interests: string[]
-  profileImage: string | null
-  profileImageFilename: string | null
-  isPublic: boolean
-  isActive: boolean
+  isActive?: boolean
+  isPublic?: boolean
+  profileImage?: string | null
+  profileImageFilename?: string | null
+  image?: string | null
+  lastLoginAt?: Date | null
 
-  // NEW: Professional Goals & Media
-  goal: string | null
-  collage: any | null // JSON field for educational background
-  coverImage: string | null
-  coverImageFilename: string | null
+  // Professional Goals & Media
+  goal?: string | null
+  collage?: any | null
+  coverImage?: string | null
+  coverImageFilename?: string | null
 
-  // NEW: Social Media & Online Presence
-  facebookUrl: string | null
-  threadsUrl: string | null
-  youtubeUrl: string | null
-  xUrl: string | null
-  linkedInUrl: string | null
-  portfolioUrl: string | null
+  // Social & Online Presence
+  facebookUrl?: string | null
+  threadsUrl?: string | null
+  youtubeUrl?: string | null
+  xUrl?: string | null
+  linkedInUrl?: string | null
+  portfolioUrl?: string | null
 
-  // NEW: Content & Communication
-  posts: any | null // JSON field for recent posts/articles
-  podcasts: any | null // JSON field for favorite podcasts
+  // Content & Communication
+  posts?: any | null
+  podcasts?: any | null
 
-  // NEW: Skills & Professional Development
-  skills: string[] // Array of skills
-  careerAchievements: string[] // Array of achievements
-  learningGoals: string[] // Array of learning objectives
+  // Skills & Professional Development
+  skills: string[]
+  careerAchievements?: JsonValue | [] | null // JSON in DB, cast to array
+  learningGoals: string[]
 
-  // NEW: Services & Professional Network
-  servicesOffered: any | null // JSON field for services provided
-  professionalAssociations: any | null // JSON field for organizations
-  professionalBooks: any | null // JSON field for influential books
+  // Services & Professional Network
+  servicesOffered?: any | null
+  professionalAssociations?: any | null
+  professionalBooks?: any | null
 
-  // NEW: Projects & Expertise Sharing
-  sideProjects: any | null // JSON field for personal projects
-  askMeAbout: any | null // JSON field for expertise areas
+  // Projects & Expertise
+  sideProjects?: any | null
+  askMeAbout?: any | null
 
-  // Verification & Security
-  lastLoginAt: string | null
-  isAdmin: boolean
-  isSuperUser: boolean
+  // Other
+  signals?: any | null
+  weeklyTreasureWishlist?: string | null
 
-  // NextAuth fields
-  emailVerified: string | null
-  image: string | null
-
-  // Relationships (optional, loaded when needed)
-  requestedMeetings?: Parley[]
-  receivedMeetings?: Parley[]
+  // Relationships
+  accounts?: Account[]
   givenCredits?: Anchor[]
   receivedCredits?: Anchor[]
-  accounts?: Account[]
-  sessions?: Session[]
   logs?: Log[]
-  signals?: Log[]
+  receivedMeetings?: Parley[]
+  requestedMeetings?: Parley[]
+  sessions?: Session[]
 
-  weeklyTreasureWishlist?: string
+  // Prisma optional arrays
+  specialties?: string[]
 }
 
 // Usership status enum
@@ -106,10 +111,12 @@ export type MembershipStatus =
   | 'ACTIVE'
   | 'INACTIVE'
   | 'EXPIRED'
+  | 'CANCELLED'
   | 'SUSPENDED'
   | 'REJECTED'
   | 'INITIAL_REVIEW'
   | 'BACKGROUND_CHECK'
+  | 'FINAL_DECISION'
 
 // Chapter interface (basic version)
 export interface Chapter {

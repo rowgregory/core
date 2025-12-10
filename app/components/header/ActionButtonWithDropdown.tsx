@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { User } from '@/types/user'
 import { initialParleyFormState } from '@/app/lib/constants/entities/initialParleyFormState'
 import { setOpenAnchorDrawer } from '@/app/redux/features/anchorSlice'
 import { initialAnchorFormState } from '@/app/lib/constants/anchor'
@@ -23,7 +22,7 @@ import {
 } from 'lucide-react'
 import { setOpenParleyDrawer } from '@/app/redux/features/parleySlice'
 import { setOpenAddUserDrawer, setOpenStowawayDrawer, setOpenSwabbieDrawer } from '@/app/redux/features/userSlice'
-import { useAppDispatch, useUserSelector } from '@/app/redux/store'
+import { useAppDispatch, useSettingsSelector, useUserSelector } from '@/app/redux/store'
 import { navigatorInputs, setInputs } from '@/app/redux/features/formSlice'
 import { useRouter } from 'next/navigation'
 import useSoundEffect from '@/hooks/useSoundEffect'
@@ -143,9 +142,10 @@ const ActionButtonWithDropdown = () => {
   const [isActionsOpen, setIsActionsOpen] = useState(false)
   const [activeSubmenu, setActiveSubmenu] = useState<string | null>(null)
   const dispatch = useAppDispatch()
-  const { user } = useUserSelector() as { user: User }
-  const chapter = user?.chapter
-  const isAdmin = user?.isAdmin
+  const { user } = useUserSelector()
+  const { settings } = useSettingsSelector()
+  const chapter = settings
+  const isAdmin = user?.isAdmin ?? false
   const { push } = useRouter()
   const { play } = useSoundEffect('/sound-effects/action-menu.mp3', true)
 
@@ -186,7 +186,7 @@ const ActionButtonWithDropdown = () => {
           setIsActionsOpen(!isActionsOpen)
           setActiveSubmenu(null)
         }}
-        className="px-4 py-2 bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 text-white rounded-lg hover:from-cyan-500 hover:to-cyan-500 transition-all flex items-center space-x-2 font-medium shadow-lg text-sm"
+        className="px-4 py-2 bg-linear-to-r from-blue-600 via-cyan-600 to-teal-600 text-white rounded-lg hover:from-cyan-500 hover:to-cyan-500 transition-all flex items-center space-x-2 font-medium shadow-lg text-sm"
       >
         <Plus className="w-4 h-4" />
         <span>Actions</span>
@@ -208,7 +208,7 @@ const ActionButtonWithDropdown = () => {
                 chapter?.hasUnlockedGrog,
                 chapter?.hasUnlockedMuster,
                 chapter?.hasUnlockedBooty,
-                user?.id
+                user?.id ?? ''
               )?.map((item, i) => (
                 <div key={i} className="relative">
                   <motion.button

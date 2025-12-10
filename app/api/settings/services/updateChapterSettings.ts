@@ -73,7 +73,7 @@ export async function updateChapterSettings(req: NextRequest, chapterId: string)
     return NextResponse.json(
       {
         message: 'Chapter settings updated successfully',
-        data: updatedChapter
+        chapter: updatedChapter
       },
       { status: 200 }
     )

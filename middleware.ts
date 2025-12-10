@@ -5,10 +5,49 @@ import { auth } from './app/lib/auth'
 const publicRoutes = ['/auth/login', '/auth/callback']
 
 const protectedAPIRoutes = [
-  '/api/users/[chapterId]/get-users-list',
-  '/api/users/[chapterId]/[userId]/update-user',
-  '/api/users/[chapterId]/[userId]/delete-user',
-  '/api/settings/[chapterId]'
+  // Anchor routes
+  '/api/anchor/[chapterId]/get-anchors-list',
+  '/api/anchor/[chapterId]/[userId]/create-anchor',
+  '/api/anchor/[chapterId]/[userId]/get-my-anchors',
+  '/api/anchor/[chapterId]/[userId]/update-anchor',
+
+  // Grog routes (assuming events/meetings)
+  '/api/grog/[chapterId]/get-grogslist',
+  '/api/grog/[chapterId]/[userId]/create-grog',
+  '/api/grog/[chapterId]/[userId]/update-grog',
+  '/api/grog/[chapterId]/[userId]/update-grog-status',
+
+  // Parley routes (assuming discussions/forums)
+  '/api/parley/[chapterId]',
+  '/api/parley/[chapterId]/create',
+  '/api/parley/[chapterId]/[userId]/[parleyId]/delete-parley',
+  '/api/parley/[chapterId]/[userId]/update',
+  '/api/parley/[chapterId]/[userId]/update-status',
+
+  // Rendezvous routes (assuming appointments/meetings)
+  '/api/rendezvous/[chapterId]/create-rendezvous',
+  '/api/rendezvous/[chapterId]/fetch-rendezvous-list',
+  '/api/rendezvous/[chapterId]/update-rendezvous',
+
+  // Settings routes
+  '/api/settings/[chapterId]',
+
+  // Treasure Map routes (assuming analytics/reporting)
+  '/api/treasure-map/[chapterId]/get-treasure-maps-list',
+  '/api/treasure-map/[chapterId]/[userId]/create-treasure-map',
+  '/api/treasure-map/[chapterId]/[userId]/get-my-treasure-maps',
+  '/api/treasure-map/[chapterId]/[userId]/update-treasure-map',
+  '/api/treasure-map/[chapterId]/[userId]/update-treasure-map-status',
+
+  // User routes
+  '/api/user/[chapterId]/create-user',
+  '/api/user/[chapterId]/reports/generate-member-metrics',
+  '/api/user/[chapterId]/stowaway/update',
+  '/api/user/[chapterId]/[userId]/get-user-by-id',
+  '/api/user/[chapterId]/[userId]/me/get-my-profile',
+  '/api/user/[chapterId]/[userId]/me/update-my-profile',
+  '/api/user/[chapterId]/[userId]/update-user',
+  '/api/user/[chapterId]/[userId]/update-user-status'
 ]
 
 const cronRoutes = ['/api/cron/weekly-reminder-email']
@@ -22,8 +61,7 @@ export async function middleware(req: NextRequest) {
     nextUrl.pathname.startsWith('/_next') ||
     nextUrl.pathname.includes('.') ||
     nextUrl.pathname.startsWith('/icon') ||
-    nextUrl.pathname.startsWith('/api/placeholder') ||
-    nextUrl.pathname.match(/^\/api\/user\/[^\/]+$/)
+    nextUrl.pathname.startsWith('/api/placeholder')
   ) {
     return NextResponse.next()
   }
@@ -51,12 +89,13 @@ export async function middleware(req: NextRequest) {
 
   // Helper function to check if path matches any protected route pattern
   const isProtectedAPIRoute =
+    !isAuthAPIRoute &&
     protectedAPIRoutes.some((route) => {
       // Convert route pattern to regex (replace [param] with wildcard)
       const pattern = route.replace(/\[[\w-]+\]/g, '[^/]+')
       const regex = new RegExp(`^${pattern}$`)
       return regex.test(nextUrl.pathname)
-    }) && !isAuthAPIRoute
+    })
 
   const isProtectedPageRoute = nextUrl.pathname.startsWith('/member') || nextUrl.pathname.startsWith('/admin')
   const isAdminRoute = nextUrl.pathname.startsWith('/admin')

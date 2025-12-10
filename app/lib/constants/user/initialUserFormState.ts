@@ -3,7 +3,6 @@ import { initialChapterFormState } from '../chapter/initialChapterFormState'
 
 export const initialUserFormState: User = {
   // Application & Review Process
-  addedBy: undefined,
   isFinalDecisionMade: false,
   rejectionReason: '',
   finalDecisionAt: null,
@@ -17,8 +16,8 @@ export const initialUserFormState: User = {
 
   // System Fields
   id: '',
-  createdAt: '',
-  updatedAt: '',
+  createdAt: new Date(),
+  updatedAt: new Date(),
 
   // Basic Information
   name: '',
@@ -85,7 +84,6 @@ export const initialUserFormState: User = {
   isSuperUser: false,
 
   // NextAuth fields
-  emailVerified: null,
   image: null,
 
   // Relationships (optional, loaded when needed)
@@ -96,8 +94,7 @@ export const initialUserFormState: User = {
   accounts: undefined,
   sessions: undefined,
   logs: undefined,
-  signals: undefined,
-  chapter: initialChapterFormState
+  signals: undefined
 }
 
 const initialMetaUserData = {

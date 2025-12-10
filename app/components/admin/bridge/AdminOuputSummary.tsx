@@ -1,10 +1,10 @@
 import React, { FC } from 'react'
 
 const AdminOuputSummary: FC<{
-  activeMembers: string
-  totalRevenue: string
-  newApplicationsCount: string
-  parleyRequestsCount: string
+  activeMembers: number
+  totalRevenue: number
+  newApplicationsCount: number
+  parleyRequestsCount: number
 }> = ({ activeMembers, totalRevenue, newApplicationsCount, parleyRequestsCount }) => {
   return (
     <div className="bg-gray-800/40 border border-gray-700/50 rounded-xl p-4">

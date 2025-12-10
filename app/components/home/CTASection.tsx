@@ -21,7 +21,7 @@ const CTASection = () => {
           </p>
           <Link
             href="/swabbie"
-            className="px-8 py-4 bg-gradient-to-r from-teal-500 via-cyan-500 to-blue-500 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-xl shadow-gray/25"
+            className="px-8 py-4 bg-linear-to-r from-teal-500 via-cyan-500 to-blue-500 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-xl shadow-gray/25"
           >
             Apply Today
             <ArrowRight className="inline ml-2 w-5 h-5" />

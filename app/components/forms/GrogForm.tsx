@@ -28,7 +28,7 @@ const GrogForm: FC<IForm> = ({ inputs, errors, handleInput, isLoading, handleSub
             className="space-y-6"
           >
             <div className="flex items-center mb-4">
-              <div className="bg-gradient-to-b from-teal-600 to-teal-700 p-2 rounded-lg mr-4 shadow-lg shadow-cyan-900/50">
+              <div className="bg-linear-to-b from-teal-600 to-teal-700 p-2 rounded-lg mr-4 shadow-lg shadow-cyan-900/50">
                 <Calendar className="w-5 h-5 text-white" />
               </div>
               <h2 className="text-2xl font-semibold text-white">Grog Details</h2>
@@ -120,7 +120,7 @@ const GrogForm: FC<IForm> = ({ inputs, errors, handleInput, isLoading, handleSub
             className="space-y-6"
           >
             <div className="flex items-center mb-4">
-              <div className="bg-gradient-to-r from-cyan-600 to-cyan-700 p-2 rounded-lg mr-4 shadow-lg shadow-emerald-900/50">
+              <div className="bg-linear-to-r from-cyan-600 to-cyan-700 p-2 rounded-lg mr-4 shadow-lg shadow-emerald-900/50">
                 <Clock className="w-5 h-5 text-white" />
               </div>
               <h2 className="text-2xl font-semibold text-white">When & Where</h2>
@@ -194,7 +194,7 @@ const GrogForm: FC<IForm> = ({ inputs, errors, handleInput, isLoading, handleSub
             className="space-y-6"
           >
             <div className="flex items-center mb-4">
-              <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-2 rounded-lg mr-4 shadow-lg shadow-purple-900/50">
+              <div className="bg-linear-to-r from-blue-600 to-blue-700 p-2 rounded-lg mr-4 shadow-lg shadow-purple-900/50">
                 <Users className="w-5 h-5 text-white" />
               </div>
               <h2 className="text-2xl font-semibold text-white">Crew Capacity</h2>
@@ -271,7 +271,7 @@ const GrogForm: FC<IForm> = ({ inputs, errors, handleInput, isLoading, handleSub
             className="space-y-6"
           >
             <div className="flex items-center mb-4">
-              <div className="bg-gradient-to-r from-purple-600 to-purple-700 p-2 rounded-lg mr-4 shadow-lg shadow-purple-900/50">
+              <div className="bg-linear-to-r from-purple-600 to-purple-700 p-2 rounded-lg mr-4 shadow-lg shadow-purple-900/50">
                 <Settings className="w-5 h-5 text-white" />
               </div>
               <h2 className="text-2xl font-semibold text-white">Additional Details</h2>
@@ -409,7 +409,7 @@ const GrogForm: FC<IForm> = ({ inputs, errors, handleInput, isLoading, handleSub
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             disabled={isLoading}
-            className="flex-1 px-6 py-3 bg-gradient-to-r from-teal-600 via-cyan-600 to-blue-600 text-white rounded-lg hover:from-teal-500 hover:to-blue-500 transition-all flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 px-6 py-3 bg-linear-to-r from-teal-600 via-cyan-600 to-blue-600 text-white rounded-lg hover:from-teal-500 hover:to-blue-500 transition-all flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? (
               <>
