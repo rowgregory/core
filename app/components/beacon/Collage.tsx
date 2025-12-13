@@ -86,7 +86,6 @@ const Collage: React.FC<CollageProps> = ({
           setUploadProgress((prev) => ({ ...prev, [imageId]: 100 }))
           setTimeout(() => {
             setUploadProgress((prev) => {
-              // eslint-disable-next-line @typescript-eslint/no-unused-vars
               const { [imageId]: _, ...rest } = prev
               return rest
             })

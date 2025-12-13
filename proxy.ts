@@ -52,7 +52,7 @@ const protectedAPIRoutes = [
 
 const cronRoutes = ['/api/cron/weekly-reminder-email']
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const { nextUrl } = req
 
   // Skip middleware for static files and Next.js internals only

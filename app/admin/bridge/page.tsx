@@ -1,6 +1,5 @@
 'use client'
 
-import React, { useState } from 'react'
 import { MoreHorizontal } from 'lucide-react'
 import CircularProgress from '@/app/components/common/CircularProgress'
 import AdminBridgeStatsGrid from '@/app/components/admin/bridge/AdminBridgeStatsGrid'
@@ -12,13 +11,9 @@ import TopPerformers from '@/app/components/admin/bridge/TopPerformers'
 import TooltipWrapper from '@/app/components/common/TooltipWrapper'
 import { useDashboardSelector } from '@/app/redux/store'
 import QuickActionButtons from '@/app/components/admin/bridge/QuackActionButtons'
-import { AnimatePresence } from 'framer-motion'
-import DatabaseBanner from '@/app/components/common/DatabaseBanner'
 
 const AdminBridge = () => {
   const data = useDashboardSelector()
-  const [isVisible, setIsVisible] = useState(true)
-  const handleDismiss = () => setIsVisible(false)
 
   return (
     <div className="bg-gray-900">
@@ -27,7 +22,6 @@ const AdminBridge = () => {
         {/* Main Content Area */}
         <div className="flex-1 p-6 md:overflow-y-auto">
           {/* Database Banner */}
-          <AnimatePresence mode="wait">{isVisible && <DatabaseBanner handleDismiss={handleDismiss} />}</AnimatePresence>
           {/* Stats Grid */}
           <AdminBridgeStatsGrid data={data} />
           {/* Weekly Activity Chart */}
