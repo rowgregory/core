@@ -179,6 +179,8 @@ export async function getAdminOverview() {
       }
     })
 
+    const users = await prisma.user.findMany()
+
     const user = await prisma.user.findFirst({
       where: {
         id: session?.user.id,
@@ -325,6 +327,7 @@ export async function getAdminOverview() {
       rendezvous: serializedRendezvous,
       chapter,
       treasureMaps: serializedTreasureMaps,
+      users,
       user: {
         ...user,
         isProfileComplete,

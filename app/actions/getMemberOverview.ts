@@ -63,6 +63,8 @@ export async function getMemberOverview() {
       }
     })
 
+    const users = await prisma.user.findMany()
+
     const user = await prisma.user.findFirst({
       where: {
         id,
@@ -258,6 +260,7 @@ export async function getMemberOverview() {
       rendezvous: serializedRendezvous,
       chapter,
       treasureMaps: serializedTreasureMaps,
+      users,
       user: {
         ...user,
         // Add computed fields

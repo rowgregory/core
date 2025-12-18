@@ -30,6 +30,7 @@ const eslintConfig = [
       "@typescript-eslint/ban-ts-comment": "off",
       "react/no-unescaped-entities": "off",
       "@next/next/no-img-element": "off",
+      "@typescript-eslint/triple-slash-reference": "off",
     },
   },
 ];

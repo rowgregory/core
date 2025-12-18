@@ -5,6 +5,7 @@ import { SessionProvider } from 'next-auth/react'
 import { Sora } from 'next/font/google'
 import { metadata as siteMetadata } from './metadata'
 import { getUsers } from './actions/getUsers'
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 export const metadata = siteMetadata
 
@@ -28,6 +29,7 @@ export default async function RootLayout({
     <html lang="en">
       <head>
         <meta property="fb:app_id" content="2265167933990680" />
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID!} />
       </head>
       <body className={`${sora.variable} antialiased`}>
         <SessionProvider session={session}>
