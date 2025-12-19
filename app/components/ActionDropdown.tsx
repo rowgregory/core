@@ -193,7 +193,7 @@ const ActionDropdown = () => {
             transition={{ duration: 0.2 }}
             className="fixed xs:right-16 -translate-x-1/2 left-1/2 sm:left-auto sm:translate-x-0 w-[90%] sm:right-20 top-14 sm:w-68 bg-gray-800 border border-gray-700 rounded-lg shadow-xl overflow-hidden z-100 "
           >
-            <div className="py-2 overflow-y-scroll h-[calc(100vh-150px)]">
+            <div className="py-2 overflow-y-scroll h-[calc(100vh-150px)] sm:h-fit">
               {actionItems(
                 isAdmin,
                 chapter?.hasUnlockedGrog,
