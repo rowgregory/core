@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import { signOut } from 'next-auth/react'
@@ -14,7 +14,6 @@ const LogoutButton = () => {
     try {
       setIsLoading(true)
       await signOut({
-        redirect: false, // Prevent automatic redirect
         callbackUrl: '/auth/login' // Optional: specify where to redirect after signout
       })
 

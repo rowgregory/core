@@ -11,6 +11,7 @@ import getTreasureMapStatusIcon from '@/app/lib/utils/treasure-map/getTreasureMa
 import { setOpenTreasureMapDrawer } from '@/app/redux/features/treasureMapSlice'
 import TreasureMapCard from '@/app/components/treasure-map/TreasureMapCard'
 import { useTreasureMapSelector } from '@/app/redux/store'
+import InfoBanner from '@/app/components/common/InfoBanner'
 
 const AdminTreasureMaps = () => {
   const session = useSession()
@@ -53,14 +54,19 @@ const AdminTreasureMaps = () => {
     })
 
   return (
-    <div className="bg-gray-900 flex h-full">
+    <div className="bg-gray-900 min-h-[calc(100vh-68px)]">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex-1 p-6 overflow-y-auto space-y-6"
+        className="flex-1 px-3 py-6 sm:p-6 overflow-y-auto space-y-6"
       >
+        {/* Treasure Map Info Banner */}
+        <InfoBanner
+          type="treasure map"
+          description="is a referral or lead you send to another member to help them grow their business."
+        />
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 xl:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 xs:gap-3 sm:gap-4">
           {getTreasureMapStatusOptions(treasureMaps)
             .slice(1)
             .map((status, index) => (
@@ -69,7 +75,7 @@ const AdminTreasureMaps = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-6"
+                className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-lg xs:rounded-xl p-3 xs:p-4 sm:p-6"
               >
                 <div className="flex items-center justify-between">
                   <div>
@@ -85,7 +91,7 @@ const AdminTreasureMaps = () => {
         </div>
 
         {/* Filters and Search */}
-        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="sticky top-0 z-20 flex flex-col md:flex-row gap-4">
           {/* Search */}
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -103,7 +109,7 @@ const AdminTreasureMaps = () => {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-violet-400 focus:border-violet-400 transition-all"
+              className="px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-violet-400 focus:border-violet-400 transition-all w-full md:w-fit"
             >
               {getTreasureMapStatusOptions(treasureMaps).map((option) => (
                 <option key={option.value} value={option.value}>
@@ -114,7 +120,7 @@ const AdminTreasureMaps = () => {
 
             <button
               onClick={() => setShowMyTreasureMapsOnly(!showMyTreasureMapsOnly)}
-              className={`px-4 py-3 border rounded-lg transition-all flex items-center space-x-2 ${
+              className={`px-4 py-3 border rounded-lg transition-all flex items-center space-x-2 w-full md:w-fit ${
                 showMyTreasureMapsOnly
                   ? 'bg-violet-500/10 border-violet-500 text-violet-300'
                   : 'bg-gray-800/50 border-gray-700 text-gray-300 hover:border-gray-600 hover:text-white'

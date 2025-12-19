@@ -1,6 +1,6 @@
 'use client'
 
-import React, { FC, useEffect } from 'react'
+import { FC, useEffect } from 'react'
 import useCustomPathname from '@/hooks/useCustomPathname'
 import { useSession } from 'next-auth/react'
 import getCurrentPageId from '../lib/utils/common/getCurrentPageId'

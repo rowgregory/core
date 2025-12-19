@@ -100,7 +100,7 @@ const ParleyDrawer = () => {
                   {inputs?.isUpdating ? 'Update' : 'Schedule'} Parley
                 </h2>
                 <p className="text-sm text-gray-500 mt-1">
-                  {inputs?.isUpdating ? 'Updating yer existing parley' : 'Create a new parley between crew members'}
+                  {inputs?.isUpdating ? 'Updating your existing meeting' : 'Create a new meeting between crew members'}
                 </p>
               </motion.div>
 

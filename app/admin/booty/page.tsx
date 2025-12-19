@@ -25,6 +25,8 @@ import {
   FileText,
   Compass
 } from 'lucide-react'
+import InfoBanner from '@/app/components/common/InfoBanner'
+import { LockedModuleBanner } from '@/app/components/common/LockedModuleBanner'
 
 interface Invoice {
   id: string
@@ -263,18 +265,28 @@ const BootyBillingPage: React.FC = () => {
   const financials = calculateFinancials()
 
   return (
-    <div className="h-full bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6">
-      <div className="flex-1 mx-auto">
+    <div className="bg-gray-900 min-h-[calc(100vh-68px)]">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex-1 px-3 py-6 sm:p-6 overflow-y-auto space-y-6"
+      >
+        {/* Booty Info Banner */}
+        <InfoBanner
+          type="booty"
+          description="Booty is the payments and revenue module. Once unlocked, this page will allow your chapter to accept payments, track income, and manage financial activity directly through the platform. For now, this feature is locked and not yet available."
+        />
+        <LockedModuleBanner />
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           {/* Navigation */}
-          <div className="flex flex-wrap items-center gap-4 p-4 bg-gray-800/40 border border-gray-700/50 rounded-xl backdrop-blur-sm">
+          <div className="flex flex-col sm:flex-wrap sm:items-center gap-y-4 sm:gap-4 p-4 bg-gray-800/40 border border-gray-700/50 rounded-xl backdrop-blur-sm">
             <div className="flex items-center space-x-2">
               <Compass className="w-4 h-4 text-gray-400" />
               <span className="text-sm text-gray-400">Navigation:</span>
             </div>
 
-            <div className="flex items-center space-x-2">
+            <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-x-2">
               <button
                 onClick={() => setViewMode('dashboard')}
                 className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
@@ -351,7 +363,7 @@ const BootyBillingPage: React.FC = () => {
                 placeholder="Search treasure..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-1.5 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                className="pl-10 pr-4 py-1.5 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 w-full sm:w-fit"
               />
             </div>
           </div>
@@ -467,8 +479,8 @@ const BootyBillingPage: React.FC = () => {
                         transition={{ delay: 0.1 * index }}
                         className="flex items-center justify-between p-4 bg-gray-700/20 rounded-lg hover:bg-gray-700/30 transition-colors"
                       >
-                        <div className="flex items-center space-x-4">
-                          <div className={`p-2 rounded-lg ${getStatusColor(invoice.status)}`}>
+                        <div className="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-x-4">
+                          <div className={`p-2 rounded-lg w-fit ${getStatusColor(invoice.status)}`}>
                             <StatusIcon className="w-4 h-4" />
                           </div>
                           <div>
@@ -990,7 +1002,7 @@ const BootyBillingPage: React.FC = () => {
             </div>
           </div>
         </motion.div>
-      </div>
+      </motion.div>
     </div>
   )
 }

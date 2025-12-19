@@ -63,7 +63,7 @@ const TreasureMapCard: FC<{ treasureMap: ITreasureMap; index: number }> = ({ tre
     >
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
-        <div className="flex items-center space-x-3">
+        <div className="flex flex-col gap-y-2 sm:gap-y-0 sm:items-center sm:flex-row space-x-3">
           <div className="flex -space-x-2">
             {/* Giver Avatar */}
             <Picture
@@ -81,7 +81,7 @@ const TreasureMapCard: FC<{ treasureMap: ITreasureMap; index: number }> = ({ tre
             />
           </div>
           <div>
-            <h3 className="text-white font-semibold text-lg">{treasureMap.clientName}</h3>
+            <h3 className="text-white font-semibold text-lg leading-tight">{treasureMap.clientName}</h3>
             <p className="text-gray-400 text-sm">{treasureMap.chapter?.name}</p>
           </div>
         </div>

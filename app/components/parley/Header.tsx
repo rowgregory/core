@@ -53,7 +53,7 @@ const Header: FC<{ parley: IParley }> = ({ parley }) => {
           </div>
         </div>
         {/* Date */}
-        <div className="flex-shrink-0 text-xs text-gray-500">{new Date(parley.createdAt).toLocaleDateString()}</div>
+        <div className="shrink-0 text-xs text-gray-500">{new Date(parley.createdAt).toLocaleDateString()}</div>
       </div>
     </div>
   )

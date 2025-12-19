@@ -1,7 +1,6 @@
 'use client'
 
-import React from 'react'
-import { MessageSquare, MoreHorizontal, Users } from 'lucide-react'
+import { MoreHorizontal } from 'lucide-react'
 import CircularProgress from '@/app/components/common/CircularProgress'
 import { formatDate } from '@/app/lib/utils/date/formatDate'
 import { IParley } from '@/types/parley'
@@ -17,9 +16,9 @@ const MemberBridge = () => {
   return (
     <div className="bg-gray-900">
       {/* Main Layout */}
-      <div className="flex flex-col md:flex-row min-h-[calc(100vh-66px)]">
+      <div className="flex flex-col md:flex-row min-h-[calc(100vh-68px)]">
         {/* Main Content Area */}
-        <div className="flex-1 p-6 md:overflow-y-auto">
+        <div className="flex-1 py-6 px-3 md:p-6 md:overflow-y-auto">
           <MemberBridgeStatsGrid data={data} />
           {/* Weekly Activity Chart */}
           <WeeklyActivityChart weeklyActivity={data?.weeklyActivity} />
@@ -68,21 +67,6 @@ const MemberBridge = () => {
               ) : (
                 <p className="text-gray-500 text-sm">No upcoming parleys scheduled</p>
               )}
-            </div>
-          </div>
-
-          {/* Quick Actions */}
-          <div className="mb-8">
-            <h3 className="text-white font-semibold mb-4">Quick Actions</h3>
-            <div className="space-y-2">
-              <button className="w-full flex items-center space-x-3 p-3 bg-gray-800/40 border border-gray-700/50 rounded-lg hover:bg-gray-700/30 transition-all text-left">
-                <MessageSquare className="w-4 h-4 text-violet-400" />
-                <span className="text-gray-300 text-sm">Signal Quartermaster</span>
-              </button>
-              <button className="w-full flex items-center space-x-3 p-3 bg-gray-800/40 border border-gray-700/50 rounded-lg hover:bg-gray-700/30 transition-all text-left">
-                <Users className="w-4 h-4 text-cyan-400" />
-                <span className="text-gray-300 text-sm">Report Suspicious Activity</span>
-              </button>
             </div>
           </div>
         </div>

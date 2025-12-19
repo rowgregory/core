@@ -1,7 +1,7 @@
+import { FC } from 'react'
 import { useAppDispatch } from '@/app/redux/store'
-import React, { FC } from 'react'
 import { motion } from 'framer-motion'
-import { Anchor, Layers, Scroll, Users } from 'lucide-react'
+import { Anchor, Flag, Layers, Sailboat, Scroll, Users } from 'lucide-react'
 import { setInputs } from '@/app/redux/features/formSlice'
 import { useSession } from 'next-auth/react'
 
@@ -26,6 +26,10 @@ const EmptyState: FC<{
         <Scroll className="w-16 h-16 text-gray-600 mx-auto mb-4" />
       ) : title === 'Treasure Map' ? (
         <Layers className="w-16 h-16 text-gray-600 mx-auto mb-4" />
+      ) : title === `Stowaway'` ? (
+        <Flag className="w-16 h-16 text-gray-600 mx-auto mb-4" />
+      ) : title === `Swabbie'` ? (
+        <Sailboat className="w-16 h-16 text-gray-600 mx-auto mb-4" />
       ) : (
         <Users className="w-16 h-16 text-gray-600 mx-auto mb-4" />
       )}

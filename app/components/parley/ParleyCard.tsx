@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import { FC } from 'react'
 import { IParley } from '@/types/parley'
 import { motion } from 'framer-motion'
 import { XCircle } from 'lucide-react'
@@ -52,7 +52,7 @@ const ParleyCard: FC<{ parley: IParley; index: number }> = ({ parley, index }) =
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ delay: index * 0.05 }}
-      className={`backdrop-blur-sm border rounded-xl p-6 hover:border-gray-600 transition-all ${
+      className={`backdrop-blur-sm border rounded-lg xs:rounded-xl p-3 xs:p-4 sm:p-6 hover:border-gray-600 transition-all ${
         parley.recipientId === userId && parley.status === 'REQUESTED'
           ? 'bg-cyan-800/20 border-cyan-400 border-2 shadow-lg shadow-cyan-500/20'
           : parley.status === 'CONFIRMED'
@@ -66,12 +66,12 @@ const ParleyCard: FC<{ parley: IParley; index: number }> = ({ parley, index }) =
                   : 'bg-gray-800/50 border-gray-700'
       }`}
     >
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 xs:gap-4">
         {/* Main Info */}
-        <div className="space-y-4 w-full">
+        <div className="space-y-3 xs:space-y-4 w-full">
           {/* Header with Delete Button */}
-          <div className="flex items-start justify-between">
-            <div className="flex-1">
+          <div className="flex items-start justify-between gap-2">
+            <div className="flex-1 min-w-0">
               <Header parley={parley} />
             </div>
           </div>
@@ -88,7 +88,9 @@ const ParleyCard: FC<{ parley: IParley; index: number }> = ({ parley, index }) =
           {/* Notes */}
           {parley.notes && (
             <div className="pt-2">
-              <p className="text-sm text-gray-400 italic">&quot;{parley.notes}&quot;</p>
+              <p className="text-xs xs:text-sm text-gray-400 italic line-clamp-3 xs:line-clamp-none">
+                &quot;{parley.notes}&quot;
+              </p>
             </div>
           )}
 
@@ -120,12 +122,12 @@ const ParleyCard: FC<{ parley: IParley; index: number }> = ({ parley, index }) =
 
           {/* Status message for CANCELLED meetings */}
           {parley.status === 'CANCELLED' && (
-            <div className="pt-4 border-t border-gray-700">
-              <div className="flex items-center space-x-2 px-4 py-3 bg-red-600/10 border border-red-600/30 rounded-lg">
-                <XCircle className="w-5 h-5 text-red-400" />
-                <div>
-                  <p className="text-red-300 text-sm font-medium">Meeting Cancelled</p>
-                  <p className="text-red-400/80 text-xs mt-1">
+            <div className="pt-3 xs:pt-4 border-t border-gray-700">
+              <div className="flex items-start gap-2 xs:gap-3 px-3 xs:px-4 py-2.5 xs:py-3 bg-red-600/10 border border-red-600/30 rounded-lg">
+                <XCircle className="w-4 h-4 xs:w-5 xs:h-5 text-red-400 flex-shrink-0 mt-0.5" />
+                <div className="min-w-0">
+                  <p className="text-red-300 text-xs xs:text-sm font-medium">Meeting Cancelled</p>
+                  <p className="text-red-400/80 text-[10px] xs:text-xs mt-0.5 xs:mt-1 leading-tight">
                     This parley has been cancelled by one of the participants
                   </p>
                 </div>

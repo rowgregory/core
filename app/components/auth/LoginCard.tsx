@@ -1,4 +1,4 @@
-import React, { FC, FormEvent } from 'react'
+import { FC, FormEvent } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { AlertCircle, ArrowRight, Loader2, Mail } from 'lucide-react'
 import SailboatSVG from '@/public/svg/SailboatSVG'
@@ -35,7 +35,7 @@ const LoginCard: FC<ILoginCard> = ({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.1 }}
-      className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-8 shadow-2xl"
+      className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-4 sm:p-8 shadow-2xl"
       style={{ boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8)' }}
     >
       <AnimatePresence mode="wait">
@@ -48,8 +48,10 @@ const LoginCard: FC<ILoginCard> = ({
             transition={{ duration: 0.3 }}
           >
             <div className="mb-6">
-              <h2 className="text-xl font-semibold text-white mb-2">Sign in to The Bridge</h2>
-              <p className="text-gray-400 text-sm">Enter your email to receive a secure magic link</p>
+              <h2 className="text-center sm:text-left text-xl font-semibold text-white mb-2">Sign in to The Bridge</h2>
+              <p className="text-center sm:text-left text-gray-400 text-sm">
+                Enter your email to receive a secure magic link
+              </p>
             </div>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
@@ -75,7 +77,7 @@ const LoginCard: FC<ILoginCard> = ({
                   animate={{ opacity: 1, y: 0 }}
                   className="flex items-center space-x-2 text-red-400 text-sm bg-red-400/10 border border-red-400/20 rounded-lg p-3"
                 >
-                  <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                  <AlertCircle className="w-4 h-4 shrink-0" />
                   <span>{error}</span>
                 </motion.div>
               )}

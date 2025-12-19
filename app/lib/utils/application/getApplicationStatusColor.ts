@@ -4,6 +4,16 @@ const getApplicationStatusColor: any = (status: string) => {
       return 'text-emerald-400 bg-emerald-400/10 border-emerald-400/20'
     case 'PENDING':
       return 'text-yellow-400 bg-yellow-400/10 border-yellow-400/20'
+
+    case 'INITIAL_REVIEW':
+      return 'text-blue-400 bg-blue-400/10 border-blue-400/20'
+
+    case 'BACKGROUND_CHECK':
+      return 'text-indigo-400 bg-indigo-400/10 border-indigo-400/20'
+
+    case 'REJECTED':
+      return 'text-red-500 bg-red-500/10 border-red-500/20'
+
     case 'ACTIVE':
       return 'text-green-400 bg-green-400/10 border-green-400/20'
     case 'INACTIVE':

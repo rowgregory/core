@@ -5,13 +5,17 @@ export interface AppStatePayload {
   mobileNavigation: boolean
   navigationDrawer: boolean
   isNavigationCollapsed: boolean
+  actionDropdown: boolean
+  itemAction: string | null
 }
 
 const initialAppState: AppStatePayload = {
   handbookDrawer: false,
   mobileNavigation: false,
   navigationDrawer: false,
-  isNavigationCollapsed: false
+  isNavigationCollapsed: false,
+  actionDropdown: false,
+  itemAction: null
 }
 
 export const appSlice = createSlice({
@@ -38,6 +42,21 @@ export const appSlice = createSlice({
     },
     setIsNavigationCollapsed: (state, payload) => {
       state.isNavigationCollapsed = !payload
+    },
+    setOpenActionDropdown: (state) => {
+      state.actionDropdown = true
+    },
+    setCloseActionDropdown: (state) => {
+      state.actionDropdown = false
+    },
+    setToggleActionDropdown: (state, { payload }) => {
+      state.actionDropdown = !payload
+    },
+    setOpenActionDropdownSubmenu: (state, { payload }) => {
+      state.itemAction = payload
+    },
+    setCloseActionDropdownSubmenu: (state) => {
+      state.itemAction = null
     }
   }
 })
@@ -51,5 +70,10 @@ export const {
   setCloseMobileNavigation,
   setOpenNavigationDrawer,
   setCloseNavigationDrawer,
-  setIsNavigationCollapsed
+  setIsNavigationCollapsed,
+  setOpenActionDropdown,
+  setCloseActionDropdown,
+  setOpenActionDropdownSubmenu,
+  setCloseActionDropdownSubmenu,
+  setToggleActionDropdown
 } = appSlice.actions

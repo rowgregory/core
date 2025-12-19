@@ -18,7 +18,7 @@ import { useAppDispatch } from './redux/store'
 import { PageWrapperProps } from '@/types/common'
 
 const showLink = (path: string) =>
-  !['/admin', '/member', '/swabbie/port', '/auth/custom-callback'].some((str) => path.includes(str))
+  !['/admin', '/member', '/swabbie/port', '/auth/login', '/auth/custom-callback'].some((str) => path.includes(str))
 
 export default function PageWrapper({ children, users }: PageWrapperProps) {
   const path = useCustomPathname()

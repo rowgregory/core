@@ -1,10 +1,10 @@
-import React, { useState, useMemo, FC } from 'react'
+import { useState, useMemo, FC } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowUpDown, Users, Circle } from 'lucide-react'
 import industryList from '@/app/lib/constants/navigator/industryList'
 
 const IndustrySlots: FC<{ industrySlots: any[]; capacityPercent: number }> = ({ industrySlots, capacityPercent }) => {
-  const [sortFilledFirst, setSortFilledFirst] = useState(false)
+  const [sortFilledFirst, setSortFilledFirst] = useState(true)
 
   const industryListCount = industryList.length
   const filledSlots = industrySlots?.filter((p) => p.filled)?.length
@@ -31,7 +31,7 @@ const IndustrySlots: FC<{ industrySlots: any[]; capacityPercent: number }> = ({ 
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.5 }}
     >
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-col gap-y-2 xl:gap-y-0 xl:flex-row xl:items-center xl:justify-between mb-6">
         <h3 className="text-2xl font-bold text-white">Industry Slots</h3>
         <div className="flex items-center space-x-3">
           <button
@@ -51,7 +51,7 @@ const IndustrySlots: FC<{ industrySlots: any[]; capacityPercent: number }> = ({ 
         </div>
       </div>
 
-      <div className="space-y-3 max-h-96 overflow-y-auto">
+      <div className="space-y-2 sm:space-y-3 max-h-96 overflow-y-auto">
         {sortedSlots?.map((slot, index) => (
           <motion.div
             key={`${slot.industry}-${index}`}
@@ -59,27 +59,37 @@ const IndustrySlots: FC<{ industrySlots: any[]; capacityPercent: number }> = ({ 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.2 }}
-            className="flex items-center justify-between p-3 bg-gray-700/30 rounded-lg hover:bg-gray-700/40 transition-colors"
+            className="flex items-center justify-between p-2 sm:p-3 bg-gray-700/30 rounded-lg hover:bg-gray-700/40 transition-colors"
           >
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-2 sm:space-x-3 flex-1 min-w-0 mr-2">
               <div
-                className={`w-4 h-4 rounded-full flex items-center justify-center ${
+                className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full flex items-center justify-center shrink-0 ${
                   slot.filled ? '' : 'border-2 border-dashed border-gray-500'
                 }`}
                 style={{ backgroundColor: slot.filled ? slot.color : 'transparent' }}
               >
-                {slot.filled && <Circle className="w-2 h-2 text-white fill-current" />}
+                {slot.filled && <Circle className="w-1.5 h-1.5 sm:w-2 sm:h-2 text-white fill-current" />}
               </div>
-              <span className={`font-medium ${slot.filled ? 'text-white' : 'text-gray-400'}`}>{slot.industry}</span>
+              <span
+                className={`font-medium white text-xs sm:text-sm ${slot.filled ? 'text-white' : 'text-gray-400'}`}
+                title={slot.industry}
+              >
+                {slot.industry}
+              </span>
             </div>
-            <div className="text-right flex items-center space-x-2">
+            <div className="text-right flex items-center space-x-1.5 sm:space-x-2 shrink-0">
               {slot.filled ? (
                 <>
-                  <Users className="w-4 h-4 text-emerald-400" />
-                  <span className="text-emerald-400 text-sm font-medium">{slot.member}</span>
+                  <Users className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-400 shrink-0" />
+                  <span
+                    className="text-emerald-400 text-[10px] sm:text-sm font-medium truncate max-w-[60px] xs:max-w-20 sm:max-w-none"
+                    title={slot.member}
+                  >
+                    {slot.member}
+                  </span>
                 </>
               ) : (
-                <span className="text-gray-500 text-sm italic">Available</span>
+                <span className="text-gray-500 text-[10px] sm:text-sm italic whitespace-nowrap">Available</span>
               )}
             </div>
           </motion.div>

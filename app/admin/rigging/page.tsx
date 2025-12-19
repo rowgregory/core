@@ -76,18 +76,17 @@ const Rigging: FC = () => {
   }
 
   return (
-    <div className="bg-gray-900 h-full flex">
-      {/* Main Configuration Card */}
+    <div className="bg-gray-900 min-h-[calc(100vh-68px)]">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex-1 p-6 overflow-y-auto max-w-7xl"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="flex-1 px-3 py-6 sm:p-6 overflow-y-auto space-y-6"
       >
         {/* Form Content */}
         <>
-          <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-y-6 px-8 py-6 border-b border-gray-700/50">
+          <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-y-6 px-3 sm:px-8 py-6 border-b border-gray-700/50">
             <div className="flex items-center space-x-4">
-              <div className="w-16 h-16 bg-linear-to-br from-teal-500 via-cyan-600 to-blue-600 rounded-xl flex items-center justify-center">
+              <div className="hidden sm:flex w-16 h-16 bg-linear-to-br from-teal-500 via-cyan-600 to-blue-600 rounded-xl items-center justify-center">
                 <Sliders className="w-8 h-8 text-white" />
               </div>
               <div>
@@ -131,7 +130,7 @@ const Rigging: FC = () => {
               )}
             </div>
           </div>
-          <div className="grid lg:grid-cols-2 gap-8 p-8">
+          <div className="grid lg:grid-cols-2 gap-y-8 sm:gap-8 p-4 sm:p-8">
             {/* Chapter Information */}
             <div className="space-y-6">
               <div className="flex items-center space-x-3 mb-6">

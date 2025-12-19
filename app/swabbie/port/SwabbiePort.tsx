@@ -411,7 +411,7 @@ const SwabbiePort = () => {
           >
             <div className="flex flex-col lg:flex-row sm:items-center space-y-3 sm:space-y-0 lg:space-x-4 mb-4 sm:mb-6">
               <div
-                className={`h-10 w-1 sm:h-12 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0 ${
+                className={`h-10 w-1 sm:h-12 rounded-xl flex items-center justify-center shadow-lg shrink-0 ${
                   data?.user?.membershipStatus === 'ACTIVE'
                     ? 'bg-linear-to-r from-amber-600 to-amber-700 shadow-amber-900/50'
                     : 'bg-linear-to-r from-cyan-600 to-blue-700 shadow-cyan-900/50'
@@ -560,7 +560,7 @@ const SwabbiePort = () => {
                 className="bg-slate-800/40 rounded-2xl border border-slate-600/30 p-4 sm:p-6 shadow-xl shadow-slate-900/50"
               >
                 <div className="flex items-center space-x-2 sm:space-x-3 mb-4 sm:mb-6">
-                  <AlertTriangle className="h-5 w-5 sm:h-6 sm:w-6 text-amber-400 flex-shrink-0" />
+                  <AlertTriangle className="h-5 w-5 sm:h-6 sm:w-6 text-amber-400 shrink-0" />
                   <h3 className="text-lg sm:text-xl font-semibold text-white">Chart Your Course</h3>
                 </div>
 
@@ -583,7 +583,7 @@ const SwabbiePort = () => {
                         {/* Main content */}
                         <div className="flex items-start space-x-3 flex-1 min-w-0">
                           <div
-                            className={`h-7 w-7 sm:h-8 sm:w-8 rounded-lg flex items-center justify-center transition-colors shadow-lg flex-shrink-0 ${
+                            className={`h-7 w-7 sm:h-8 sm:w-8 rounded-lg flex items-center justify-center transition-colors shadow-lg shrink-0 ${
                               step.disabled
                                 ? 'bg-slate-600/30 shadow-slate-800/50'
                                 : 'bg-linear-to-r from-cyan-600 to-blue-600 group-hover:from-cyan-500 group-hover:to-blue-500 shadow-cyan-900/50'
@@ -600,7 +600,7 @@ const SwabbiePort = () => {
                         </div>
 
                         {/* Action and arrow - on mobile: full width, on desktop: right side */}
-                        <div className="flex items-center justify-between sm:justify-end space-x-2 sm:flex-shrink-0 sm:ml-4">
+                        <div className="flex items-center justify-between sm:justify-end space-x-2 sm:shrink-0 sm:ml-4">
                           <span
                             className={`text-xs sm:text-sm transition-colors px-2 py-1 rounded-full whitespace-nowrap flex-1 sm:flex-initial text-center sm:text-left ${
                               step.disabled
@@ -611,7 +611,7 @@ const SwabbiePort = () => {
                             {step.action}
                           </span>
                           {!step.disabled && (
-                            <ChevronRight className="h-4 w-4 text-cyan-300 group-hover:text-cyan-200 group-hover:translate-x-1 transition-all flex-shrink-0" />
+                            <ChevronRight className="h-4 w-4 text-cyan-300 group-hover:text-cyan-200 group-hover:translate-x-1 transition-all shrink-0" />
                           )}
                         </div>
                       </div>
@@ -629,9 +629,9 @@ const SwabbiePort = () => {
                   className="bg-slate-800/40 rounded-2xl border border-amber-600/30 p-4 sm:p-6 shadow-xl shadow-slate-900/50"
                 >
                   <div className="flex items-center space-x-2 sm:space-x-3 mb-4 sm:mb-6">
-                    <MessageSquare className="h-5 w-5 sm:h-6 sm:w-6 text-amber-400 flex-shrink-0" />
+                    <MessageSquare className="h-5 w-5 sm:h-6 sm:w-6 text-amber-400 shrink-0" />
                     <h3 className="text-lg sm:text-xl font-semibold text-white flex-1 min-w-0">Signal Log</h3>
-                    <span className="text-xs sm:text-sm text-amber-300 bg-amber-900/30 px-2 py-1 rounded-full whitespace-nowrap flex-shrink-0">
+                    <span className="text-xs sm:text-sm text-amber-300 bg-amber-900/30 px-2 py-1 rounded-full whitespace-nowrap shrink-0">
                       {data?.user?.signals?.length} message{data?.user?.signals?.length !== 1 ? 's' : ''}
                     </span>
                   </div>

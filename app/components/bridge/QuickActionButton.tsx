@@ -1,28 +1,29 @@
-const QuickActionButton = ({ title, icon: Icon, color, onClick }: any) => (
-  <button
-    onClick={onClick}
-    className={`
-    group relative overflow-hidden
-    flex items-center justify-center space-x-3 
-    w-full px-6 py-4 
-    rounded-lg border border-transparent
-    bg-linear-to-r ${color}
-    text-white font-semibold text-sm tracking-wide
-    shadow-lg shadow-black/10
-    transition-all duration-200 ease-out
-    hover:shadow-xl hover:shadow-black/20 hover:-translate-y-0.5
-    active:translate-y-0 active:shadow-md
-    focus:outline-none focus:ring-2 focus:ring-white/20 focus:ring-offset-2 focus:ring-offset-transparent
-  `}
-  >
-    <Icon className="w-5 h-5 transition-transform duration-200 group-hover:scale-110" />
-    <span className="relative z-10">{title}</span>
+import { motion } from 'framer-motion'
+import { FC } from 'react'
 
-    {/* Subtle shine effect on hover */}
-    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-      <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-    </div>
-  </button>
-)
+interface QuickActionButtonProps {
+  title: string
+  description: string
+  icon: any
+  color: string
+  onClick: () => void
+}
+
+const QuickActionButton: FC<QuickActionButtonProps> = ({ title, description, icon: Icon, color, onClick }) => {
+  return (
+    <motion.button
+      onClick={onClick}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+      className={`flex flex-col items-start p-4 bg-linear-to-br ${color} shadow-lg transition-all duration-300`}
+    >
+      <div className="flex items-center justify-between w-full mb-3">
+        <Icon className="w-6 h-6" />
+      </div>
+      <h4 className="font-semibold text-base mb-1">{title}</h4>
+      <p className="text-xs text-white/80 text-left leading-relaxed">{description}</p>
+    </motion.button>
+  )
+}
 
 export default QuickActionButton

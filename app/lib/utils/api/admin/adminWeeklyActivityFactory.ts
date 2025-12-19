@@ -26,7 +26,14 @@ export const adminWeeklyActivityFactory = {
       })
 
       const treasureMaps = await prisma.treasureMap.count({
-        where: { closedAt: { gte: dayStart, lt: dayEnd } }
+        where: {
+          OR: [
+            { closedAt: { gte: dayStart, lt: dayEnd } },
+            {
+              AND: [{ closedAt: null }, { createdAt: { gte: dayStart, lt: dayEnd } }]
+            }
+          ]
+        }
       })
 
       const anchors = await prisma.anchor.count({

@@ -18,10 +18,9 @@ const AdminBridge = () => {
   return (
     <div className="bg-gray-900">
       {/* Main Layout */}
-      <div className="flex flex-col md:flex-row min-h-[calc(100vh-66px)]">
+      <div className="flex flex-col md:flex-row min-h-[calc(100vh-68px)]">
         {/* Main Content Area */}
-        <div className="flex-1 p-6 md:overflow-y-auto">
-          {/* Database Banner */}
+        <div className="flex-1 py-6 px-3 md:p-6 md:overflow-y-auto">
           {/* Stats Grid */}
           <AdminBridgeStatsGrid data={data} />
           {/* Weekly Activity Chart */}

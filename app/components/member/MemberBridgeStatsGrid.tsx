@@ -1,8 +1,21 @@
-import React, { FC } from 'react'
+import { FC } from 'react'
 import { DollarSign, Anchor, Layers3, Scroll } from 'lucide-react'
 import StatCard from '../bridge/StatCard'
 
-const MemberBridgeStatsGrid: FC<{ data: any }> = ({ data }) => {
+interface IMemberBridgeStatsGrid {
+  data: {
+    totalRevenue: number
+    totalRevenueChange: number
+    totalParleys: number
+    parleysChangePercent: number
+    totalTreasureMaps: number
+    treasureMapsChangePercent: number
+    totalAnchors: number
+    anchorsChangePercent: number
+  }
+}
+
+const MemberBridgeStatsGrid: FC<IMemberBridgeStatsGrid> = ({ data }) => {
   const stats = [
     {
       title: 'TOTAL REVENUE',
@@ -38,7 +51,7 @@ const MemberBridgeStatsGrid: FC<{ data: any }> = ({ data }) => {
     }
   ]
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-4 gap-6 mb-8">
+    <div className="grid grid-cols-2 lg:grid-cols-2 2xl:grid-cols-4 gap-1.5 xs:gap-2 sm:gap-4 lg:gap-6 mb-8">
       {stats.map((stat, i) => (
         <StatCard
           key={i}

@@ -23,7 +23,7 @@ const InputStyle =
 
 const SwabbieErrorText = ({ error }: { error: string }) => (
   <p className="text-red-400 text-sm mt-1 flex items-center space-x-1">
-    <AlertCircle className="w-4 h-4 flex-shrink-0" />
+    <AlertCircle className="w-4 h-4 shrink-0" />
     <span>{error}</span>
   </p>
 )
@@ -258,7 +258,7 @@ const SwabbieApplicationForm: FC<IForm> = ({ inputs, errors, handleInput, handle
             {/* Application Notice */}
             <div className="bg-amber-900/20 border border-amber-600/50 rounded-lg p-4 shadow-inner">
               <div className="flex items-start">
-                <AlertTriangle className="w-5 h-5 text-amber-400 mr-3 mt-0.5 flex-shrink-0" />
+                <AlertTriangle className="w-5 h-5 text-amber-400 mr-3 mt-0.5 shrink-0" />
                 <div>
                   <h4 className="text-amber-400 font-semibold mb-1">Quartermaster Review</h4>
                   <p className="text-amber-200 text-sm">

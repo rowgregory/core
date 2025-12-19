@@ -78,7 +78,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
             animate={{ opacity: 1, y: 0 }}
             className="flex items-center space-x-1 text-red-400 text-sm"
           >
-            <AlertCircle className="w-4 h-4 flex-shrink-0" />
+            <AlertCircle className="w-4 h-4 shrink-0" />
             <span>{error}</span>
           </motion.div>
         )}

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import getAnchorStatusOptions from '@/app/lib/utils/anchor/getAnchorStatusOptions'
 import getAnchorStatusIcon from '@/app/lib/utils/anchor/getAnchorStatusIcon'
@@ -11,8 +11,9 @@ import EmptyState from '@/app/components/common/EmptyState'
 import { Search } from 'lucide-react'
 import { setOpenAnchorDrawer } from '@/app/redux/features/anchorSlice'
 import { useAnchorSelector } from '@/app/redux/store'
+import InfoBanner from '@/app/components/common/InfoBanner'
 
-const Anchors = () => {
+const MemberAnchors = () => {
   const session = useSession()
   const [searchQuery, setSearchQuery] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
@@ -48,14 +49,20 @@ const Anchors = () => {
     })
 
   return (
-    <div className="bg-gray-900 flex h-full">
+    <div className="bg-gray-900 min-h-[calc(100vh-68px)]">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex-1 p-6 overflow-y-auto space-y-6"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="flex-1 px-3 py-6 sm:p-6 overflow-y-auto space-y-6"
       >
+        {/* Anchor Info Banner */}
+        <InfoBanner
+          type="anchor"
+          description="is a way to recognize and thank a member for closed business they helped generate."
+        />
+
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 xs:gap-3 sm:gap-4">
           {getAnchorStatusOptions(anchors)
             .slice(1)
             .map((status, index) => (
@@ -64,15 +71,15 @@ const Anchors = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-6"
+                className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-lg xs:rounded-xl p-3 xs:p-4 sm:p-6"
               >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-gray-400 text-sm">{status.label}</p>
-                    <p className="text-2xl font-bold text-white">{status.count}</p>
+                <div className="flex items-center justify-between gap-2">
+                  <div className="min-w-0 flex-1">
+                    <p className="text-gray-400 text-[10px] xs:text-xs sm:text-sm truncate">{status.label}</p>
+                    <p className="text-lg xs:text-xl sm:text-2xl font-bold text-white">{status.count}</p>
                   </div>
-                  <div className={`p-3 rounded-lg ${getAnchorStatusColor(status.value)}`}>
-                    {getAnchorStatusIcon(status.value)}
+                  <div className={`p-1.5 xs:p-2 sm:p-3 rounded-lg shrink-0 ${getAnchorStatusColor(status.value)}`}>
+                    <div className="w-3.5 h-3.5 xs:w-4 xs:h-4 sm:w-5 sm:h-5">{getAnchorStatusIcon(status.value)}</div>
                   </div>
                 </div>
               </motion.div>
@@ -80,7 +87,7 @@ const Anchors = () => {
         </div>
 
         {/* Filters and Search */}
-        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="sticky top-0 z-20 flex flex-col md:flex-row gap-4">
           {/* Search */}
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -98,7 +105,7 @@ const Anchors = () => {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-violet-400 focus:border-violet-400 transition-all"
+              className="px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-violet-400 focus:border-violet-400 transition-all w-full md:w-fit"
             >
               {getAnchorStatusOptions(anchors).map((option) => (
                 <option key={option.value} value={option.value}>
@@ -135,4 +142,4 @@ const Anchors = () => {
   )
 }
 
-export default Anchors
+export default MemberAnchors

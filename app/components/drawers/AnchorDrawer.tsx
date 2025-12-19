@@ -1,5 +1,4 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import React from 'react'
 import Backdrop from '../common/Backdrop'
 import Drawer from '../common/Drawer'
 import { X } from 'lucide-react'
@@ -157,6 +156,7 @@ const AnchorDrawer = () => {
               isLoading={isLoading}
               user={user}
               isUpdating={inputs?.isUpdating}
+              onClose={onClose}
             />
           </Drawer>
         </>

@@ -87,7 +87,7 @@ const NavigatorDrawer = () => {
                 transition={{ delay: 0.2, duration: 0.4 }}
               >
                 <h2 className="text-xl font-bold bg-linear-to-r from-cyan-400 via-blue-400 to-teal-400 bg-clip-text text-transparent">
-                  {navigatorForm?.inputs?.isUpdating ? 'Update Navigator' : 'Add New Navigator'}
+                  {navigatorForm?.inputs?.isUpdating ? 'Update Navigator' : 'Add Navigator'}
                 </h2>
                 <p className="text-sm text-gray-500 mt-1">Create a new navigator profile</p>
               </motion.div>

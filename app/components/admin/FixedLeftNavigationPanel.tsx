@@ -1,10 +1,10 @@
-import React, { FC } from 'react'
+import { FC } from 'react'
 import { motion } from 'framer-motion'
 import { ChevronLeft, ChevronRight, Crown, Shield, ShipWheel } from 'lucide-react'
 import Link from 'next/link'
-import { itemVariants } from '../drawers/MobileNavigationDrawer'
 import { RootState, useAppDispatch, useAppSelector } from '@/app/redux/store'
 import { setIsNavigationCollapsed } from '@/app/redux/features/appSlice'
+import { itemVariants } from '@/app/lib/constants/motion'
 
 interface IFixedLeftNavigationPanel {
   selectedPage: string

@@ -31,6 +31,8 @@ import { setOpenGrogDrawer } from '@/app/redux/features/grogSlice'
 import { useAppDispatch } from '@/app/redux/store'
 import getGrogStatusColor from '@/app/lib/constants/grogs/getGrogStatusColor'
 import CalendarGrid from '@/app/components/grogs/CalendarGrid'
+import InfoBanner from '@/app/components/common/InfoBanner'
+import { LockedModuleBanner } from '@/app/components/common/LockedModuleBanner'
 // import { useSession } from 'next-auth/react'
 // import { showToast } from '@/app/redux/features/toastSlice'
 
@@ -330,17 +332,28 @@ const GrogsEventsPage: FC = () => {
     return grogs.filter((event) => event.date === dateString)
   }
   return (
-    <div className="h-full bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6">
-      <div className="flex-1 mx-auto">
+    <div className="bg-gray-900 min-h-[calc(100vh-68px)]">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="flex-1 px-3 py-6 sm:p-6 overflow-y-auto space-y-6"
+      >
+        <InfoBanner
+          type="grog"
+          description="Grog is the chapter’s social event module, used to create and manage meetup-style gatherings. This feature is currently locked and not yet enabled for your chapter. Once purchased and built, you’ll be able to schedule events, track attendance, and keep members engaged."
+        />
+
+        <LockedModuleBanner />
+
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           {/* Navigation & Filters */}
-          <div className="flex flex-wrap items-center gap-4 p-4 bg-gray-800/40 border border-gray-700/50 rounded-xl backdrop-blur-sm">
+          <div className="flex flex-col sm:flex-wrap sm:items-center gap-y-4 sm:gap-4 p-4 bg-gray-800/40 border border-gray-700/50 rounded-xl backdrop-blur-sm">
             <div className="flex items-center space-x-2">
               <Compass className="w-4 h-4 text-gray-400" />
               <span className="text-sm text-gray-400">Navigation:</span>
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-x-2">
               <button
                 onClick={() => setViewMode('calendar')}
                 className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
@@ -371,6 +384,16 @@ const GrogsEventsPage: FC = () => {
               >
                 Analytics
               </button>
+            </div>
+            <div className="relative">
+              <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search grogs..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 pr-4 py-1.5 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 w-full md:w-fit"
+              />
             </div>
             <select
               value={filterType}
@@ -408,16 +431,6 @@ const GrogsEventsPage: FC = () => {
               <option value="COMPLETED">Completed</option>
               <option value="CANCELLED">Cancelled</option>
             </select>
-            <div className="relative">
-              <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search grogs..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-1.5 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
-              />
-            </div>
           </div>
         </motion.div>
 
@@ -480,7 +493,7 @@ const GrogsEventsPage: FC = () => {
                     {/* Event Header */}
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-start space-x-4">
-                        <div className="flex-shrink-0">
+                        <div className="shrink-0">
                           <div className={`p-3 rounded-xl ${getEventTypeColor(grog.category)}`}>
                             <EventTypeIcon className="w-6 h-6" />
                           </div>
@@ -860,7 +873,7 @@ const GrogsEventsPage: FC = () => {
             </div>
           </div>
         </motion.div>
-      </div>
+      </motion.div>
     </div>
   )
 }

@@ -11,6 +11,7 @@ import getAnchorStatusOptions from '@/app/lib/utils/anchor/getAnchorStatusOption
 import getAnchorStatusColor from '@/app/lib/utils/anchor/getAnchorStatusColor'
 import { setOpenAnchorDrawer } from '@/app/redux/features/anchorSlice'
 import { useAnchorSelector } from '@/app/redux/store'
+import InfoBanner from '@/app/components/common/InfoBanner'
 
 const AdminAnchors = () => {
   const session = useSession()
@@ -50,12 +51,17 @@ const AdminAnchors = () => {
     })
 
   return (
-    <div className="bg-gray-900 flex h-full">
+    <div className="bg-gray-900 min-h-[calc(100vh-68px)]">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex-1 p-6 overflow-y-auto space-y-6"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="flex-1 px-3 py-6 sm:p-6 overflow-y-auto space-y-6"
       >
+        {/* Anchor Info Banner */}
+        <InfoBanner
+          type="anchor"
+          description="is a way to recognize and thank a member for closed business they helped generate."
+        />
         {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {getAnchorStatusOptions(anchors)
@@ -99,7 +105,7 @@ const AdminAnchors = () => {
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setShowMyAnchorsOnly(!showMyAnchorsOnly)}
-              className={`px-4 py-3 border rounded-lg transition-all flex items-center space-x-2 ${
+              className={`px-4 py-3 border rounded-lg transition-all flex items-center space-x-2 w-full md:w-fit ${
                 showMyAnchorsOnly
                   ? 'bg-violet-500/10 border-violet-500 text-violet-300'
                   : 'bg-gray-800/50 border-gray-700 text-gray-300 hover:border-gray-600 hover:text-white'

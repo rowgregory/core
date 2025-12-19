@@ -413,11 +413,11 @@ const AdminReportsPage: React.FC = () => {
                           {member?.profileImage ? (
                             <Picture
                               src={member?.profileImage}
-                              className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center object-cover"
+                              className="shrink-0 w-10 h-10 rounded-full flex items-center justify-center object-cover"
                               priority={false}
                             />
                           ) : (
-                            <div className="flex-shrink-0 w-10 h-10 bg-linear-to-r from-cyan-500 to-blue-500 rounded-full flex items-center justify-center">
+                            <div className="shrink-0 w-10 h-10 bg-linear-to-r from-cyan-500 to-blue-500 rounded-full flex items-center justify-center">
                               <span className="text-white font-semibold text-sm">
                                 {member.name
                                   .split(' ')

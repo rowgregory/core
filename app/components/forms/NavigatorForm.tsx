@@ -114,7 +114,7 @@ const NavigatorForm: FC<INavigatorForm> = ({
             <div className="bg-cyan-500/10 border border-cyan-500/20 rounded-lg p-4">
               <label className="block text-sm font-medium text-cyan-300 mb-3">Assigning to Chapter</label>
               <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-linear-to-r from-cyan-500 via-blue-500 to-teal-500 rounded-full flex items-center justify-center shadow-lg">
+                <div className="hidden w-12 h-12 bg-linear-to-r from-cyan-500 via-blue-500 to-teal-500 rounded-full sm:flex items-center justify-center shadow-lg">
                   <span className="text-white font-bold text-lg">L</span>
                 </div>
                 <div>
@@ -229,12 +229,12 @@ const NavigatorForm: FC<INavigatorForm> = ({
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4, duration: 0.4 }}
       >
-        <div className="flex space-x-3">
+        <div className="flex flex-col sm:flew-row gap-y-3 sm:gap-x-3">
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={onClose}
-            className="flex-1 px-6 py-3 border border-gray-600 text-gray-300 rounded-lg hover:bg-gray-800 transition-all"
+            className="order-2 sm:order-1 flex-1 px-6 py-3 border border-gray-600 text-gray-300 rounded-lg hover:bg-gray-800 transition-all"
           >
             Cancel
           </motion.button>
@@ -245,7 +245,7 @@ const NavigatorForm: FC<INavigatorForm> = ({
             whileTap={{ scale: 0.98 }}
             onClick={handleSubmit}
             disabled={isLoading}
-            className="flex-1 px-6 py-3 bg-linear-to-r from-cyan-600 via-blue-600 to-teal-600 text-white rounded-lg hover:from-cyan-500 hover:via-blue-500 hover:to-teal-500 transition-all flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="order-1 sm:order-2 flex-1 px-6 py-3 bg-linear-to-r from-cyan-600 via-blue-600 to-teal-600 text-white rounded-lg hover:from-cyan-500 hover:via-blue-500 hover:to-teal-500 transition-all flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? (
               <>

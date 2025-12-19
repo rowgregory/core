@@ -44,7 +44,7 @@ const LoginPage = () => {
   }
 
   return (
-    <div className="min-h-[calc(100dvh-74px)] bg-gray-900 flex items-center justify-center p-6">
+    <div className="min-h-screen bg-gray-900 flex items-center justify-center p-6">
       <div className="w-full max-w-md">
         {/* Header */}
         <LoginHeader />
@@ -88,7 +88,7 @@ const LoginPage = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.5 }}
-          className="text-center mt-8"
+          className="text-center mt-8 hidden sm:block"
         >
           <p className="text-xs text-gray-500">Coastal Referral Exchange Management System</p>
         </motion.div>

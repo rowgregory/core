@@ -266,19 +266,19 @@ const ProjectBreakdown = () => {
 
                     <div className="space-y-3 mb-6">
                       <div className="flex items-center gap-2">
-                        <CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0" />
+                        <CheckCircle className="w-4 h-4 text-green-400 shrink-0" />
                         <span className="text-sm text-gray-300">Professional static multi-page website</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0" />
+                        <CheckCircle className="w-4 h-4 text-green-400 shrink-0" />
                         <span className="text-sm text-gray-300">Member directory & profiles</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0" />
+                        <CheckCircle className="w-4 h-4 text-green-400 shrink-0" />
                         <span className="text-sm text-gray-300">Contact page</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0" />
+                        <CheckCircle className="w-4 h-4 text-green-400 shrink-0" />
                         <span className="text-sm text-gray-300">Mobile responsive design</span>
                       </div>
                     </div>
@@ -311,23 +311,23 @@ const ProjectBreakdown = () => {
 
                     <div className="space-y-3 mb-6">
                       <div className="flex items-center gap-2">
-                        <Gamepad2 className="w-4 h-4 text-green-400 flex-shrink-0" />
+                        <Gamepad2 className="w-4 h-4 text-green-400 shrink-0" />
                         <span className="text-sm text-gray-300">Everything in Boot Sequence, plus:</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Target className="w-4 h-4 text-green-400 flex-shrink-0" />
+                        <Target className="w-4 h-4 text-green-400 shrink-0" />
                         <span className="text-sm text-gray-300">Pick exactly what you need</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Calculator className="w-4 h-4 text-green-400 flex-shrink-0" />
+                        <Calculator className="w-4 h-4 text-green-400 shrink-0" />
                         <span className="text-sm text-gray-300">See real-time pricing</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Users className="w-4 h-4 text-green-400 flex-shrink-0" />
+                        <Users className="w-4 h-4 text-green-400 shrink-0" />
                         <span className="text-sm text-gray-300">Perfect for group decisions</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Zap className="w-4 h-4 text-green-400 flex-shrink-0" />
+                        <Zap className="w-4 h-4 text-green-400 shrink-0" />
                         <span className="text-sm text-gray-300">Add more features later</span>
                       </div>
                       {selectedFeatures.length > 0 && (
@@ -337,7 +337,7 @@ const ProjectBreakdown = () => {
                             .filter((feature) => selectedFeatures.includes(feature.id))
                             .map((feature) => (
                               <div key={feature.id} className="flex items-center gap-2 mb-1">
-                                <CheckCircle className="w-3 h-3 text-green-400 flex-shrink-0" />
+                                <CheckCircle className="w-3 h-3 text-green-400 shrink-0" />
                                 <span className="text-xs text-gray-300">{feature.title}</span>
                               </div>
                             ))}
@@ -379,7 +379,7 @@ const ProjectBreakdown = () => {
                         className="bg-gray-900 border border-gray-700 rounded-lg p-4 hover:bg-gray-800 transition-colors"
                       >
                         <div className="flex items-start gap-3">
-                          <div className="p-2 bg-blue-600/20 rounded-lg border border-blue-500/30 flex-shrink-0">
+                          <div className="p-2 bg-blue-600/20 rounded-lg border border-blue-500/30 shrink-0">
                             <feature.icon className="w-4 h-4 text-blue-400" />
                           </div>
                           <div className="flex-1 min-w-0">
@@ -437,7 +437,7 @@ const ProjectBreakdown = () => {
                         >
                           <div className="flex items-start gap-3 mb-3">
                             <div
-                              className={`p-2 rounded-lg flex-shrink-0 ${isSelected ? 'bg-indigo-600/30' : 'bg-gray-700'}`}
+                              className={`p-2 rounded-lg shrink-0 ${isSelected ? 'bg-indigo-600/30' : 'bg-gray-700'}`}
                             >
                               <feature.icon className={`w-5 h-5 ${isSelected ? 'text-indigo-400' : 'text-gray-400'}`} />
                             </div>

@@ -1,8 +1,30 @@
-import React, { FC } from 'react'
+import { FC, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { overlayVariants } from '../drawers/MobileNavigationDrawer'
+
+const overlayVariants = {
+  closed: {
+    opacity: 0,
+    transition: {
+      duration: 0.3
+    }
+  },
+  open: {
+    opacity: 1,
+    transition: {
+      duration: 0.3
+    }
+  }
+}
 
 const Backdrop: FC<{ onClose: () => void }> = ({ onClose }) => {
+  useEffect(() => {
+    // Prevent background scroll
+    document.body.style.overflow = 'hidden'
+    return () => {
+      // Re-enable scroll when unmounted
+      document.body.style.overflow = ''
+    }
+  }, [])
   return (
     <motion.div
       variants={overlayVariants}

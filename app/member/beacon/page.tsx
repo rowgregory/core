@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { useAppDispatch, useFormSelector, useUserSelector } from '@/app/redux/store'
 import useBeaconForm from '@/hooks/useBeaconForm'
 import BeaconHeader from '@/app/components/beacon/BeaconHeader'
@@ -19,8 +18,8 @@ const MemberBeacon = () => {
 
   return (
     <div className="bg-gray-900 h-full">
-      <div className="flex-1 p-6 overflow-y-auto max-w-7xl">
-        <div className="px-8 py-6 border-b border-gray-700/50">
+      <div className="flex-1 px-3 py-6 sm:p-6 overflow-y-auto max-w-7xl">
+        <div className="sm:px-8 py-6 border-b border-gray-700/50">
           <BeaconHeader inputs={inputs} isEditing={isEditing} />
         </div>
         <BeaconForm

@@ -9,7 +9,8 @@ import {
   Crosshair,
   Flag,
   ClipboardList,
-  BookOpenText
+  BookOpenText,
+  GitBranch
 } from 'lucide-react'
 
 export const memberNavLinks = (isMembership: boolean) => [
@@ -81,17 +82,24 @@ export const memberNavLinks = (isMembership: boolean) => [
       ]
     : []),
   {
-    id: 'hidden-cove',
-    label: 'Hidden Cove',
-    icon: HiddenCoveSVG,
-    description: 'Special tools, features, and perks waiting to be discovered',
-    linkKey: '/member/hidden-cove'
-  },
-  {
     id: 'lore-and-lingo',
     label: 'Lore & Lingo',
     icon: BookOpenText,
     description: 'Decode the crew’s language — your map to every parley, anchor, and treasure maps.',
     linkKey: '/member/lore-and-lingo'
+  },
+  {
+    id: 'changelog',
+    label: 'Changelog',
+    icon: GitBranch,
+    description: 'Track updates, improvements, and new features — your complete history of platform evolution.',
+    linkKey: '/member/changelog'
+  },
+  {
+    id: 'hidden-cove',
+    label: 'Hidden Cove',
+    icon: HiddenCoveSVG,
+    description: 'Special tools, features, and perks waiting to be discovered',
+    linkKey: '/member/hidden-cove'
   }
 ]

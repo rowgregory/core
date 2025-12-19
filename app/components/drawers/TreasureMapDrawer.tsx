@@ -94,6 +94,11 @@ const TreasureMapDrawer = () => {
                 <h2 className="text-xl font-bold bg-linear-to-r from-cyan-400 via-blue-400 to-teal-400 bg-clip-text text-transparent">
                   {treasureMapForm?.inputs?.isUpdating ? 'Update Treasure Map' : 'Send Treasure Map'}
                 </h2>
+                <p className="text-sm text-gray-500 mt-1">
+                  {treasureMapForm?.inputs?.isUpdating
+                    ? 'Updating your existing referral'
+                    : 'Add a new referral between members'}
+                </p>
               </motion.div>
 
               <motion.button

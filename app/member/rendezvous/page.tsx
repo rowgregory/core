@@ -12,6 +12,7 @@ import { useFetchRendezvousListQuery } from '@/app/redux/services/rendezvousApi'
 import { RendezvousEvent } from '@/types/rendezvous'
 import { chapterId } from '@/app/lib/constants/api/chapterId'
 import RendezvousListView from '@/app/components/rendezvous/RendezvousListView'
+import InfoBanner from '@/app/components/common/InfoBanner'
 
 const Rendezvous = () => {
   const { data } = useFetchRendezvousListQuery({ chapterId }) as { data: { rendezvous: RendezvousEvent[] } }
@@ -79,8 +80,17 @@ const Rendezvous = () => {
   }, [dynamicMeetings, data?.rendezvous])
 
   return (
-    <div className="h-full bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6">
-      <div className="flex-1 mx-auto">
+    <div className="bg-gray-900 min-h-[calc(100vh-68px)]">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="flex-1 px-3 py-6 sm:p-6 overflow-y-auto space-y-6"
+      >
+        {/* Rendezvous Info Banner */}
+        <InfoBanner
+          type="rendezvous"
+          description="is the recurring weekly networking group meeting, tracked in the calendar or list."
+        />
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           {/* Navigation & Filters */}
@@ -89,10 +99,10 @@ const Rendezvous = () => {
               <Compass className="w-4 h-4 text-gray-400" />
               <span className="text-sm text-gray-400">Navigation:</span>
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-x-2 w-full">
               <button
                 onClick={() => setViewMode('calendar')}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors w-full sm:w-fit ${
                   viewMode === 'calendar'
                     ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30'
                     : 'bg-gray-700 text-gray-400 border border-gray-600 hover:bg-gray-700/70'
@@ -122,13 +132,15 @@ const Rendezvous = () => {
             transition={{ delay: 0.2 }}
             className="bg-gray-800/40 border border-gray-700/50 rounded-xl backdrop-blur-sm overflow-hidden"
           >
-            <div className="p-6 border-b border-gray-700/50">
-              <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-bold text-white flex items-center">
-                  <Calendar className="w-6 h-6 mr-2" />
-                  The Gathering Point
+            <div className="px-3 py-6 sm:p-6 border-b border-gray-700/50">
+              <div className="flex flex-col xs:flex-row xs:items-center xs:justify-between gap-3">
+                <h2 className="text-lg xs:text-xl sm:text-2xl font-bold text-white flex items-center">
+                  <Calendar className="w-5 h-5 xs:w-6 xs:h-6 mr-2 shrink-0" />
+                  <span className="truncate">The Gathering Point</span>
                 </h2>
-                <div className="flex items-center space-x-3">{/* Month navigation buttons */}</div>
+                <div className="flex items-center justify-end space-x-2 xs:space-x-3 w-full xs:w-auto">
+                  {/* Month navigation buttons */}
+                </div>
               </div>
             </div>
 
@@ -151,13 +163,15 @@ const Rendezvous = () => {
             transition={{ delay: 0.2 }}
             className="bg-gray-800/40 border border-gray-700/50 rounded-xl backdrop-blur-sm overflow-hidden"
           >
-            <div className="p-6 border-b border-gray-700/50">
-              <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-bold text-white flex items-center">
-                  <Calendar className="w-6 h-6 mr-2" />
-                  The Gathering Point
+            <div className="px-3 py-6 sm:p-6 border-b border-gray-700/50">
+              <div className="flex flex-col xs:flex-row xs:items-center xs:justify-between gap-3">
+                <h2 className="text-lg xs:text-xl sm:text-2xl font-bold text-white flex items-center">
+                  <Calendar className="w-5 h-5 xs:w-6 xs:h-6 mr-2 shrink-0" />
+                  <span className="truncate">The Gathering Point</span>
                 </h2>
-                <div className="flex items-center space-x-3">{/* Month navigation buttons */}</div>
+                <div className="flex items-center justify-end space-x-2 xs:space-x-3 w-full xs:w-auto">
+                  {/* Month navigation buttons */}
+                </div>
               </div>
             </div>
 
@@ -169,7 +183,7 @@ const Rendezvous = () => {
             />
           </motion.div>
         )}
-      </div>
+      </motion.div>
     </div>
   )
 }

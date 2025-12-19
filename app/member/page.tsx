@@ -1,7 +1,7 @@
 'use client'
 
 import useCustomPathname from '@/hooks/useCustomPathname'
-import React, { FC, useEffect } from 'react'
+import { FC, useEffect } from 'react'
 import getCurrentPageId from '../lib/utils/common/getCurrentPageId'
 import { memberNavLinks } from '../lib/constants/navigation/memberNavLinks'
 import { useAppDispatch, useApplicationSelector } from '../redux/store'

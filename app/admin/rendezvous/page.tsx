@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Calendar, Compass } from 'lucide-react'
 import CalendarGrid from '@/app/components/grogs/CalendarGrid'
@@ -10,6 +10,7 @@ import getRendezvousTypeIcon from '@/app/lib/utils/rendezvous/getRendezvousTypeI
 import getRendezvousForDate from '@/app/lib/utils/rendezvous/getRendezvousForDates'
 import RendezvousListView from '@/app/components/rendezvous/RendezvousListView'
 import { useRendezvousSelector } from '@/app/redux/store'
+import InfoBanner from '@/app/components/common/InfoBanner'
 
 const Rendezvous = () => {
   const { rendezvous } = useRendezvousSelector()
@@ -77,8 +78,17 @@ const Rendezvous = () => {
   }, [dynamicMeetings, rendezvous])
 
   return (
-    <div className="h-full bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6">
-      <div className="flex-1 mx-auto">
+    <div className="bg-gray-900 min-h-[calc(100vh-68px)]">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="flex-1 px-3 py-6 sm:p-6 overflow-y-auto space-y-6"
+      >
+        {/* Rendezvous Info Banner */}
+        <InfoBanner
+          type="rendezvous"
+          description="is the recurring weekly networking group meeting, tracked in the calendar or list."
+        />
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           {/* Navigation & Filters */}
@@ -87,7 +97,7 @@ const Rendezvous = () => {
               <Compass className="w-4 h-4 text-gray-400" />
               <span className="text-sm text-gray-400">Navigation:</span>
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-x-2 w-full">
               <button
                 onClick={() => setViewMode('calendar')}
                 className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
@@ -167,7 +177,7 @@ const Rendezvous = () => {
             />
           </motion.div>
         )}
-      </div>
+      </motion.div>
     </div>
   )
 }

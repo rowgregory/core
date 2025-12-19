@@ -1,4 +1,3 @@
-import React from 'react'
 import { Calendar, DollarSign, Building, FileText, AlertCircle, CheckCircle } from 'lucide-react'
 import { useAppDispatch, useUserSelector } from '@/app/redux/store'
 import { motion } from 'framer-motion'
@@ -35,9 +34,9 @@ const AnchorForm = ({ inputs, errors, handleInput, isLoading, handleSubmit, user
           >
             {/* Role Switch Toggle */}
             <div className="space-y-3">
-              <label className="block text-sm font-medium text-gray-300">What be yer role in this anchor?</label>
+              <label className="block text-sm font-medium text-gray-300">What is your role in this anchor?</label>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid sm:grid-cols-2 gap-3">
                 <button
                   type="button"
                   onClick={() => {
@@ -413,7 +412,7 @@ const AnchorForm = ({ inputs, errors, handleInput, isLoading, handleSubmit, user
               value={formatDateForInput(inputs?.closedDate) || ''}
               onChange={handleInput}
               max={new Date().toISOString().split('T')[0]}
-              className={`w-full bg-gray-800/50 border rounded-lg px-3 py-2.5 text-white focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 focus:outline-none  ${errors?.closedDate ? 'border-red-500' : 'border-gray-600'}`}
+              className={`w-full bg-gray-800/50 border rounded-lg px-3 py-2.5 text-white focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 focus:outline-none [&::-webkit-calendar-picker-indicator]:invert ${errors?.closedDate ? 'border-red-500' : 'border-gray-600'}`}
             />
             {errors?.closedDate && <p className="mt-1 text-sm text-red-400">{errors?.closedDate}</p>}
           </div>
@@ -474,13 +473,13 @@ const AnchorForm = ({ inputs, errors, handleInput, isLoading, handleSubmit, user
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4, duration: 0.4 }}
       >
-        <div className="flex space-x-3">
+        <div className="flex flex-col sm:flex-row sm:gap-x-3 gap-y-3">
           <motion.button
+            onClick={onClose}
             type="button"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            onClick={onClose}
-            className="flex-1 px-6 py-3 border border-gray-600 text-gray-300 rounded-lg hover:bg-gray-800 transition-all"
+            className="order-2 sm:order-1 flex-1 px-6 py-3 border border-gray-600 text-gray-300 rounded-lg hover:bg-gray-800 transition-all"
           >
             Cancel
           </motion.button>
@@ -490,7 +489,7 @@ const AnchorForm = ({ inputs, errors, handleInput, isLoading, handleSubmit, user
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             disabled={isLoading || session.data?.user?.id !== user?.id}
-            className="flex-1 px-6 py-3 bg-linear-to-r from-teal-600 via-cyan-600 to-blue-600 text-white rounded-lg hover:from-teal-500 hover:to-blue-500 transition-all flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="order-1 sm:order-2 flex-1 px-6 py-3 bg-linear-to-r from-teal-600 via-cyan-600 to-blue-600 text-white rounded-lg hover:from-teal-500 hover:to-blue-500 transition-all flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? (
               <>

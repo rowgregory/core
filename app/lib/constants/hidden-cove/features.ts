@@ -20,8 +20,8 @@ export const features = [
     status: 'not_purchased',
     linkKey: '/admin/grogs',
     pricing: {
-      build: 750,
-      monthly: 25
+      build: 950,
+      monthly: 30
     }
   },
 
@@ -51,8 +51,8 @@ export const features = [
     status: 'not_purchased',
     linkKey: '/admin/muster',
     pricing: {
-      build: 1100,
-      monthly: 40
+      build: 2450,
+      monthly: 45
     }
   },
   {
@@ -72,8 +72,8 @@ export const features = [
     status: 'not_purchased',
     linkKey: '/admin/booty',
     pricing: {
-      build: 2500,
-      monthly: 100
+      build: 4500,
+      monthly: 70
     }
   }
 ]

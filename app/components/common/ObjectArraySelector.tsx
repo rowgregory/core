@@ -99,7 +99,7 @@ const ObjectArraySelector: FC<IObjectArraySelector> = ({
               </div>
               <button
                 onClick={() => removeObjectArrayItem(name, index)}
-                className="text-cyan-300 hover:text-white ml-2 flex-shrink-0"
+                className="text-cyan-300 hover:text-white ml-2 shrink-0"
                 disabled={disabled}
               >
                 <X className="w-4 h-4" />

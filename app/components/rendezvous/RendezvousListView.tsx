@@ -106,7 +106,7 @@ const RendezvousListView = ({ events, getEventTypeIcon, getEventTypeColor, onRem
   }
 
   return (
-    <div className="p-6">
+    <div className="px-3 py-6">
       {/* Filters and Controls */}
       <div className="mb-6 space-y-4">
         <div className="flex items-center justify-between">
@@ -150,7 +150,7 @@ const RendezvousListView = ({ events, getEventTypeIcon, getEventTypeColor, onRem
       </div>
 
       {/* Sort Headers */}
-      <div className="mb-4">
+      <div className="hidden sm:block mb-4">
         <div className="grid grid-cols-12 gap-4 p-3 bg-gray-800/30 rounded-lg text-xs font-medium text-gray-400">
           <button
             onClick={() => toggleSort('date')}
@@ -206,11 +206,11 @@ const RendezvousListView = ({ events, getEventTypeIcon, getEventTypeColor, onRem
                   ${isCancelled ? 'opacity-70' : ''}
                 `}
               >
-                <div className="grid grid-cols-12 gap-4 p-4 items-center">
+                <div className="grid sm:grid-cols-12 gap-4 p-4 items-center">
                   {/* Date & Time */}
                   <div className="col-span-3">
                     <div className="flex items-center space-x-2">
-                      <Calendar className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                      <Calendar className="w-4 h-4 text-gray-400 shrink-0" />
                       <div>
                         <div
                           className={`text-sm font-medium ${isCancelled ? 'line-through text-gray-400' : 'text-white'}`}

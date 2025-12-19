@@ -1,5 +1,5 @@
-import React, { FC } from 'react'
-import { AlertCircle, Building2, CheckCircle, FileText, Mail, MapPin, Phone, User } from 'lucide-react'
+import { FC, useState } from 'react'
+import { AlertCircle, Building2, CheckCircle, FileText, Mail, Phone, User } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useAppDispatch, useUserSelector } from '@/app/redux/store'
 import { setInputs } from '@/app/redux/features/formSlice'
@@ -19,6 +19,10 @@ const TreasureMapForm: FC<IForm> = ({
 }) => {
   const { users } = useUserSelector()
   const dispatch = useAppDispatch()
+  const [showAll, setShowAll] = useState(false)
+  const visibleCount = 5 // number of tags to show initially
+
+  const displayedTags = showAll ? genericNoteOptions : genericNoteOptions.slice(0, visibleCount)
 
   return (
     <>
@@ -31,15 +35,10 @@ const TreasureMapForm: FC<IForm> = ({
             transition={{ delay: 0.1 }}
             className="space-y-4"
           >
-            <h3 className="text-lg font-semibold text-white flex items-center space-x-2">
-              <MapPin className="w-5 h-5 text-purple-400" />
-              <span>Treasure Map</span>
-            </h3>
-
             <div className="space-y-3">
-              <label className="block text-sm font-medium text-gray-300">What be yer role in this treasure map?</label>
+              <label className="block text-sm font-medium text-gray-300">What is your role in this referral?</label>
 
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid sm:grid-cols-3 gap-3">
                 <button
                   type="button"
                   onClick={() => {
@@ -59,7 +58,7 @@ const TreasureMapForm: FC<IForm> = ({
                   <div className="text-2xl mx-auto mb-2 w-fit font-mono">→</div>
                   <div className="text-center">
                     <div className="font-semibold">I&apos;m Giving</div>
-                    <div className="text-xs opacity-70 mt-1">Sending a treasure map</div>
+                    <div className="text-xs opacity-70 mt-1">Sending a referral</div>
                   </div>
                 </button>
 
@@ -82,7 +81,7 @@ const TreasureMapForm: FC<IForm> = ({
                   <div className="text-2xl mx-auto mb-2 w-fit font-mono">←</div>
                   <div className="text-center">
                     <div className="font-semibold">I&apos;m Receiving</div>
-                    <div className="text-xs opacity-70 mt-1">Got a treasure map</div>
+                    <div className="text-xs opacity-70 mt-1">Got a referral</div>
                   </div>
                 </button>
 
@@ -119,9 +118,7 @@ const TreasureMapForm: FC<IForm> = ({
                 <>
                   {/* When GIVING - Current User (Read-only) */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Ye be Sendin&apos; a Treasure Map
-                    </label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">You Are Giving The Referral</label>
                     <div className="w-full px-4 py-3 bg-gray-700/30 border border-gray-600 rounded-lg">
                       <div className="flex items-center space-x-3">
                         <div className="w-10 h-10 bg-linear-to-r from-teal-500 via-cyan-500 to-blue-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
@@ -145,9 +142,7 @@ const TreasureMapForm: FC<IForm> = ({
 
                   {/* Who receives */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Who Receives Yer Treasure Map?
-                    </label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Who receives the referral?</label>
                     <select
                       name="receiverId"
                       value={inputs?.receiverId || ''}
@@ -178,7 +173,7 @@ const TreasureMapForm: FC<IForm> = ({
                   {/* When RECEIVING - Current User (Read-only) */}
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Ye be Receivin&apos; a Treasure Map
+                      You are receiving the referral
                     </label>
                     <div className="w-full px-4 py-3 bg-gray-700/30 border border-gray-600 rounded-lg">
                       <div className="flex items-center space-x-3">
@@ -203,9 +198,7 @@ const TreasureMapForm: FC<IForm> = ({
 
                   {/* Who gave it */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Who be Givin&apos; Ye the Treasure Map?
-                    </label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Who is giving the referral?</label>
                     <select
                       name="giverId"
                       value={inputs?.giverId || ''}
@@ -214,7 +207,7 @@ const TreasureMapForm: FC<IForm> = ({
                         errors.giverId ? 'border-red-500' : 'border-gray-600'
                       }`}
                     >
-                      <option value="">Select who gave ye the treasure...</option>
+                      <option value="">Select who gave you the referral...</option>
                       {users
                         ?.filter((navigator) => navigator.id !== user?.id && navigator?.membershipStatus === 'ACTIVE')
                         .map((navigator) => (
@@ -236,9 +229,7 @@ const TreasureMapForm: FC<IForm> = ({
               <>
                 {/* Third Party Mode - Select both giver and receiver */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Who be Givin&apos; the Treasure Map?
-                  </label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Who is giving the referral?</label>
                   <select
                     name="giverId"
                     value={inputs?.giverId || ''}
@@ -265,9 +256,7 @@ const TreasureMapForm: FC<IForm> = ({
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Who be Receivin&apos; the Treasure Map?
-                  </label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Who is receiving the referral?</label>
                   <select
                     name="receiverId"
                     value={inputs?.receiverId || ''}
@@ -468,28 +457,40 @@ const TreasureMapForm: FC<IForm> = ({
                 Click a tag to quickly fill in the notes for {users?.find((u) => u.id === inputs.receiverId)?.name}
               </p>
 
-              <div className="flex flex-wrap gap-2">
-                {genericNoteOptions.map((tag, index) => (
+              <div>
+                <div className="flex flex-wrap gap-2">
+                  {displayedTags.map((tag, index) => (
+                    <button
+                      key={index}
+                      type="button"
+                      onClick={() => {
+                        dispatch(
+                          setInputs({
+                            formName: 'treasureMapForm',
+                            data: { notes: tag }
+                          })
+                        )
+                      }}
+                      className={`px-3 py-2 border rounded-lg text-sm transition-all duration-200 ${
+                        inputs?.notes === tag
+                          ? 'bg-teal-500/30 border-teal-400 text-teal-200 shadow-lg shadow-teal-400/20'
+                          : 'bg-gray-700/50 hover:bg-teal-500/20 border-gray-600 hover:border-teal-400 text-gray-300 hover:text-teal-300'
+                      }`}
+                    >
+                      {tag}
+                    </button>
+                  ))}
+                </div>
+
+                {genericNoteOptions.length > visibleCount && (
                   <button
-                    key={index}
                     type="button"
-                    onClick={() => {
-                      dispatch(
-                        setInputs({
-                          formName: 'treasureMapForm',
-                          data: { notes: tag }
-                        })
-                      )
-                    }}
-                    className={`px-3 py-2 border rounded-lg text-sm transition-all duration-200 ${
-                      inputs?.notes === tag
-                        ? 'bg-teal-500/30 border-teal-400 text-teal-200 shadow-lg shadow-teal-400/20'
-                        : 'bg-gray-700/50 hover:bg-teal-500/20 border-gray-600 hover:border-teal-400 text-gray-300 hover:text-teal-300'
-                    }`}
+                    onClick={() => setShowAll(!showAll)}
+                    className="mt-2 text-sm text-teal-300 hover:text-teal-400"
                   >
-                    {tag}
+                    {showAll ? 'Show Less' : 'More'}
                   </button>
-                ))}
+                )}
               </div>
 
               {/* Custom input option */}
@@ -533,13 +534,13 @@ const TreasureMapForm: FC<IForm> = ({
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4, duration: 0.4 }}
       >
-        <div className="flex space-x-3">
+        <div className="flex flex-col sm:flex-row sm:gap-x-3 gap-y-3">
           <motion.button
             type="button"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={onClose}
-            className="flex-1 px-6 py-3 border border-gray-600 text-gray-300 rounded-lg hover:bg-gray-800 transition-all"
+            className="order-2 sm:order-1 flex-1 px-6 py-3 border border-gray-600 text-gray-300 rounded-lg hover:bg-gray-800 transition-all"
           >
             Cancel
           </motion.button>
@@ -550,7 +551,7 @@ const TreasureMapForm: FC<IForm> = ({
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             disabled={isLoading}
-            className="flex-1 px-6 py-3 bg-linear-to-r from-teal-600 via-cyan-600 to-blue-600 text-white rounded-lg hover:from-teal-500 hover:to-blue-500 transition-all flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="order-1 sm:order-2 flex-1 px-6 py-3 bg-linear-to-r from-teal-600 via-cyan-600 to-blue-600 text-white rounded-lg hover:from-teal-500 hover:to-blue-500 transition-all flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? (
               <>

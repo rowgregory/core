@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import { FC } from 'react'
 import TooltipWrapper from '../../common/TooltipWrapper'
 import { MoreHorizontal } from 'lucide-react'
 

@@ -199,13 +199,13 @@ const SwabbieForm = ({ inputs, handleInput, isLoading, handleSubmit, isUpdating,
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4, duration: 0.4 }}
       >
-        <div className="flex space-x-3">
+        <div className="flex flex-col sm:flex-row sm:gap-x-3 gap-y-3">
           <motion.button
             type="button"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={onClose}
-            className="flex-1 px-6 py-3 border border-gray-600 text-gray-300 rounded-lg hover:bg-gray-800 transition-all"
+            className="order-2 sm:order-1 flex-1 px-6 py-3 border border-gray-600 text-gray-300 rounded-lg hover:bg-gray-800 transition-all"
           >
             Cancel
           </motion.button>
@@ -216,17 +216,17 @@ const SwabbieForm = ({ inputs, handleInput, isLoading, handleSubmit, isUpdating,
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             disabled={isLoading}
-            className="flex-1 px-6 py-3 bg-linear-to-r from-teal-600 via-cyan-600 to-blue-600 text-white rounded-lg hover:from-teal-500 hover:to-blue-500 transition-all flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="order-1 sm:order-2 flex-1 px-6 py-3 bg-linear-to-r from-teal-600 via-cyan-600 to-blue-600 text-white rounded-lg hover:from-teal-500 hover:to-blue-500 transition-all flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? (
               <>
                 <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                <span>{isUpdating ? 'Updating' : 'Creating...'}</span>
+                <span>{isUpdating ? 'Updating' : 'Draft...'}</span>
               </>
             ) : (
               <>
                 <CheckCircle className="w-5 h-5" />
-                <span>{isUpdating ? 'Update' : 'Create'} Swabbie</span>
+                <span>{isUpdating ? 'Update' : 'Draft'} Swabbie</span>
               </>
             )}
           </motion.button>

@@ -20,7 +20,7 @@ const MemberExpectations = () => {
               variants={fadeInUp}
               className="flex items-start space-x-4 p-6 bg-gray-700/40 backdrop-blur-sm rounded-xl hover:bg-gray-700/60 transition-colors duration-200 border border-gray-600/30"
             >
-              <CheckCircle className="w-6 h-6 text-cyan-400 mt-1 flex-shrink-0" />
+              <CheckCircle className="w-6 h-6 text-cyan-400 mt-1 shrink-0" />
               <p className="text-gray-200 leading-relaxed">{expectation}</p>
             </motion.div>
           ))}

@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import { FC, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Calendar, DollarSign, Building2, User, FileText, MapPin, Globe, Crown } from 'lucide-react'
 import { IAnchor } from '@/types/anchor'
@@ -116,14 +116,14 @@ const AnchorCard: FC<{ anchor: IAnchor; index: number }> = ({ anchor, index }) =
   return (
     <motion.div
       onClick={handleCardClick}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
       transition={{ delay: index * 0.2, ease: 'easeInOut' }}
       className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-6 hover:bg-gray-800/70 transition-all duration-200 cursor-pointer"
     >
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
-        <div className="flex items-center space-x-3">
+        <div className="flex flex-col sm:flex-row sm:items-center space-y-3 sm:space-x-3">
           <div className="flex -space-x-2">
             {/* Giver Avatar */}
             {giverInfo.type === 'internal' ? (
@@ -187,11 +187,6 @@ const AnchorCard: FC<{ anchor: IAnchor; index: number }> = ({ anchor, index }) =
           <div className="flex items-center space-x-2">
             <User className="w-4 h-4 text-gray-400" />
             <span className="text-gray-400 text-sm">Giver</span>
-            {giverInfo.type === 'fleet-earnings' && (
-              <span className="px-1.5 py-0.5 bg-emerald-500/20 text-emerald-400 text-xs rounded border border-emerald-500/30">
-                Fleet Earnings
-              </span>
-            )}
             {giverInfo.type === 'external' && (
               <span className="px-1.5 py-0.5 bg-orange-500/20 text-orange-400 text-xs rounded border border-orange-500/30">
                 External
@@ -234,9 +229,9 @@ const AnchorCard: FC<{ anchor: IAnchor; index: number }> = ({ anchor, index }) =
       </div>
 
       {/* Dates */}
-      <div className="flex items-center justify-between mb-4 text-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 text-sm">
         <div className="flex items-center space-x-2">
-          <Calendar className="w-4 h-4 text-gray-400" />
+          <Calendar className="hidden sm:block w-4 h-4 text-gray-400" />
           <span className="text-gray-400">Closed:</span>
           <span className="text-white">{formatDate(anchor.closedDate)}</span>
         </div>

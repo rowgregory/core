@@ -109,21 +109,21 @@ const StowawayCard: React.FC<StowawayCardProps> = ({ stowaway, className = '' })
       {/* Contact and business info */}
       <div className="space-y-3">
         <div className="flex items-center space-x-3 text-sm">
-          <Mail className="w-4 h-4 text-gray-400 flex-shrink-0" />
+          <Mail className="w-4 h-4 text-gray-400 shrink-0" />
           <span className={`truncate ${isRejected || isSwabbie ? 'text-gray-500' : 'text-gray-300'}`}>
             {stowaway.email}
           </span>
         </div>
 
         <div className="flex items-center space-x-3 text-sm">
-          <Building2 className="w-4 h-4 text-gray-400 flex-shrink-0" />
+          <Building2 className="w-4 h-4 text-gray-400 shrink-0" />
           <span className={`truncate ${isRejected || isSwabbie ? 'text-gray-500' : 'text-gray-300'}`}>
             {stowaway.company}
           </span>
         </div>
 
         <div className="flex items-center space-x-3 text-sm">
-          <Briefcase className="w-4 h-4 text-gray-400 flex-shrink-0" />
+          <Briefcase className="w-4 h-4 text-gray-400 shrink-0" />
           <span className={`truncate ${isRejected || isSwabbie ? 'text-gray-500' : 'text-gray-300'}`}>
             {stowaway.industry}
           </span>

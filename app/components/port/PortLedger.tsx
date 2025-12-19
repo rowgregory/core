@@ -87,7 +87,7 @@ const PortLedger: FC<{
               href="/member/beacon"
               className="w-full flex items-center space-x-3 p-3 text-left hover:bg-slate-700/30 rounded-lg transition-colors group"
             >
-              <div className="w-2 h-2 bg-amber-400 rounded-full flex flex-shrink-0"></div>
+              <div className="w-2 h-2 bg-amber-400 rounded-full flex shrink-0"></div>
               <div>
                 <div className="text-white font-medium text-sm group-hover:text-amber-200">Locate the Beacon</div>
                 <div className="text-slate-400 text-xs mt-0.5">
@@ -101,7 +101,7 @@ const PortLedger: FC<{
               href="/member/treasure-maps"
               className="w-full flex items-center space-x-3 p-3 text-left hover:bg-slate-700/30 rounded-lg transition-colors group"
             >
-              <div className="w-2 h-2 bg-amber-400 rounded-full flex flex-shrink-0"></div>
+              <div className="w-2 h-2 bg-amber-400 rounded-full flex shrink-0"></div>
               <div>
                 <div className="text-white font-medium text-sm group-hover:text-amber-200">Send Treasure Map</div>
                 <div className="text-slate-400 text-xs mt-0.5">
@@ -114,7 +114,7 @@ const PortLedger: FC<{
               href="/member/parley"
               className="w-full flex items-center space-x-3 p-3 text-left hover:bg-slate-700/30 rounded-lg transition-colors group"
             >
-              <div className="w-2 h-2 bg-amber-400 rounded-full flex flex-shrink-0"></div>
+              <div className="w-2 h-2 bg-amber-400 rounded-full flex shrink-0"></div>
               <div>
                 <div className="text-white font-medium text-sm group-hover:text-amber-200">Call a Parley</div>
                 <div className="text-slate-400 text-xs mt-0.5">

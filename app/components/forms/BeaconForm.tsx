@@ -497,7 +497,7 @@ const BeaconForm: FC<IBeaconForm> = ({ inputs, errors, handleInput, isEditing, h
   const dispatch = useAppDispatch()
 
   return (
-    <div className="p-8">
+    <div className="py-6 sm:p-8">
       <div className="space-y-4">
         <h3 className="text-lg font-semibold text-white">Treasure Quest</h3>
 
@@ -702,8 +702,8 @@ const BeaconForm: FC<IBeaconForm> = ({ inputs, errors, handleInput, isEditing, h
           label="Professional Bio"
           icon={<FileText />}
           name="bio"
-          value={inputs.bio}
-          onChange={handleInput || ''}
+          value={inputs.bio || ''}
+          onChange={handleInput}
           disabled={!isEditing}
           placeholder="Tell us about yourself, your experience, and what you're looking to achieve..."
           rows={4}

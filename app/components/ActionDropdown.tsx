@@ -1,31 +1,22 @@
-import React, { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { useAppDispatch, useApplicationSelector, useSettingsSelector, useUserSelector } from '../redux/store'
+import { Users, Calendar, Anchor, Layers3, Sailboat, Beer, LifeBuoy, Coins, ChevronRight, Flag } from 'lucide-react'
 import { initialParleyFormState } from '@/app/lib/constants/entities/initialParleyFormState'
 import { setOpenAnchorDrawer } from '@/app/redux/features/anchorSlice'
 import { initialAnchorFormState } from '@/app/lib/constants/anchor'
 import { setOpenTreasureMapDrawer } from '@/app/redux/features/treasureMapSlice'
 import { initialTreasureMapFormState } from '@/types/treasure-map'
 import { setOpenGrogDrawer } from '@/app/redux/features/grogSlice'
-import {
-  Users,
-  Calendar,
-  Anchor,
-  Layers3,
-  Sailboat,
-  Beer,
-  Plus,
-  ChevronDown,
-  LifeBuoy,
-  Coins,
-  ChevronRight,
-  Flag
-} from 'lucide-react'
 import { setOpenParleyDrawer } from '@/app/redux/features/parleySlice'
 import { setOpenAddUserDrawer, setOpenStowawayDrawer, setOpenSwabbieDrawer } from '@/app/redux/features/userSlice'
-import { useAppDispatch, useSettingsSelector, useUserSelector } from '@/app/redux/store'
 import { navigatorInputs, setInputs } from '@/app/redux/features/formSlice'
 import { useRouter } from 'next/navigation'
-import useSoundEffect from '@/hooks/useSoundEffect'
+import {
+  setCloseActionDropdown,
+  setCloseActionDropdownSubmenu,
+  setOpenActionDropdownSubmenu
+} from '../redux/features/appSlice'
+import Backdrop from './common/Backdrop'
 
 const actionItems = (
   isAdmin: boolean,
@@ -37,6 +28,7 @@ const actionItems = (
   {
     action: 'schedule-parley',
     label: 'Schedule Parley',
+    description: 'Schedule a meeting or conversation with another member.',
     icon: Calendar,
     open: setOpenParleyDrawer,
     formName: 'parleyForm',
@@ -46,6 +38,7 @@ const actionItems = (
   {
     action: 'create-treasure-map',
     label: 'Send Treasure Map',
+    description: 'Send a referral connecting two members for business.',
     icon: Layers3,
     open: setOpenTreasureMapDrawer,
     formName: 'treasureMapForm',
@@ -55,22 +48,24 @@ const actionItems = (
   {
     action: 'anchor',
     label: 'Drop Anchor',
+    description: 'Send a thank-you for successfully closed business.',
     icon: Anchor,
     open: setOpenAnchorDrawer,
     formName: 'anchorForm',
     initial: { ...initialAnchorFormState, giverId: userId },
     isUnlocked: true
   },
-  // Nested user creation actions
   {
     action: 'crew-management',
     label: 'Crew Management',
+    description: 'Manage crew members and user access.',
     icon: Users,
     hasSubmenu: true,
     submenu: [
       {
         action: 'flag-stowaway',
         label: 'Flag Stowaway',
+        description: 'Add a visitor with unknown joining status into the system for tracking and review.',
         icon: Flag,
         open: setOpenStowawayDrawer,
         formName: 'stowawayForm',
@@ -80,6 +75,7 @@ const actionItems = (
       {
         action: 'add-swabbie',
         label: 'Draft Swabbie',
+        description: 'Quickly add a new member who wants to join the crew—no action needed from them.',
         icon: Sailboat,
         open: setOpenSwabbieDrawer,
         formName: 'swabbieForm',
@@ -91,6 +87,7 @@ const actionItems = (
             {
               action: 'add-navigator',
               label: 'Add Navigator',
+              description: 'Add existing member to chapter.',
               icon: Users,
               open: setOpenAddUserDrawer,
               formName: 'navigatorForm',
@@ -107,68 +104,76 @@ const actionItems = (
         {
           action: 'launch-grog',
           label: 'Launch Grog',
+          description: 'Create and manage events for the chapter.',
           icon: Beer,
           open: setOpenGrogDrawer,
           formName: 'grogForm',
           initial: {},
           isUnlocked: isGrogUnlocked,
-          lockKey: 'grog'
+          lockKey: 'grog',
+          linkKey: '/admin/grogs'
         },
         {
           action: 'call-muster',
           label: 'Call Muster',
+          description: 'Track attendance and participation for meetings and events.',
           icon: LifeBuoy,
           open: () => {},
           formName: 'musterForm',
           initial: {},
           isUnlocked: isMusterUnlocked,
-          lockKey: 'muster'
+          lockKey: 'muster',
+          linkKey: '/admin/muster'
         },
         {
           action: 'collect-booty',
           label: 'Collect Booty',
+          description: 'Record or manage collected revenue or rewards.',
           icon: Coins,
           open: () => {},
           formName: 'bootyForm',
           initial: {},
           isUnlocked: isBootyUnlocked,
-          lockKey: 'booty'
+          lockKey: 'booty',
+          linkKey: '/admin/booty'
         }
       ]
     : [])
 ]
 
-const ActionButtonWithDropdown = () => {
-  const [isActionsOpen, setIsActionsOpen] = useState(false)
-  const [activeSubmenu, setActiveSubmenu] = useState<string | null>(null)
-  const dispatch = useAppDispatch()
-  const { user } = useUserSelector()
+const ActionDropdown = () => {
+  const { actionDropdown, itemAction } = useApplicationSelector()
   const { settings } = useSettingsSelector()
+  const { user } = useUserSelector()
+  const { push } = useRouter()
+  const dispatch = useAppDispatch()
   const chapter = settings
   const isAdmin = user?.isAdmin ?? false
-  const { push } = useRouter()
-  const { play } = useSoundEffect('/sound-effects/action-menu.mp3', true)
+
+  const onClose = () => {
+    dispatch(setCloseActionDropdown())
+    dispatch(setCloseActionDropdownSubmenu(null))
+  }
 
   const handleActionClick = (item: any) => {
     if (item.hasSubmenu) {
-      setActiveSubmenu(activeSubmenu === item.action ? null : item.action)
+      dispatch(setOpenActionDropdownSubmenu(itemAction === item.action ? null : item.action))
       return
     }
 
     if (item.isUnlocked) {
-      setIsActionsOpen(false)
-      setActiveSubmenu(null)
+      onClose()
       dispatch(item.open())
       dispatch(setInputs({ formName: item.formName, data: item.initial }))
     } else {
-      push('/admin/hidden-cove')
+      onClose()
+      push(item.linkKey)
     }
   }
 
   const handleSubmenuClick = (submenuItem: any) => {
     if (submenuItem.isUnlocked) {
-      setIsActionsOpen(false)
-      setActiveSubmenu(null)
+      onClose()
       dispatch(submenuItem.open())
       dispatch(setInputs({ formName: submenuItem.formName, data: submenuItem.initial }))
     } else {
@@ -177,32 +182,18 @@ const ActionButtonWithDropdown = () => {
   }
 
   return (
-    <div className="relative">
-      <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={() => {
-          play()
-          setIsActionsOpen(!isActionsOpen)
-          setActiveSubmenu(null)
-        }}
-        className="px-4 py-2 bg-linear-to-r from-blue-600 via-cyan-600 to-teal-600 text-white rounded-lg hover:from-cyan-500 hover:to-cyan-500 transition-all flex items-center space-x-2 font-medium shadow-lg text-sm"
-      >
-        <Plus className="w-4 h-4" />
-        <span>Actions</span>
-        <ChevronDown className={`w-4 h-4 transition-transform ${isActionsOpen ? 'rotate-180' : ''}`} />
-      </motion.button>
-
-      <AnimatePresence>
-        {isActionsOpen && (
+    <AnimatePresence>
+      {actionDropdown && (
+        <>
+          <Backdrop onClose={onClose} />
           <motion.div
             initial={{ opacity: 0, y: -10, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="absolute right-0 mt-2 w-56 bg-gray-800 border border-gray-700 rounded-lg shadow-xl overflow-hidden"
+            className="fixed xs:right-16 -translate-x-1/2 left-1/2 sm:left-auto sm:translate-x-0 w-[90%] sm:right-20 top-14 sm:w-68 bg-gray-800 border border-gray-700 rounded-lg shadow-xl overflow-hidden z-100 "
           >
-            <div className="py-2">
+            <div className="py-2 overflow-y-scroll h-[calc(100vh-150px)]">
               {actionItems(
                 isAdmin,
                 chapter?.hasUnlockedGrog,
@@ -214,17 +205,23 @@ const ActionButtonWithDropdown = () => {
                   <motion.button
                     onClick={() => handleActionClick(item)}
                     className={`w-full px-4 py-3 text-left text-gray-200 hover:text-white transition-all flex items-center justify-between hover:bg-cyan-600/10 ${
-                      item.hasSubmenu && activeSubmenu === item.action ? 'bg-cyan-600/20' : ''
+                      item.hasSubmenu && itemAction === item.action ? 'bg-cyan-600/20' : ''
                     }`}
                   >
-                    <div className="flex items-center space-x-3">
-                      <item.icon className="w-4 h-4 text-cyan-400" />
-                      <span className="font-medium text-sm">{item.label}</span>
+                    <div className="flex items-start space-x-3">
+                      <item.icon className="w-4 h-4 mt-0.5 text-cyan-400" />
+                      <div className="flex flex-col">
+                        <span className="font-medium text-sm">{item.label}</span>
+                        {item.description && (
+                          <span className="text-xs text-gray-400 leading-tight">{item.description}</span>
+                        )}
+                      </div>
                     </div>
+
                     {item.hasSubmenu && (
                       <ChevronRight
                         className={`w-4 h-4 text-gray-400 transition-transform ${
-                          activeSubmenu === item.action ? 'rotate-90' : ''
+                          itemAction === item.action ? 'rotate-90' : ''
                         }`}
                       />
                     )}
@@ -232,7 +229,7 @@ const ActionButtonWithDropdown = () => {
 
                   {/* Submenu */}
                   <AnimatePresence>
-                    {item.hasSubmenu && activeSubmenu === item.action && (
+                    {item.hasSubmenu && itemAction === item.action && (
                       <motion.div
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
@@ -244,10 +241,14 @@ const ActionButtonWithDropdown = () => {
                           <motion.button
                             key={subIndex}
                             onClick={() => handleSubmenuClick(submenuItem)}
-                            className="w-full pl-8 pr-4 py-2 text-left text-gray-300 hover:text-white transition-all flex items-center space-x-3 hover:bg-cyan-600/10 text-sm"
+                            className="w-full pl-10 pr-4 py-2 text-left text-gray-300 hover:text-white transition-all flex items-start space-x-3 hover:bg-cyan-600/10"
                           >
-                            <submenuItem.icon className="w-3 h-3 text-cyan-300" />
-                            <span>{submenuItem.label}</span>
+                            <div className="flex flex-col">
+                              <span className="text-sm">{submenuItem.label}</span>
+                              {submenuItem.description && (
+                                <span className="text-xs text-gray-500 leading-tight">{submenuItem.description}</span>
+                              )}
+                            </div>
                           </motion.button>
                         ))}
                       </motion.div>
@@ -257,10 +258,10 @@ const ActionButtonWithDropdown = () => {
               ))}
             </div>
           </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+        </>
+      )}
+    </AnimatePresence>
   )
 }
 
-export default ActionButtonWithDropdown
+export default ActionDropdown

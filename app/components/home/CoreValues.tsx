@@ -130,7 +130,7 @@ export default function CoreValues({ coreValues }: { coreValues: any[] }) {
                   </div>
 
                   {/* Decorative buoy/marker */}
-                  <div className="flex-shrink-0 hidden md:block">
+                  <div className="shrink-0 hidden md:block">
                     <motion.div
                       className="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-500 rounded-full border-4 border-white shadow-xl flex items-center justify-center relative"
                       animate={{

@@ -23,10 +23,11 @@ import {
   UserPlus,
   Award,
   Target,
-  CalendarDays,
   Timer,
   Compass
 } from 'lucide-react'
+import InfoBanner from '@/app/components/common/InfoBanner'
+import { LockedModuleBanner } from '@/app/components/common/LockedModuleBanner'
 
 interface MusterRecord {
   id: string
@@ -77,7 +78,6 @@ const AdminMusterPage: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0])
   const [showProbationMembers, setShowProbationMembers] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
-
   // Mock data - replace with actual data
   const recentMuster: MusterRecord = {
     id: '1',
@@ -286,105 +286,99 @@ const AdminMusterPage: React.FC = () => {
   const overallStats = calculateOverallStats()
 
   return (
-    <div className="h-full bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6">
-      <div className="flex-1 mx-auto">
+    <div className="bg-gray-900 min-h-[calc(100vh-68px)]">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex-1 px-3 py-6 sm:p-6 overflow-y-auto space-y-6"
+      >
+        {/* Muster Info Banner */}
+        <InfoBanner
+          type="muster"
+          description="is the attendance module for tracking who shows up to weekly meetings. This feature is currently locked because it hasn’t been built for your chapter yet. Once purchased and developed, you’ll be able to take attendance, review history, and measure member engagement right from here."
+        />
+        <LockedModuleBanner />
         {/* Header */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-          {/* <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
-            <div>
-              <h1 className="text-4xl font-bold text-white mb-2 flex items-center">
-                <Anchor className="w-8 h-8 mr-3 text-blue-400" />
-                Chapter Muster
-              </h1>
-              <p className="text-gray-400">Track crew attendance, monitor patterns, and maintain ship discipline</p>
-            </div>
-            <div className="flex items-center space-x-3 mt-4 sm:mt-0">
-              <button className="flex items-center space-x-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 rounded-lg text-white transition-colors">
-                <Plus className="w-4 h-4" />
-                <span>New Muster</span>
-              </button>
-              <button className="flex items-center space-x-2 px-4 py-2 bg-gray-700/50 hover:bg-gray-700/70 border border-gray-600 rounded-lg text-gray-300 transition-colors">
-                <Download className="w-4 h-4" />
-                <span>Export</span>
-              </button>
-            </div>
-          </div> */}
-
-          {/* Controls */}
-          <div className="flex flex-wrap items-center gap-4 p-4 bg-gray-800/40 border border-gray-700/50 rounded-xl backdrop-blur-sm">
-            <div className="flex items-center space-x-2">
-              <Compass className="w-4 h-4 text-gray-400" />
-              <span className="text-sm text-gray-400">Navigation:</span>
-            </div>
-
-            <div className="flex items-center space-x-2">
-              <button
-                onClick={() => setViewMode('summary')}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                  viewMode === 'summary'
-                    ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
-                    : 'bg-gray-700 text-gray-400 border border-gray-600 hover:bg-gray-700/70'
-                }`}
-              >
-                Fleet Overview
-              </button>
-              <button
-                onClick={() => setViewMode('detailed')}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                  viewMode === 'detailed'
-                    ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
-                    : 'bg-gray-700 text-gray-400 border border-gray-600 hover:bg-gray-700/70'
-                }`}
-              >
-                Daily Muster
-              </button>
-              <button
-                onClick={() => setViewMode('individual')}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                  viewMode === 'individual'
-                    ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
-                    : 'bg-gray-700 text-gray-400 border border-gray-600 hover:bg-gray-700/70'
-                }`}
-              >
-                Crew Records
-              </button>
-            </div>
-
-            <select
-              value={selectedPeriod}
-              onChange={(e) => setSelectedPeriod(e.target.value)}
-              className="px-3 py-1.5 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="current_week">This Week</option>
-              <option value="current_month">This Month</option>
-              <option value="current_quarter">This Quarter</option>
-              <option value="current_year">This Year</option>
-            </select>
-
-            <div className="relative">
-              <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search crew..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-1.5 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-
-            <button
-              onClick={() => setShowProbationMembers(!showProbationMembers)}
-              className={`flex items-center space-x-2 px-3 py-1.5 rounded-lg text-sm transition-colors ${
-                showProbationMembers
-                  ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30'
-                  : 'bg-gray-700 text-gray-400 border border-gray-600'
-              }`}
-            >
-              <AlertTriangle className="w-4 h-4" />
-              <span>Show Probation</span>
-            </button>
+        <div className="flex flex-col gap-3 p-3 sm:flex-wrap sm:flex-row sm:items-center sm:gap-4 sm:p-4 bg-gray-800/40 border border-gray-700/50 rounded-xl backdrop-blur-sm">
+          {/* Label */}
+          <div className="flex items-center space-x-2">
+            <Compass className="w-4 h-4 text-gray-400" />
+            <span className="text-sm text-gray-400">Navigation:</span>
           </div>
-        </motion.div>
+
+          {/* View Buttons */}
+          <div className="flex flex-col sm:flex-row gap-y-2 sm:gap-2 sm:overflow-x-auto no-scrollbar -mx-1 px-1 sm:overflow-visible sm:flex-wrap sm:mx-0 sm:px-0">
+            {[
+              { key: 'summary', label: 'Fleet Overview' },
+              { key: 'detailed', label: 'Daily Muster' },
+              { key: 'individual', label: 'Crew Records' }
+            ].map((btn) => (
+              <button
+                key={btn.key}
+                onClick={() => setViewMode(btn.key as any)}
+                className={`
+          px-3 py-1.5 whitespace-nowrap rounded-lg text-sm font-medium transition-colors
+          ${
+            viewMode === btn.key
+              ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
+              : 'bg-gray-700 text-gray-400 border border-gray-600 hover:bg-gray-700/70'
+          }
+        `}
+              >
+                {btn.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Period Select */}
+          <select
+            value={selectedPeriod}
+            onChange={(e) => setSelectedPeriod(e.target.value)}
+            className="
+      w-full sm:w-auto
+      px-3 py-1.5 bg-gray-700 border border-gray-600 rounded-lg 
+      text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500
+    "
+          >
+            <option value="current_week">This Week</option>
+            <option value="current_month">This Month</option>
+            <option value="current_quarter">This Quarter</option>
+            <option value="current_year">This Year</option>
+          </select>
+
+          {/* Search */}
+          <div className="relative w-full sm:w-auto sm:min-w-[220px]">
+            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search crew..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="
+        w-full
+        pl-10 pr-4 py-1.5 bg-gray-700 border border-gray-600 rounded-lg 
+        text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500
+      "
+            />
+          </div>
+
+          {/* Probation Toggle */}
+          <button
+            onClick={() => setShowProbationMembers(!showProbationMembers)}
+            className={`
+      w-full sm:w-auto flex items-center justify-center sm:justify-start
+      space-x-2 px-3 py-1.5 rounded-lg text-sm transition-colors
+      ${
+        showProbationMembers
+          ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30'
+          : 'bg-gray-700 text-gray-400 border border-gray-600'
+      }
+    `}
+          >
+            <AlertTriangle className="w-4 h-4" />
+            <span>Show Probation</span>
+          </button>
+        </div>
 
         {/* Overview Stats */}
         <motion.div
@@ -458,12 +452,13 @@ const AdminMusterPage: React.FC = () => {
         </motion.div>
 
         {/* Content based on view mode */}
-        {viewMode === 'summary' && (
+        {/* Content based on view mode */}
+        {/* {viewMode === 'summary' && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-gray-800/40 border border-gray-700/50 rounded-xl backdrop-blur-sm overflow-hidden"
+            className="bg-gray-800/40 border border-gray-700/50 rounded-xl backdrop-blur-sm overflow-hidden flex flex-col"
           >
             <div className="p-6 border-b border-gray-700/50">
               <div className="flex items-center justify-between">
@@ -478,18 +473,18 @@ const AdminMusterPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto overflow-y-hidden">
               <table className="w-full">
-                <thead className="bg-gray-700/30">
+                <thead className="bg-gray-700/30 sticky top-0">
                   <tr className="text-left">
-                    <th className="px-6 py-4 text-sm font-semibold text-gray-300">Crew Member</th>
-                    <th className="px-4 py-4 text-sm font-semibold text-gray-300">Status</th>
-                    <th className="px-4 py-4 text-sm font-semibold text-gray-300">Attendance Rate</th>
-                    <th className="px-4 py-4 text-sm font-semibold text-gray-300">Streak</th>
-                    <th className="px-4 py-4 text-sm font-semibold text-gray-300">Trend</th>
-                    <th className="px-4 py-4 text-sm font-semibold text-gray-300">Last Absence</th>
-                    <th className="px-4 py-4 text-sm font-semibold text-gray-300">Contact</th>
-                    <th className="px-4 py-4 text-sm font-semibold text-gray-300">Actions</th>
+                    <th className="px-6 py-4 text-sm font-semibold text-gray-300 whitespace-nowrap">Crew Member</th>
+                    <th className="px-4 py-4 text-sm font-semibold text-gray-300 whitespace-nowrap">Status</th>
+                    <th className="px-4 py-4 text-sm font-semibold text-gray-300 whitespace-nowrap">Attendance Rate</th>
+                    <th className="px-4 py-4 text-sm font-semibold text-gray-300 whitespace-nowrap">Streak</th>
+                    <th className="px-4 py-4 text-sm font-semibold text-gray-300 whitespace-nowrap">Trend</th>
+                    <th className="px-4 py-4 text-sm font-semibold text-gray-300 whitespace-nowrap">Last Absence</th>
+                    <th className="px-4 py-4 text-sm font-semibold text-gray-300 whitespace-nowrap">Contact</th>
+                    <th className="px-4 py-4 text-sm font-semibold text-gray-300 whitespace-nowrap">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-700/50">
@@ -510,9 +505,9 @@ const AdminMusterPage: React.FC = () => {
                         transition={{ delay: 0.1 * index }}
                         className="hover:bg-gray-700/20 transition-colors"
                       >
-                        <td className="px-6 py-4">
+                        <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center space-x-3">
-                            <div className="flex-shrink-0 w-10 h-10 bg-linear-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center">
+                            <div className="shrink-0 w-10 h-10 bg-linear-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center">
                               <span className="text-white font-semibold text-sm">
                                 {member.memberName
                                   .split(' ')
@@ -530,7 +525,7 @@ const AdminMusterPage: React.FC = () => {
                           </div>
                         </td>
 
-                        <td className="px-4 py-4">
+                        <td className="px-4 py-4 whitespace-nowrap">
                           <div className="text-center">
                             <div className="text-lg font-bold text-white">
                               {member.presentCount}/{member.totalMeetings}
@@ -542,7 +537,7 @@ const AdminMusterPage: React.FC = () => {
                           </div>
                         </td>
 
-                        <td className="px-4 py-4">
+                        <td className="px-4 py-4 whitespace-nowrap">
                           <div className="flex items-center space-x-3">
                             <div className="flex-1">
                               <div className="flex items-center justify-between mb-1">
@@ -578,7 +573,7 @@ const AdminMusterPage: React.FC = () => {
                           </div>
                         </td>
 
-                        <td className="px-4 py-4 text-center">
+                        <td className="px-4 py-4 whitespace-nowrap text-center">
                           <div
                             className={`inline-flex items-center space-x-1 px-2 py-1 rounded-lg text-sm font-medium ${
                               member.perfectAttendanceStreak >= 10
@@ -596,7 +591,7 @@ const AdminMusterPage: React.FC = () => {
                           <div className="text-xs text-gray-400 mt-1">meetings</div>
                         </td>
 
-                        <td className="px-4 py-4">
+                        <td className="px-4 py-4 whitespace-nowrap">
                           <div className="flex items-center space-x-2">
                             <TrendIcon className={`w-4 h-4 ${getTrendColor(member.attendanceTrend)}`} />
                             <span className={`text-sm font-medium capitalize ${getTrendColor(member.attendanceTrend)}`}>
@@ -605,7 +600,7 @@ const AdminMusterPage: React.FC = () => {
                           </div>
                         </td>
 
-                        <td className="px-4 py-4">
+                        <td className="px-4 py-4 whitespace-nowrap">
                           {member.lastAbsence ? (
                             <div className="text-sm text-gray-400">
                               {new Date(member.lastAbsence).toLocaleDateString()}
@@ -615,7 +610,7 @@ const AdminMusterPage: React.FC = () => {
                           )}
                         </td>
 
-                        <td className="px-4 py-4">
+                        <td className="px-4 py-4 whitespace-nowrap">
                           <div className="flex items-center space-x-2">
                             <button className="p-1 text-gray-400 hover:text-blue-400 transition-colors">
                               <Phone className="w-4 h-4" />
@@ -626,7 +621,7 @@ const AdminMusterPage: React.FC = () => {
                           </div>
                         </td>
 
-                        <td className="px-4 py-4">
+                        <td className="px-4 py-4 whitespace-nowrap">
                           <div className="flex items-center space-x-2">
                             <button className="p-1 text-gray-400 hover:text-blue-400 transition-colors">
                               <Eye className="w-4 h-4" />
@@ -643,8 +638,7 @@ const AdminMusterPage: React.FC = () => {
               </table>
             </div>
           </motion.div>
-        )}
-
+        )} */}
         {viewMode === 'detailed' && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -748,7 +742,7 @@ const AdminMusterPage: React.FC = () => {
                         className="flex items-center justify-between p-4 bg-gray-700/20 rounded-lg hover:bg-gray-700/30 transition-colors"
                       >
                         <div className="flex items-center space-x-4">
-                          <div className="flex-shrink-0 w-12 h-12 bg-linear-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center">
+                          <div className="shrink-0 w-12 h-12 bg-linear-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center">
                             <span className="text-white font-semibold">
                               {member.memberName
                                 .split(' ')
@@ -1002,7 +996,7 @@ const AdminMusterPage: React.FC = () => {
             </div>
           </div>
         </motion.div>
-      </div>
+      </motion.div>
     </div>
   )
 }

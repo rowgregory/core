@@ -1,8 +1,6 @@
-import React, { FC } from 'react'
+import { FC } from 'react'
 import { motion } from 'framer-motion'
-import { AlertCircle, Calendar, CheckCircle, Clock, MessageSquare, Phone, Scroll, Users, Video } from 'lucide-react'
-import { useAppDispatch } from '@/app/redux/store'
-import { setInputs } from '@/app/redux/features/formSlice'
+import { AlertCircle, Calendar, CheckCircle, Clock, MessageSquare, Phone, Users, Video } from 'lucide-react'
 import { formatDateTimeForInput } from '@/app/lib/utils/date/formatDate'
 import { IForm } from '@/types/forms'
 
@@ -55,8 +53,6 @@ const ParleyForm: FC<IForm> = ({
   users,
   ref
 }) => {
-  const dispatch = useAppDispatch()
-
   return (
     <>
       <form ref={ref} id="parleyForm" onSubmit={handleSubmit} className="flex-1 overflow-y-auto">
@@ -68,62 +64,28 @@ const ParleyForm: FC<IForm> = ({
             transition={{ delay: 0.1 }}
             className="space-y-4"
           >
-            <h3 className="text-lg font-semibold text-white flex items-center space-x-2">
-              <Scroll className="w-5 h-5 text-cyan-400" />
-              <span>Parley Request</span>
-            </h3>
-
-            {/* Role Switch Toggle */}
-            <div className="space-y-3">
-              <label className="block text-sm font-medium text-gray-300">What be yer role in this parley?</label>
-
-              <div className="grid grid-cols-2 gap-3">
-                <button
-                  type="button"
-                  onClick={() => {
-                    dispatch(
-                      setInputs({
-                        formName: 'parleyForm',
-                        data: { isReceiving: false, requesterId: user?.id, recipientId: '' }
-                      })
-                    )
-                  }}
-                  className={`py-4 px-4 rounded-xl border transition-all duration-200 ${
-                    !inputs?.isReceiving
-                      ? 'border-teal-400 bg-teal-400/10 text-teal-300 shadow-lg shadow-teal-400/20'
-                      : 'border-gray-600 bg-gray-800/50 text-gray-300 hover:border-gray-500 hover:bg-gray-700/50'
-                  }`}
-                >
-                  <div className="text-center">
-                    <div className="font-semibold">I&apos;m Requesting</div>
-                    <div className="text-xs opacity-70 mt-1">Asking for a parley</div>
-                  </div>
-                </button>
-              </div>
-            </div>
-
             {!inputs?.isReceiving ? (
               <>
                 {/* When REQUESTING - Current User (Read-only) */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">You are requesting this parley</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">You are requesting the parley</label>
                   <div className="w-full px-4 py-3 bg-gray-700/30 border border-gray-600 rounded-lg">
-                    <div className="flex items-center space-x-3">
+                    <div className="flex items-center gap-y-3 sm:gap-y-0 sm:gap-x-3 mb-3">
                       <div className="w-10 h-10 bg-linear-to-r from-teal-500 via-cyan-500 to-blue-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
                         {user?.name
                           ?.split(' ')
                           .map((n) => n[0])
                           .join('')}
                       </div>
-                      <div>
-                        <p className="font-semibold text-white">{user?.name}</p>
-                        <p className="text-sm text-gray-400">{user?.email}</p>
-                      </div>
                       <div className="ml-auto">
                         <span className="px-3 py-1 rounded-full text-xs font-medium bg-teal-400/20 text-teal-300 border border-teal-400/30">
                           Requester
                         </span>
                       </div>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-white">{user?.name}</p>
+                      <p className="text-sm text-gray-400">{user?.email}</p>
                     </div>
                   </div>
                 </div>
@@ -237,14 +199,10 @@ const ParleyForm: FC<IForm> = ({
                   <label className="block text-sm font-medium text-gray-300 mb-3">Have you already met?</label>
                   <div className="grid grid-cols-2 gap-3">
                     {[
-                      { label: 'Yes', value: 'COMPLETED', description: 'Marks yer parley as completed' },
+                      { label: 'Yes', value: 'COMPLETED' },
                       {
                         label: 'No',
-                        value: inputs?.status === 'CONFIRMED' ? 'CONFIRMED' : 'REQUESTED',
-                        description:
-                          inputs?.status === 'CONFIRMED'
-                            ? 'Keeps yer parley as confirmed'
-                            : 'Keeps yer parley as requested'
+                        value: inputs?.status === 'CONFIRMED' ? 'CONFIRMED' : 'REQUESTED'
                       }
                     ].map((option) => (
                       <motion.label
@@ -272,7 +230,6 @@ const ParleyForm: FC<IForm> = ({
                         >
                           {option.label}
                         </div>
-                        <div className="text-xs text-gray-500 text-center">{option.description}</div>
                       </motion.label>
                     ))}
                   </div>
@@ -611,13 +568,13 @@ const ParleyForm: FC<IForm> = ({
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4, duration: 0.4 }}
       >
-        <div className="flex space-x-3">
+        <div className="flex flex-col sm:flex-row gap-y-3 sm:gap-x-3">
           <motion.button
             type="button"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={onClose}
-            className="flex-1 px-6 py-3 border border-gray-600 text-gray-300 rounded-lg hover:bg-gray-800 transition-all"
+            className="order-2 sm:order-1 flex-1 px-6 py-3 border border-gray-600 text-gray-300 rounded-lg hover:bg-gray-800 transition-all"
           >
             Cancel
           </motion.button>
@@ -627,7 +584,7 @@ const ParleyForm: FC<IForm> = ({
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             disabled={isLoading}
-            className="flex-1 px-6 py-3 bg-linear-to-r from-teal-600 via-cyan-600 to-blue-600 text-white rounded-lg hover:from-teal-500 hover:to-blue-500 transition-all flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="order-1 sm:order-2 flex-1 px-6 py-3 bg-linear-to-r from-teal-600 via-cyan-600 to-blue-600 text-white rounded-lg hover:from-teal-500 hover:to-blue-500 transition-all flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? (
               <>

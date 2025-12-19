@@ -7,6 +7,8 @@ import { setUpdateRendezvous } from '@/app/redux/features/rendezvousSlice'
 import { showToast } from '@/app/redux/features/toastSlice'
 import { useCreateRendezvousMutation, useUpdateRendezvousMutation } from '@/app/redux/services/rendezvousApi'
 import { useAppDispatch, useFormSelector, useUserSelector } from '@/app/redux/store'
+import { SerializedError } from '@reduxjs/toolkit'
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { motion } from 'framer-motion'
 import { Calendar, ChevronLeft, ChevronRight, Clock } from 'lucide-react'
 import { FC, useState } from 'react'
@@ -67,7 +69,9 @@ const CalendarGrid: FC<CalendarGridProps> = ({
     e.preventDefault()
 
     const isUpdating = !inputs.isRecurring
-    let rendezvous
+    let rendezvous:
+      | { data: any; error?: undefined }
+      | { data?: undefined; error: FetchBaseQueryError | SerializedError }
     try {
       if (isUpdating) {
         rendezvous = await updateRendezvous({
@@ -95,46 +99,50 @@ const CalendarGrid: FC<CalendarGridProps> = ({
   }
 
   return (
-    <div className="p-6">
+    <div className="">
       {/* Built-in Month Navigation */}
-      <div className="flex items-center justify-center space-x-4 mb-6">
+      <div className="flex items-center justify-center gap-3 sm:gap-4 mb-4 sm:mb-6">
         <button
           onClick={() => navigateMonth('prev', setCurrentMonth)}
-          className="p-2 text-gray-400 hover:text-white hover:bg-gray-700/50 rounded-lg transition-all duration-200"
+          className="p-1.5 sm:p-2 text-gray-400 hover:text-white hover:bg-gray-700/50 rounded-lg transition-all duration-200"
           aria-label="Previous month"
         >
-          <ChevronLeft className="w-5 h-5" />
+          <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
 
-        <h3 className="text-lg font-semibold text-white min-w-[180px] text-center">{formatMonth(currentMonth)}</h3>
+        <h3 className="text-base xs:text-lg sm:text-xl font-semibold text-white min-w-[140px] xs:min-w-[180px] text-center">
+          {formatMonth(currentMonth)}
+        </h3>
 
         <button
           onClick={() => navigateMonth('next', setCurrentMonth)}
-          className="p-2 text-gray-400 hover:text-white hover:bg-gray-700/50 rounded-lg transition-all duration-200"
+          className="p-1.5 sm:p-2 text-gray-400 hover:text-white hover:bg-gray-700/50 rounded-lg transition-all duration-200"
           aria-label="Next month"
         >
-          <ChevronRight className="w-5 h-5" />
+          <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
       </div>
 
       {/* Day headers */}
-      <div className="grid grid-cols-7 gap-1 mb-2">
+      <div className="grid grid-cols-7 gap-1.5 sm:gap-2 mb-1 sm:mb-2">
         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
-          <div key={day} className="p-2 text-center text-sm font-semibold text-gray-400">
+          <div
+            key={day}
+            className="p-1.5 sm:p-2 text-center text-[10px] xs:text-xs sm:text-sm font-semibold text-gray-400"
+          >
             {day}
           </div>
         ))}
       </div>
 
       {/* Calendar days */}
-      <div className="grid grid-cols-7 gap-1">
+      <div className="grid grid-cols-7 gap-1 xs:gap-1.5 sm:gap-2">
         {calendarDays.map((date, index) => {
           const dayEvents = getEventsForDate(events, date)
           const isCurrentMonthDay = isCurrentMonth(date, currentMonth)
           const isTodayDay = isToday(date)
           const isSelected = selectedDate === date.toISOString().split('T')[0]
 
-          // Check if any events on this day have been updated from database
           const hasUpdatedEvents = dayEvents.some(
             (event) => event.createdAt || event.updatedAt || event.status !== 'ACTIVE'
           )
@@ -147,7 +155,9 @@ const CalendarGrid: FC<CalendarGridProps> = ({
               transition={{ delay: index * 0.01 }}
               onClick={() => handleDayClick(date, dayEvents)}
               className={`
-          relative min-h-[100px] p-2 cursor-pointer rounded-lg border transition-all duration-200 hover:border-purple-500/50
+          relative min-h-[72px] xs:min-h-[88px] sm:min-h-[100px]
+          p-1.5 xs:p-2 cursor-pointer rounded-md border
+          transition-all duration-200 hover:border-purple-500/50
           ${isCurrentMonthDay ? 'bg-gray-700/20 border-gray-600/30' : 'bg-gray-800/10 border-gray-700/20 opacity-40'}
           ${isTodayDay ? 'ring-2 ring-blue-400/50' : ''}
           ${isSelected ? 'bg-purple-500/20 border-purple-500/50' : ''}
@@ -155,16 +165,15 @@ const CalendarGrid: FC<CalendarGridProps> = ({
         `}
             >
               <div
-                className={`text-sm font-medium mb-1 ${
+                className={`text-xs xs:text-sm font-medium mb-0.5 xs:mb-1 ${
                   isTodayDay ? 'text-blue-400 font-bold' : isCurrentMonthDay ? 'text-white' : 'text-gray-500'
                 }`}
               >
                 {date.getDate()}
-                {/* Indicator for updated events */}
-                {hasUpdatedEvents && <span className="ml-1 inline-block w-1.5 h-1.5 bg-cyan-400 rounded-full"></span>}
+                {hasUpdatedEvents && <span className="ml-1 inline-block w-1.5 h-1.5 bg-cyan-400 rounded-full" />}
               </div>
 
-              <div className="space-y-1">
+              <div className="space-y-0.5 xs:space-y-1">
                 {dayEvents.slice(0, 3).map((event) => {
                   const EventIcon = getEventTypeIcon(event.type)
                   const isUpdated = event.createdAt || event.updatedAt || event.status !== 'ACTIVE'
@@ -174,7 +183,7 @@ const CalendarGrid: FC<CalendarGridProps> = ({
                   return (
                     <div
                       key={event.id}
-                      className={`flex items-center space-x-1 p-1 rounded text-xs truncate 
+                      className={`flex items-center space-x-1 p-0.5 xs:p-1 rounded text-[10px] xs:text-xs truncate
                   ${getEventTypeColor(event.type)}
                   ${isUpdated ? 'ring-1 ring-cyan-300/50' : ''}
                   ${isCancelled ? 'opacity-60' : ''}
@@ -182,18 +191,19 @@ const CalendarGrid: FC<CalendarGridProps> = ({
                 `}
                       title={`${event.title}${isUpdated ? ' (Modified)' : ''}`}
                     >
-                      <EventIcon className={`w-3 h-3 flex-shrink-0 ${isCancelled ? 'opacity-50' : ''}`} />
-                      <span className={`truncate`}>{event.title}</span>
-                      {/* Visual indicator for modified events */}
+                      <EventIcon className={`w-3 h-3 shrink-0 ${isCancelled ? 'opacity-50' : ''}`} />
+                      <span className="truncate">{event.title}</span>
                       {isUpdated && !isCancelled && !isRemoved && (
-                        <span className="w-1 h-1 bg-cyan-400 rounded-full flex-shrink-0 ml-1"></span>
+                        <span className="w-1 h-1 bg-cyan-400 rounded-full shrink-0 ml-1" />
                       )}
                     </div>
                   )
                 })}
 
                 {dayEvents.length > 3 && (
-                  <div className="text-xs text-gray-400 font-medium text-center">+{dayEvents.length - 3} more</div>
+                  <div className="text-[10px] xs:text-xs text-gray-400 font-medium text-center">
+                    +{dayEvents.length - 3} more
+                  </div>
                 )}
               </div>
             </motion.div>
@@ -203,9 +213,8 @@ const CalendarGrid: FC<CalendarGridProps> = ({
 
       {/* Selected Day Meeting Details */}
       {selectedDate && (
-        <div className="border-t border-gray-700/50 pt-6">
+        <div className="border-t border-gray-700/50 pt-4 xs:pt-5 sm:pt-6">
           {(() => {
-            // With this:
             const selectedDayEvents = (() => {
               const [year, month, day] = selectedDate.split('-')
               const targetDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day))
@@ -213,9 +222,7 @@ const CalendarGrid: FC<CalendarGridProps> = ({
               return events.filter((event) => {
                 if (event.startTime) {
                   const eventDate = new Date(event.startTime)
-                  const matches = eventDate.toDateString() === targetDate.toDateString()
-
-                  return matches
+                  return eventDate.toDateString() === targetDate.toDateString()
                 } else {
                   const eventDate = new Date(event.date)
                   return eventDate.toDateString() === targetDate.toDateString()
@@ -223,43 +230,34 @@ const CalendarGrid: FC<CalendarGridProps> = ({
               })
             })()
 
+            const formattedSelectedDate = (() => {
+              const [year, month, day] = selectedDate.split('-')
+              const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day))
+              return date.toLocaleDateString('en-US', {
+                weekday: 'long',
+                month: 'long',
+                day: 'numeric'
+              })
+            })()
+
             if (selectedDayEvents.length === 0) {
               return (
-                <div className="text-center text-gray-400">
+                <div className="text-center text-gray-400 px-2">
                   <Calendar className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                  <p>
-                    No meeting scheduled for{' '}
-                    {(() => {
-                      const [year, month, day] = selectedDate.split('-')
-                      const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day))
-                      return date.toLocaleDateString('en-US', {
-                        weekday: 'long',
-                        month: 'long',
-                        day: 'numeric'
-                      })
-                    })()}
-                  </p>
+                  <p className="text-sm xs:text-base">No meeting scheduled for {formattedSelectedDate}</p>
                 </div>
               )
             }
 
             return (
               <div>
-                <h3 className="text-lg font-bold text-white mb-4 flex items-center">
-                  <Calendar className="w-5 h-5 mr-2" />
-                  Meetings on{' '}
-                  {(() => {
-                    const [year, month, day] = selectedDate.split('-')
-                    const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day))
-                    return date.toLocaleDateString('en-US', {
-                      weekday: 'long',
-                      month: 'long',
-                      day: 'numeric'
-                    })
-                  })()}
+                <h3 className="pl-3 text-base xs:text-lg sm:text-xl font-bold text-white mb-3 xs:mb-4 flex flex-wrap items-center gap-1">
+                  <Calendar className="w-4 h-4 xs:w-5 xs:h-5 mr-1" />
+                  <span>Meeting on&nbsp;</span>
+                  <span className="text-violet-300">{formattedSelectedDate}</span>
                 </h3>
 
-                <div className="space-y-4">
+                <div className="space-y-3 xs:space-y-4">
                   {selectedDayEvents.map((event, index) => {
                     const EventIcon = getEventTypeIcon(event.type)
                     const formatTime = (dateTime: string | number | Date) => {
@@ -278,19 +276,23 @@ const CalendarGrid: FC<CalendarGridProps> = ({
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.1 }}
-                        className="bg-gray-700/20 border border-gray-600/30 rounded-lg p-4"
+                        className="bg-gray-700/20 border border-gray-600/30 rounded-lg p-3 xs:p-4"
                       >
-                        <div className="flex items-start justify-between">
+                        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                           <div className="flex items-start space-x-3">
                             <div className={`p-2 rounded-lg ${getEventTypeColor(event.type)}`}>
-                              <EventIcon className="w-5 h-5" />
+                              <EventIcon className="w-4 h-4 xs:w-5 xs:h-5" />
                             </div>
-                            <div className="flex-1">
-                              <h4 className="font-semibold text-white mb-1">{event.title}</h4>
-                              <p className="text-sm text-gray-400 mb-2">{event.description}</p>
+                            <div className="flex-1 min-w-0">
+                              <h4 className="font-semibold text-white mb-1 text-sm xs:text-base wrap-break-word">
+                                {event.title}
+                              </h4>
+                              <p className="text-xs xs:text-sm text-gray-400 mb-2 wrap-break-word">
+                                {event.description}
+                              </p>
 
                               {event.startTime && event.endTime && (
-                                <div className="flex items-center space-x-1 text-xs text-gray-500 mb-2">
+                                <div className="flex items-center flex-wrap gap-1 text-[11px] xs:text-xs text-gray-500 mb-2">
                                   <Clock className="w-3 h-3" />
                                   <span className={`${event.status === 'CANCELLED' ? 'line-through opacity-50' : ''}`}>
                                     {formatTime(event.startTime)} - {formatTime(event.endTime)}
@@ -299,7 +301,7 @@ const CalendarGrid: FC<CalendarGridProps> = ({
                               )}
 
                               {event.isRecurring && (
-                                <div className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/30">
+                                <div className="inline-flex items-center px-2 py-1 rounded text-[11px] xs:text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/30">
                                   Recurring {event.recurrencePattern}
                                 </div>
                               )}
@@ -309,20 +311,19 @@ const CalendarGrid: FC<CalendarGridProps> = ({
                           {user?.isAdmin && !isRemoving && (
                             <button
                               onClick={() => handleRemoveMeeting(event)}
-                              className="px-3 py-1.5 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-medium rounded-md transition-all duration-200 hover:bg-emerald-500/30 hover:shadow-lg whitespace-nowrap"
+                              className="w-full sm:w-auto px-3 py-1.5 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-medium rounded-md transition-all duration-200 hover:bg-emerald-500/30 hover:shadow-lg whitespace-nowrap text-center"
                             >
                               Update Meeting
                             </button>
                           )}
                         </div>
 
-                        {/* Remove Form */}
                         {isRemoving && (
                           <motion.form
                             onSubmit={handleSubmit}
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: 'auto' }}
-                            className="mt-4 pt-4 border-t border-gray-600/30"
+                            className="mt-3 xs:mt-4 pt-3 xs:pt-4 border-t border-gray-600/30"
                           >
                             <h5 className="text-sm font-medium text-white mb-3">Update Meeting Details</h5>
 
@@ -335,11 +336,11 @@ const CalendarGrid: FC<CalendarGridProps> = ({
                                   name="title"
                                   value={inputs?.title || ''}
                                   onChange={handleInput}
-                                  className="w-full px-3 py-2 bg-gray-800/50 border border-gray-600/30 rounded-md text-white text-sm  focus:outline-none focus:border-violet-500"
+                                  className="w-full px-3 py-2 bg-gray-800/50 border border-gray-600/30 rounded-md text-white text-sm focus:outline-none focus:border-violet-500"
                                   placeholder="Enter title"
                                 />
                               </div>
-                              {/* Description */}
+
                               <div>
                                 <label className="block text-xs font-medium text-gray-400 mb-1">
                                   Message (optional)
@@ -350,11 +351,10 @@ const CalendarGrid: FC<CalendarGridProps> = ({
                                   onChange={handleInput}
                                   className="w-full px-3 py-2 bg-gray-800/50 border border-gray-600/30 rounded-md text-white text-sm focus:outline-none focus:border-violet-500"
                                   rows={2}
-                                  placeholder="Enter reason for removing this meeting..."
+                                  placeholder="Enter reason for updating this meeting..."
                                 />
                               </div>
 
-                              {/* Type */}
                               <div>
                                 <label className="block text-xs font-medium text-gray-400 mb-1">Meeting Type</label>
                                 <select
@@ -370,17 +370,15 @@ const CalendarGrid: FC<CalendarGridProps> = ({
                                 </select>
                               </div>
 
-                              {/* Action Buttons */}
-                              <div className="flex space-x-2 pt-2">
+                              <div className="flex flex-col xs:flex-row gap-2 pt-2">
                                 <button
                                   type="submit"
-                                  className="px-4 py-2 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-medium rounded-md transition-all duration-200 hover:bg-emerald-500/30 flex item-center gap-x-2"
+                                  className="inline-flex items-center justify-center px-4 py-2 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-medium rounded-md transition-all duration-200 hover:bg-emerald-500/30"
                                 >
-                                  Confirm Update{' '}
-                                  {isCreating ||
-                                    (isUpdating && (
-                                      <div className="w-3 h-3 border-2 border-emerald-500 animate-spin rounded-full bordert-0" />
-                                    ))}
+                                  Confirm Update
+                                  {(isCreating || isUpdating) && (
+                                    <div className="ml-2 w-3 h-3 border-2 border-emerald-500 animate-spin rounded-full border-t-transparent" />
+                                  )}
                                 </button>
                                 <button
                                   type="button"

@@ -1,4 +1,3 @@
-import React from 'react'
 import { setOpenAnchorDrawer } from '@/app/redux/features/anchorSlice'
 import { setOpenParleyDrawer } from '@/app/redux/features/parleySlice'
 import { useAppDispatch } from '@/app/redux/store'
@@ -12,24 +11,28 @@ const MemberQuickActions = () => {
   const quickActions = [
     {
       title: 'Schedule Parley',
+      description: 'Log a new parley meeting between crew members to track interactions and engagement.',
       icon: Scroll,
       color: 'from-teal-500 to-teal-600 text-white rounded-lg hover:from-teal-400 hover:to-teal-500',
       onClick: () => dispatch(setOpenParleyDrawer())
     },
     {
       title: 'Send Treasure Map',
+      description: 'Create and send a treasure map to other crew members, keeping track of adventures and progress.',
       icon: Layers3,
       color: 'from-cyan-500 to-cyan-600 text-white rounded-lg hover:from-cyan-400 hover:to-cyan-500',
       onClick: () => dispatch(setOpenTreasureMapDrawer())
     },
     {
       title: 'Drop Anchor',
+      description: 'Record an anchor that signifies thank you for closed business from a crew member.',
       icon: Anchor,
       color: 'from-sky-500 to-sky-600 text-white rounded-lg hover:from-sky-400 hover:to-sky-500',
       onClick: () => dispatch(setOpenAnchorDrawer())
     },
     {
       title: 'Draft Swabbie',
+      description: 'Quickly add a new swabbie (potential crew member) to the system without them filling out a form.',
       icon: Sailboat,
       color: 'from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-400 hover:to-blue-500',
       onClick: () => dispatch(setOpenSwabbieDrawer())
@@ -48,6 +51,7 @@ const MemberQuickActions = () => {
             icon={action.icon}
             color={action.color}
             onClick={action.onClick}
+            description={action.description}
           />
         ))}
       </div>

@@ -13,7 +13,9 @@ import {
   Beer,
   Coins,
   Crosshair,
-  Flag
+  Flag,
+  BookOpenText,
+  GitBranch
 } from 'lucide-react'
 
 export const adminNavLinks = [
@@ -115,6 +117,20 @@ export const adminNavLinks = [
     icon: Sliders,
     description: 'Chapter Configuration',
     linkKey: '/admin/rigging'
+  },
+  {
+    id: 'lore-and-lingo',
+    label: 'Lore & Lingo',
+    icon: BookOpenText,
+    description: 'Decode the crew’s language — your map to every parley, anchor, and treasure maps.',
+    linkKey: '/admin/lore-and-lingo'
+  },
+  {
+    id: 'changelog',
+    label: 'Changelog',
+    icon: GitBranch,
+    description: 'Track updates, improvements, and new features — your complete history of platform evolution.',
+    linkKey: '/admin/changelog'
   },
   {
     id: 'hidden-cove',
