@@ -18,11 +18,11 @@ import {
   XCircle
 } from 'lucide-react'
 import { formatDate } from '@/app/lib/utils/date/formatDate'
-import { useUpdateUserStatusMutation } from '@/app/redux/services/userApi'
+import { useUpdateUserStatusMutation } from '@/app/lib/redux/services/userApi'
 import { chapterId } from '@/app/lib/constants/api/chapterId'
-import { useAppDispatch, useUserSelector } from '@/app/redux/store'
+import { useAppDispatch, useUserSelector } from '@/app/lib/redux/store'
 import useSoundEffect from '@/hooks/useSoundEffect'
-import { showToast } from '@/app/redux/features/toastSlice'
+import { showToast } from '@/app/lib/redux/features/toastSlice'
 
 const statusColors: any = {
   PENDING: 'bg-amber-900/30 text-amber-300 border-amber-600/50',

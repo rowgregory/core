@@ -1,9 +1,9 @@
 'use client'
 
-import { useAppDispatch, useFormSelector, useUserSelector } from '@/app/redux/store'
+import { useAppDispatch, useFormSelector, useUserSelector } from '@/app/lib/redux/store'
 import BeaconHeader from '@/app/components/beacon/BeaconHeader'
 import BeaconForm from '@/app/components/forms/BeaconForm'
-import { createFormActions } from '@/app/redux/features/formSlice'
+import { createFormActions } from '@/app/lib/redux/features/formSlice'
 import useBeaconForm from '@/hooks/useBeaconForm'
 
 const AdminBeacon = () => {

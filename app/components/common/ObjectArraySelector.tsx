@@ -1,4 +1,4 @@
-import { setInputs } from '@/app/redux/features/formSlice'
+import { setInputs } from '@/app/lib/redux/features/formSlice'
 import { motion } from 'framer-motion'
 import { Plus, X } from 'lucide-react'
 import { cloneElement, FC, useState } from 'react'

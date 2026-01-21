@@ -4,9 +4,9 @@ import { Calendar, DollarSign, Building2, User, FileText, MapPin, Globe, Crown }
 import { IAnchor } from '@/types/anchor'
 import Picture from '../common/Picture'
 import { formatDate } from '@/app/lib/utils/date/formatDate'
-import { setOpenAnchorDrawer } from '@/app/redux/features/anchorSlice'
-import { useAppDispatch } from '@/app/redux/store'
-import { setInputs } from '@/app/redux/features/formSlice'
+import { setOpenAnchorDrawer } from '@/app/lib/redux/features/anchorSlice'
+import { useAppDispatch } from '@/app/lib/redux/store'
+import { setInputs } from '@/app/lib/redux/features/formSlice'
 import { useSession } from 'next-auth/react'
 import getAnchorStatusColor from '@/app/lib/utils/anchor/getAnchorStatusColor'
 

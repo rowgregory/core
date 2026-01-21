@@ -2,8 +2,8 @@ import React, { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Camera, FileImage, Plus } from 'lucide-react'
 import Picture from '../common/Picture'
-import { setInputs } from '@/app/redux/features/formSlice'
-import { useAppDispatch } from '@/app/redux/store'
+import { setInputs } from '@/app/lib/redux/features/formSlice'
+import { useAppDispatch } from '@/app/lib/redux/store'
 
 interface CollageImage {
   fileUrl?: string

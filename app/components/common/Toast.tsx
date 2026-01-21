@@ -3,8 +3,8 @@ import React, { useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, CheckCircle, AlertCircle, Info, AlertTriangle } from 'lucide-react'
 // import UIfx from 'uifx'
-import { useAppDispatch, useToastSelector } from '@/app/redux/store'
-import { hideToast } from '@/app/redux/features/toastSlice'
+import { useAppDispatch, useToastSelector } from '@/app/lib/redux/store'
+import { hideToast } from '@/app/lib/redux/features/toastSlice'
 
 // Import your sound files
 // const successSound = new UIfx('/path/to/success-sound.mp3', { volume: 0.4 })

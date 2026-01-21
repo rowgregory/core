@@ -1,7 +1,7 @@
 import { User } from '@/types/user'
 import React from 'react'
 import Picture from '../common/Picture'
-import { useUserSelector } from '@/app/redux/store'
+import { useUserSelector } from '@/app/lib/redux/store'
 import Link from 'next/link'
 
 const CustomerAvatars = () => {

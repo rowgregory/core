@@ -1,5 +1,5 @@
-import { recomputeAllStats } from '@/app/redux/features/dashboardSlice'
-import { store } from '@/app/redux/store'
+import { recomputeAllStats } from '@/app/lib/redux/features/dashboardSlice'
+import { store } from '@/app/lib/redux/store'
 
 export const recomputeDashboardStats = ({ id, isAdmin }: { id: string | undefined; isAdmin: boolean | undefined }) => {
   const state = store.getState()

@@ -1,9 +1,9 @@
 import { Calendar, DollarSign, Building, FileText, AlertCircle, CheckCircle } from 'lucide-react'
-import { useAppDispatch, useUserSelector } from '@/app/redux/store'
+import { useAppDispatch, useUserSelector } from '@/app/lib/redux/store'
 import { motion } from 'framer-motion'
 import { formatDateForInput } from '@/app/lib/utils/date/formatDate'
 import { useSession } from 'next-auth/react'
-import { setInputs } from '@/app/redux/features/formSlice'
+import { setInputs } from '@/app/lib/redux/features/formSlice'
 import getAnchorStatusColor from '@/app/lib/utils/anchor/getAnchorStatusColor'
 
 const formatCurrency = (value: string) => {

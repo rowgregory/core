@@ -8,9 +8,9 @@ import { useSession } from 'next-auth/react'
 import getApplicationStatusColor from '@/app/lib/utils/application/getApplicationStatusColor'
 import getApplicationStatusIcon from '@/app/lib/utils/application/getApplicationStatusIcon'
 import EmptyState from '@/app/components/common/EmptyState'
-import { setOpenSwabbieDrawer } from '@/app/redux/features/userSlice'
+import { setOpenSwabbieDrawer } from '@/app/lib/redux/features/userSlice'
 import SwabbieCard from '@/app/components/swabbie/SwabbieCard'
-import { useUserSelector } from '@/app/redux/store'
+import { useUserSelector } from '@/app/lib/redux/store'
 import InfoBanner from '@/app/components/common/InfoBanner'
 
 const Applications = () => {

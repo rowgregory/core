@@ -1,21 +1,21 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { useAppDispatch, useApplicationSelector, useSettingsSelector, useUserSelector } from '../redux/store'
+import { useAppDispatch, useApplicationSelector, useSettingsSelector, useUserSelector } from '../lib/redux/store'
 import { Users, Calendar, Anchor, Layers3, Sailboat, Beer, LifeBuoy, Coins, ChevronRight, Flag } from 'lucide-react'
 import { initialParleyFormState } from '@/app/lib/constants/entities/initialParleyFormState'
-import { setOpenAnchorDrawer } from '@/app/redux/features/anchorSlice'
+import { setOpenAnchorDrawer } from '@/app/lib/redux/features/anchorSlice'
 import { initialAnchorFormState } from '@/app/lib/constants/anchor'
-import { setOpenTreasureMapDrawer } from '@/app/redux/features/treasureMapSlice'
+import { setOpenTreasureMapDrawer } from '@/app/lib/redux/features/treasureMapSlice'
 import { initialTreasureMapFormState } from '@/types/treasure-map'
-import { setOpenGrogDrawer } from '@/app/redux/features/grogSlice'
-import { setOpenParleyDrawer } from '@/app/redux/features/parleySlice'
-import { setOpenAddUserDrawer, setOpenStowawayDrawer, setOpenSwabbieDrawer } from '@/app/redux/features/userSlice'
-import { navigatorInputs, setInputs } from '@/app/redux/features/formSlice'
+import { setOpenGrogDrawer } from '@/app/lib/redux/features/grogSlice'
+import { setOpenParleyDrawer } from '@/app/lib/redux/features/parleySlice'
+import { setOpenAddUserDrawer, setOpenStowawayDrawer, setOpenSwabbieDrawer } from '@/app/lib/redux/features/userSlice'
+import { navigatorInputs, setInputs } from '@/app/lib/redux/features/formSlice'
 import { useRouter } from 'next/navigation'
 import {
   setCloseActionDropdown,
   setCloseActionDropdownSubmenu,
   setOpenActionDropdownSubmenu
-} from '../redux/features/appSlice'
+} from '../lib/redux/features/appSlice'
 import Backdrop from './common/Backdrop'
 
 const actionItems = (

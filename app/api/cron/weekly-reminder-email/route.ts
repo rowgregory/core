@@ -43,11 +43,7 @@ async function sendWeeklyReminders(req: NextRequest) {
             from: 'no-reply@coastal-referral-exchange.com',
             to: user.email,
             subject: 'Log Your Treasure Maps, Anchors & Parleys - Midnight Deadline!',
-            html: weeklyReminderTemplate(
-              user.name || user.email.split('@')[0],
-              weekEndDate,
-              user.role === 'ADMIN' || user.isAdmin
-            )
+            html: weeklyReminderTemplate(user.name || user.email.split('@')[0])
           })
           return { success: true, email: user.email, result }
         } catch (error) {

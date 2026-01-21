@@ -9,8 +9,8 @@ import AnchorCard from '@/app/components/anchor/AnchorCard'
 import getAnchorStatusIcon from '@/app/lib/utils/anchor/getAnchorStatusIcon'
 import getAnchorStatusOptions from '@/app/lib/utils/anchor/getAnchorStatusOptions'
 import getAnchorStatusColor from '@/app/lib/utils/anchor/getAnchorStatusColor'
-import { setOpenAnchorDrawer } from '@/app/redux/features/anchorSlice'
-import { useAnchorSelector } from '@/app/redux/store'
+import { setOpenAnchorDrawer } from '@/app/lib/redux/features/anchorSlice'
+import { useAnchorSelector } from '@/app/lib/redux/store'
 import InfoBanner from '@/app/components/common/InfoBanner'
 
 const AdminAnchors = () => {

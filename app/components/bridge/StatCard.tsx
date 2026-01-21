@@ -1,4 +1,4 @@
-import { useDashboardSelector } from '@/app/redux/store'
+import { useDashboardSelector } from '@/app/lib/redux/store'
 import { AnimatePresence, motion } from 'framer-motion'
 import { TrendingDown, TrendingUp } from 'lucide-react'
 import HorizontalLoader from '../common/HorizontalLoader'

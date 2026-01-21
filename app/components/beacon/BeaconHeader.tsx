@@ -1,8 +1,8 @@
 import { Camera, User, Eye, EyeOff } from 'lucide-react'
 import Picture from '../common/Picture'
 import MemberStatusBadge from '../member/MemberStatusBadge'
-import { useAppDispatch } from '@/app/redux/store'
-import { setInputs } from '@/app/redux/features/formSlice'
+import { useAppDispatch } from '@/app/lib/redux/store'
+import { setInputs } from '@/app/lib/redux/features/formSlice'
 import { FC } from 'react'
 
 interface IBeaconHeader {

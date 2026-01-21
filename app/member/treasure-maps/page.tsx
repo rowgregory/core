@@ -8,9 +8,9 @@ import getTreasureMapStatusIcon from '@/app/lib/utils/treasure-map/getTreasureMa
 import { useSession } from 'next-auth/react'
 import { Search } from 'lucide-react'
 import EmptyState from '@/app/components/common/EmptyState'
-import { setOpenTreasureMapDrawer } from '@/app/redux/features/treasureMapSlice'
+import { setOpenTreasureMapDrawer } from '@/app/lib/redux/features/treasureMapSlice'
 import TreasureMapCard from '@/app/components/treasure-map/TreasureMapCard'
-import { useTreasureMapSelector } from '@/app/redux/store'
+import { useTreasureMapSelector } from '@/app/lib/redux/store'
 import InfoBanner from '@/app/components/common/InfoBanner'
 
 const TrasureMaps = () => {

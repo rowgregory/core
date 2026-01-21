@@ -2,8 +2,8 @@ import { FC } from 'react'
 import { motion } from 'framer-motion'
 import { ChevronLeft, ChevronRight, Crown, Shield, ShipWheel } from 'lucide-react'
 import Link from 'next/link'
-import { RootState, useAppDispatch, useAppSelector } from '@/app/redux/store'
-import { setIsNavigationCollapsed } from '@/app/redux/features/appSlice'
+import { RootState, useAppDispatch, useAppSelector } from '@/app/lib/redux/store'
+import { setIsNavigationCollapsed } from '@/app/lib/redux/features/appSlice'
 import { itemVariants } from '@/app/lib/constants/motion'
 
 interface IFixedLeftNavigationPanel {

@@ -9,7 +9,7 @@ import AdminOuputSummary from '@/app/components/admin/bridge/AdminOuputSummary'
 import MemberEngagement from '@/app/components/admin/bridge/MemberEngagement'
 import TopPerformers from '@/app/components/admin/bridge/TopPerformers'
 import TooltipWrapper from '@/app/components/common/TooltipWrapper'
-import { useDashboardSelector } from '@/app/redux/store'
+import { useDashboardSelector } from '@/app/lib/redux/store'
 import QuickActionButtons from '@/app/components/admin/bridge/QuackActionButtons'
 
 const AdminBridge = () => {

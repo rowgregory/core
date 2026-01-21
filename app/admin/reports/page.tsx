@@ -20,7 +20,7 @@ import {
   Minus,
   Info
 } from 'lucide-react'
-import { useGenerateMemberMetricsQuery } from '@/app/redux/services/userApi'
+import { useGenerateMemberMetricsQuery } from '@/app/lib/redux/services/userApi'
 import { chapterId } from '@/app/lib/constants/api/chapterId'
 import Picture from '@/app/components/common/Picture'
 import TooltipWrapper from '@/app/components/common/TooltipWrapper'

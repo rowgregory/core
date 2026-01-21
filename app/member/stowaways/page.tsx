@@ -7,9 +7,9 @@ import getApplicationStatusOptions from '@/app/lib/utils/application/getApplicat
 import getApplicationStatusColor from '@/app/lib/utils/application/getApplicationStatusColor'
 import getApplicationStatusIcon from '@/app/lib/utils/application/getApplicationStatusIcon'
 import EmptyState from '@/app/components/common/EmptyState'
-import { setOpenStowawayDrawer } from '@/app/redux/features/userSlice'
+import { setOpenStowawayDrawer } from '@/app/lib/redux/features/userSlice'
 import StowawayCard from '@/app/components/stowaway/StowawayCard'
-import { useUserSelector } from '@/app/redux/store'
+import { useUserSelector } from '@/app/lib/redux/store'
 import InfoBanner from '@/app/components/common/InfoBanner'
 
 const Stowaways = () => {

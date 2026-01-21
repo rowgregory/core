@@ -1,6 +1,6 @@
 'use client'
 
-import { useAppDispatch } from '@/app/redux/store'
+import { useAppDispatch } from '@/app/lib/redux/store'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'

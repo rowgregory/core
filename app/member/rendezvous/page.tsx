@@ -8,7 +8,7 @@ import getRendezvousTypeColor from '@/app/lib/utils/rendezvous/getRendezvousType
 import generateRecurringThursdayMeetings from '@/app/lib/utils/rendezvous/generateRecurringThursdayMeetings'
 import getRendezvousTypeIcon from '@/app/lib/utils/rendezvous/getRendezvousTypeIcon'
 import getRendezvousForDate from '@/app/lib/utils/rendezvous/getRendezvousForDates'
-import { useFetchRendezvousListQuery } from '@/app/redux/services/rendezvousApi'
+import { useFetchRendezvousListQuery } from '@/app/lib/redux/services/rendezvousApi'
 import { RendezvousEvent } from '@/types/rendezvous'
 import { chapterId } from '@/app/lib/constants/api/chapterId'
 import RendezvousListView from '@/app/components/rendezvous/RendezvousListView'

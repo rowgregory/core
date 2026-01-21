@@ -2,11 +2,11 @@ import { IParley } from '@/types/parley'
 import React, { FC } from 'react'
 import { motion } from 'framer-motion'
 import { AlertTriangle, CheckCircle, Edit3, XCircle } from 'lucide-react'
-import { useDeleteParleyMutation } from '@/app/redux/services/parleyApi'
+import { useDeleteParleyMutation } from '@/app/lib/redux/services/parleyApi'
 import { chapterId } from '@/app/lib/constants/api/chapterId'
-import { useAppDispatch } from '@/app/redux/store'
-import { deleteParleyFromState } from '@/app/redux/features/parleySlice'
-import { showToast } from '@/app/redux/features/toastSlice'
+import { useAppDispatch } from '@/app/lib/redux/store'
+import { deleteParleyFromState } from '@/app/lib/redux/features/parleySlice'
+import { showToast } from '@/app/lib/redux/features/toastSlice'
 
 const ConfirmedActionButtons: FC<{
   parley: IParley

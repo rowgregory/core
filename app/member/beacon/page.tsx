@@ -1,10 +1,10 @@
 'use client'
 
-import { useAppDispatch, useFormSelector, useUserSelector } from '@/app/redux/store'
+import { useAppDispatch, useFormSelector, useUserSelector } from '@/app/lib/redux/store'
 import useBeaconForm from '@/hooks/useBeaconForm'
 import BeaconHeader from '@/app/components/beacon/BeaconHeader'
 import BeaconForm from '@/app/components/forms/BeaconForm'
-import { createFormActions } from '@/app/redux/features/formSlice'
+import { createFormActions } from '@/app/lib/redux/features/formSlice'
 
 const MemberBeacon = () => {
   const dispatch = useAppDispatch()

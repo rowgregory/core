@@ -1,9 +1,9 @@
 'use client'
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Search, Users, Award } from 'lucide-react'
-import NavigatorCard from '../components/navigators/NavigatorCard'
-import { useUserSelector } from '../redux/store'
+import NavigatorCard from '@/app/components/navigators/NavigatorCard'
+import { useUserSelector } from '@/app/lib/redux/store'
 
 const Navigators = () => {
   const [searchTerm, setSearchTerm] = useState('')

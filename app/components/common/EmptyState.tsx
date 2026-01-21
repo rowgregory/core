@@ -1,8 +1,8 @@
 import { FC } from 'react'
-import { useAppDispatch } from '@/app/redux/store'
+import { useAppDispatch } from '@/app/lib/redux/store'
 import { motion } from 'framer-motion'
 import { Anchor, Flag, Layers, Sailboat, Scroll, Users } from 'lucide-react'
-import { setInputs } from '@/app/redux/features/formSlice'
+import { setInputs } from '@/app/lib/redux/features/formSlice'
 import { useSession } from 'next-auth/react'
 
 const EmptyState: FC<{

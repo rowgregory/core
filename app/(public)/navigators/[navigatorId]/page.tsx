@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useMemo, useState } from 'react'
-import { useUserSelector } from '@/app/redux/store'
+import { useUserSelector } from '@/app/lib/redux/store'
 import { useSession } from 'next-auth/react'
 import { useParams, useRouter } from 'next/navigation'
 import Lightbox from '@/app/components/navigators/Lightbox'

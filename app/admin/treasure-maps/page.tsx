@@ -8,9 +8,9 @@ import { Search, User2Icon, Users2 } from 'lucide-react'
 import getTreasureMapStatusOptions from '@/app/lib/utils/treasure-map/getTreasureMapStatusOptions'
 import getTreasureMapStatusColor from '@/app/lib/utils/treasure-map/getTreasureMapStatusColor'
 import getTreasureMapStatusIcon from '@/app/lib/utils/treasure-map/getTreasureMapStatusIcon'
-import { setOpenTreasureMapDrawer } from '@/app/redux/features/treasureMapSlice'
+import { setOpenTreasureMapDrawer } from '@/app/lib/redux/features/treasureMapSlice'
 import TreasureMapCard from '@/app/components/treasure-map/TreasureMapCard'
-import { useTreasureMapSelector } from '@/app/redux/store'
+import { useTreasureMapSelector } from '@/app/lib/redux/store'
 import InfoBanner from '@/app/components/common/InfoBanner'
 
 const AdminTreasureMaps = () => {

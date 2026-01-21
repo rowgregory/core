@@ -9,15 +9,15 @@ import MobileNavigationDrawer from '../components/drawers/MobileNavigationDrawer
 import FixedLeftNavigationPanel from '../components/admin/FixedLeftNavigationPanel'
 import FixedHeader from '../components/admin/FixedHeader'
 import { motion } from 'framer-motion'
-import { useAppDispatch, useApplicationSelector } from '../redux/store'
-import { setUsers, setUser } from '../redux/features/userSlice'
-import { setParleys } from '../redux/features/parleySlice'
-import { setTreasureMaps } from '../redux/features/treasureMapSlice'
-import { setAnchors } from '../redux/features/anchorSlice'
-import { setRendezvous } from '../redux/features/rendezvousSlice'
-import { setHydrateDashboard } from '../redux/features/dashboardSlice'
+import { useAppDispatch, useApplicationSelector } from '../lib/redux/store'
+import { setUsers, setUser } from '../lib/redux/features/userSlice'
+import { setParleys } from '../lib/redux/features/parleySlice'
+import { setTreasureMaps } from '../lib/redux/features/treasureMapSlice'
+import { setAnchors } from '../lib/redux/features/anchorSlice'
+import { setRendezvous } from '../lib/redux/features/rendezvousSlice'
+import { setHydrateDashboard } from '../lib/redux/features/dashboardSlice'
 import { ILayoutClient } from '@/types/common'
-import { setChapter } from '../redux/features/settingsSlice'
+import { setChapter } from '../lib/redux/features/settingsSlice'
 
 const AdminLayoutClient: FC<ILayoutClient> = ({ data, children }) => {
   const path = useCustomPathname()

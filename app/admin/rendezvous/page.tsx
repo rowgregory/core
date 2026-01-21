@@ -9,7 +9,7 @@ import generateRecurringThursdayMeetings from '@/app/lib/utils/rendezvous/genera
 import getRendezvousTypeIcon from '@/app/lib/utils/rendezvous/getRendezvousTypeIcon'
 import getRendezvousForDate from '@/app/lib/utils/rendezvous/getRendezvousForDates'
 import RendezvousListView from '@/app/components/rendezvous/RendezvousListView'
-import { useRendezvousSelector } from '@/app/redux/store'
+import { useRendezvousSelector } from '@/app/lib/redux/store'
 import InfoBanner from '@/app/components/common/InfoBanner'
 
 const Rendezvous = () => {

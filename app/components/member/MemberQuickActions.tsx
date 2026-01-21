@@ -1,8 +1,8 @@
-import { setOpenAnchorDrawer } from '@/app/redux/features/anchorSlice'
-import { setOpenParleyDrawer } from '@/app/redux/features/parleySlice'
-import { useAppDispatch } from '@/app/redux/store'
-import { setOpenTreasureMapDrawer } from '@/app/redux/features/treasureMapSlice'
-import { setOpenSwabbieDrawer } from '@/app/redux/features/userSlice'
+import { setOpenAnchorDrawer } from '@/app/lib/redux/features/anchorSlice'
+import { setOpenParleyDrawer } from '@/app/lib/redux/features/parleySlice'
+import { useAppDispatch } from '@/app/lib/redux/store'
+import { setOpenTreasureMapDrawer } from '@/app/lib/redux/features/treasureMapSlice'
+import { setOpenSwabbieDrawer } from '@/app/lib/redux/features/userSlice'
 import { Anchor, Layers3, Sailboat, Scroll } from 'lucide-react'
 import QuickActionButton from '@/app/components/bridge/QuickActionButton'
 

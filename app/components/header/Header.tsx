@@ -3,8 +3,8 @@ import React from 'react'
 import LaunchAppButton from '../common/LaunchAppButton'
 import useCustomPathname from '@/hooks/useCustomPathname'
 import { Menu, ShipWheel } from 'lucide-react'
-import { useAppDispatch, useSettingsSelector } from '@/app/redux/store'
-import { setOpenNavigationDrawer } from '@/app/redux/features/appSlice'
+import { useAppDispatch, useSettingsSelector } from '@/app/lib/redux/store'
+import { setOpenNavigationDrawer } from '@/app/lib/redux/features/appSlice'
 
 const Header = () => {
   const path = useCustomPathname()

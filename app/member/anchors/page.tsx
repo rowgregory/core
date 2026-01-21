@@ -9,8 +9,8 @@ import { useSession } from 'next-auth/react'
 import AnchorCard from '@/app/components/anchor/AnchorCard'
 import EmptyState from '@/app/components/common/EmptyState'
 import { Search } from 'lucide-react'
-import { setOpenAnchorDrawer } from '@/app/redux/features/anchorSlice'
-import { useAnchorSelector } from '@/app/redux/store'
+import { setOpenAnchorDrawer } from '@/app/lib/redux/features/anchorSlice'
+import { useAnchorSelector } from '@/app/lib/redux/store'
 import InfoBanner from '@/app/components/common/InfoBanner'
 
 const MemberAnchors = () => {

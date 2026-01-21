@@ -1,4 +1,4 @@
-import { Errors } from '@/app/redux/features/formSlice'
+import { Errors } from '@/app/lib/redux/features/formSlice'
 
 const isValidEmail = (email: string) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/

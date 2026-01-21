@@ -29,7 +29,7 @@ import { Textarea } from '@/app/components/ui/TextArea'
 import { IBeaconForm } from '@/types/forms'
 import TagSelector from '../common/TagSelector'
 import ObjectArraySelector from '../common/ObjectArraySelector'
-import { useAppDispatch } from '@/app/redux/store'
+import { useAppDispatch } from '@/app/lib/redux/store'
 import Collage from '../beacon/Collage'
 import SingleImageUploader from '../common/SingleImageUploader'
 

@@ -7,7 +7,7 @@ import { IParley } from '@/types/parley'
 import MemberBridgeStatsGrid from '@/app/components/member/MemberBridgeStatsGrid'
 import WeeklyActivityChart from '@/app/components/bridge/WeeklyActivityChart'
 import TooltipWrapper from '@/app/components/common/TooltipWrapper'
-import { useDashboardSelector } from '@/app/redux/store'
+import { useDashboardSelector } from '@/app/lib/redux/store'
 import MemberQuickActions from '@/app/components/member/MemberQuickActions'
 
 const MemberBridge = () => {

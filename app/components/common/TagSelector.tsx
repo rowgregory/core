@@ -1,5 +1,5 @@
-import { setInputs } from '@/app/redux/features/formSlice'
-import { useAppDispatch } from '@/app/redux/store'
+import { setInputs } from '@/app/lib/redux/features/formSlice'
+import { useAppDispatch } from '@/app/lib/redux/store'
 import { X } from 'lucide-react'
 import { FC } from 'react'
 import { motion } from 'framer-motion'

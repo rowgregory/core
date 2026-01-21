@@ -198,12 +198,6 @@ export interface GetUserResponse {
   member: UserWithChapter
 }
 
-export interface CreateUserResponse {
-  success: boolean
-  message: string
-  member: UserWithChapter
-}
-
 export interface UpdateUserResponse {
   user: { id: string; data: any }
   success: boolean
@@ -264,4 +258,28 @@ export interface UserWithMeta extends User {
     }
   }
   chapter: Chapter
+}
+
+export interface CreateUserInput {
+  chapterId: string
+  name: string
+  email: string
+  phone?: string | null
+  company?: string
+  industry?: string
+  location?: string
+  businessLicenseNumber?: string
+  isLicensed?: boolean
+  membershipStatus?: MembershipStatus
+  isAdmin?: boolean
+  hasCompletedApplication?: boolean
+  joinedAt?: string
+  expiresAt?: string
+  isAddedByAdmin?: boolean
+}
+
+export interface CreateUserResponse {
+  user: any
+  error?: string
+  fieldErrors?: any[]
 }

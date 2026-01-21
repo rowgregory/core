@@ -3,7 +3,7 @@ import ActionsButton from '../header/ActionsButton'
 import MobileMenuButton from '../header/MobileMenuButton'
 import LogoutButton from '../header/LogoutButton'
 import BeaconActions from '../beacon/BeaconActions'
-import { useApplicationSelector } from '@/app/redux/store'
+import { useApplicationSelector } from '@/app/lib/redux/store'
 import ActionDropdown from '../ActionDropdown'
 
 interface IFixedHeader {

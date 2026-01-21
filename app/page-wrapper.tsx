@@ -13,8 +13,8 @@ import GrogDrawer from './components/drawers/GrogDrawer'
 import StowawayDrawer from './components/drawers/StowawayDrawer'
 import Footer from './components/Footer'
 import NavigationDrawer from './components/NavigationDrawer'
-import { setUsers } from './redux/features/userSlice'
-import { useAppDispatch } from './redux/store'
+import { setUsers } from './lib/redux/features/userSlice'
+import { useAppDispatch } from './lib/redux/store'
 import { PageWrapperProps } from '@/types/common'
 
 const showLink = (path: string) =>

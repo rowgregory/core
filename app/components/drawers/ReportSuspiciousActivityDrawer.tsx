@@ -2,8 +2,8 @@
 
 import { useState } from 'react'
 import { X, AlertTriangle, Send } from 'lucide-react'
-import { useAppDispatch, useReportSlice } from '@/app/redux/store'
-import { setCloseReportSuspiciousActivityDrawer } from '@/app/redux/features/reportSlice'
+import { useAppDispatch, useReportSlice } from '@/app/lib/redux/store'
+import { setCloseReportSuspiciousActivityDrawer } from '@/app/lib/redux/features/reportSlice'
 
 type ReportType = 'SPAM' | 'INAPPROPRIATE' | 'FRAUD' | 'HARASSMENT' | 'OTHER'
 

@@ -1,5 +1,5 @@
-import { setInputs } from '@/app/redux/features/formSlice'
-import { useAppDispatch } from '@/app/redux/store'
+import { setInputs } from '@/app/lib/redux/features/formSlice'
+import { useAppDispatch } from '@/app/lib/redux/store'
 import { useEffect } from 'react'
 
 const useBeaconForm = (data: any) => {

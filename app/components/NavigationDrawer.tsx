@@ -4,8 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { X } from 'lucide-react'
-import { RootState, useAppDispatch, useAppSelector } from '../redux/store'
-import { setCloseNavigationDrawer } from '../redux/features/appSlice'
+import { RootState, useAppDispatch, useAppSelector } from '../lib/redux/store'
+import { setCloseNavigationDrawer } from '../lib/redux/features/appSlice'
 
 const NavigationDrawer = () => {
   const pathname = usePathname()

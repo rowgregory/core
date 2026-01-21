@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Search, Users, Plus } from 'lucide-react'
-import { useUserSelector } from '@/app/redux/store'
+import { useUserSelector } from '@/app/lib/redux/store'
 import AdminNavigatorCard from '@/app/components/admin/AdminNavigatorCard'
 import navigatorStatusOptions from '@/app/lib/utils/navigator/navigatorStatusOptions'
 import { getNavigatorStatusIcon } from '@/app/lib/utils/navigator/getNavigatorStatusIcon'

@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
-import { useAppDispatch, useApplicationSelector } from '@/app/redux/store'
+import { useAppDispatch, useApplicationSelector } from '@/app/lib/redux/store'
 import useSoundEffect from '@/hooks/useSoundEffect'
-import { setOpenActionDropdown } from '@/app/redux/features/appSlice'
+import { setOpenActionDropdown } from '@/app/lib/redux/features/appSlice'
 import { Plus, ChevronDown } from 'lucide-react'
 
 const ActionsButton = () => {

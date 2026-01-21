@@ -3,14 +3,14 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Search, Users2, User2Icon } from 'lucide-react'
-import { setOpenParleyDrawer } from '@/app/redux/features/parleySlice'
+import { setOpenParleyDrawer } from '@/app/lib/redux/features/parleySlice'
 import { useSession } from 'next-auth/react'
 import EmptyState from '@/app/components/common/EmptyState'
 import ParleyCard from '@/app/components/parley/ParleyCard'
 import statusOptions from '@/app/lib/utils/parley/getParleyStatusOptions'
 import getParleyStatusIcon from '@/app/lib/utils/parley/getParleyStatusIcon'
 import getParleyStatusColor from '@/app/lib/utils/parley/getParleyStatusColor'
-import { useParleySelector } from '@/app/redux/store'
+import { useParleySelector } from '@/app/lib/redux/store'
 import InfoBanner from '@/app/components/common/InfoBanner'
 
 const AdminParleys = () => {

@@ -1,6 +1,6 @@
 import getCurrentPageId from '@/app/lib/utils/common/getCurrentPageId'
-import { setCloseMobileNavigation } from '@/app/redux/features/appSlice'
-import { RootState, useAppDispatch, useAppSelector, useUserSelector } from '@/app/redux/store'
+import { setCloseMobileNavigation } from '@/app/lib/redux/features/appSlice'
+import { RootState, useAppDispatch, useAppSelector, useUserSelector } from '@/app/lib/redux/store'
 import useCustomPathname from '@/hooks/useCustomPathname'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Crown, Shield } from 'lucide-react'

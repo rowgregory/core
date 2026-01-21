@@ -1,5 +1,5 @@
-import { setCloseHandbookDrawer } from '@/app/redux/features/appSlice'
-import { RootState, useAppDispatch, useAppSelector } from '@/app/redux/store'
+import { setCloseHandbookDrawer } from '@/app/lib/redux/features/appSlice'
+import { RootState, useAppDispatch, useAppSelector } from '@/app/lib/redux/store'
 import { AnimatePresence, motion } from 'framer-motion'
 import React from 'react'
 

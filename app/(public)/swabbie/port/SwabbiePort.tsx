@@ -24,7 +24,7 @@ import {
 import jsPDF from 'jspdf'
 import { formatDate } from '@/app/lib/utils/date/formatDate'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useGetUserByIdQuery } from '@/app/redux/services/userApi'
+import { useGetUserByIdQuery } from '@/app/lib/redux/services/userApi'
 import { chapterId } from '@/app/lib/constants/api/chapterId'
 import Link from 'next/link'
 import ApplicationTimeline from '@/app/components/port/ApplicationTimeline'

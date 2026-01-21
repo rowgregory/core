@@ -2,7 +2,7 @@ import { User } from '@/types/user'
 import React, { FC } from 'react'
 import { motion } from 'framer-motion'
 import Picture from '../common/Picture'
-import { useUserSelector } from '@/app/redux/store'
+import { useUserSelector } from '@/app/lib/redux/store'
 import { MotionLink } from '@/app/components/common/MotionLink'
 
 const RightSidebar: FC<{ user: User | null; setSelectedIndex: any; setLightboxOpen: any }> = ({

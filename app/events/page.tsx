@@ -18,7 +18,7 @@ import {
   Sparkle
 } from 'lucide-react'
 import { formatDate } from '../lib/utils/date/formatDate'
-import { useGetGrogsQuery } from '../redux/services/grogApi'
+import { useGetGrogsQuery } from '../lib/redux/services/grogApi'
 import { GrogFormStateTyped } from '@/types/grog'
 import { chapterId } from '../lib/constants/api/chapterId'
 

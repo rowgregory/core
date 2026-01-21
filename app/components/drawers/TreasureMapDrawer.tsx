@@ -2,21 +2,21 @@
 
 import { motion, AnimatePresence } from 'framer-motion'
 import { X } from 'lucide-react'
-import { useAppDispatch, useFormSelector, useTreasureMapSelector, useUserSelector } from '@/app/redux/store'
+import { useAppDispatch, useFormSelector, useTreasureMapSelector, useUserSelector } from '@/app/lib/redux/store'
 import Backdrop from '../common/Backdrop'
 import Drawer from '../common/Drawer'
 import {
   addTreasureMapToState,
   setCloseTreasureMapDrawer,
   updateTreasureMapInState
-} from '@/app/redux/features/treasureMapSlice'
+} from '@/app/lib/redux/features/treasureMapSlice'
 import TreasureMapForm from '../forms/TreasureMapForm'
-import { createFormActions, resetForm } from '@/app/redux/features/formSlice'
-import { showToast } from '@/app/redux/features/toastSlice'
+import { createFormActions, resetForm } from '@/app/lib/redux/features/formSlice'
+import { showToast } from '@/app/lib/redux/features/toastSlice'
 import { chapterId } from '@/app/lib/constants/api/chapterId'
-import { useCreateTreasureMapMutation, useUpdateTreasureMapMutation } from '@/app/redux/services/treasureMapApi'
+import { useCreateTreasureMapMutation, useUpdateTreasureMapMutation } from '@/app/lib/redux/services/treasureMapApi'
 import validateTreasureMapForm from '../forms/validations/validateTreasureMapForm'
-import { recomputeTreasureMapCard } from '@/app/redux/features/dashboardSlice'
+import { recomputeTreasureMapCard } from '@/app/lib/redux/features/dashboardSlice'
 import { recomputeDashboardStats } from '@/app/lib/utils/common/recomputeDashboardStats'
 
 const TreasureMapDrawer = () => {

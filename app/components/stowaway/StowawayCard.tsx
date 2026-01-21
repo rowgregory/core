@@ -2,11 +2,11 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { Mail, Building2, Briefcase, User, UserCheck, X } from 'lucide-react'
 import { chapterId } from '@/app/lib/constants/api/chapterId'
-import { useUpdateUserStatusMutation } from '@/app/redux/services/userApi'
-import { useAppDispatch, useUserSelector } from '@/app/redux/store'
-import { showToast } from '@/app/redux/features/toastSlice'
-import { setOpenStowawayDrawer } from '@/app/redux/features/userSlice'
-import { setInputs } from '@/app/redux/features/formSlice'
+import { useUpdateUserStatusMutation } from '@/app/lib/redux/services/userApi'
+import { useAppDispatch, useUserSelector } from '@/app/lib/redux/store'
+import { showToast } from '@/app/lib/redux/features/toastSlice'
+import { setOpenStowawayDrawer } from '@/app/lib/redux/features/userSlice'
+import { setInputs } from '@/app/lib/redux/features/formSlice'
 
 interface StowawayCardProps {
   stowaway: {

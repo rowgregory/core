@@ -2,8 +2,8 @@ import React, { useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { Upload, X, Camera, FileImage } from 'lucide-react'
 import Picture from './Picture'
-import { setInputs } from '@/app/redux/features/formSlice'
-import { useAppDispatch } from '@/app/redux/store'
+import { setInputs } from '@/app/lib/redux/features/formSlice'
+import { useAppDispatch } from '@/app/lib/redux/store'
 
 interface SingleImageUploaderProps {
   label?: string

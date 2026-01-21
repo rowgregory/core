@@ -1,26 +1,26 @@
 'use client'
 
-import React from 'react'
+import StormEffects from '@/app/components/common/StormEffects'
+import SwabbieApplicationForm from '@/app/components/forms/SwabbieApplicationForm'
+import validateSwabbieForm from '@/app/components/forms/validations/validateSwabbieForm'
+import { createUser } from '@/app/lib/actions/createUser'
+import { createFormActions } from '@/app/lib/redux/features/formSlice'
+import { showToast } from '@/app/lib/redux/features/toastSlice'
+import { useAppDispatch, useFormSelector } from '@/app/lib/redux/store'
 import { motion } from 'framer-motion'
 import { ShipWheel } from 'lucide-react'
-import { createFormActions } from '../redux/features/formSlice'
-import { RootState, useAppDispatch, useAppSelector } from '../redux/store'
 import { useRouter } from 'next/navigation'
-import { useCreateUserMutation } from '../redux/services/userApi'
-import { chapterId } from '../lib/constants/api/chapterId'
-import { showToast } from '../redux/features/toastSlice'
-import validateSwabbieForm from '../components/forms/validations/validateSwabbieForm'
-import StormEffects from '../components/common/StormEffects'
-import SwabbieApplicationForm from '../components/forms/SwabbieApplicationForm'
+import { chapterId } from '@/app/lib/constants/api/chapterId'
+import { useState } from 'react'
 
 const Swabbie = () => {
   const dispatch = useAppDispatch()
   const { handleInput, handleToggle, setErrors } = createFormActions('swabbieForm', dispatch)
-  const { swabbieForm } = useAppSelector((state: RootState) => state.form)
+  const { swabbieForm } = useFormSelector()
   const { push } = useRouter()
-  const [createSwabbie, { isLoading }] = useCreateUserMutation() as any
   const inputs = swabbieForm?.inputs
   const errors = swabbieForm?.errors
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
@@ -28,7 +28,8 @@ const Swabbie = () => {
     if (!validateSwabbieForm(swabbieForm.inputs, setErrors)) return
 
     try {
-      const result = await createSwabbie({ chapterId, hasCompletedApplication: true, ...swabbieForm.inputs }).unwrap()
+      setIsLoading(true)
+      const result = await createUser({ chapterId, hasCompletedApplication: true, ...swabbieForm.inputs })
 
       push(`/swabbie/port?swabbieId=${result.user.id}`)
       dispatch(
@@ -46,6 +47,8 @@ const Swabbie = () => {
           description: error?.data?.message || 'Something went wrong. Please try again.'
         })
       )
+    } finally {
+      setIsLoading(false)
     }
   }
 
