@@ -49,7 +49,7 @@ const weeklyReminderTemplate = (memberName: string) => `
             </td>
             <td style="padding: 12px 0; border-bottom: 1px solid #f1f5f9;">
               <strong style="color: #0f172a; font-size: 14px;">Anchors</strong>
-              <p style="margin: 2px 0 0 0; color: #64748b; font-size: 13px;">Referrals received from other members</p>
+              <p style="margin: 2px 0 0 0; color: #64748b; font-size: 13px;">Thank you for closed business</p>
             </td>
           </tr>
           <tr>
@@ -58,7 +58,7 @@ const weeklyReminderTemplate = (memberName: string) => `
             </td>
             <td style="padding: 12px 0;">
               <strong style="color: #0f172a; font-size: 14px;">Parleys</strong>
-              <p style="margin: 2px 0 0 0; color: #64748b; font-size: 13px;">One-on-one meetings with other business owners</p>
+              <p style="margin: 2px 0 0 0; color: #64748b; font-size: 13px;">Face-2-face meetings with other members</p>
             </td>
           </tr>
         </table>
