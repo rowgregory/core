@@ -1,5 +1,5 @@
 import { sliceCron } from '@/app/lib/constants/api/sliceNames'
-import sqyshIsPresentingTomorrow from '@/app/lib/email-templates/sqysh-presenting'
+import presentingTemplate from '@/app/lib/email-templates/presenting'
 import { createLog } from '@/app/lib/utils/api/createLog'
 import { handleApiError } from '@/app/lib/utils/api/handleApiError'
 import prisma from '@/prisma/client'
@@ -40,8 +40,8 @@ async function sendPresentationReminders(req: NextRequest) {
           const result = await resend.emails.send({
             from: 'no-reply@coastal-referral-exchange.com',
             to: user.email,
-            subject: 'Tomorrow: Sqysh Presentation - Bring Your Laptops!',
-            html: sqyshIsPresentingTomorrow()
+            subject: 'Next Week: Jake - Commercial Real Estate Insights',
+            html: presentingTemplate()
           })
           return { success: true, email: user.email, result }
         } catch (error) {

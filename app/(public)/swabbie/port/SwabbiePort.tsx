@@ -21,7 +21,7 @@ import {
   ShipWheel,
   MessageSquare
 } from 'lucide-react'
-import jsPDF from 'jspdf'
+import { jsPDF } from 'jspdf'
 import { formatDate } from '@/app/lib/utils/date/formatDate'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useGetUserByIdQuery } from '@/app/lib/redux/services/userApi'

@@ -1,4 +1,4 @@
-const sqyshIsPresentingTomorrow = () => `
+const presentingTemplate = () => `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,17 +24,17 @@ const sqyshIsPresentingTomorrow = () => `
       </p>
       
       <p style="margin: 0 0 24px 0; color: #334155; font-size: 16px; line-height: 1.6;">
-        Just a friendly reminder that <strong style="color: #0f172a;">Sqysh will be presenting tomorrow</strong> at our meeting!
+        <strong style="color: #0f172a;">Jake </strong>will be presenting next week at our meeting!
       </p>
 
       <!-- Highlight Box -->
-      <div style="margin: 28px 0; padding: 20px; background: linear-gradient(135deg, #06b6d4 0%, #0ea5e9 100%); border-radius: 12px;">
+      <div style="margin: 28px 0; padding: 20px; background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); border-radius: 12px;">
         <div style="text-align: center;">
           <p style="margin: 0 0 12px 0; color: white; font-size: 18px; font-weight: 600;">
-            Bring Your Laptops!
+            Commercial Real Estate Insights
           </p>
           <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 14px; line-height: 1.6;">
-            Sqysh will be available to answer any questions you have about the app. This is a great opportunity to get hands on help with any features or issues.
+            Jake will share valuable insights on the current commercial real estate market and opportunities for referrals within our network.
           </p>
         </div>
       </div>
@@ -51,8 +51,8 @@ const sqyshIsPresentingTomorrow = () => `
               <div style="width: 8px; height: 8px; background: #10b981; border-radius: 50%; margin-top: 4px;"></div>
             </td>
             <td style="padding: 12px 0; border-bottom: 1px solid #f1f5f9;">
-              <strong style="color: #0f172a; font-size: 14px;">Your Laptop</strong>
-              <p style="margin: 2px 0 0 0; color: #64748b; font-size: 13px;">For hands on Q&A and troubleshooting</p>
+              <strong style="color: #0f172a; font-size: 14px;">Your Business Cards</strong>
+              <p style="margin: 2px 0 0 0; color: #64748b; font-size: 13px;">Perfect for networking opportunities</p>
             </td>
           </tr>
           <tr>
@@ -61,7 +61,7 @@ const sqyshIsPresentingTomorrow = () => `
             </td>
             <td style="padding: 12px 0; border-bottom: 1px solid #f1f5f9;">
               <strong style="color: #0f172a; font-size: 14px;">Your Questions</strong>
-              <p style="margin: 2px 0 0 0; color: #64748b; font-size: 13px;">Any app features you'd like to learn more about</p>
+              <p style="margin: 2px 0 0 0; color: #64748b; font-size: 13px;">About the commercial real estate market</p>
             </td>
           </tr>
           <tr>
@@ -69,8 +69,8 @@ const sqyshIsPresentingTomorrow = () => `
               <div style="width: 8px; height: 8px; background: #6366f1; border-radius: 50%; margin-top: 4px;"></div>
             </td>
             <td style="padding: 12px 0;">
-              <strong style="color: #0f172a; font-size: 14px;">Your Login Info</strong>
-              <p style="margin: 2px 0 0 0; color: #64748b; font-size: 13px;">Make sure you can access the app</p>
+              <strong style="color: #0f172a; font-size: 14px;">Referral Ideas</strong>
+              <p style="margin: 2px 0 0 0; color: #64748b; font-size: 13px;">Clients who might benefit from commercial real estate services</p>
             </td>
           </tr>
         </table>
@@ -78,7 +78,7 @@ const sqyshIsPresentingTomorrow = () => `
 
       <!-- Closing -->
       <p style="margin: 24px 0 0 0; color: #334155; font-size: 16px; line-height: 1.6;">
-        See you tomorrow morning!
+        See you next thursday!
       </p>
 
     </div>
@@ -98,4 +98,4 @@ const sqyshIsPresentingTomorrow = () => `
 </html>
 `
 
-export default sqyshIsPresentingTomorrow
+export default presentingTemplate
