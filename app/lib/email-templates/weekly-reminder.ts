@@ -27,6 +27,13 @@ const weeklyReminderTemplate = (memberName: string) => `
         This is your weekly reminder to log any recent activity. Keeping your records up to date helps you track progress and ensures your contributions are recognized.
       </p>
 
+      <!-- Presentation Reminder -->
+      <div style="margin: 0 0 24px 0; padding: 16px; background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 6px;">
+        <p style="margin: 0; color: #92400e; font-size: 15px; line-height: 1.6;">
+          <strong>Tomorrow's Meeting:</strong> Jake will be presenting during our morning session. Don't miss it!
+        </p>
+      </div>
+
       <!-- Activities List -->
       <div style="margin: 28px 0;">
         <p style="margin: 0 0 16px 0; color: #0f172a; font-size: 15px; font-weight: 600;">

@@ -12,7 +12,7 @@ const presentingTemplate = () => `
     <!-- Header -->
     <div style="padding: 32px 40px; border-bottom: 1px solid #e2e8f0;">
       <p style="margin: 0 0 4px 0; color: #64748b; font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Coastal Referral Exchange</p>
-      <h1 style="margin: 0; color: #0f172a; font-size: 24px; font-weight: 600;">Tomorrow's Presentation</h1>
+      <h1 style="margin: 0; color: #0f172a; font-size: 24px; font-weight: 600;">Next Week's Presentation</h1>
     </div>
 
     <!-- Main Content -->
