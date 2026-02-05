@@ -1,5 +1,5 @@
 import { sliceCron } from '@/app/lib/constants/api/sliceNames'
-import presentingTemplate from '@/app/lib/email-templates/presenting'
+import { bgclTemplate } from '@/app/lib/email-templates/bgcl'
 import { createLog } from '@/app/lib/utils/api/createLog'
 import { handleApiError } from '@/app/lib/utils/api/handleApiError'
 import prisma from '@/prisma/client'
@@ -41,7 +41,7 @@ async function sendPresentationReminders(req: NextRequest) {
             from: 'Coastal Referral Exchange <noreply@coastal-referral-exchange.com>',
             to: user.email,
             subject: 'Weekly Reminder: Support Boys and Girls Club of Lynn',
-            html: presentingTemplate()
+            html: bgclTemplate()
           })
           return { success: true, email: user.email, result }
         } catch (error) {
