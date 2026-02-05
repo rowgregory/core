@@ -38,9 +38,9 @@ async function sendPresentationReminders(req: NextRequest) {
       const batchPromises = batch.map(async (user) => {
         try {
           const result = await resend.emails.send({
-            from: 'no-reply@coastal-referral-exchange.com',
+            from: 'Coastal Referral Exchange <noreply@coastal-referral-exchange.com>',
             to: user.email,
-            subject: 'Next Week: Jake - Commercial Real Estate Insights',
+            subject: 'Next Week: Kerry from Cross Country Mortgage - Financing Solutions',
             html: presentingTemplate()
           })
           return { success: true, email: user.email, result }

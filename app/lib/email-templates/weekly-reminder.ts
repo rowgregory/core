@@ -30,7 +30,7 @@ const weeklyReminderTemplate = (memberName: string) => `
       <!-- Presentation Reminder -->
       <div style="margin: 0 0 24px 0; padding: 16px; background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 6px;">
         <p style="margin: 0; color: #92400e; font-size: 15px; line-height: 1.6;">
-          <strong>Tomorrow's Meeting:</strong> Jake will be presenting during our morning session. Don't miss it!
+          <strong>Tomorrow's Meeting:</strong> Kerry will be presenting during our morning session. Don't miss it!
         </p>
       </div>
 

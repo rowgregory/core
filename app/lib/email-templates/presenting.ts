@@ -4,7 +4,7 @@ const presentingTemplate = () => `
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Presentation Tomorrow - Coastal Referral Exchange</title>
+  <title>Presentation Next Week - Coastal Referral Exchange</title>
 </head>
 <body style="margin: 0; padding: 40px 20px; background-color: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
   <div style="max-width: 520px; margin: 0 auto; background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden;">
@@ -24,17 +24,17 @@ const presentingTemplate = () => `
       </p>
       
       <p style="margin: 0 0 24px 0; color: #334155; font-size: 16px; line-height: 1.6;">
-        <strong style="color: #0f172a;">Jake </strong>will be presenting next week at our meeting!
+        <strong style="color: #0f172a;">Kerry from Cross Country Mortgage</strong> will be presenting next week at our meeting!
       </p>
 
       <!-- Highlight Box -->
       <div style="margin: 28px 0; padding: 20px; background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); border-radius: 12px;">
         <div style="text-align: center;">
           <p style="margin: 0 0 12px 0; color: white; font-size: 18px; font-weight: 600;">
-            Commercial Real Estate Insights
+            Mortgage & Financing Solutions
           </p>
           <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 14px; line-height: 1.6;">
-            Jake will share valuable insights on the current commercial real estate market and opportunities for referrals within our network.
+            Kerry will share insights on current mortgage rates, financing options, and how to best support your clients through the home buying and refinancing process.
           </p>
         </div>
       </div>
@@ -61,7 +61,7 @@ const presentingTemplate = () => `
             </td>
             <td style="padding: 12px 0; border-bottom: 1px solid #f1f5f9;">
               <strong style="color: #0f172a; font-size: 14px;">Your Questions</strong>
-              <p style="margin: 2px 0 0 0; color: #64748b; font-size: 13px;">About the commercial real estate market</p>
+              <p style="margin: 2px 0 0 0; color: #64748b; font-size: 13px;">About mortgage products and financing strategies</p>
             </td>
           </tr>
           <tr>
@@ -70,7 +70,7 @@ const presentingTemplate = () => `
             </td>
             <td style="padding: 12px 0;">
               <strong style="color: #0f172a; font-size: 14px;">Referral Ideas</strong>
-              <p style="margin: 2px 0 0 0; color: #64748b; font-size: 13px;">Clients who might benefit from commercial real estate services</p>
+              <p style="margin: 2px 0 0 0; color: #64748b; font-size: 13px;">Clients who are buying, refinancing, or exploring home financing options</p>
             </td>
           </tr>
         </table>
@@ -78,7 +78,7 @@ const presentingTemplate = () => `
 
       <!-- Closing -->
       <p style="margin: 24px 0 0 0; color: #334155; font-size: 16px; line-height: 1.6;">
-        See you next thursday!
+        See you next Thursday!
       </p>
 
     </div>
