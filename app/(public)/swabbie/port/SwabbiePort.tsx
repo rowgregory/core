@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Clock,
@@ -30,180 +30,6 @@ import Link from 'next/link'
 import ApplicationTimeline from '@/app/components/port/ApplicationTimeline'
 import StormWatchSupport from '@/app/components/port/StormWatchSupport'
 import QuartermasterDialogueModal from '@/app/components/modals/QuartermasterDialogueModal'
-
-// const PeriscopeModal = ({ isOpen, onClose }: any) => {
-//   const [periscopePosition, setPeriscopePosition] = useState({ x: 50, y: 50 })
-//   const [foundQuartermaster, setFoundQuartermaster] = useState(false)
-//   const [showContactForm, setShowContactForm] = useState(false)
-
-//   const handlePeriscopeMove = (e: any) => {
-//     const rect = e.currentTarget.getBoundingClientRect()
-//     const x = ((e.clientX - rect.left) / rect.width) * 100
-//     const y = ((e.clientY - rect.top) / rect.height) * 100
-//     setPeriscopePosition({ x, y })
-
-//     // Quartermaster is found in the bottom-right area
-//     if (x > 70 && x < 85 && y > 60 && y < 80) {
-//       if (!foundQuartermaster) {
-//         setFoundQuartermaster(true)
-//         setTimeout(() => setShowContactForm(true), 1000)
-//       }
-//     }
-//   }
-
-//   const resetPeriscope = () => {
-//     setFoundQuartermaster(false)
-//     setShowContactForm(false)
-//     setPeriscopePosition({ x: 50, y: 50 })
-//   }
-
-//   return (
-//     <AnimatePresence>
-//       {isOpen && (
-//         <motion.div
-//           initial={{ opacity: 0 }}
-//           animate={{ opacity: 1 }}
-//           exit={{ opacity: 0 }}
-//           className="fixed inset-0 bg-black z-50"
-//         >
-//           {/* Close button */}
-//           <button
-//             onClick={onClose}
-//             className="absolute top-4 right-4 z-60 text-white hover:text-amber-400 transition-colors"
-//           >
-//             <X className="h-8 w-8" />
-//           </button>
-
-//           {!showContactForm ? (
-//             <>
-//               {/* Periscope View */}
-//               <div
-//                 className="w-full h-full relative cursor-crosshair overflow-hidden"
-//                 onMouseMove={handlePeriscopeMove}
-//               >
-//                 {/* Ship deck background */}
-//                 <div
-//                   className="absolute inset-0 transition-transform duration-100 ease-out"
-//                   style={{
-//                     backgroundImage: `
-//                       radial-gradient(circle at 30% 20%, #8B4513 0%, #654321 50%, transparent 70%),
-//                       radial-gradient(circle at 80% 70%, #4A4A4A 0%, #2A2A2A 40%, transparent 60%),
-//                       linear-gradient(to bottom, #1a1a2e 0%, #16213e 50%, #0f3460 100%)
-//                     `,
-//                     transform: `translate(${-(periscopePosition.x - 50) * 0.5}px, ${-(periscopePosition.y - 50) * 0.3}px) scale(1.2)`
-//                   }}
-//                 >
-//                   {/* Ship elements */}
-//                   <div className="absolute bottom-20 left-10 w-16 h-32 bg-amber-800 opacity-60" />
-//                   <div className="absolute top-32 right-20 w-12 h-20 bg-gray-600 opacity-70" />
-
-//                   {/* Quartermaster figure (target area) */}
-//                   <motion.div
-//                     className="absolute"
-//                     style={{ left: '77%', top: '70%' }}
-//                     animate={foundQuartermaster ? { scale: [1, 1.2, 1] } : {}}
-//                     transition={{ duration: 0.5 }}
-//                   >
-//                     <div className="w-8 h-12 bg-amber-600 rounded opacity-80" />
-//                     <div className="w-12 h-8 bg-blue-800 rounded mt-1 opacity-80" />
-//                   </motion.div>
-//                 </div>
-
-//                 {/* Periscope overlay */}
-//                 <div className="absolute inset-0 pointer-events-none">
-//                   <svg className="w-full h-full">
-//                     <defs>
-//                       <radialGradient id="periscopeGradient" cx="50%" cy="50%" r="50%">
-//                         <stop offset="0%" stopColor="transparent" />
-//                         <stop offset="70%" stopColor="transparent" />
-//                         <stop offset="100%" stopColor="black" />
-//                       </radialGradient>
-//                     </defs>
-//                     <rect width="100%" height="100%" fill="url(#periscopeGradient)" />
-//                   </svg>
-
-//                   {/* Crosshairs */}
-//                   <div
-//                     className="absolute transform -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-//                     style={{ left: `${periscopePosition.x}%`, top: `${periscopePosition.y}%` }}
-//                   >
-//                     <Target className="h-8 w-8 text-amber-400 opacity-80" />
-//                   </div>
-//                 </div>
-
-//                 {/* Instructions */}
-//                 <div className="absolute top-4 left-4 text-amber-400 font-mono">
-//                   <p>🔍 PERISCOPE VIEW ACTIVE</p>
-//                   <p className="text-sm mt-2">Scan the ship to locate the Quartermaster</p>
-//                   {foundQuartermaster && (
-//                     <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-green-400 mt-2">
-//                       ✓ QUARTERMASTER LOCATED - Establishing communication...
-//                     </motion.p>
-//                   )}
-//                 </div>
-//               </div>
-//             </>
-//           ) : (
-//             /* Contact Form */
-//             <motion.div
-//               initial={{ scale: 0.8, opacity: 0 }}
-//               animate={{ scale: 1, opacity: 1 }}
-//               className="flex items-center justify-center h-full p-4"
-//             >
-//               <div className="bg-slate-900 rounded-2xl border border-amber-500/30 p-8 max-w-md w-full">
-//                 <div className="text-center mb-6">
-//                   <div className="text-amber-400 text-4xl mb-2">📡</div>
-//                   <h2 className="text-2xl font-bold text-white mb-2">Communication Established</h2>
-//                   <p className="text-slate-300 text-sm">Direct line to Quartermaster&apos;s quarters secured</p>
-//                 </div>
-
-//                 <form className="space-y-4">
-//                   <input
-//                     type="text"
-//                     placeholder="Swabbie identification"
-//                     className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500"
-//                   />
-//                   <input
-//                     type="email"
-//                     placeholder="Signal frequency (email)"
-//                     className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500"
-//                   />
-//                   <select className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-amber-500">
-//                     <option>Message priority level</option>
-//                     <option>Routine inquiry</option>
-//                     <option>Urgent assistance</option>
-//                     <option>Emergency support</option>
-//                   </select>
-//                   <textarea
-//                     rows={4}
-//                     placeholder="Transmit your message..."
-//                     className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500 resize-none"
-//                   />
-
-//                   <div className="flex gap-3">
-//                     <button
-//                       type="button"
-//                       onClick={resetPeriscope}
-//                       className="flex-1 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-xl transition-colors"
-//                     >
-//                       Reset Periscope
-//                     </button>
-//                     <button
-//                       type="submit"
-//                       className="flex-1 py-3 bg-amber-600 hover:bg-amber-500 text-white rounded-xl transition-colors"
-//                     >
-//                       Send Signal
-//                     </button>
-//                   </div>
-//                 </form>
-//               </div>
-//             </motion.div>
-//           )}
-//         </motion.div>
-//       )}
-//     </AnimatePresence>
-//   )
-// }
 
 const generateHandbookPDF = () => {
   const doc = new jsPDF()
@@ -278,7 +104,7 @@ const SwabbiePort = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden flex justify-center py-10">
+      <div className="min-h-screen bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden flex justify-center py-10">
         <div className="w-8 h-8 rounded-full border-2 border-cyan-500 border-t-0 animate-spin" />
       </div>
     )
@@ -287,7 +113,7 @@ const SwabbiePort = () => {
   return (
     <>
       <QuartermasterDialogueModal user={data?.user} onClose={onClose} open={open} />
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden pb-20">
+      <div className="min-h-screen bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden pb-20">
         <Link
           href="/"
           className="bg-linear-to-r from-cyan-400 via-blue-400 to-teal-400 bg-clip-text text-transparent uppercase text-2xl font-bold cursor-pointer hover:bg-linear-to-r hover:from-teal-400 hover:via-blue-400 hover:to-cyan-400 flex items-center absolute left-4 lg:left-6 top-2"
@@ -592,8 +418,10 @@ const SwabbiePort = () => {
                             <step.icon className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-white" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <h4 className="font-medium text-white text-sm sm:text-base break-words">{step.title}</h4>
-                            <p className="text-xs sm:text-sm text-slate-300 mt-1 break-words leading-tight">
+                            <h4 className="font-medium text-white text-sm sm:text-base wrap-break-word">
+                              {step.title}
+                            </h4>
+                            <p className="text-xs sm:text-sm text-slate-300 mt-1 wrap-break-word leading-tight">
                               {step.description}
                             </p>
                           </div>

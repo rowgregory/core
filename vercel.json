@@ -7,6 +7,10 @@
     {
       "path": "/api/cron/presentation",
       "schedule": "0 17 * * 4"
+    },
+    {
+      "path": "/api/cron/bgcl",
+      "schedule": "0 21 * * 4"
     }
   ]
 }
