@@ -40,7 +40,7 @@ async function sendPresentationReminders(req: NextRequest) {
           const result = await resend.emails.send({
             from: 'Coastal Referral Exchange <noreply@coastal-referral-exchange.com>',
             to: user.email,
-            subject: 'Next Week: Kerry from Cross Country Mortgage - Financing Solutions',
+            subject: 'Off Next Week!',
             html: presentingTemplate()
           })
           return { success: true, email: user.email, result }
