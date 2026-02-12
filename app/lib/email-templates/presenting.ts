@@ -4,7 +4,7 @@ const presentingTemplate = () => `
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Presentation Next Week - Coastal Referral Exchange</title>
+  <title>Meeting Update - Coastal Referral Exchange</title>
 </head>
 <body style="margin: 0; padding: 40px 20px; background-color: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
   <div style="max-width: 520px; margin: 0 auto; background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden;">
@@ -12,7 +12,7 @@ const presentingTemplate = () => `
     <!-- Header -->
     <div style="padding: 32px 40px; border-bottom: 1px solid #e2e8f0;">
       <p style="margin: 0 0 4px 0; color: #64748b; font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Coastal Referral Exchange</p>
-      <h1 style="margin: 0; color: #0f172a; font-size: 24px; font-weight: 600;">Next Week's Presentation</h1>
+      <h1 style="margin: 0; color: #0f172a; font-size: 24px; font-weight: 600;">Meeting Update</h1>
     </div>
 
     <!-- Main Content -->
@@ -22,63 +22,21 @@ const presentingTemplate = () => `
       <p style="margin: 0 0 24px 0; color: #334155; font-size: 16px; line-height: 1.6;">
         Hello CORE,
       </p>
-      
-      <p style="margin: 0 0 24px 0; color: #334155; font-size: 16px; line-height: 1.6;">
-        <strong style="color: #0f172a;">Kerry from Cross Country Mortgage</strong> will be presenting next week at our meeting!
-      </p>
-
-      <!-- Highlight Box -->
-      <div style="margin: 28px 0; padding: 20px; background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); border-radius: 12px;">
+      <!-- No Meeting Notice -->
+      <div style="margin: 28px 0; padding: 20px; background: linear-gradient(135deg, #0e7490 0%, #0284c7 100%); border-radius: 12px;">
         <div style="text-align: center;">
-          <p style="margin: 0 0 12px 0; color: white; font-size: 18px; font-weight: 600;">
-            Mortgage & Financing Solutions
+          <p style="margin: 0 0 8px 0; color: #ffffff; font-size: 18px; font-weight: 600;">
+            No Meeting Next Week
           </p>
-          <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 14px; line-height: 1.6;">
-            Kerry will share insights on current mortgage rates, financing options, and how to best support your clients through the home buying and refinancing process.
+          <p style="margin: 0; color: #a5f3fc; font-size: 14px; line-height: 1.6;">
+            We're taking next week off. We'll see everyone the following week!
           </p>
         </div>
       </div>
 
-      <!-- What to Bring -->
-      <div style="margin: 28px 0;">
-        <p style="margin: 0 0 16px 0; color: #0f172a; font-size: 15px; font-weight: 600;">
-          What to bring:
-        </p>
-        
-        <table style="width: 100%; border-collapse: collapse;">
-          <tr>
-            <td style="padding: 12px 0; border-bottom: 1px solid #f1f5f9; vertical-align: top; width: 24px;">
-              <div style="width: 8px; height: 8px; background: #10b981; border-radius: 50%; margin-top: 4px;"></div>
-            </td>
-            <td style="padding: 12px 0; border-bottom: 1px solid #f1f5f9;">
-              <strong style="color: #0f172a; font-size: 14px;">Your Business Cards</strong>
-              <p style="margin: 2px 0 0 0; color: #64748b; font-size: 13px;">Perfect for networking opportunities</p>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding: 12px 0; border-bottom: 1px solid #f1f5f9; vertical-align: top; width: 24px;">
-              <div style="width: 8px; height: 8px; background: #f59e0b; border-radius: 50%; margin-top: 4px;"></div>
-            </td>
-            <td style="padding: 12px 0; border-bottom: 1px solid #f1f5f9;">
-              <strong style="color: #0f172a; font-size: 14px;">Your Questions</strong>
-              <p style="margin: 2px 0 0 0; color: #64748b; font-size: 13px;">About mortgage products and financing strategies</p>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding: 12px 0; vertical-align: top; width: 24px;">
-              <div style="width: 8px; height: 8px; background: #6366f1; border-radius: 50%; margin-top: 4px;"></div>
-            </td>
-            <td style="padding: 12px 0;">
-              <strong style="color: #0f172a; font-size: 14px;">Referral Ideas</strong>
-              <p style="margin: 2px 0 0 0; color: #64748b; font-size: 13px;">Clients who are buying, refinancing, or exploring home financing options</p>
-            </td>
-          </tr>
-        </table>
-      </div>
-
       <!-- Closing -->
       <p style="margin: 24px 0 0 0; color: #334155; font-size: 16px; line-height: 1.6;">
-        See you next Thursday!
+        Enjoy the week off and we'll see you soon!
       </p>
 
     </div>

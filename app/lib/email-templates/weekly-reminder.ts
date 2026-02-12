@@ -27,10 +27,17 @@ const weeklyReminderTemplate = (memberName: string) => `
         This is your weekly reminder to log any recent activity. Keeping your records up to date helps you track progress and ensures your contributions are recognized.
       </p>
 
-      <!-- Presentation Reminder -->
+      <!-- No Meeting Notice -->
       <div style="margin: 0 0 24px 0; padding: 16px; background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 6px;">
         <p style="margin: 0; color: #92400e; font-size: 15px; line-height: 1.6;">
-          <strong>Tomorrow's Meeting:</strong> Kerry will be presenting during our morning session. Don't miss it!
+          <strong>No Meeting This Week!</strong> We're taking this week off. See you the following week!
+        </p>
+      </div>
+
+      <!-- Upcoming Presentation Notice -->
+      <div style="margin: 0 0 24px 0; padding: 16px; background: #f0fdfa; border-left: 4px solid #0e7490; border-radius: 6px;">
+        <p style="margin: 0; color: #164e63; font-size: 15px; line-height: 1.6;">
+          <strong>Coming Up:</strong> Martin Connolly from Live Well Capital will be presenting at our next meeting. Don't miss it!
         </p>
       </div>
 
@@ -91,7 +98,7 @@ const weeklyReminderTemplate = (memberName: string) => `
         This reminder is sent weekly to help you stay on track.
       </p>
       <p style="margin: 0; color: #94a3b8; font-size: 11px;">
-        © 2025 Coastal Referral Exchange
+        © 2026 Coastal Referral Exchange
       </p>
     </div>
 
