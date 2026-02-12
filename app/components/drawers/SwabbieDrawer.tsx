@@ -3,16 +3,20 @@ import { X } from 'lucide-react'
 import { useAppDispatch, useFormSelector, useUserSelector } from '@/app/lib/redux/store'
 import Backdrop from '../common/Backdrop'
 import Drawer from '../common/Drawer'
-import { addUserToState, setCloseSwabbieDrawer, updateUserInState } from '@/app/lib/redux/features/userSlice'
+import { setCloseSwabbieDrawer } from '@/app/lib/redux/features/userSlice'
 import SwabbieForm from '../forms/SwabbieForm'
-import { createFormActions } from '@/app/lib/redux/features/formSlice'
+import { createFormActions, resetForm } from '@/app/lib/redux/features/formSlice'
 import { showToast } from '@/app/lib/redux/features/toastSlice'
 import { useSession } from 'next-auth/react'
 import { chapterId } from '@/app/lib/constants/api/chapterId'
-import { useCreateUserMutation, useUpdateUserMutation } from '@/app/lib/redux/services/userApi'
 import validateSwabbieForm from '../forms/validations/validateSwabbieForm'
+import { useState } from 'react'
+import { updateUser } from '@/app/lib/actions/updateUser'
+import { createUser } from '@/app/lib/actions/createUser'
+import { useRouter } from 'next/navigation'
 
 const SwabbieDrawer = () => {
+  const router = useRouter()
   const session = useSession()
   const dispatch = useAppDispatch()
   const onClose = () => dispatch(setCloseSwabbieDrawer())
@@ -20,11 +24,10 @@ const SwabbieDrawer = () => {
   const inputs = swabbieForm?.inputs
   const errors = swabbieForm?.errors
   const { handleInput, setErrors, handleToggle } = createFormActions('swabbieForm', dispatch)
-  const [createSwabbie, { isLoading: isCreating }] = useCreateUserMutation()
-  const [updateSwabbie, { isLoading: isUpdating }] = useUpdateUserMutation()
-  const isLoading = isCreating || isUpdating
+  const [isLoading, setIsLoading] = useState(false)
   const user = session?.data?.user
   const { swabbieDrawer } = useUserSelector()
+  const isUpdating = inputs?.isUpdating
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
@@ -32,6 +35,7 @@ const SwabbieDrawer = () => {
     if (!validateSwabbieForm(swabbieForm?.inputs, setErrors)) return
 
     try {
+      setIsLoading(true)
       const swabbieData = {
         ...swabbieForm?.inputs,
         chapterId,
@@ -42,13 +46,14 @@ const SwabbieDrawer = () => {
       }
 
       if (inputs?.isUpdating) {
-        const updated = await updateSwabbie({ swabbieId: inputs?.id, ...swabbieData }).unwrap()
-        dispatch(updateUserInState({ id: inputs.id, data: updated?.user }))
+        await updateUser(inputs?.id, swabbieData)
       } else {
-        const created = await createSwabbie({ ...swabbieData }).unwrap()
-        dispatch(addUserToState(created?.user))
+        await createUser(swabbieData)
       }
 
+      router.refresh()
+
+      dispatch(resetForm('swabbieForm'))
       onClose()
 
       dispatch(
@@ -66,6 +71,8 @@ const SwabbieDrawer = () => {
           description: error.data.message || 'Unable to process request.'
         })
       )
+    } finally {
+      setIsLoading(false)
     }
   }
 

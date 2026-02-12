@@ -1,19 +1,14 @@
 'use client'
 
-import React, { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Save, Edit2, X, Settings2, MapPin, Calendar, Clock, CheckCircle, Sliders } from 'lucide-react'
+import { Edit2, X, Settings2, MapPin, Calendar, Clock, CheckCircle, Sliders } from 'lucide-react'
 import { createFormActions, resetForm, setInputs } from '@/app/lib/redux/features/formSlice'
 import { useAppDispatch, useFormSelector, useSettingsSelector } from '@/app/lib/redux/store'
-import { showToast } from '@/app/lib/redux/features/toastSlice'
-import { useUpdateChapterSettingsMutation } from '@/app/lib/redux/services/settingsApi'
 import { Input } from '@/app/components/ui/Input'
 import { Select } from '@/app/components/ui/Select'
-import { validateChapterSettingsForm } from '@/app/lib/utils/validations/validateChapterSettingsForm'
 import { MEETING_FREQUENCIES } from '@/app/lib/constants/settings/meetingFrequencies'
 import { MEETING_DAYS } from '@/app/lib/constants/settings/meetingDay'
-import { chapterId } from '@/app/lib/constants/api/chapterId'
-import { setChapter } from '@/app/lib/redux/features/settingsSlice'
 import { normalizeTimeFormat } from '@/app/lib/utils/time/normalizeTimeFormat'
 
 const Rigging: FC = () => {
@@ -21,7 +16,6 @@ const Rigging: FC = () => {
   const { settingsForm } = useFormSelector()
   const { settings } = useSettingsSelector()
   const { handleInput, setErrors } = createFormActions('settingsForm', dispatch)
-  const [updateChapterSettings, { isLoading }] = useUpdateChapterSettingsMutation()
   const [isEditing, setIsEditing] = useState(false)
   const inputs = settingsForm?.inputs
 
@@ -42,33 +36,32 @@ const Rigging: FC = () => {
     }
   }, [dispatch, settings])
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault()
 
-    try {
-      if (!validateChapterSettingsForm(inputs, setErrors)) return
+  //   try {
+  //     if (!validateChapterSettingsForm(inputs, setErrors)) return
 
-      const response = await updateChapterSettings({ chapterId, settings: inputs }).unwrap()
-      dispatch(setChapter(response.chapter))
-      dispatch(
-        showToast({
-          type: 'success',
-          message: 'Chapter Settings Updated',
-          description: 'Your chapter settings have been successfully updated.'
-        })
-      )
+  //     const response = await updateChapterSettings({ chapterId, settings: inputs }).unwrap()
+  //     dispatch(
+  //       showToast({
+  //         type: 'success',
+  //         message: 'Chapter Settings Updated',
+  //         description: 'Your chapter settings have been successfully updated.'
+  //       })
+  //     )
 
-      setIsEditing(false)
-    } catch (error: any) {
-      dispatch(
-        showToast({
-          type: 'error',
-          message: 'Update Failed',
-          description: error.data.message || 'Unable to update chapter settings'
-        })
-      )
-    }
-  }
+  //     setIsEditing(false)
+  //   } catch (error: any) {
+  //     dispatch(
+  //       showToast({
+  //         type: 'error',
+  //         message: 'Update Failed',
+  //         description: error.data.message || 'Unable to update chapter settings'
+  //       })
+  //     )
+  //   }
+  // }
 
   const handleCancel = () => {
     setIsEditing(false)
@@ -107,7 +100,7 @@ const Rigging: FC = () => {
                 </motion.button>
               ) : (
                 <div className="flex space-x-3">
-                  <motion.button
+                  {/* <motion.button
                     onClick={handleSubmit}
                     disabled={isLoading}
                     className=" flex items-center space-x-2  bg-cyan-600 hover:bg-cyan-700  text-white font-medium  px-4 py-2.5 rounded-lg text-sm disabled:opacity-50 disabled:cursor-not-allowed  transition-all duration-200"
@@ -116,7 +109,7 @@ const Rigging: FC = () => {
                   >
                     <Save className="w-4 h-4" />
                     <span>{isLoading ? 'Saving...' : 'Save Changes'}</span>
-                  </motion.button>
+                  </motion.button> */}
                   <motion.button
                     onClick={handleCancel}
                     className="flex items-center space-x-2 bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200"

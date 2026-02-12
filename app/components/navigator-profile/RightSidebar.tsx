@@ -5,12 +5,12 @@ import Picture from '../common/Picture'
 import { useUserSelector } from '@/app/lib/redux/store'
 import { MotionLink } from '@/app/components/common/MotionLink'
 
-const RightSidebar: FC<{ user: User | null; setSelectedIndex: any; setLightboxOpen: any }> = ({
+const RightSidebar: FC<{ user: User | null; setSelectedIndex: any; setLightboxOpen: any; users: any }> = ({
   user,
   setSelectedIndex,
-  setLightboxOpen
+  setLightboxOpen,
+  users
 }) => {
-  const { users } = useUserSelector()
   const openLightbox = (index: number) => {
     setSelectedIndex(index)
     setLightboxOpen(true)

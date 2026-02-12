@@ -18,11 +18,11 @@ import {
   XCircle
 } from 'lucide-react'
 import { formatDate } from '@/app/lib/utils/date/formatDate'
-import { useUpdateUserStatusMutation } from '@/app/lib/redux/services/userApi'
-import { chapterId } from '@/app/lib/constants/api/chapterId'
-import { useAppDispatch, useUserSelector } from '@/app/lib/redux/store'
+import { useAppDispatch } from '@/app/lib/redux/store'
 import useSoundEffect from '@/hooks/useSoundEffect'
 import { showToast } from '@/app/lib/redux/features/toastSlice'
+import { updateUserStatus } from '@/app/lib/actions/updateUserStatus'
+import { useRouter } from 'next/navigation'
 
 const statusColors: any = {
   PENDING: 'bg-amber-900/30 text-amber-300 border-amber-600/50',
@@ -41,38 +41,42 @@ export const statusIcons: any = {
 }
 
 const SwabbieCard: FC<{ swabbie: any; index: number }> = ({ swabbie, index }) => {
+  const router = useRouter()
   const StatusIcon: any = statusIcons[swabbie.membershipStatus]
-  const [updateSwabbie, { isLoading }] = useUpdateUserStatusMutation()
   const [currentStatus, setCurrentStatus] = useState('')
-  const { user } = useUserSelector()
   const { play: playDroplet } = useSoundEffect('/sound-effects/droplet.mp3', true)
   const { play: playPortal } = useSoundEffect('/sound-effects/portal.mp3', true)
   const dispatch = useAppDispatch()
+  const [isLoading, setIsLoading] = useState(false)
 
   if (!StatusIcon) {
     return null
   }
 
-  const handleStatusUpdate = async (newStatus: string) => {
+  const handleStatusUpdate = async (newStatus) => {
     setCurrentStatus(newStatus)
 
     try {
-      await updateSwabbie({ chapterId, userId: user?.id, swabbieId: swabbie.id, membershipStatus: newStatus }).unwrap()
+      setIsLoading(true)
+      await updateUserStatus(swabbie.id, newStatus)
+
+      router.refresh()
 
       if (newStatus === 'ACTIVE') {
         playPortal()
       } else {
         playDroplet()
       }
-    } catch (error: any) {
+    } catch (error) {
       dispatch(
         showToast({
           type: 'error',
           message: 'Failed to update swabbie status.',
-          description: error?.data?.message,
-          duration: 10000
+          description: error?.data?.message
         })
       )
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -580,35 +584,6 @@ const SwabbieCard: FC<{ swabbie: any; index: number }> = ({ swabbie, index }) =>
           </div>
         )}
       </div>
-
-      {/* Signals Log */}
-      {user?.signals && user.signals.length > 0 && (
-        <div className="mb-5">
-          <div className="flex items-center space-x-2 mb-3">
-            <div className="h-2 w-2 rounded-full bg-amber-400" />
-            <span className="text-xs text-gray-300 font-medium">
-              Signal Log ({user.signals.length} message{user.signals.length !== 1 ? 's' : ''})
-            </span>
-          </div>
-
-          <div className="space-y-2 max-h-32 overflow-y-auto">
-            {user.signals.map((signal: { createdAt: string; message: string; chapterId: string }, index: number) => (
-              <div key={index} className="bg-slate-800/30 rounded-lg p-3 border border-slate-600/20">
-                <div className="flex items-start justify-between mb-1">
-                  <span className="text-xs text-amber-300 font-medium">To Quartermaster</span>
-                  <span className="text-xs text-slate-400">{new Date(signal.createdAt).toLocaleDateString()}</span>
-                </div>
-
-                <p className="text-xs text-slate-300 wrap-break-word">{signal.message}</p>
-
-                {signal.chapterId && (
-                  <div className="text-xs text-slate-500 mt-1">Chapter: {signal.chapterId.slice(-8)}</div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </motion.div>
   )
 }

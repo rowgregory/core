@@ -57,11 +57,11 @@ export const memberNavLinks = (isMembership: boolean) => [
     linkKey: '/member/rendezvous'
   },
   {
-    id: 'swabbies',
-    label: 'Swabbies',
-    icon: Sailboat,
-    description: 'The Port',
-    linkKey: '/member/swabbies'
+    id: 'applications',
+    label: 'Applications',
+    icon: ClipboardList,
+    description: 'Visitor Requests',
+    linkKey: '/member/applications'
   },
   {
     id: 'beacon',
@@ -94,12 +94,12 @@ export const memberNavLinks = (isMembership: boolean) => [
     icon: GitBranch,
     description: 'Track updates, improvements, and new features — your complete history of platform evolution.',
     linkKey: '/member/changelog'
-  },
-  {
-    id: 'hidden-cove',
-    label: 'Hidden Cove',
-    icon: HiddenCoveSVG,
-    description: 'Special tools, features, and perks waiting to be discovered',
-    linkKey: '/member/hidden-cove'
   }
+  // {
+  //   id: 'hidden-cove',
+  //   label: 'Hidden Cove',
+  //   icon: HiddenCoveSVG,
+  //   description: 'Special tools, features, and perks waiting to be discovered',
+  //   linkKey: '/member/hidden-cove'
+  // }
 ]

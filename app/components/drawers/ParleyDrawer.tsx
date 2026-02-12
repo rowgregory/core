@@ -1,20 +1,22 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { X } from 'lucide-react'
-import { addParleyToState, setCloseParleyDrawer, updateParleyInState } from '@/app/lib/redux/features/parleySlice'
-import { useAppDispatch, useFormSelector, useParleySelector, useUserSelector } from '@/app/lib/redux/store'
+import { setCloseParleyDrawer } from '@/app/lib/redux/features/parleySlice'
+import { useAppDispatch, useFormSelector, useParleySelector } from '@/app/lib/redux/store'
 import Backdrop from '../common/Backdrop'
 import { createFormActions, resetForm } from '@/app/lib/redux/features/formSlice'
 import Drawer from '../common/Drawer'
-import { useCreateParleyMutation, useUpdateParleyMutation } from '@/app/lib/redux/services/parleyApi'
 import { showToast } from '@/app/lib/redux/features/toastSlice'
 import validateParleyForm from '../forms/validations/validateParleyForm'
 import { chapterId } from '@/app/lib/constants/api/chapterId'
 import ParleyForm from '../forms/ParleyForm'
-import { useRef } from 'react'
-import { recomputeParleyCard } from '@/app/lib/redux/features/dashboardSlice'
-import { recomputeDashboardStats } from '@/app/lib/utils/common/recomputeDashboardStats'
+import { useRef, useState } from 'react'
+import { useSession } from 'next-auth/react'
+import { updateParley } from '@/app/lib/actions/updateParley'
+import { createParley } from '@/app/lib/actions/createParley'
+import { useRouter } from 'next/navigation'
 
-const ParleyDrawer = () => {
+const ParleyDrawer = ({ users }) => {
+  const router = useRouter()
   const dispatch = useAppDispatch()
   const onClose = () => dispatch(setCloseParleyDrawer())
   const { parleyDrawer } = useParleySelector()
@@ -22,11 +24,10 @@ const ParleyDrawer = () => {
   const inputs = parleyForm?.inputs
   const errors = parleyForm?.errors
   const { handleInput, setErrors } = createFormActions('parleyForm', dispatch)
-  const [createParley, { isLoading: isCreating }] = useCreateParleyMutation()
-  const [updateParley, { isLoading: isUpdating }] = useUpdateParleyMutation()
-  const isLoading = isCreating || isUpdating
-  const { users, user } = useUserSelector()
+  const [isLoading, setIsLoading] = useState(false)
   const drawerRef = useRef(null) as any
+  const session = useSession()
+  const user = session.data?.user
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
@@ -35,6 +36,8 @@ const ParleyDrawer = () => {
       return drawerRef.current.scrollTo({ behavior: 'smooth', top: 0 })
 
     try {
+      setIsLoading(true)
+
       const scheduledAt = new Date(inputs?.scheduledAt)
 
       const parleyData = {
@@ -47,15 +50,12 @@ const ParleyDrawer = () => {
       }
 
       if (inputs?.isUpdating) {
-        const updated = await updateParley({ parleyId: inputs?.id, ...parleyData }).unwrap()
-        dispatch(updateParleyInState({ id: inputs?.id, data: updated?.parley }))
+        await updateParley(inputs?.id, parleyData)
       } else {
-        const created = await createParley(parleyData).unwrap()
-        dispatch(addParleyToState(created?.parley))
-        dispatch(recomputeParleyCard())
+        await createParley(parleyData)
       }
 
-      recomputeDashboardStats({ id: user?.id, isAdmin: user?.isAdmin })
+      router.refresh()
 
       dispatch(resetForm('parleyForm'))
       onClose()
@@ -69,7 +69,7 @@ const ParleyDrawer = () => {
             : 'Your parley has been successfully created and is ready to chart its course!'
         })
       )
-    } catch (error: any) {
+    } catch (error) {
       dispatch(
         showToast({
           type: 'error',
@@ -77,6 +77,8 @@ const ParleyDrawer = () => {
           description: error.data.message || 'Unable to process request.'
         })
       )
+    } finally {
+      setIsLoading(false)
     }
   }
 

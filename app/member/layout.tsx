@@ -1,13 +1,7 @@
 'use server'
 
-import React, { FC, ReactNode } from 'react'
-import { getMemberOverview } from '../actions/getMemberOverview'
-import MemberLayoutClient from './page'
+import MemberLayoutClient from '../components/pages/MemberLayoutClient'
 
-const MemberLayout: FC<{ children: ReactNode }> = async ({ children }) => {
-  const data = await getMemberOverview()
-
-  return <MemberLayoutClient data={data}>{children}</MemberLayoutClient>
+export default async function MemberLayoutPage({ children }) {
+  return <MemberLayoutClient>{children}</MemberLayoutClient>
 }
-
-export default MemberLayout

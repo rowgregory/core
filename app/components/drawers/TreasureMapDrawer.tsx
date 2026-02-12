@@ -2,35 +2,34 @@
 
 import { motion, AnimatePresence } from 'framer-motion'
 import { X } from 'lucide-react'
-import { useAppDispatch, useFormSelector, useTreasureMapSelector, useUserSelector } from '@/app/lib/redux/store'
+import { useAppDispatch, useFormSelector, useTreasureMapSelector } from '@/app/lib/redux/store'
 import Backdrop from '../common/Backdrop'
 import Drawer from '../common/Drawer'
-import {
-  addTreasureMapToState,
-  setCloseTreasureMapDrawer,
-  updateTreasureMapInState
-} from '@/app/lib/redux/features/treasureMapSlice'
+import { setCloseTreasureMapDrawer } from '@/app/lib/redux/features/treasureMapSlice'
 import TreasureMapForm from '../forms/TreasureMapForm'
 import { createFormActions, resetForm } from '@/app/lib/redux/features/formSlice'
 import { showToast } from '@/app/lib/redux/features/toastSlice'
 import { chapterId } from '@/app/lib/constants/api/chapterId'
-import { useCreateTreasureMapMutation, useUpdateTreasureMapMutation } from '@/app/lib/redux/services/treasureMapApi'
 import validateTreasureMapForm from '../forms/validations/validateTreasureMapForm'
-import { recomputeTreasureMapCard } from '@/app/lib/redux/features/dashboardSlice'
-import { recomputeDashboardStats } from '@/app/lib/utils/common/recomputeDashboardStats'
+import { useSession } from 'next-auth/react'
+import { updateTreasureMap } from '@/app/lib/actions/updateTreasureMap'
+import { useState } from 'react'
+import { createTreasureMap } from '@/app/lib/actions/createTreasureMap'
+import { useRouter } from 'next/navigation'
 
-const TreasureMapDrawer = () => {
+const TreasureMapDrawer = ({ users }) => {
+  const router = useRouter()
   const dispatch = useAppDispatch()
   const onClose = () => dispatch(setCloseTreasureMapDrawer())
   const { treasureMapForm } = useFormSelector()
-  const { user } = useUserSelector()
   const inputs = treasureMapForm?.inputs
   const errors = treasureMapForm?.errors
   const { handleInput, setErrors } = createFormActions('treasureMapForm', dispatch)
-  const [createTreasureMap, { isLoading: isCreating }] = useCreateTreasureMapMutation()
-  const [updateTreasureMap, { isLoading: isUpdating }] = useUpdateTreasureMapMutation()
-  const isLoading = isCreating || isUpdating
+  const [isLoading, setIsLoading] = useState(false)
   const { treasureMapDrawer } = useTreasureMapSelector()
+  const session = useSession()
+  const user = session.data?.user
+  const isUpdating = inputs?.isUpdating
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
@@ -38,21 +37,20 @@ const TreasureMapDrawer = () => {
     if (!validateTreasureMapForm(treasureMapForm?.inputs, setErrors)) return
 
     try {
+      setIsLoading(true)
       const treasureMapData = {
         ...treasureMapForm?.inputs,
         chapterId,
         userId: user?.id
       }
 
-      if (inputs?.isUpdating) {
-        const updated = await updateTreasureMap({ ...treasureMapData, treasureMapId: inputs?.id }).unwrap()
-        dispatch(updateTreasureMapInState({ id: inputs?.id, data: updated?.treasureMap }))
+      if (isUpdating) {
+        await updateTreasureMap(inputs?.id, treasureMapData)
       } else {
-        const created = await createTreasureMap({ ...treasureMapData }).unwrap()
-        dispatch(addTreasureMapToState(created?.treasureMap))
-        dispatch(recomputeTreasureMapCard())
+        await createTreasureMap(treasureMapData)
       }
-      recomputeDashboardStats({ id: user?.id, isAdmin: user?.isAdmin })
+
+      router.refresh()
 
       dispatch(resetForm('treasureMapForm'))
       onClose()
@@ -72,6 +70,8 @@ const TreasureMapDrawer = () => {
           description: error?.data?.message || 'There was an issue charting the map. Try again.'
         })
       )
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -123,6 +123,7 @@ const TreasureMapDrawer = () => {
               user={user}
               isUpdating={inputs?.isUpdating}
               onClose={onClose}
+              users={users}
             />
           </Drawer>
         </>

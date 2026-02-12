@@ -1,37 +1,7 @@
-'use client'
+import BeaconClient from '@/app/components/pages/BeaconClient'
+import { getUserById } from '@/app/lib/actions/getUserById'
 
-import { useAppDispatch, useFormSelector, useUserSelector } from '@/app/lib/redux/store'
-import BeaconHeader from '@/app/components/beacon/BeaconHeader'
-import BeaconForm from '@/app/components/forms/BeaconForm'
-import { createFormActions } from '@/app/lib/redux/features/formSlice'
-import useBeaconForm from '@/hooks/useBeaconForm'
-
-const AdminBeacon = () => {
-  const dispatch = useAppDispatch()
-  const { beaconForm, isEditing } = useFormSelector()
-  const { handleInput, handleToggle } = createFormActions('beaconForm', dispatch)
-  const inputs = beaconForm?.inputs
-  const errors = beaconForm?.errors
-  const { user } = useUserSelector()
-
-  useBeaconForm(user)
-
-  return (
-    <div className="bg-gray-900 min-h-[calc(100vh-68px)]">
-      <div className="flex-1 px-3 py-6 sm:p-6 overflow-y-auto max-w-7xl">
-        <div className="sm:px-8 py-6 border-b border-gray-700/50">
-          <BeaconHeader inputs={inputs} isEditing={isEditing} />
-        </div>
-        <BeaconForm
-          inputs={inputs}
-          errors={errors}
-          handleInput={handleInput}
-          isEditing={isEditing}
-          handleToggle={handleToggle}
-        />
-      </div>
-    </div>
-  )
+export default async function AdminBeaconPage() {
+  const data = await getUserById()
+  return <BeaconClient data={data} />
 }
-
-export default AdminBeacon

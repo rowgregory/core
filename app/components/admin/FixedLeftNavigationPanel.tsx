@@ -9,10 +9,10 @@ import { itemVariants } from '@/app/lib/constants/motion'
 interface IFixedLeftNavigationPanel {
   selectedPage: string
   links: any
-  data: any
+  user: any
 }
 
-const FixedLeftNavigationPanel: FC<IFixedLeftNavigationPanel> = ({ selectedPage, links, data }) => {
+const FixedLeftNavigationPanel: FC<IFixedLeftNavigationPanel> = ({ selectedPage, links, user }) => {
   const { isNavigationCollapsed } = useAppSelector((state: RootState) => state.app)
   const dispatch = useAppDispatch()
 
@@ -114,17 +114,17 @@ const FixedLeftNavigationPanel: FC<IFixedLeftNavigationPanel> = ({ selectedPage,
         >
           <div className="flex items-center space-x-3 p-3 bg-gray-800/50 rounded-xl">
             <div className="w-8 h-8 bg-linear-to-r from-teal-400 via-cyan-400 to-blue-400 rounded-full flex items-center justify-center text-white font-bold">
-              {data?.user?.isSuperUser ? (
+              {user?.isSuperUser ? (
                 <Crown className="w-4 h-4" />
-              ) : data?.user?.isAdmin ? (
+              ) : user?.isAdmin ? (
                 <Shield className="w-4 h-4" />
               ) : (
-                data?.user?.name?.charAt(0)
+                user?.name?.charAt(0)
               )}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-white text-sm font-medium truncate">{data?.user?.name}</p>
-              <p className="text-gray-400 text-xs truncate">{data?.user?.email}</p>
+              <p className="text-white text-sm font-medium truncate">{user?.name}</p>
+              <p className="text-gray-400 text-xs truncate">{user?.email}</p>
             </div>
           </div>
         </motion.div>
@@ -137,12 +137,12 @@ const FixedLeftNavigationPanel: FC<IFixedLeftNavigationPanel> = ({ selectedPage,
         >
           <div className="py-3 flex items-center justify-center bg-gray-800/50 rounded-xl">
             <div className="w-8 h-8 bg-linear-to-r from-teal-400 via-cyan-400 to-blue-400 rounded-full flex items-center justify-center text-white font-bold">
-              {data?.user?.isSuperUser ? (
+              {user?.isSuperUser ? (
                 <Crown className="w-4 h-4" />
-              ) : data?.user?.isAdmin ? (
+              ) : user?.isAdmin ? (
                 <Shield className="w-4 h-4" />
               ) : (
-                data?.user?.name?.charAt(0)
+                user?.name?.charAt(0)
               )}
             </div>
           </div>

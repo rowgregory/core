@@ -11,8 +11,6 @@ import {
   Award,
   BarChart3,
   Filter,
-  Download,
-  RefreshCw,
   Eye,
   EyeOff,
   ArrowUpRight,
@@ -20,12 +18,12 @@ import {
   Minus,
   Info
 } from 'lucide-react'
-import { useGenerateMemberMetricsQuery } from '@/app/lib/redux/services/userApi'
-import { chapterId } from '@/app/lib/constants/api/chapterId'
+// import { chapterId } from '@/app/lib/constants/api/chapterId'
 import Picture from '@/app/components/common/Picture'
 import TooltipWrapper from '@/app/components/common/TooltipWrapper'
-import { generateAdminCoreReport } from '@/app/lib/utils/reports/generateAdminCoreReport'
+// import { generateAdminCoreReport } from '@/app/lib/utils/reports/generateAdminCoreReport'
 import { useSession } from 'next-auth/react'
+// import { generateMemberMetrics } from '@/app/lib/actions/generateMemberMetrics'
 
 const getOverallHealth = (memberJoinedAt: string | Date, engagementScore: number, networkingScore: number) => {
   const joinDate = typeof memberJoinedAt === 'string' ? new Date(memberJoinedAt) : memberJoinedAt
@@ -149,8 +147,7 @@ const AdminReportsPage: React.FC = () => {
   const [selectedPeriod, setSelectedPeriod] = useState('weekly')
   const [filterStatus, setFilterStatus] = useState('all')
   const [showInactiveMembers, setShowInactiveMembers] = useState(true)
-  const { data, refetch, isFetching } = useGenerateMemberMetricsQuery({ chapterId, filterType: selectedPeriod })
-  const members = data?.users
+  const members = []
 
   // Calculate total external revenue for the entire chapter
   const totalExternalRevenue = members?.reduce((chapterSum: any, user: { allAnchors: { received: any[] } }) => {
@@ -168,18 +165,18 @@ const AdminReportsPage: React.FC = () => {
   const stats = calculateOverallStats(members)
   const { criticalMembers, warningMembers, topPerformers } = getActionItems(members)
 
-  const handleExport = async (e: { preventDefault: () => void }) => {
-    e.preventDefault()
+  // const handleExport = async (e: { preventDefault: () => void }) => {
+  //   e.preventDefault()
 
-    const activeMembers = members?.filter((m: { membershipStatus: string }) => m.membershipStatus === 'ACTIVE')
+  //   const activeMembers = members?.filter((m: { membershipStatus: string }) => m.membershipStatus === 'ACTIVE')
 
-    await generateAdminCoreReport(activeMembers, {
-      title: 'Storm Watch Chapter',
-      subtitle: `${selectedPeriod} Business Review`,
-      colorScheme: 'nautical',
-      includeDetailedBreakdown: true
-    })
-  }
+  //   await generateAdminCoreReport(activeMembers, {
+  //     title: 'Storm Watch Chapter',
+  //     subtitle: `${selectedPeriod} Business Review`,
+  //     colorScheme: 'nautical',
+  //     includeDetailedBreakdown: true
+  //   })
+  // }
 
   const filteredMembers = members?.filter(
     (member: { joinedAt: string | Date; scores: { engagementScore: number; networkingScore: number } }) => {
@@ -197,11 +194,11 @@ const AdminReportsPage: React.FC = () => {
   )
 
   return (
-    <div className="h-full bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6">
+    <div className="h-full bg-linear-to-br from-gray-900 via-gray-800 to-gray-900 p-6">
       <div className="flex-1 mx-auto">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+          {/* <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
             <div>
               <h1 className="text-4xl font-bold text-white mb-2">CORE Chapter Reports</h1>
               <p className="text-gray-400">Enhanced stoplight system with comprehensive member analytics</p>
@@ -222,7 +219,7 @@ const AdminReportsPage: React.FC = () => {
                 <span>Refresh</span>
               </button>
             </div>
-          </div>
+          </div> */}
 
           {/* Filters */}
           <div className="flex flex-wrap items-center gap-4 p-4 bg-gray-800/40 border border-gray-700/50 rounded-xl backdrop-blur-sm">
@@ -233,7 +230,6 @@ const AdminReportsPage: React.FC = () => {
             <select
               value={selectedPeriod}
               onChange={(e) => {
-                refetch()
                 setSelectedPeriod(e.target.value)
               }}
               className="px-3 py-1.5 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"

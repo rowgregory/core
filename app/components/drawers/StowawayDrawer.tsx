@@ -3,16 +3,20 @@ import { X } from 'lucide-react'
 import { useAppDispatch, useFormSelector, useUserSelector } from '@/app/lib/redux/store'
 import Backdrop from '../common/Backdrop'
 import Drawer from '../common/Drawer'
-import { addUserToState, setCloseStowawayDrawer, updateUserInState } from '@/app/lib/redux/features/userSlice'
+import { setCloseStowawayDrawer } from '@/app/lib/redux/features/userSlice'
 import StowawayForm from '../forms/StowawayForm'
-import { createFormActions } from '@/app/lib/redux/features/formSlice'
+import { createFormActions, resetForm } from '@/app/lib/redux/features/formSlice'
 import { showToast } from '@/app/lib/redux/features/toastSlice'
 import { useSession } from 'next-auth/react'
 import { chapterId } from '@/app/lib/constants/api/chapterId'
-import { useCreateUserMutation, useUpdateStowawayMutation } from '@/app/lib/redux/services/userApi'
 import validateStowawayForm from '../forms/validations/validateStowawayForm'
+import { useState } from 'react'
+import updateStowaway from '@/app/lib/actions/updateStowaway'
+import { createStowaway } from '@/app/lib/actions/createStowaway'
+import { useRouter } from 'next/navigation'
 
 const StowawayDrawer = () => {
+  const router = useRouter()
   const session = useSession()
   const user = session?.data?.user
   const dispatch = useAppDispatch()
@@ -20,10 +24,9 @@ const StowawayDrawer = () => {
   const { stowawayForm } = useFormSelector()
   const inputs = stowawayForm?.inputs
   const { handleInput, setErrors, handleToggle } = createFormActions('stowawayForm', dispatch)
-  const [createStowaway, { isLoading: isCreating }] = useCreateUserMutation()
-  const [updateStowaway, { isLoading: isUpdating }] = useUpdateStowawayMutation()
-  const isLoading = isCreating || isUpdating
+  const [isLoading, setIsLoading] = useState(false)
   const { stowawayDrawer } = useUserSelector()
+  const isUpdating = inputs?.isUpdating
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
@@ -31,6 +34,8 @@ const StowawayDrawer = () => {
     if (!validateStowawayForm(stowawayForm?.inputs, setErrors)) return
 
     try {
+      setIsLoading(true)
+
       const stowawayData = {
         ...stowawayForm?.inputs,
         chapterId,
@@ -40,14 +45,15 @@ const StowawayDrawer = () => {
         membershipStatus: 'FLAGGED'
       }
 
-      if (inputs?.isUpdating) {
-        const updated = await updateStowaway({ stowawayId: inputs?.id, ...stowawayData }).unwrap()
-        dispatch(updateUserInState({ id: inputs.id, data: updated?.user }))
+      if (isUpdating) {
+        updateStowaway(inputs?.id, stowawayData)
       } else {
-        const created = await createStowaway(stowawayData).unwrap()
-        dispatch(addUserToState(created.user))
+        await createStowaway(stowawayData)
       }
 
+      router.refresh()
+
+      dispatch(resetForm('stowawayForm'))
       onClose()
 
       dispatch(
@@ -67,6 +73,8 @@ const StowawayDrawer = () => {
             `Failed to ${isUpdating ? 'update' : 'create'} the Stowaway. Please check the details and try again.`
         })
       )
+    } finally {
+      setIsLoading(false)
     }
   }
 

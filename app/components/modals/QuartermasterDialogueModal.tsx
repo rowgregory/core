@@ -1,18 +1,15 @@
-import React, { useState, useEffect, FC } from 'react'
+'use client'
+
+import { useState, useEffect, FC } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X } from 'lucide-react'
 import { User as UserProps } from '@/types/user'
 import Picture from '../common/Picture'
-import { useSignalQuartermasterMutation, useUpdatePapersMutation } from '@/app/lib/redux/services/userApi'
-import { chapterId } from '@/app/lib/constants/api/chapterId'
 import { useAppDispatch, useFormSelector } from '@/app/lib/redux/store'
-import { clearInputs, createFormActions, setInputs } from '@/app/lib/redux/features/formSlice'
-import { showToast } from '@/app/lib/redux/features/toastSlice'
+import { createFormActions, setInputs } from '@/app/lib/redux/features/formSlice'
 import getDialogue from '@/app/lib/utils/port/getDialog'
 import MainDialog from '../port/MainDialog'
-import ShipPapersForm from '../forms/ShipPapersForm'
 import PortLedger from '../port/PortLedger'
-import SignalTheQuartermasterForm from '../forms/SignalTheQuartermasterForm'
 
 interface IQuartermasterDialogModal {
   user: UserProps
@@ -29,12 +26,10 @@ const QuartermasterDialogueModal: FC<IQuartermasterDialogModal> = ({ user, onClo
   const [showShipPapers, setShowShipPapers] = useState(false)
   const [showScuttleThePapersWarning, setShowScuttleThePapersWarning] = useState(false)
   const [messageText, setMessageText] = useState('')
-  const [signalQuartermaster, { isLoading }] = useSignalQuartermasterMutation()
   const { swabbieForm } = useFormSelector()
   const dispatch = useAppDispatch()
   const { handleInput, handleToggle } = createFormActions('swabbieForm', dispatch)
   const inputs = swabbieForm?.inputs
-  const [updateSwabbiePapers, { isLoading: isUpdating }] = useUpdatePapersMutation()
 
   const dialogues = getDialogue(user)
   const currentMsg = dialogues[currentDialogue]
@@ -90,60 +85,10 @@ const QuartermasterDialogueModal: FC<IQuartermasterDialogModal> = ({ user, onClo
     }
   }
 
-  const handleSignalTheQuartermaster = async (e: { preventDefault: () => void }) => {
-    e.preventDefault()
-
-    try {
-      await signalQuartermaster({ chapterId, signal: messageText, swabbieId: user.id }).unwrap()
-
-      dispatch(
-        showToast({ message: 'Signal sent to Quartermaster', type: 'success', description: ``, duration: 10000 })
-      )
-
-      setShowSignalTheQuartermaster(false)
-      setShowPortLedger(true)
-      setCurrentDialogue(1)
-      setMessageText('')
-    } catch (error: any) {
-      dispatch(
-        showToast({
-          message: 'Failed to send signal',
-          type: 'error',
-          description: error?.data?.message,
-          duration: 10000
-        })
-      )
-    }
-  }
-
   const handleCancelSignalToQuartermaster = () => {
     setShowSignalTheQuartermaster(false)
     setShowPortLedger(true)
     setMessageText('')
-  }
-
-  const handleUpdateLedger = async (e: { preventDefault: () => void }) => {
-    e.preventDefault()
-
-    try {
-      await updateSwabbiePapers({ chapterId, swabbieId: user?.id, ...inputs }).unwrap()
-
-      dispatch(showToast({ message: 'Swabbie details updated', type: 'success', description: ``, duration: 10000 }))
-
-      setShowShipPapers(false)
-      setShowPortLedger(true)
-      setCurrentDialogue(1)
-      dispatch(clearInputs({ formName: 'swabbieForm' }))
-    } catch (error: any) {
-      dispatch(
-        showToast({
-          message: 'Failed to updated your papers',
-          type: 'error',
-          description: error?.data?.message,
-          duration: 10000
-        })
-      )
-    }
   }
 
   const handleCancelUpdatePapers = () => {
@@ -169,7 +114,7 @@ const QuartermasterDialogueModal: FC<IQuartermasterDialogModal> = ({ user, onClo
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[80] overflow-hidden"
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-80 overflow-hidden"
         >
           {/* Floating Status Indicator */}
           <motion.div
@@ -225,28 +170,6 @@ const QuartermasterDialogueModal: FC<IQuartermasterDialogModal> = ({ user, onClo
             displayedText={displayedText}
             isTyping={isTyping}
           />
-
-          {showShipPapers && (
-            <ShipPapersForm
-              handleSubmit={handleUpdateLedger}
-              inputs={swabbieForm?.inputs}
-              handleInput={handleInput}
-              handleToggle={handleToggle}
-              isLoading={isLoading}
-              onClose={handleCancelUpdatePapers}
-              isUpdating={isUpdating}
-            />
-          )}
-
-          {showSignalTheQuartermaster && (
-            <SignalTheQuartermasterForm
-              handleMessageCancel={handleCancelSignalToQuartermaster}
-              handleSendMessage={handleSignalTheQuartermaster}
-              isLoading={isLoading}
-              messageText={messageText}
-              setMessageText={setMessageText}
-            />
-          )}
 
           {showPortLedger && (
             <PortLedger

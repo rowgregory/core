@@ -27,15 +27,6 @@ export const logSlice = createSlice({
     setLogs: (state, { payload }) => {
       state.logs = payload
     }
-  },
-  extraReducers: (builder) => {
-    builder.addMatcher(
-      (action: any) => action.type.endsWith('/rejected') && action.payload?.data?.sliceName === 'logApi',
-      (state, action: any) => {
-        state.loading = false
-        state.error = action.payload.data.message
-      }
-    )
   }
 })
 

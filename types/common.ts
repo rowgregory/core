@@ -1,5 +1,5 @@
+import { User } from '@prisma/client'
 import { ReactNode } from 'react'
-import { User } from './user'
 
 export interface ILayoutClient {
   data: any
@@ -8,5 +8,5 @@ export interface ILayoutClient {
 
 export interface PageWrapperProps {
   children: ReactNode
-  users: User[]
+  users: any
 }

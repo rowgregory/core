@@ -1,7 +1,7 @@
 import { FC, useState } from 'react'
 import { AlertCircle, Building2, CheckCircle, FileText, Mail, Phone, User } from 'lucide-react'
 import { motion } from 'framer-motion'
-import { useAppDispatch, useUserSelector } from '@/app/lib/redux/store'
+import { useAppDispatch } from '@/app/lib/redux/store'
 import { setInputs } from '@/app/lib/redux/features/formSlice'
 import getServiceTags from '@/app/lib/constants/navigator/getServiceTags'
 import { IForm } from '@/types/forms'
@@ -15,9 +15,9 @@ const TreasureMapForm: FC<IForm> = ({
   handleSubmit,
   user,
   isUpdating,
-  onClose
+  onClose,
+  users
 }) => {
-  const { users } = useUserSelector()
   const dispatch = useAppDispatch()
   const [showAll, setShowAll] = useState(false)
   const visibleCount = 5 // number of tags to show initially

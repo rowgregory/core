@@ -1,5 +1,5 @@
 import { Calendar, DollarSign, Building, FileText, AlertCircle, CheckCircle } from 'lucide-react'
-import { useAppDispatch, useUserSelector } from '@/app/lib/redux/store'
+import { useAppDispatch } from '@/app/lib/redux/store'
 import { motion } from 'framer-motion'
 import { formatDateForInput } from '@/app/lib/utils/date/formatDate'
 import { useSession } from 'next-auth/react'
@@ -16,9 +16,18 @@ const formatCurrency = (value: string) => {
   }).format(parseFloat(value))
 }
 
-const AnchorForm = ({ inputs, errors, handleInput, isLoading, handleSubmit, user, isUpdating, onClose }: any) => {
+const AnchorForm = ({
+  inputs,
+  errors,
+  handleInput,
+  isLoading,
+  handleSubmit,
+  user,
+  isUpdating,
+  onClose,
+  users
+}: any) => {
   const session = useSession()
-  const { users } = useUserSelector()
   const dispatch = useAppDispatch()
 
   return (
@@ -260,9 +269,8 @@ const AnchorForm = ({ inputs, errors, handleInput, isLoading, handleSubmit, user
                   >
                     <option value="">Select who gave you the referral...</option>
                     <option value="external">Out of chaper member</option>
-                    <option value="fleet-earnings">Fleet earnings</option>
                     {users
-                      ?.filter((navigator) => navigator.id !== user?.id && navigator?.membershipStatus === 'ACTIVE')
+                      // ?.filter((navigator) => navigator.id !== user?.id && navigator?.membershipStatus === 'ACTIVE')
                       .map((navigator) => (
                         <option key={navigator.id} value={navigator.id || ''}>
                           {navigator.name} - {navigator.company}

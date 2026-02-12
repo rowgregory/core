@@ -1,6 +1,6 @@
 import getCurrentPageId from '@/app/lib/utils/common/getCurrentPageId'
 import { setCloseMobileNavigation } from '@/app/lib/redux/features/appSlice'
-import { RootState, useAppDispatch, useAppSelector, useUserSelector } from '@/app/lib/redux/store'
+import { RootState, useAppDispatch, useAppSelector } from '@/app/lib/redux/store'
 import useCustomPathname from '@/hooks/useCustomPathname'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Crown, Shield } from 'lucide-react'
@@ -9,6 +9,7 @@ import { FC } from 'react'
 import Drawer from '../common/Drawer'
 import Backdrop from '../common/Backdrop'
 import { itemVariants } from '@/app/lib/constants/motion'
+import { useSession } from 'next-auth/react'
 
 const MobileNavigationDrawer: FC<{ links: any }> = ({ links }) => {
   const dispatch = useAppDispatch()
@@ -16,7 +17,8 @@ const MobileNavigationDrawer: FC<{ links: any }> = ({ links }) => {
   const { mobileNavigation } = useAppSelector((state: RootState) => state.app)
   const path = useCustomPathname()
   const selectedPage = getCurrentPageId(path, links)
-  const { user } = useUserSelector()
+  const session = useSession()
+  const user = session.data?.user
 
   return (
     <AnimatePresence>

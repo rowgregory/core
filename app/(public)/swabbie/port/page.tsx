@@ -1,14 +1,24 @@
-'use client'
+'use server'
 
-import React, { Suspense } from 'react'
-import SwabbiePort from './SwabbiePort'
+import SwabbiePortClient from '@/app/components/pages/SwabbiePortClient'
+import { getSwabbie } from '@/app/lib/actions/getSwabbie'
 
-const SwabbiePortPage = () => {
-  return (
-    <Suspense fallback={<></>}>
-      <SwabbiePort />
-    </Suspense>
-  )
+interface SwabbiePortPageProps {
+  searchParams: Promise<{ swabbieId: string }>
 }
 
-export default SwabbiePortPage
+export default async function SwabbiePortPage({ searchParams }: SwabbiePortPageProps) {
+  const { swabbieId } = await searchParams
+
+  if (!swabbieId) {
+    return null
+  }
+
+  const data = await getSwabbie(swabbieId)
+
+  if (!data) {
+    return null
+  }
+
+  return <SwabbiePortClient data={data} />
+}

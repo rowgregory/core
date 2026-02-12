@@ -1,17 +1,17 @@
-import HiddenCoveSVG from '@/public/svg/HiddenCoveSVG'
+// import HiddenCoveSVG from '@/public/svg/HiddenCoveSVG'
 import {
   Users,
   ClipboardList,
-  FileText,
+  // FileText,
   TowerControl,
   Anchor,
-  Sliders,
+  // Sliders,
   Ship,
   Scroll,
   Layers,
-  LifeBuoy,
-  Beer,
-  Coins,
+  // LifeBuoy,
+  // Beer,
+  // Coins,
   Crosshair,
   Flag,
   BookOpenText,
@@ -47,32 +47,32 @@ export const adminNavLinks = [
     description: 'Thank You For Closed Business',
     linkKey: '/admin/anchors'
   },
-  {
-    id: 'muster',
-    label: 'Muster',
-    icon: LifeBuoy,
-    description: 'The Crew Quarters',
-    linkKey: '/admin/muster'
-  },
+  // {
+  //   id: 'muster',
+  //   label: 'Muster',
+  //   icon: LifeBuoy,
+  //   description: 'The Crew Quarters',
+  //   linkKey: '/admin/muster'
+  // },
   {
     id: 'stowaways',
     label: 'Stowaways',
     icon: Flag,
-    description: 'The Brig',
+    description: 'Visitors with unknown joining status',
     linkKey: '/admin/stowaways'
   },
   {
     id: 'rendezvous',
     label: 'Rendezvous',
     icon: Crosshair,
-    description: 'The Gathering Point',
+    description: 'Calendar',
     linkKey: '/admin/rendezvous'
   },
   {
     id: 'beacon',
     label: 'Beacon',
     icon: TowerControl,
-    description: 'The Lighthouse',
+    description: 'Profile',
     linkKey: '/admin/beacon'
   },
   {
@@ -82,13 +82,13 @@ export const adminNavLinks = [
     description: 'Member Directory',
     linkKey: '/admin/navigators'
   },
-  {
-    id: 'grogs',
-    label: 'Grogs',
-    icon: Beer,
-    description: 'The Tavern',
-    linkKey: '/admin/grogs'
-  },
+  // {
+  //   id: 'grogs',
+  //   label: 'Grogs',
+  //   icon: Beer,
+  //   description: 'The Tavern',
+  //   linkKey: '/admin/grogs'
+  // },
   {
     id: 'applications',
     label: 'Applications',
@@ -96,47 +96,47 @@ export const adminNavLinks = [
     description: 'Visitor Requests',
     linkKey: '/admin/applications'
   },
-  {
-    id: 'reports',
-    label: 'Reports',
-    icon: FileText,
-    description: 'Analytics & Reports',
-    linkKey: '/admin/reports'
-  },
-  {
-    id: 'booty',
-    label: 'Booty',
-    icon: Coins,
-    description: 'The Treasure Vault',
-    linkKey: '/admin/booty'
-  },
+  // {
+  //   id: 'reports',
+  //   label: 'Reports',
+  //   icon: FileText,
+  //   description: 'Analytics & Reports',
+  //   linkKey: '/admin/reports'
+  // },
+  // {
+  //   id: 'booty',
+  //   label: 'Booty',
+  //   icon: Coins,
+  //   description: 'The Treasure Vault',
+  //   linkKey: '/admin/booty'
+  // },
 
-  {
-    id: 'rigging',
-    label: 'Rigging',
-    icon: Sliders,
-    description: 'Chapter Configuration',
-    linkKey: '/admin/rigging'
-  },
+  // {
+  //   id: 'rigging',
+  //   label: 'Rigging',
+  //   icon: Sliders,
+  //   description: 'Chapter Configuration',
+  //   linkKey: '/admin/rigging'
+  // },
   {
     id: 'lore-and-lingo',
     label: 'Lore & Lingo',
     icon: BookOpenText,
-    description: 'Decode the crew’s language — your map to every parley, anchor, and treasure maps.',
+    description: 'Decode the crew’s language',
     linkKey: '/admin/lore-and-lingo'
   },
   {
     id: 'changelog',
     label: 'Changelog',
     icon: GitBranch,
-    description: 'Track updates, improvements, and new features — your complete history of platform evolution.',
+    description: 'Track updates, improvements, and new features.',
     linkKey: '/admin/changelog'
-  },
-  {
-    id: 'hidden-cove',
-    label: 'Hidden Cove',
-    icon: HiddenCoveSVG,
-    description: 'Special tools, features, and perks waiting to be discovered',
-    linkKey: '/admin/hidden-cove'
   }
+  // {
+  //   id: 'hidden-cove',
+  //   label: 'Hidden Cove',
+  //   icon: HiddenCoveSVG,
+  //   description: 'Special tools, features, and perks waiting to be discovered',
+  //   linkKey: '/admin/hidden-cove'
+  // }
 ]

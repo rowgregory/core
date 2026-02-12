@@ -2,38 +2,40 @@ import { AnimatePresence, motion } from 'framer-motion'
 import Backdrop from '../common/Backdrop'
 import Drawer from '../common/Drawer'
 import { X } from 'lucide-react'
-import { useAnchorSelector, useAppDispatch, useFormSelector, useUserSelector } from '@/app/lib/redux/store'
-import { addAnchorToState, setCloseAnchorDrawer, updateAnchorInState } from '@/app/lib/redux/features/anchorSlice'
-import { useCreateAnchorMutation, useUpdateAnchorMutation } from '@/app/lib/redux/services/anchorApi'
+import { useAnchorSelector, useAppDispatch, useFormSelector } from '@/app/lib/redux/store'
+import { setCloseAnchorDrawer } from '@/app/lib/redux/features/anchorSlice'
 import { createFormActions, resetForm } from '@/app/lib/redux/features/formSlice'
 import AnchorForm from '../forms/AnchorForm'
 import { chapterId } from '@/app/lib/constants/api/chapterId'
 import { showToast } from '@/app/lib/redux/features/toastSlice'
 import validateAnchorForm from '../forms/validations/validateAnchorForm'
-import { recomputeAnchorCard } from '@/app/lib/redux/features/dashboardSlice'
-import { recomputeDashboardStats } from '@/app/lib/utils/common/recomputeDashboardStats'
+import { createAnchor } from '@/app/lib/actions/createAnchor'
+import { useRouter } from 'next/navigation'
+import { updateAnchor } from '@/app/lib/actions/updateAnchor'
+import { useSession } from 'next-auth/react'
+import { useState } from 'react'
 
-const AnchorDrawer = () => {
+const AnchorDrawer = ({ users }) => {
   const dispatch = useAppDispatch()
+  const router = useRouter()
   const onClose = () => dispatch(setCloseAnchorDrawer())
   const { anchorDrawer } = useAnchorSelector()
-  const { user } = useUserSelector()
   const { anchorForm } = useFormSelector()
   const inputs = anchorForm?.inputs
   const errors = anchorForm?.errors
-  const [createAnchor, { isLoading: isCreating }] = useCreateAnchorMutation()
-  const [updateAnchor, { isLoading: isUpdating }] = useUpdateAnchorMutation()
-  const isLoading = isCreating || isUpdating
+  const session = useSession()
+  const userId = session.data?.user?.id
+  const [isLoading, setIsLoading] = useState(false)
 
   const { handleInput, setErrors } = createFormActions('anchorForm', dispatch)
 
-  // Handle form submission
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
 
     if (!validateAnchorForm(anchorForm?.inputs, setErrors)) return
 
     try {
+      setIsLoading(true)
       const isExternalGiver = anchorForm?.inputs?.giverId === 'external'
       const isExternalReceiver = anchorForm?.inputs?.receiverId === 'external'
 
@@ -43,7 +45,7 @@ const AnchorDrawer = () => {
         businessValue: parseFloat(anchorForm?.inputs?.businessValue),
         closedDate: new Date(anchorForm?.inputs?.closedDate).toISOString(),
         chapterId,
-        userId: user?.id,
+        userId,
 
         // External giver attributes
         externalGiverName: anchorForm?.inputs?.externalGiverName || null,
@@ -74,15 +76,12 @@ const AnchorDrawer = () => {
       }
 
       if (inputs?.isUpdating) {
-        const updated = await updateAnchor({ ...submitData, anchorId: anchorForm?.inputs?.id }).unwrap()
-        dispatch(updateAnchorInState({ id: inputs?.id, data: updated?.anchor }))
+        await updateAnchor(anchorForm?.inputs?.id, submitData)
       } else {
-        const created = await createAnchor(submitData).unwrap()
-        dispatch(addAnchorToState(created?.anchor))
-        dispatch(recomputeAnchorCard(created?.anchor))
+        await createAnchor(submitData)
       }
 
-      recomputeDashboardStats({ id: user?.id, isAdmin: user?.isAdmin })
+      router.refresh()
 
       dispatch(resetForm('anchorForm'))
       onClose()
@@ -102,7 +101,7 @@ const AnchorDrawer = () => {
           description: `Anchor ${inputs?.isUpdating ? 'updated' : 'created'} successfully${participantInfo}.`
         })
       )
-    } catch (error: any) {
+    } catch (error) {
       dispatch(
         showToast({
           type: 'error',
@@ -110,6 +109,8 @@ const AnchorDrawer = () => {
           description: error.data.message || 'Unable to process request.'
         })
       )
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -154,9 +155,10 @@ const AnchorDrawer = () => {
               handleInput={handleInput}
               handleSubmit={handleSubmit}
               isLoading={isLoading}
-              user={user}
+              user={session.data?.user}
               isUpdating={inputs?.isUpdating}
               onClose={onClose}
+              users={users}
             />
           </Drawer>
         </>

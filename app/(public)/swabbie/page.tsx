@@ -17,7 +17,7 @@ const Swabbie = () => {
   const dispatch = useAppDispatch()
   const { handleInput, handleToggle, setErrors } = createFormActions('swabbieForm', dispatch)
   const { swabbieForm } = useFormSelector()
-  const { push } = useRouter()
+  const { push, refresh } = useRouter()
   const inputs = swabbieForm?.inputs
   const errors = swabbieForm?.errors
   const [isLoading, setIsLoading] = useState(false)
@@ -30,6 +30,8 @@ const Swabbie = () => {
     try {
       setIsLoading(true)
       const result = await createUser({ chapterId, hasCompletedApplication: true, ...swabbieForm.inputs })
+
+      refresh()
 
       push(`/swabbie/port?swabbieId=${result.user.id}`)
       dispatch(

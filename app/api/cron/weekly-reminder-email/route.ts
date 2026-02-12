@@ -40,7 +40,7 @@ async function sendWeeklyReminders(req: NextRequest) {
       const batchPromises = batch.map(async (user) => {
         try {
           const result = await resend.emails.send({
-            from: 'no-reply@coastal-referral-exchange.com',
+            from: 'Coastal Referral Exchange <noreply@coastal-referral-exchange.com>',
             to: user.email,
             subject: 'Log Your Treasure Maps, Anchors & Parleys - Midnight Deadline!',
             html: weeklyReminderTemplate(user.name || user.email.split('@')[0])

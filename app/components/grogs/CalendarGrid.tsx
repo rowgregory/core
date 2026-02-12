@@ -3,15 +3,15 @@ import generateCalendarDays from '@/app/lib/utils/calendar/generateCalendarDays'
 import navigateMonth from '@/app/lib/utils/calendar/navigateMonth'
 import { formatMonth, isCurrentMonth, isToday } from '@/app/lib/utils/date/formatDate'
 import { createFormActions, setInputs } from '@/app/lib/redux/features/formSlice'
-import { setUpdateRendezvous } from '@/app/lib/redux/features/rendezvousSlice'
 import { showToast } from '@/app/lib/redux/features/toastSlice'
-import { useCreateRendezvousMutation, useUpdateRendezvousMutation } from '@/app/lib/redux/services/rendezvousApi'
-import { useAppDispatch, useFormSelector, useUserSelector } from '@/app/lib/redux/store'
-import { SerializedError } from '@reduxjs/toolkit'
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
+import { useAppDispatch, useFormSelector } from '@/app/lib/redux/store'
 import { motion } from 'framer-motion'
 import { Calendar, ChevronLeft, ChevronRight, Clock } from 'lucide-react'
 import { FC, useState } from 'react'
+import { useSession } from 'next-auth/react'
+import { updateRendezvous } from '@/app/lib/actions/updateRendezvous'
+import { useRouter } from 'next/navigation'
+import { createRendezvous } from '@/app/lib/actions/createRendezvous'
 
 interface CalendarGridProps {
   selectedDate: string
@@ -32,14 +32,15 @@ const CalendarGrid: FC<CalendarGridProps> = ({
 }) => {
   const [currentMonth, setCurrentMonth] = useState(new Date())
   const calendarDays = generateCalendarDays(currentMonth)
-  const [createRendezvous, { isLoading: isCreating }] = useCreateRendezvousMutation()
-  const [updateRendezvous, { isLoading: isUpdating }] = useUpdateRendezvousMutation()
   const dispatch = useAppDispatch()
   const { handleInput } = createFormActions('rendezvousForm', dispatch)
   const { rendezvousForm } = useFormSelector()
   const [removingMeetingId, setRemovingMeetingId] = useState<string | null>(null)
-  const { user } = useUserSelector()
+  const session = useSession()
+  const user = session.data.user
   const inputs = rendezvousForm?.inputs
+  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleDayClick = (date: Date, dayEvents: any) => {
     // Use local date formatting instead of UTC
@@ -69,20 +70,16 @@ const CalendarGrid: FC<CalendarGridProps> = ({
     e.preventDefault()
 
     const isUpdating = !inputs.isRecurring
-    let rendezvous:
-      | { data: any; error?: undefined }
-      | { data?: undefined; error: FetchBaseQueryError | SerializedError }
+
     try {
+      setIsLoading(true)
       if (isUpdating) {
-        rendezvous = await updateRendezvous({
-          id: inputs.id,
-          ...prepareRendezvousData
-        })
+        await updateRendezvous(inputs.id, prepareRendezvousData)
       } else {
-        rendezvous = await createRendezvous(prepareRendezvousData)
+        await createRendezvous(prepareRendezvousData)
       }
 
-      dispatch(setUpdateRendezvous(rendezvous?.data))
+      router.refresh()
 
       dispatch(
         showToast({
@@ -95,6 +92,8 @@ const CalendarGrid: FC<CalendarGridProps> = ({
       setRemovingMeetingId(null)
     } catch (error: any) {
       dispatch(showToast({ type: 'error', message: 'Failed to update meeting', description: error?.data?.message }))
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -110,7 +109,7 @@ const CalendarGrid: FC<CalendarGridProps> = ({
           <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
 
-        <h3 className="text-base xs:text-lg sm:text-xl font-semibold text-white min-w-[140px] xs:min-w-[180px] text-center">
+        <h3 className="text-base xs:text-lg sm:text-xl font-semibold text-white min-w-35 xs:min-w-45 text-center">
           {formatMonth(currentMonth)}
         </h3>
 
@@ -155,7 +154,7 @@ const CalendarGrid: FC<CalendarGridProps> = ({
               transition={{ delay: index * 0.01 }}
               onClick={() => handleDayClick(date, dayEvents)}
               className={`
-          relative min-h-[72px] xs:min-h-[88px] sm:min-h-[100px]
+          relative min-h-18 xs:min-h-22 sm:min-h-25
           p-1.5 xs:p-2 cursor-pointer rounded-md border
           transition-all duration-200 hover:border-purple-500/50
           ${isCurrentMonthDay ? 'bg-gray-700/20 border-gray-600/30' : 'bg-gray-800/10 border-gray-700/20 opacity-40'}
@@ -376,7 +375,7 @@ const CalendarGrid: FC<CalendarGridProps> = ({
                                   className="inline-flex items-center justify-center px-4 py-2 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-medium rounded-md transition-all duration-200 hover:bg-emerald-500/30"
                                 >
                                   Confirm Update
-                                  {(isCreating || isUpdating) && (
+                                  {isLoading && (
                                     <div className="ml-2 w-3 h-3 border-2 border-emerald-500 animate-spin rounded-full border-t-transparent" />
                                   )}
                                 </button>

@@ -2,28 +2,28 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X } from 'lucide-react'
 import { createFormActions, resetForm } from '@/app/lib/redux/features/formSlice'
 import { useAppDispatch, useFormSelector, useUserSelector } from '@/app/lib/redux/store'
-import { addUserToState, setCloseAddUserDrawer, updateUserInState } from '@/app/lib/redux/features/userSlice'
-import { useCreateUserMutation, useUpdateUserMutation } from '@/app/lib/redux/services/userApi'
+import { setCloseAddUserDrawer } from '@/app/lib/redux/features/userSlice'
 import { chapterId } from '@/app/lib/constants/api/chapterId'
 import { showToast } from '@/app/lib/redux/features/toastSlice'
 import NavigatorForm from '../forms/NavigatorForm'
 import Backdrop from '../common/Backdrop'
 import Drawer from '../common/Drawer'
 import validateNavigatorForm from '../forms/validations/validateNavigatorForm'
-import { recomputeMemberCard } from '@/app/lib/redux/features/dashboardSlice'
-import { recomputeDashboardStats } from '@/app/lib/utils/common/recomputeDashboardStats'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { updateUser } from '@/app/lib/actions/updateUser'
+import { createUser } from '@/app/lib/actions/createUser'
 
 const NavigatorDrawer = () => {
+  const router = useRouter()
   const dispatch = useAppDispatch()
   const { handleInput, setErrors, handleToggle } = createFormActions('navigatorForm', dispatch)
   const { navigatorForm } = useFormSelector()
-  const { addUserDrawer, user } = useUserSelector()
+  const { addUserDrawer } = useUserSelector()
   const onClose = () => dispatch(setCloseAddUserDrawer())
-  const [createUser, { isLoading: isCreating }] = useCreateUserMutation()
-  const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation()
   const inputs = navigatorForm.inputs
   const errors = navigatorForm.errors
-  const isLoading = isCreating || isUpdating
+  const [isLoading, setIsLoading] = useState(false)
   const isUpdateMode = navigatorForm?.inputs?.isUpdating
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
@@ -32,6 +32,7 @@ const NavigatorDrawer = () => {
     if (!validateNavigatorForm(inputs, setErrors)) return
 
     try {
+      setIsLoading(true)
       const memberData = {
         ...inputs,
         chapterId,
@@ -39,15 +40,13 @@ const NavigatorDrawer = () => {
         expiresAt: new Date(inputs?.expiresAt)
       }
 
-      if (navigatorForm?.inputs?.isUpdating) {
-        const updated = await updateUser({ ...memberData, userId: navigatorForm?.inputs?.id }).unwrap()
-        dispatch(updateUserInState(updated?.user))
+      if (isUpdateMode) {
+        await updateUser(navigatorForm?.inputs?.id, memberData)
       } else {
-        const created = await createUser(memberData).unwrap()
-        dispatch(addUserToState(created?.user))
-        dispatch(recomputeMemberCard())
+        await createUser(memberData)
       }
-      recomputeDashboardStats({ id: user?.id, isAdmin: user?.isAdmin })
+
+      router.refresh()
 
       dispatch(resetForm('navigatorForm'))
       onClose()
@@ -67,6 +66,8 @@ const NavigatorDrawer = () => {
           description: `There was an error ${navigatorForm?.inputs?.isUpdating ? 'updating' : 'creating'} ${navigatorForm?.inputs?.name}`
         })
       )
+    } finally {
+      setIsLoading(false)
     }
   }
 

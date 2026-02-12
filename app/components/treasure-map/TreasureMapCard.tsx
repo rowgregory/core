@@ -3,34 +3,31 @@ import { motion } from 'framer-motion'
 import { FC, useState } from 'react'
 import { ITreasureMap } from '@/types/treasure-map'
 import Picture from '../common/Picture'
-import { setOpenTreasureMapDrawer, updateTreasureMapInState } from '@/app/lib/redux/features/treasureMapSlice'
+import { setOpenTreasureMapDrawer } from '@/app/lib/redux/features/treasureMapSlice'
 import { setInputs } from '@/app/lib/redux/features/formSlice'
 import { formatDate } from '@/app/lib/utils/date/formatDate'
 import { useAppDispatch } from '@/app/lib/redux/store'
-import { useUpdateTreasureMapStatusMutation } from '@/app/lib/redux/services/treasureMapApi'
-import { chapterId } from '@/app/lib/constants/api/chapterId'
-import { useSession } from 'next-auth/react'
 import { showToast } from '@/app/lib/redux/features/toastSlice'
 import getTreasureMapStatusIcon from '@/app/lib/utils/treasure-map/getTreasureMapStatusIcon'
 import getTreasureMapStatusColor from '@/app/lib/utils/treasure-map/getTreasureMapStatusColor'
+import { updateTreasureMapStatus } from '@/app/lib/actions/updateTreasureMapStatus'
+import { useRouter } from 'next/navigation'
 
 const TreasureMapCard: FC<{ treasureMap: ITreasureMap; index: number }> = ({ treasureMap, index }) => {
   const [isNotesExpanded, setIsNotesExpanded] = useState(false)
-  const session = useSession()
+  const router = useRouter()
   const dispatch = useAppDispatch()
-  const [updateTreasureMapStatus, { isLoading }] = useUpdateTreasureMapStatusMutation()
   const [currentStatus, setCurrentStatus] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
-  const handleStatusChange = async (treasureMapId: string, newStatus: string) => {
+  const handleStatusChange = async (treasureMapId: string, newStatus) => {
     setCurrentStatus(newStatus)
+
     try {
-      const updated = await updateTreasureMapStatus({
-        chapterId,
-        userId: session.data?.user.id,
-        treasureMapId,
-        status: newStatus
-      }).unwrap()
-      dispatch(updateTreasureMapInState({ id: treasureMap?.id, data: updated?.treasureMap }))
+      setIsLoading(true)
+      await updateTreasureMapStatus(treasureMapId, newStatus)
+
+      router.refresh()
 
       dispatch(
         showToast({
@@ -47,6 +44,8 @@ const TreasureMapCard: FC<{ treasureMap: ITreasureMap; index: number }> = ({ tre
           description: error?.data?.message
         })
       )
+    } finally {
+      setIsLoading(false)
     }
   }
 

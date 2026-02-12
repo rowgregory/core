@@ -1,12 +1,11 @@
+import { FC, useState } from 'react'
 import { IParley } from '@/types/parley'
-import React, { FC } from 'react'
 import { motion } from 'framer-motion'
 import { AlertTriangle, CheckCircle, Edit3, XCircle } from 'lucide-react'
-import { useDeleteParleyMutation } from '@/app/lib/redux/services/parleyApi'
-import { chapterId } from '@/app/lib/constants/api/chapterId'
-import { useAppDispatch } from '@/app/lib/redux/store'
-import { deleteParleyFromState } from '@/app/lib/redux/features/parleySlice'
+import { store } from '@/app/lib/redux/store'
 import { showToast } from '@/app/lib/redux/features/toastSlice'
+import { deleteParley } from '@/app/lib/actions/deleteParley'
+import { useRouter } from 'next/navigation'
 
 const ConfirmedActionButtons: FC<{
   parley: IParley
@@ -15,28 +14,34 @@ const ConfirmedActionButtons: FC<{
   onEdit: () => void
   userId: string
 }> = ({ parley, handleStatusUpdate, isUpdating, onEdit, userId }) => {
-  const [deleteParley, { isLoading: isDeleting }] = useDeleteParleyMutation()
-  const dispatch = useAppDispatch()
+  const router = useRouter()
+  const [isDeleting, setIsDeleting] = useState(false)
 
   const handleDelete = async () => {
     try {
-      await deleteParley({ chapterId, userId, parleyId: parley.id }).unwrap()
-      dispatch(deleteParleyFromState(parley.id))
-      dispatch(
+      setIsDeleting(true)
+
+      await deleteParley(parley.id)
+
+      router.refresh()
+
+      store.dispatch(
         showToast({
           type: 'success',
           message: 'Parley Deleted',
           description: 'The parley has been successfully removed.'
         })
       )
-    } catch (error: any) {
-      dispatch(
+    } catch (error) {
+      store.dispatch(
         showToast({
           type: 'error',
           message: 'Delete Failed',
           description: error.data?.error || 'Failed to delete parley'
         })
       )
+    } finally {
+      setIsDeleting(false)
     }
   }
 

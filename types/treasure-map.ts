@@ -87,26 +87,6 @@ const createInitialTreasureMapState = (currentUserId: string, chapterId: string)
   chapterId: chapterId
 })
 
-// Redux state interface
-interface TreasureMapState {
-  loading: boolean
-  error: string | null
-  treasureMaps: ITreasureMap[]
-  selectedTreasureMap: ITreasureMap | null
-  treasureMapDrawer: boolean
-  formData: TreasureMapFormState
-}
-
-// Initial Redux state
-const initialTreasureMapState: TreasureMapState = {
-  loading: false,
-  error: null,
-  treasureMaps: [],
-  selectedTreasureMap: null,
-  treasureMapDrawer: false,
-  formData: initialTreasureMapFormState
-}
-
 // Status options for dropdowns
 const TREASURE_MAP_STATUSES = ['GIVEN', 'ACCEPTED', 'CONTACTED', 'CLOSED', 'DECLINED'] as const
 

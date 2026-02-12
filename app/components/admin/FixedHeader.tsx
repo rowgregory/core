@@ -26,7 +26,7 @@ const FixedHeader: FC<IFixedHeader> = ({ selectedPage, links }) => {
     <>
       <ActionDropdown />
       <header
-        className={`${isNavigationCollapsed ? 'lg:ml-20' : 'lg:ml-[280px]'} fixed left-0 top-0 right-0 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800 z-30 h-[69px]`}
+        className={`${isNavigationCollapsed ? 'lg:ml-20' : 'lg:ml-70'} fixed left-0 top-0 right-0 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800 z-30 h-17.25`}
         style={{
           transition: 'left 0.3s ease-in-out'
         }}

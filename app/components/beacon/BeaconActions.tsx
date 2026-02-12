@@ -4,14 +4,15 @@ import uploadFileToFirebase from '@/app/lib/utils/firebase/uploadFileToFirebase'
 import validateProfileForm from '@/app/lib/utils/validations/validateProfileForm'
 import { createFormActions, setIsEditing, setIsNotEditing } from '@/app/lib/redux/features/formSlice'
 import { showToast } from '@/app/lib/redux/features/toastSlice'
-import { useUpdateMyProfileMutation } from '@/app/lib/redux/services/userApi'
 import { useAppDispatch, useFormSelector } from '@/app/lib/redux/store'
 import { Edit2, Save } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { updateMyProfile } from '@/app/lib/actions/updateMyProfile'
+import { useRouter } from 'next/navigation'
 
 const BeaconActions = () => {
+  const router = useRouter()
   const dispatch = useAppDispatch()
-  const [updateMyProfile] = useUpdateMyProfileMutation()
   const [isLoading, setIsLoading] = useState(false)
   const { beaconForm, isEditing } = useFormSelector()
   const inputs = beaconForm?.inputs
@@ -129,9 +130,9 @@ const BeaconActions = () => {
         askMeAbout: inputs.askMeAbout,
 
         weeklyTreasureWishlist: inputs.weeklyTreasureWishlist
-      }).unwrap()
+      })
 
-      // router.refresh()
+      router.refresh()
 
       dispatch(
         showToast({

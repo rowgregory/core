@@ -1,12 +1,9 @@
-import { useDashboardSelector } from '@/app/lib/redux/store'
 import { AnimatePresence, motion } from 'framer-motion'
 import { TrendingDown, TrendingUp } from 'lucide-react'
 import HorizontalLoader from '../common/HorizontalLoader'
 import TooltipWrapper from '../common/TooltipWrapper'
 
 const StatCard = ({ title, value, change, icon: Icon, color, tooltip, isFetching }: any) => {
-  const { loading } = useDashboardSelector()
-
   return (
     <TooltipWrapper tooltip={tooltip}>
       <motion.div
@@ -21,7 +18,7 @@ const StatCard = ({ title, value, change, icon: Icon, color, tooltip, isFetching
           </div>
 
           <AnimatePresence>
-            {!loading && !isFetching && change !== undefined && (
+            {!isFetching && change !== undefined && (
               <motion.span
                 key="change-indicator"
                 initial={{ opacity: 0 }}
@@ -48,7 +45,7 @@ const StatCard = ({ title, value, change, icon: Icon, color, tooltip, isFetching
             {title}
           </p>
           <div className="h-4 sm:h-6">
-            {loading || isFetching ? (
+            {isFetching ? (
               <HorizontalLoader />
             ) : (
               <motion.p
