@@ -38,10 +38,10 @@ async function sendPresentationReminders(req: NextRequest) {
       const batchPromises = batch.map(async (user) => {
         try {
           const result = await resend.emails.send({
-            from: 'Coastal Referral Exchange <noreply@coastal-referral-exchange.com>',
+            from: 'Coastal Referral Exchange <sqysh@coastal-referral-exchange.com>',
             to: user.email,
-            subject: 'Weekly Reminder: Support Boys and Girls Club of Lynn',
-            html: bgclTemplate()
+            subject: 'Support Boys & Girls Club of Lynn',
+            html: bgclTemplate(user?.name?.split(' ')[0])
           })
           return { success: true, email: user.email, result }
         } catch (error) {

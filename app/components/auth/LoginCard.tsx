@@ -125,7 +125,7 @@ const LoginCard: FC<ILoginCard> = ({
             <p className="text-violet-400 font-medium mb-6">{email}</p>
             <div className="bg-gray-700/30 border border-gray-600 rounded-lg p-4 mb-6">
               <p className="text-sm text-gray-300 leading-relaxed">
-                Click the link in your email to sign in securely. The link will expire in 15 minutes for your security.
+                Click the link in your email to sign in securely. The link will expire in 60 minutes for your security.
               </p>
             </div>
             <motion.button

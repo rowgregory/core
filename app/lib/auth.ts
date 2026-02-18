@@ -26,12 +26,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       type: 'email',
       maxAge: 60 * 60, // 60 mins
       from: process.env.RESEND_FROM_EMAIL!,
-      sendVerificationRequest: async ({ identifier: email, url, provider }) => {
+      sendVerificationRequest: async ({ identifier: email, url }) => {
         try {
           const result = await resend.emails.send({
-            from: `Navigator Access <${provider.from!}>`,
+            from: `Navigator Access <sqysh@coastal-referral-exchange.com>`,
             to: email,
-            subject: 'Your Bridge Awaits — Click to Enter, Navigator',
+            subject: 'Your Login Link - Coastal Referral Exchange',
             html: magicLinkTemplate(url)
           })
 

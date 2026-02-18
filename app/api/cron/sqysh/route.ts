@@ -1,5 +1,5 @@
 import { sliceCron } from '@/app/lib/constants/api/sliceNames'
-import presentingTemplate from '@/app/lib/email-templates/presenting'
+import sqyshGoogleReviewTemplate from '@/app/lib/email-templates/sqysh-google-review'
 import { createLog } from '@/app/lib/utils/api/createLog'
 import { handleApiError } from '@/app/lib/utils/api/handleApiError'
 import prisma from '@/prisma/client'
@@ -20,9 +20,9 @@ function getBaseUrl() {
   return 'http://localhost:3000'
 }
 
-async function sendPresentationReminders(req: NextRequest) {
+async function sendSqyshGoogleReviewReminders(req: NextRequest) {
   const baseUrl = getBaseUrl()
-  const normalizedUrl = `${baseUrl}/api/cron/presentation`
+  const normalizedUrl = `${baseUrl}/api/cron/sqysh`
 
   try {
     const users = await prisma.user.findMany({ where: { membershipStatus: 'ACTIVE' } })
@@ -38,10 +38,10 @@ async function sendPresentationReminders(req: NextRequest) {
       const batchPromises = batch.map(async (user) => {
         try {
           const result = await resend.emails.send({
-            from: 'Coastal Referral Exchange <noreply@coastal-referral-exchange.com>',
+            from: 'Coastal Referral Exchange <sqysh@coastal-referral-exchange.com>',
             to: user.email,
-            subject: 'Off Next Week!',
-            html: presentingTemplate()
+            subject: 'Help Sqysh Grow - Share Your Experience',
+            html: sqyshGoogleReviewTemplate(user?.name?.split(' ')[0])
           })
           return { success: true, email: user.email, result }
         } catch (error) {
@@ -68,10 +68,10 @@ async function sendPresentationReminders(req: NextRequest) {
     const failedEmails = results.filter((r) => !r.success).map((r) => ({ email: r.email, error: r.error }))
 
     // Log success
-    await createLog('info', `Presentation reminder emails sent`, {
-      location: ['app route - POST /api/cron/presentation'],
-      message: `Sent ${successful}/${users.length} presentation reminder emails successfully`,
-      name: 'PresentationRemindersSent',
+    await createLog('info', `Sqysh google review reminder emails sent`, {
+      location: ['app route - POST /api/cron/sqysh'],
+      message: `Sent ${successful}/${users.length} sqysh google review reminder emails successfully`,
+      name: 'SqyshGoogleReviewRemindersSent',
       timestamp: new Date().toISOString(),
       url: normalizedUrl,
       method: req.method,
@@ -86,10 +86,10 @@ async function sendPresentationReminders(req: NextRequest) {
 
     // Log failures separately if any
     if (failed > 0) {
-      await createLog('error', `Some presentation reminder emails failed`, {
-        location: ['app route - POST /api/cron/presentation'],
+      await createLog('error', `Some sqysh google review reminder emails failed`, {
+        location: ['app route - POST /api/cron/sqysh'],
         message: `${failed}/${users.length} email(s) failed to send`,
-        name: 'PresentationRemindersPartialFailure',
+        name: 'SqyshGoogleReviewRemindersPartialFailure',
         timestamp: new Date().toISOString(),
         url: normalizedUrl,
         method: req.method,
@@ -102,16 +102,16 @@ async function sendPresentationReminders(req: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: `Presentation reminder sent to ${successful}/${users.length} active members`,
+      message: `Sqysh google review reminder sent to ${successful}/${users.length} active members`,
       count: users.length,
       successful,
       failed
     })
   } catch (error: any) {
-    await createLog('error', `Presentation reminder job failed`, {
-      location: ['app route - POST /api/cron/presentation'],
-      message: `Fatal error in presentation reminders: ${error instanceof Error ? error.message : 'Unknown error'}`,
-      name: 'PresentationRemindersError',
+    await createLog('error', `Sqysh google review reminder job failed`, {
+      location: ['app route - POST /api/cron/sqysh'],
+      message: `Fatal error in sqysh google review reminders: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      name: 'SqyshGoogleReviewRemindersError',
       timestamp: new Date().toISOString(),
       url: normalizedUrl,
       method: req.method,
@@ -124,7 +124,7 @@ async function sendPresentationReminders(req: NextRequest) {
     return handleApiError({
       error,
       req,
-      action: 'send presentation reminder email',
+      action: 'send sqysh google review reminder email',
       sliceName: sliceCron,
       statusCode: error.statusCode || error.status || 500
     })
@@ -133,9 +133,9 @@ async function sendPresentationReminders(req: NextRequest) {
 
 // Handle both GET (cron) and POST (manual trigger)
 export async function GET(req: NextRequest) {
-  return sendPresentationReminders(req)
+  return sendSqyshGoogleReviewReminders(req)
 }
 
 export async function POST(req: NextRequest) {
-  return sendPresentationReminders(req)
+  return sendSqyshGoogleReviewReminders(req)
 }

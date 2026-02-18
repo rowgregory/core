@@ -1,16 +1,16 @@
 {
   "crons": [
     {
-      "path": "/api/cron/weekly-reminder-email",
+      "path": "/api/cron/core",
       "schedule": "0 19 * * 3"
     },
     {
-      "path": "/api/cron/presentation",
-      "schedule": "0 17 * * 4"
+      "path": "/api/cron/sqysh",
+      "schedule": "0 14 * * 1"
     },
     {
       "path": "/api/cron/bgcl",
-      "schedule": "0 21 * * 4"
+      "schedule": "0 17 * * 4"
     }
   ]
 }

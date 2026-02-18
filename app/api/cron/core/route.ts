@@ -1,5 +1,5 @@
 import { sliceCron } from '@/app/lib/constants/api/sliceNames'
-import weeklyReminderTemplate from '@/app/lib/email-templates/weekly-reminder'
+import coreTemplate from '@/app/lib/email-templates/core'
 import { createLog } from '@/app/lib/utils/api/createLog'
 import { handleApiError } from '@/app/lib/utils/api/handleApiError'
 import prisma from '@/prisma/client'
@@ -20,9 +20,9 @@ function getBaseUrl() {
   return 'http://localhost:3000'
 }
 
-async function sendWeeklyReminders(req: NextRequest) {
+async function sendCoreReminders(req: NextRequest) {
   const baseUrl = getBaseUrl()
-  const normalizedUrl = `${baseUrl}/api/cron/weekly-reminder-email`
+  const normalizedUrl = `${baseUrl}/api/cron/core`
 
   try {
     const users = await prisma.user.findMany({ where: { membershipStatus: 'ACTIVE' } })
@@ -40,10 +40,10 @@ async function sendWeeklyReminders(req: NextRequest) {
       const batchPromises = batch.map(async (user) => {
         try {
           const result = await resend.emails.send({
-            from: 'Coastal Referral Exchange <noreply@coastal-referral-exchange.com>',
+            from: 'Coastal Referral Exchange <sqysh@coastal-referral-exchange.com>',
             to: user.email,
-            subject: 'Log Your Treasure Maps, Anchors & Parleys - Midnight Deadline!',
-            html: weeklyReminderTemplate(user.name || user.email.split('@')[0])
+            subject: 'Log Your Parleys, Treasure Maps, & Anchors',
+            html: coreTemplate(user.name.split(' ')[0] || user.email.split('@')[0])
           })
           return { success: true, email: user.email, result }
         } catch (error) {
@@ -70,10 +70,10 @@ async function sendWeeklyReminders(req: NextRequest) {
     const failedEmails = results.filter((r) => !r.success).map((r) => ({ email: r.email, error: r.error }))
 
     // Log success
-    await createLog('info', `Weekly reminder emails sent`, {
-      location: ['app route - POST /api/cron/weekly-reminders'],
-      message: `Sent ${successful}/${users.length} weekly reminder emails successfully`,
-      name: 'WeeklyRemindersSent',
+    await createLog('info', `Core reminder emails sent`, {
+      location: ['app route - POST /api/cron/core'],
+      message: `Sent ${successful}/${users.length} core reminder emails successfully`,
+      name: 'CoreRemindersSent',
       timestamp: new Date().toISOString(),
       url: normalizedUrl,
       method: req.method,
@@ -88,10 +88,10 @@ async function sendWeeklyReminders(req: NextRequest) {
 
     // Log failures separately if any
     if (failed > 0) {
-      await createLog('error', `Some weekly reminder emails failed`, {
-        location: ['app route - POST /api/cron/weekly-reminders'],
+      await createLog('error', `Some core reminder emails failed`, {
+        location: ['app route - POST /api/cron/core'],
         message: `${failed}/${users.length} email(s) failed to send`,
-        name: 'WeeklyRemindersPartialFailure',
+        name: 'CoreRemindersPartialFailure',
         timestamp: new Date().toISOString(),
         url: normalizedUrl,
         method: req.method,
@@ -104,16 +104,16 @@ async function sendWeeklyReminders(req: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: `Weekly reminder sent to ${successful}/${users.length} active members`,
+      message: `Core reminder sent to ${successful}/${users.length} active members`,
       count: users.length,
       successful,
       failed
     })
   } catch (error: any) {
-    await createLog('error', `Weekly reminder job failed`, {
-      location: ['app route - POST /api/cron/weekly-reminders'],
-      message: `Fatal error in weekly reminders: ${error instanceof Error ? error.message : 'Unknown error'}`,
-      name: 'WeeklyRemindersError',
+    await createLog('error', `Core reminder job failed`, {
+      location: ['app route - POST /api/cron/core'],
+      message: `Fatal error in core reminders: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      name: 'CoreRemindersError',
       timestamp: new Date().toISOString(),
       url: normalizedUrl,
       method: req.method,
@@ -126,7 +126,7 @@ async function sendWeeklyReminders(req: NextRequest) {
     return handleApiError({
       error,
       req,
-      action: 'send weekly reminder email',
+      action: 'send core reminder email',
       sliceName: sliceCron,
       statusCode: error.statusCode || error.status || 500
     })
@@ -135,9 +135,9 @@ async function sendWeeklyReminders(req: NextRequest) {
 
 // Handle both GET (cron) and POST (manual trigger)
 export async function GET(req: NextRequest) {
-  return sendWeeklyReminders(req)
+  return sendCoreReminders(req)
 }
 
 export async function POST(req: NextRequest) {
-  return sendWeeklyReminders(req)
+  return sendCoreReminders(req)
 }
