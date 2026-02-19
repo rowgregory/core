@@ -12,13 +12,6 @@ const changelogTemplate = () => `
       <td style="padding: 20px;">
         <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 520px; margin: 0 auto; background: white; border-radius: 12px;">
 
-         <!-- GIF -->
-          <tr>
-            <td style="padding: 0; border-radius: 12px 12px 0 0; overflow: hidden;">
-              <img src="https://coastal-referral-exchange.com/images/sqysh_typing.gif" width="520" alt="Sqysh typing" style="width: 100%; max-width: 520px; display: block; margin: 0; border-radius: 12px 12px 0 0;" />
-            </td>
-          </tr>
-
           <!-- Header -->
           <tr>
             <td style="padding: 24px 20px; border-bottom: 1px solid #e2e8f0;">
