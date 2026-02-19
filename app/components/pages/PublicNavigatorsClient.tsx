@@ -3,16 +3,16 @@
 import { useState } from 'react'
 import { Search, Users, Award } from 'lucide-react'
 import NavigatorCard from '@/app/components/cards/NavigatorCard'
+import { User } from '@/types/user'
 
 const PublicNavigatorsClient = ({ data }) => {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedIndustry, setSelectedIndustry] = useState('All')
   const [expandedMember, setExpandedMember] = useState(null) as any
-  const navigators = data?.filter((user) => user.membershipStatus === 'ACTIVE') ?? []
 
-  const industries: any = ['All', ...new Set(navigators?.map?.((navigator) => navigator.industry))]
+  const industries: any = ['All', ...new Set(data?.map?.((navigator: User) => navigator.industry))]
 
-  const filteredNavigators = navigators?.filter?.((navigator) => {
+  const filteredNavigators = data?.filter?.((navigator: User) => {
     const matchesSearch =
       navigator.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       navigator.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -36,7 +36,7 @@ const PublicNavigatorsClient = ({ data }) => {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 text-blue-100 text-sm md:text-base">
             <div className="flex items-center">
               <Users className="w-4 h-4 md:w-5 md:h-5 mr-2 shrink-0" />
-              <span>{navigators?.length} Professional Members</span>
+              <span>{filteredNavigators?.length} Professional Members</span>
             </div>
             <div className="flex items-center">
               <Award className="w-4 h-4 md:w-5 md:h-5 mr-2 shrink-0" />
@@ -64,7 +64,7 @@ const PublicNavigatorsClient = ({ data }) => {
             onChange={(e) => setSelectedIndustry(e.target.value)}
             className="h-12.5 px-4 bg-slate-800 border border-slate-600 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
-            {industries.map((industry, i) => (
+            {industries.map((industry: string, i: number) => (
               <option key={i} value={industry}>
                 {industry}
               </option>
@@ -75,14 +75,14 @@ const PublicNavigatorsClient = ({ data }) => {
         {/* Results Counter */}
         <div className="mb-6">
           <p className="text-gray-300">
-            Showing {filteredNavigators?.length} of {navigators?.length} navigators
+            Showing {filteredNavigators?.length} of {filteredNavigators?.length} navigators
           </p>
         </div>
 
         {/* Members Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredNavigators?.map(
-            (navigator, i) =>
+            (navigator: User, i: number) =>
               navigator.isPublic && (
                 <NavigatorCard
                   key={i}

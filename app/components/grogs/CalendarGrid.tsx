@@ -59,7 +59,7 @@ const CalendarGrid: FC<CalendarGridProps> = ({
   const prepareRendezvousData = {
     description: inputs?.description,
     type: inputs?.type,
-    status: 'CANCELLED',
+    status: inputs?.type !== 'meeting' ? 'CANCELLED' : 'ACTIVE',
     title: inputs?.title,
     chapterId,
     startTime: inputs?.startTime,
@@ -182,19 +182,22 @@ const CalendarGrid: FC<CalendarGridProps> = ({
                   return (
                     <div
                       key={event.id}
-                      className={`flex items-center space-x-1 p-0.5 xs:p-1 rounded text-[10px] xs:text-xs truncate
-                  ${getEventTypeColor(event.type)}
-                  ${isUpdated ? 'ring-1 ring-cyan-300/50' : ''}
-                  ${isCancelled ? 'opacity-60' : ''}
-                  ${isRemoved ? 'opacity-40' : ''}
-                `}
-                      title={`${event.title}${isUpdated ? ' (Modified)' : ''}`}
+                      className={`flex flex-col p-0.5 xs:p-1 rounded text-[10px] xs:text-xs
+        ${getEventTypeColor(event.type)}
+        ${isUpdated ? 'ring-1 ring-cyan-300/50' : ''}
+        ${isCancelled ? 'opacity-60' : ''}
+        ${isRemoved ? 'opacity-40' : ''}
+      `}
+                      title={`${event.title}${event.description ? ` — ${event.description}` : ''}${isUpdated ? ' (Modified)' : ''}`}
                     >
-                      <EventIcon className={`w-3 h-3 shrink-0 ${isCancelled ? 'opacity-50' : ''}`} />
-                      <span className="truncate">{event.title}</span>
-                      {isUpdated && !isCancelled && !isRemoved && (
-                        <span className="w-1 h-1 bg-cyan-400 rounded-full shrink-0 ml-1" />
-                      )}
+                      <div className="flex items-center space-x-1 truncate">
+                        <EventIcon className={`w-3 h-3 shrink-0 ${isCancelled ? 'opacity-50' : ''}`} />
+                        <span className="truncate">{event.title}</span>
+                        {isUpdated && !isCancelled && !isRemoved && (
+                          <span className="w-1 h-1 bg-cyan-400 rounded-full shrink-0 ml-1" />
+                        )}
+                      </div>
+                      {event.description && <span className="truncate opacity-70 pl-4">{event.description}</span>}
                     </div>
                   )
                 })}
@@ -248,12 +251,25 @@ const CalendarGrid: FC<CalendarGridProps> = ({
               )
             }
 
+            const isCancelled = selectedDayEvents.every((event) => event.status === 'CANCELLED')
+
             return (
               <div>
                 <h3 className="pl-3 text-base xs:text-lg sm:text-xl font-bold text-white mb-3 xs:mb-4 flex flex-wrap items-center gap-1">
                   <Calendar className="w-4 h-4 xs:w-5 xs:h-5 mr-1" />
-                  <span>Meeting on&nbsp;</span>
-                  <span className="text-violet-300">{formattedSelectedDate}</span>
+                  {isCancelled ? (
+                    <>
+                      <span>Meeting is&nbsp;</span>
+                      <span className="text-red-400">Cancelled</span>
+                      <span>&nbsp;on&nbsp;</span>
+                      <span className="text-violet-300">{formattedSelectedDate}</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>Meeting on&nbsp;</span>
+                      <span className="text-violet-300">{formattedSelectedDate}</span>
+                    </>
+                  )}
                 </h3>
 
                 <div className="space-y-3 xs:space-y-4">

@@ -1,16 +1,14 @@
-import HiddenCoveSVG from '@/public/svg/HiddenCoveSVG'
 import {
   TowerControl,
   Ship,
   Anchor,
   Scroll,
   Layers,
-  Sailboat,
   Crosshair,
   Flag,
   ClipboardList,
   BookOpenText,
-  GitBranch
+  Users
 } from 'lucide-react'
 
 export const memberNavLinks = (isMembership: boolean) => [
@@ -46,14 +44,14 @@ export const memberNavLinks = (isMembership: boolean) => [
     id: 'stowaways',
     label: 'Stowaways',
     icon: Flag,
-    description: 'The Brig',
+    description: 'Visitors with unknown joining status',
     linkKey: '/member/stowaways'
   },
   {
     id: 'rendezvous',
     label: 'Rendezvous',
     icon: Crosshair,
-    description: 'The Gathering Point',
+    description: 'Calendar',
     linkKey: '/member/rendezvous'
   },
   {
@@ -67,8 +65,15 @@ export const memberNavLinks = (isMembership: boolean) => [
     id: 'beacon',
     label: 'Beacon',
     icon: TowerControl,
-    description: 'The Lighthouse',
+    description: 'Profile',
     linkKey: '/member/beacon'
+  },
+  {
+    id: 'navigators',
+    label: 'Navigators',
+    icon: Users,
+    description: 'Member Directory',
+    linkKey: '/member/navigators'
   },
   ...(isMembership
     ? [
@@ -85,16 +90,16 @@ export const memberNavLinks = (isMembership: boolean) => [
     id: 'lore-and-lingo',
     label: 'Lore & Lingo',
     icon: BookOpenText,
-    description: 'Decode the crew’s language — your map to every parley, anchor, and treasure maps.',
+    description: 'Decode the crew’s language.',
     linkKey: '/member/lore-and-lingo'
-  },
-  {
-    id: 'changelog',
-    label: 'Changelog',
-    icon: GitBranch,
-    description: 'Track updates, improvements, and new features — your complete history of platform evolution.',
-    linkKey: '/member/changelog'
   }
+  // {
+  //   id: 'changelog',
+  //   label: 'Changelog',
+  //   icon: GitBranch,
+  //   description: 'Track updates, improvements, and new features.',
+  //   linkKey: '/member/changelog'
+  // }
   // {
   //   id: 'hidden-cove',
   //   label: 'Hidden Cove',

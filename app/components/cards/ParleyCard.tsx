@@ -61,13 +61,13 @@ const ParleyCard: FC<{ parley: IParley; index: number }> = ({ parley, index }) =
         parley.recipientId === userId && parley.status === 'REQUESTED'
           ? 'bg-cyan-800/20 border-cyan-400 border-2 shadow-lg shadow-cyan-500/20'
           : parley.status === 'CONFIRMED'
-            ? 'bg-emerald-800/20 border-emerald-600/50'
+            ? 'bg-violet-800/20 border-violet-600/50'
             : parley.status === 'CANCELLED'
               ? 'bg-red-800/20 border-red-600/50'
               : parley.status === 'REQUESTED'
                 ? 'bg-cyan-800/20 border-cyan-600/50'
                 : parley.status === 'COMPLETED'
-                  ? 'bg-violet-800/20 border-violet-600/50'
+                  ? 'bg-emerald-800/20 border-emerald-600/50'
                   : 'bg-gray-800/50 border-gray-700'
       }`}
     >

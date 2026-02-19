@@ -7,13 +7,14 @@ import NavigatorCard from '@/app/components/admin/NavigatorCard'
 import navigatorStatusOptions from '@/app/lib/utils/navigator/navigatorStatusOptions'
 import { getNavigatorStatusIcon } from '@/app/lib/utils/navigator/getNavigatorStatusIcon'
 import getNavigatorStatusColor from '@/app/lib/utils/navigator/getNavigatorStatusColor'
+import { User } from '@/types/user'
 
 const NavigatorsClient = ({ data }) => {
   const [searchQuery, setSearchQuery] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
   const [viewMode, setViewMode] = useState('grid') // 'grid' or 'list'
 
-  const filteredNavigators = data?.filter((navigator) => {
+  const filteredNavigators = data?.filter((navigator: User) => {
     const matchesSearch =
       searchQuery === '' ||
       navigator.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -102,7 +103,7 @@ const NavigatorsClient = ({ data }) => {
           className={`${viewMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6' : 'space-y-4'}`}
         >
           <AnimatePresence>
-            {filteredNavigators.map((navigator, i) => (
+            {filteredNavigators.map((navigator: User, i: number) => (
               <NavigatorCard key={i} index={i} navigator={navigator} viewMode={viewMode} />
             ))}
           </AnimatePresence>

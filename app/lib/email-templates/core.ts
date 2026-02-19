@@ -5,20 +5,6 @@ const coreTemplate = (memberName: string) => `
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Weekly Activity Reminder - Coastal Referral Exchange</title>
-  <style type="text/css">
-    @media (prefers-color-scheme: dark) {
-      .email-bg { background-color: #0f172a !important; }
-      .card-bg { background-color: #1e293b !important; }
-      .text-dark { color: #f1f5f9 !important; }
-      .text-gray { color: #cbd5e1 !important; }
-      .text-muted { color: #94a3b8 !important; }
-      .border-light { border-color: #334155 !important; }
-      .footer-bg { background-color: #0f172a !important; }
-      .notice-yellow { background-color: #422006 !important; color: #fbbf24 !important; border-color: #f59e0b !important; }
-      .notice-cyan { background-color: #164e63 !important; color: #67e8f9 !important; border-color: #0e7490 !important; }
-      .button-bg { background-color: #0ea5e9 !important; }
-    }
-  </style>
 </head>
 <body style="margin: 0; padding: 0; background-color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;" class="email-bg">
   <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #ffffff;" class="email-bg">
@@ -39,23 +25,12 @@ const coreTemplate = (memberName: string) => `
                 Hi ${memberName},
               </p>
 
-              <!-- No Meeting Notice -->
-              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 0 0 20px 0;">
-                <tr>
-                  <td style="padding: 14px; background: #ffffff; border-left: 4px solid #f59e0b; border-radius: 6px; border: 2px solid #f59e0b;" class="notice-yellow">
-                    <p style="margin: 0; color: #92400e; font-size: 14px; line-height: 1.6;">
-                      <strong>No Meeting This Week!</strong> We're taking this week off. See you the following week!
-                    </p>
-                  </td>
-                </tr>
-              </table>
-
               <!-- Upcoming Presentation Notice -->
               <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 0 0 20px 0;">
                 <tr>
                   <td style="padding: 14px; background: #ffffff; border-left: 4px solid #0e7490; border-radius: 6px; border: 2px solid #0e7490;" class="notice-cyan">
                     <p style="margin: 0; color: #164e63; font-size: 14px; line-height: 1.6;">
-                      <strong>Coming Up:</strong> Martin Connolly from Live Well Capital will be presenting at our next meeting. Don't miss it!
+                      <strong>Coming Up:</strong> Page Driscoll from Commonwealth Payroll & HR will be presenting at our next meeting. Don't miss it!
                     </p>
                   </td>
                 </tr>

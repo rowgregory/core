@@ -19,39 +19,23 @@ const AdminParleysClient = ({ data }) => {
   const [typeFilter, setTypeFilter] = useState('all')
   const [showMyParleysOnly, setShowMyParleysOnly] = useState(false)
 
-  const filteredParleys = data
-    ?.filter((parley) => {
-      const matchesSearch =
-        searchQuery === '' ||
-        parley.requester.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        parley.recipient.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        parley.requester.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        parley.recipient.company.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredParleys = data?.filter((parley) => {
+    const matchesSearch =
+      searchQuery === '' ||
+      parley.requester.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      parley.recipient.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      parley.requester.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      parley.recipient.company.toLowerCase().includes(searchQuery.toLowerCase())
 
-      const matchesStatus = statusFilter === 'all' || parley.status === statusFilter
-      const matchesType = typeFilter === 'all' || parley.meetingType === typeFilter
+    const matchesStatus = statusFilter === 'all' || parley.status === statusFilter
+    const matchesType = typeFilter === 'all' || parley.meetingType === typeFilter
 
-      if (showMyParleysOnly) {
-        return parley.requesterId === session?.data?.user.id || parley.recipientId === session.data?.user.id
-      }
+    if (showMyParleysOnly) {
+      return parley.requesterId === session?.data?.user.id || parley.recipientId === session.data?.user.id
+    }
 
-      return matchesSearch && matchesStatus && matchesType
-    })
-    .sort((a, b) => {
-      // Get current user ID
-      const currentUserId = session.data?.user?.id
-
-      // Check if user is recipient in each parley
-      const aIsRecipient = a.recipientId === currentUserId
-      const bIsRecipient = b.recipientId === currentUserId
-
-      // If one is recipient and other isn't, prioritize the recipient one
-      if (aIsRecipient && !bIsRecipient) return -1
-      if (!aIsRecipient && bIsRecipient) return 1
-
-      // If both or neither are recipient, sort by creation date (newest first)
-      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    })
+    return matchesSearch && matchesStatus && matchesType
+  })
 
   return (
     <div className="bg-gray-900 min-h-[calc(100vh-68px)]">

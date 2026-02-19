@@ -124,14 +124,14 @@ export const adminNavLinks = [
     icon: BookOpenText,
     description: 'Decode the crew’s language',
     linkKey: '/admin/lore-and-lingo'
-  },
-  {
-    id: 'changelog',
-    label: 'Changelog',
-    icon: GitBranch,
-    description: 'Track updates, improvements, and new features.',
-    linkKey: '/admin/changelog'
   }
+  // {
+  //   id: 'changelog',
+  //   label: 'Changelog',
+  //   icon: GitBranch,
+  //   description: 'Track updates, improvements, and new features.',
+  //   linkKey: '/admin/changelog'
+  // }
   // {
   //   id: 'hidden-cove',
   //   label: 'Hidden Cove',

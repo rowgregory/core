@@ -5,20 +5,6 @@ export const bgclTemplate = (memberName: string) => `
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Weekly Donation Reminder - Boys and Girls Club of Lynn</title>
-  <style type="text/css">
-    @media (prefers-color-scheme: dark) {
-      .email-bg { background-color: #0f172a !important; }
-      .card-bg { background-color: #1e293b !important; }
-      .text-dark { color: #f1f5f9 !important; }
-      .text-gray { color: #cbd5e1 !important; }
-      .text-muted { color: #94a3b8 !important; }
-      .border-light { border-color: #334155 !important; }
-      .footer-bg { background-color: #0f172a !important; }
-      .highlight-box { background-color: #1e3a8a !important; }
-      .cta-box { background-color: #1e3a4f !important; border-color: #3d80ac !important; }
-      .button-bg { background-color: #3d80ac !important; }
-    }
-  </style>
 </head>
 <body style="margin: 0; padding: 0; background-color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;" class="email-bg">
   <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #ffffff;" class="email-bg">
