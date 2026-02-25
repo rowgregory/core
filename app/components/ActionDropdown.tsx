@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { useAppDispatch, useApplicationSelector, useSettingsSelector, useUserSelector } from '../lib/redux/store'
+import { store, useApplicationSelector, useSettingsSelector } from '../lib/redux/store'
 import { Users, Calendar, Anchor, Layers3, Sailboat, Beer, LifeBuoy, Coins, ChevronRight, Flag } from 'lucide-react'
 import { initialParleyFormState } from '@/app/lib/constants/entities/initialParleyFormState'
 import { setOpenAnchorDrawer } from '@/app/lib/redux/features/anchorSlice'
@@ -17,6 +17,7 @@ import {
   setOpenActionDropdownSubmenu
 } from '../lib/redux/features/appSlice'
 import Backdrop from './common/Backdrop'
+import { useSession } from 'next-auth/react'
 
 const actionItems = (
   isAdmin: boolean,
@@ -144,27 +145,26 @@ const actionItems = (
 const ActionDropdown = () => {
   const { actionDropdown, itemAction } = useApplicationSelector()
   const { settings } = useSettingsSelector()
-  const { user } = useUserSelector()
+  const session = useSession()
   const { push } = useRouter()
-  const dispatch = useAppDispatch()
   const chapter = settings
-  const isAdmin = user?.isAdmin ?? false
+  const isAdmin = session.data?.user?.isAdmin ?? false
 
   const onClose = () => {
-    dispatch(setCloseActionDropdown())
-    dispatch(setCloseActionDropdownSubmenu(null))
+    store.dispatch(setCloseActionDropdown())
+    store.dispatch(setCloseActionDropdownSubmenu(null))
   }
 
   const handleActionClick = (item: any) => {
     if (item.hasSubmenu) {
-      dispatch(setOpenActionDropdownSubmenu(itemAction === item.action ? null : item.action))
+      store.dispatch(setOpenActionDropdownSubmenu(itemAction === item.action ? null : item.action))
       return
     }
 
     if (item.isUnlocked) {
       onClose()
-      dispatch(item.open())
-      dispatch(setInputs({ formName: item.formName, data: item.initial }))
+      store.dispatch(item.open())
+      store.dispatch(setInputs({ formName: item.formName, data: item.initial }))
     } else {
       onClose()
       push(item.linkKey)
@@ -174,8 +174,8 @@ const ActionDropdown = () => {
   const handleSubmenuClick = (submenuItem: any) => {
     if (submenuItem.isUnlocked) {
       onClose()
-      dispatch(submenuItem.open())
-      dispatch(setInputs({ formName: submenuItem.formName, data: submenuItem.initial }))
+      store.dispatch(submenuItem.open())
+      store.dispatch(setInputs({ formName: submenuItem.formName, data: submenuItem.initial }))
     } else {
       push('/admin/hidden-cove')
     }
@@ -199,7 +199,7 @@ const ActionDropdown = () => {
                 chapter?.hasUnlockedGrog,
                 chapter?.hasUnlockedMuster,
                 chapter?.hasUnlockedBooty,
-                user?.id ?? ''
+                session.data.user?.id ?? ''
               )?.map((item, i) => (
                 <div key={i} className="relative">
                   <motion.button

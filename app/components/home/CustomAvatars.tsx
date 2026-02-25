@@ -5,7 +5,8 @@ import { useUserSelector } from '@/app/lib/redux/store'
 import Link from 'next/link'
 
 const CustomerAvatars = () => {
-  const { users } = useUserSelector()
+  // TODO
+  const users = []
   const totalCount = users?.length
   // Show first 4-5 users for the avatars
   const displayUsers = users?.slice(-15) || []

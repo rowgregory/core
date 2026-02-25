@@ -88,6 +88,12 @@ const ParleyForm: FC<IForm> = ({
                       <p className="text-sm text-gray-400">{user?.email}</p>
                     </div>
                   </div>
+                  {errors?.requesterId && (
+                    <p className="text-red-400 text-sm mt-1 flex items-center space-x-1">
+                      <AlertCircle className="w-4 h-4" />
+                      <span>{errors?.requesterId}</span>
+                    </p>
+                  )}
                 </div>
 
                 {/* Who to meet with */}
