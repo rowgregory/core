@@ -9,7 +9,7 @@ export default async function sendChangelog() {
 
   try {
     const users = await prisma.user.findMany({
-      where: { membershipStatus: 'ACTIVE', email: 'sqysh@sqysh.io' }
+      where: { membershipStatus: 'ACTIVE' }
     })
 
     console.log(`📋 Found ${users.length} active members`)

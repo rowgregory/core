@@ -25,12 +25,27 @@ const coreTemplate = (memberName: string) => `
                 Hi ${memberName},
               </p>
 
+              <!-- Cancellation Notice -->
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 0 0 20px 0;">
+                <tr>
+                  <td style="padding: 14px; background: #ffffff; border-left: 4px solid #ef4444; border-radius: 6px; border: 2px solid #ef4444;">
+                    <p style="margin: 0 0 6px 0; color: #991b1b; font-size: 14px; font-weight: 700;">⚠️ Tomorrow's Meeting is Cancelled</p>
+                    <p style="margin: 0; color: #334155; font-size: 14px; line-height: 1.6;">
+                      Due to snow and parking conditions, tomorrow's Coastal meeting has been cancelled. Use this time to reach out to clients and check in on them.
+                    </p>
+                    <p style="margin: 12px 0 0 0; color: #64748b; font-size: 13px; font-style: italic; line-height: 1.6;">
+                      "No matter how long the winter, spring is sure to follow."
+                    </p>
+                  </td>
+                </tr>
+              </table>
+
               <!-- Upcoming Presentation Notice -->
               <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 0 0 20px 0;">
                 <tr>
                   <td style="padding: 14px; background: #ffffff; border-left: 4px solid #0e7490; border-radius: 6px; border: 2px solid #0e7490;" class="notice-cyan">
                     <p style="margin: 0; color: #164e63; font-size: 14px; line-height: 1.6;">
-                      <strong>Coming Up:</strong> Page Driscoll from Commonwealth Payroll & HR will be presenting at our next meeting. Don't miss it!
+                      <strong>Coming Up Next Week:</strong> Martin will be presenting at our next meeting. Don't miss it!
                     </p>
                   </td>
                 </tr>
