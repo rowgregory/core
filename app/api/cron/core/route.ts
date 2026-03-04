@@ -42,7 +42,7 @@ async function sendCoreReminders(req: NextRequest) {
           const result = await resend.emails.send({
             from: 'Coastal Referral Exchange <sqysh@coastal-referral-exchange.com>',
             to: user.email,
-            subject: "Tomorrow's Meeting is Cancelled — Log Your Activities",
+            subject: 'Log Your Activities',
             html: coreTemplate(user.name.split(' ')[0] || user.email.split('@')[0])
           })
           return { success: true, email: user.email, result }
