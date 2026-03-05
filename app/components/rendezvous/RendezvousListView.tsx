@@ -236,7 +236,7 @@ const RendezvousListView = ({ events, getEventTypeIcon, getEventTypeColor, onRem
                       </div>
                       <div>
                         <div className={`font-medium text-sm ${isCancelled ? 'text-gray-400' : 'text-white'}`}>
-                          {event.title}
+                          {event.description}
                         </div>
                         {isUpdated && <div className="text-xs text-cyan-400">Modified</div>}
                       </div>

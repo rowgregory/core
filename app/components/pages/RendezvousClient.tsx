@@ -12,7 +12,7 @@ import RendezvousListView from '@/app/components/rendezvous/RendezvousListView'
 import InfoBanner from '@/app/components/common/InfoBanner'
 
 const RendezvousClient = ({ data }) => {
-  const [viewMode, setViewMode] = useState('calendar')
+  const [viewMode, setViewMode] = useState('list')
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0])
 
   // Generate dynamic Thursday meetings
@@ -95,17 +95,7 @@ const RendezvousClient = ({ data }) => {
               <Compass className="w-4 h-4 text-gray-400" />
               <span className="text-sm text-gray-400">Navigation:</span>
             </div>
-            <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-x-2 w-full">
-              <button
-                onClick={() => setViewMode('calendar')}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                  viewMode === 'calendar'
-                    ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30'
-                    : 'bg-gray-700 text-gray-400 border border-gray-600 hover:bg-gray-700/70'
-                }`}
-              >
-                Calendar View
-              </button>
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2">
               <button
                 onClick={() => setViewMode('list')}
                 className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
@@ -115,6 +105,16 @@ const RendezvousClient = ({ data }) => {
                 }`}
               >
                 List View
+              </button>
+              <button
+                onClick={() => setViewMode('calendar')}
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                  viewMode === 'calendar'
+                    ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30'
+                    : 'bg-gray-700 text-gray-400 border border-gray-600 hover:bg-gray-700/70'
+                }`}
+              >
+                Calendar View
               </button>
             </div>
           </div>
@@ -132,7 +132,7 @@ const RendezvousClient = ({ data }) => {
               <div className="flex items-center justify-between">
                 <h2 className="text-2xl font-bold text-white flex items-center">
                   <Calendar className="w-6 h-6 mr-2" />
-                  The Gathering Point
+                  Rendezvous
                 </h2>
                 <div className="flex items-center space-x-3">{/* Month navigation buttons */}</div>
               </div>
@@ -161,7 +161,7 @@ const RendezvousClient = ({ data }) => {
               <div className="flex items-center justify-between">
                 <h2 className="text-2xl font-bold text-white flex items-center">
                   <Calendar className="w-6 h-6 mr-2" />
-                  The Gathering Point
+                  Rendezvous
                 </h2>
                 <div className="flex items-center space-x-3">{/* Month navigation buttons */}</div>
               </div>
