@@ -1,5 +1,5 @@
+import { FC } from 'react'
 import { User } from '@/types/user'
-import React, { FC } from 'react'
 
 const ProfileInfo: FC<{ user: User | null }> = ({ user }) => {
   return (
@@ -18,6 +18,26 @@ const ProfileInfo: FC<{ user: User | null }> = ({ user }) => {
         <div className="text-slate-400 mt-1 text-sm sm:text-base">{user?.company}</div>
       )}
       <p className="text-blue-400 text-xs sm:text-sm mt-1">{user?.industry}</p>
+      {(user?.phone || user?.email) && (
+        <div className="flex items-center justify-center gap-4 mt-2">
+          {user?.phone && (
+            <a
+              href={`tel:${user.phone}`}
+              className="text-slate-400 hover:text-slate-300 transition-colors text-xs sm:text-sm"
+            >
+              {user.phone}
+            </a>
+          )}
+          {user?.email && (
+            <a
+              href={`mailto:${user.email}`}
+              className="text-slate-400 hover:text-slate-300 transition-colors text-xs sm:text-sm"
+            >
+              {user.email}
+            </a>
+          )}
+        </div>
+      )}
     </div>
   )
 }
