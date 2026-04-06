@@ -1,12 +1,16 @@
 {
   "crons": [
     {
-      "path": "/api/cron/core",
-      "schedule": "0 19 * * 3"
-    },
-    {
       "path": "/api/cron/sqysh",
       "schedule": "0 14 * * 1"
+    },
+    {
+      "path": "/api/cron/directory-reminder",
+      "schedule": "0 14 * * 2"
+    },
+    {
+      "path": "/api/cron/core",
+      "schedule": "0 19 * * 3"
     },
     {
       "path": "/api/cron/bgcl",
