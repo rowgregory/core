@@ -6,7 +6,7 @@
     },
     {
       "path": "/api/cron/member-directory",
-      "schedule": "45 16 * * 2"
+      "schedule": "45 15 * * 2"
     },
     {
       "path": "/api/cron/core",
