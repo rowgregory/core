@@ -1,4 +1,4 @@
-const memberDirectoryTemplate = (memberName: string) => `
+export const memberDirectoryTemplate = (memberName: string) => `
 <!DOCTYPE html>
 <html lang="en">
 <head>
