@@ -1,5 +1,3 @@
-'use server'
-
 import AdminLayoutClient from '../components/pages/AdminLayoutClient'
 
 export const dynamic = 'force-dynamic'
