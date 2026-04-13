@@ -19,6 +19,7 @@ export async function getDashboardData() {
       select: {
         id: true,
         name: true,
+        secondaryEmail: true,
         chapterId: true,
         chapter: { select: { name: true } }
       }
@@ -163,8 +164,10 @@ export async function getDashboardData() {
       success: true,
       data: {
         currentUser: {
+          id: user.id,
           name: user.name ?? 'Member',
-          initials: getInitials(user.name ?? '')
+          initials: getInitials(user.name ?? ''),
+          secondaryEmail: user.secondaryEmail
         },
         members,
         stats: {
