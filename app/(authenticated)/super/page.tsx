@@ -39,6 +39,8 @@ export default async function SuperDashPage() {
   const pastCount = countPastMeetingThursdays(anchor, cancelledDates, visitorDates)
   const startIndex = queueData.length > 0 ? pastCount % queueData.length : 0
 
+  console.log('pastCount', pastCount, 'startIndex', startIndex, 'queueLength', queueData.length)
+
   return (
     <SuperDashClient
       data={result.data}
