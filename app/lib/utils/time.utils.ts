@@ -38,8 +38,8 @@ export function daysUntil(iso: string) {
   return `${diff}d`
 }
 
-export function toDateKey(d: Date) {
-  return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`
+export function toDateKey(d: Date): string {
+  return `${d.getUTCFullYear()}-${d.getUTCMonth()}-${d.getUTCDate()}`
 }
 
 export function getTodayLabel(): string {
