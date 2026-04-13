@@ -41,14 +41,14 @@ export function HistoryTabs({ recentActivity }: { recentActivity: ActivityItem[]
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`flex-1 h-10 text-f10 font-mono tracking-[0.12em] uppercase transition-colors border-b-2 focus-visible:outline-none ${
+              className={`flex-1 h-9 text-f9 font-mono tracking-widest uppercase transition-colors border-b-2 focus-visible:outline-none ${
                 activeTab === tab.key
                   ? 'border-primary-light dark:border-primary-dark text-primary-light dark:text-primary-dark'
                   : 'border-transparent text-muted-light dark:text-muted-dark hover:text-text-light dark:hover:text-text-dark'
               }`}
             >
               {tab.label}
-              {count > 0 && <span className="ml-1 text-f9 opacity-60">({count})</span>}
+              {count > 0 && <span className="ml-0.5 opacity-50">({count})</span>}
             </button>
           )
         })}
@@ -57,7 +57,7 @@ export function HistoryTabs({ recentActivity }: { recentActivity: ActivityItem[]
       {/* list */}
       <ul className="divide-y divide-border-light dark:divide-border-dark max-h-100 overflow-y-auto">
         {filtered.length === 0 ? (
-          <li className="px-4 py-6 text-center text-[12.5px] font-nunito text-muted-light dark:text-muted-dark">
+          <li className="px-4 py-5 text-center text-[12px] font-nunito text-muted-light dark:text-muted-dark">
             No activity yet
           </li>
         ) : (
@@ -67,19 +67,19 @@ export function HistoryTabs({ recentActivity }: { recentActivity: ActivityItem[]
               initial={{ opacity: 0, x: -8 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3, delay: i * 0.04, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="flex items-start gap-3 px-4 py-3.5 bg-bg-light dark:bg-bg-dark"
+              className="flex items-start gap-2.5 px-3 py-3 bg-bg-light dark:bg-bg-dark"
             >
               <span
-                className="w-2 h-2 rounded-full shrink-0 mt-1.5"
+                className="w-1.5 h-1.5 rounded-full shrink-0 mt-1.5"
                 style={{ backgroundColor: DOT_COLOR[item.type] }}
                 aria-hidden="true"
               />
               <div className="flex-1 min-w-0">
-                <p className="text-[13.5px] font-nunito font-medium text-text-light dark:text-text-dark truncate">
+                <p className="text-[13px] font-nunito font-medium text-text-light dark:text-text-dark truncate">
                   {item.label}
                 </p>
                 {item.type === 'REFERRAL' && item.clientPhone && (
-                  <div className="flex items-center gap-3 mt-1">
+                  <div className="flex items-center gap-2.5 mt-0.5">
                     <span className="text-f10 font-mono text-muted-light dark:text-muted-dark">
                       {formatPhone(item.clientPhone)}
                     </span>
@@ -98,7 +98,7 @@ export function HistoryTabs({ recentActivity }: { recentActivity: ActivityItem[]
                   </div>
                 )}
                 {item.type === 'CLOSED' && item.businessValue && (
-                  <p className="text-f10 font-mono text-muted-light dark:text-muted-dark mt-1">
+                  <p className="text-f10 font-mono text-muted-light dark:text-muted-dark mt-0.5">
                     ${Number(item.businessValue).toLocaleString()}
                   </p>
                 )}

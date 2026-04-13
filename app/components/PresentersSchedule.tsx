@@ -4,15 +4,16 @@ import { motion } from 'framer-motion'
 import { Mic } from 'lucide-react'
 import { daysUntil } from '../lib/utils/time.utils'
 import { ScheduledPresenter } from '@/types/presenter-queue'
+import { getInitials } from '../lib/utils/common/getInitials'
 
-export function fmtDate(iso: string) {
+export function fmtDate(iso: string, options?: any) {
   const d = iso.includes('T') ? new Date(iso) : new Date(`${iso}T12:00:00`)
   return d.toLocaleDateString('en-US', {
-    weekday: 'long',
-    month: 'long',
+    weekday: 'short',
+    month: 'short',
     day: 'numeric',
-    year: 'numeric',
-    timeZone: 'America/New_York'
+    timeZone: 'America/New_York',
+    ...options
   })
 }
 
@@ -48,7 +49,9 @@ export default function PresenterSchedule({
             <p className="font-sora font-black text-[15px] text-primary-light dark:text-primary-dark">
               {daysUntil(next.date)}
             </p>
-            <p className="text-f10 font-mono text-muted-light dark:text-muted-dark">{fmtDate(next.date)}</p>
+            <p className="text-f10 font-mono text-muted-light dark:text-muted-dark">
+              {fmtDate(next.date, { weekday: 'long', month: 'long' })}
+            </p>
           </div>
         </div>
         {next.isYou && (
@@ -76,22 +79,18 @@ function PresenterRow({ presenter: s, index: i }: { presenter: ScheduledPresente
 
   return (
     <motion.li
-      className={`flex items-center gap-3 px-4 py-3 transition-colors ${
+      className={`flex items-center gap-2.5 px-3 py-2.5 transition-colors ${
         s.isYou
           ? 'bg-primary-light/5 dark:bg-primary-dark/5'
           : isOff
             ? 'bg-red-50 dark:bg-red-400/5 opacity-60'
             : isVisitor
               ? 'bg-amber-50 dark:bg-amber-400/5'
-              : 'bg-bg-light dark:bg-bg-dark hover:bg-surface-light dark:hover:bg-surface-dark'
+              : 'bg-bg-light dark:bg-bg-dark'
       }`}
     >
-      <span className="w-5 text-center font-mono text-[11px] text-muted-light dark:text-muted-dark shrink-0">
-        {s.type === 'presenter' ? i + 1 : '—'}
-      </span>
-
       <div
-        className={`w-7 h-7 shrink-0 flex items-center justify-center border text-f10 font-mono font-bold ${
+        className={`w-6 h-6 shrink-0 flex items-center justify-center border text-f9 font-mono font-bold ${
           isOff
             ? 'bg-red-50 dark:bg-red-400/5 border-red-200 dark:border-red-400/20 text-red-400'
             : isVisitor
@@ -101,21 +100,12 @@ function PresenterRow({ presenter: s, index: i }: { presenter: ScheduledPresente
                 : 'bg-surface-light dark:bg-surface-dark border-border-light dark:border-border-dark text-muted-light dark:text-muted-dark'
         }`}
       >
-        {isOff
-          ? '✕'
-          : isVisitor
-            ? '★'
-            : s.name
-                .split(' ')
-                .map((n) => n[0])
-                .slice(0, 2)
-                .join('')
-                .toUpperCase()}
+        {isOff ? '✕' : isVisitor ? '★' : getInitials(s.name)}
       </div>
 
       <div className="flex-1 min-w-0">
         <p
-          className={`text-[13px] font-sora font-bold truncate ${
+          className={`text-[12.5px] font-sora font-bold truncate ${
             isOff
               ? 'text-red-400 dark:text-red-400'
               : isVisitor
@@ -128,11 +118,10 @@ function PresenterRow({ presenter: s, index: i }: { presenter: ScheduledPresente
           {s.name}
           {s.isYou ? ' (You)' : ''}
         </p>
-        <p className="text-f10 font-mono text-muted-light dark:text-muted-dark truncate">{s.company}</p>
       </div>
 
       <div className="text-right shrink-0">
-        <p className="text-[12px] font-mono text-text-light dark:text-text-dark">{fmtDate(s.date)}</p>
+        <p className="text-f10 font-mono text-muted-light dark:text-muted-dark">{fmtDate(s.date)}</p>
         {s.isNext && (
           <p className="text-f9 font-mono uppercase tracking-widest text-primary-light dark:text-primary-dark">Next</p>
         )}

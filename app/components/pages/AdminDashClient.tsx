@@ -28,23 +28,20 @@ function StatTile({
 }) {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-16px' })
+
   return (
     <motion.div
       ref={ref}
       initial={{ opacity: 0, y: 12 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.4, delay, ease: [0.25, 0.46, 0.45, 0.94] }}
-      className="flex items-center gap-4 px-5 py-4 border-r border-border-light dark:border-border-dark last:border-r-0"
+      className="flex flex-col gap-1 px-3 py-3 border-r border-b border-border-light dark:border-border-dark nth-[3n]:border-r-0"
     >
-      <div className="w-9 h-9 flex items-center justify-center bg-primary-light/8 dark:bg-primary-dark/10 shrink-0">
-        <Icon size={16} className="text-primary-light dark:text-primary-dark" aria-hidden="true" />
-      </div>
-      <div>
-        <p className="font-sora font-black text-xl text-primary-light dark:text-primary-dark tabular-nums leading-none mb-0.5">
-          {value}
-        </p>
-        <p className="text-f10 font-mono tracking-[0.15em] uppercase text-muted-light dark:text-muted-dark">{label}</p>
-      </div>
+      <Icon size={13} className="text-primary-light dark:text-primary-dark" aria-hidden="true" />
+      <p className="font-sora font-black text-[18px] xs:text-xl text-primary-light dark:text-primary-dark tabular-nums leading-none">
+        {value}
+      </p>
+      <p className="text-f9 font-mono tracking-[0.12em] uppercase text-muted-light dark:text-muted-dark">{label}</p>
     </motion.div>
   )
 }
@@ -69,35 +66,35 @@ export default function AdminDashClient({ data }: { data: AdminDashboardData }) 
     <div className="min-h-screen bg-bg-light dark:bg-bg-dark">
       <main className="max-w-170 mx-auto px-4 pb-12">
         {/* ── Header ── */}
-        <FadeUp className="pt-7 pb-6 border-b border-border-light dark:border-border-dark mb-6">
-          <div className="flex items-end justify-between gap-4">
+        <FadeUp className="pt-7 pb-5 border-b border-border-light dark:border-border-dark mb-6">
+          <div className="flex items-center justify-between gap-3">
             <div>
               <p className="text-f10 font-mono tracking-[0.2em] uppercase text-primary-light dark:text-primary-dark mb-1">
                 Admin
               </p>
-              <h1 className="font-sora font-black text-[28px] text-text-light dark:text-text-dark tracking-tight leading-none">
+              <h1 className="font-sora font-black text-[22px] xs:text-[28px] text-text-light dark:text-text-dark tracking-tight leading-none">
                 Chapter Overview
               </h1>
             </div>
             <Link
               href="/dashboard"
-              className="flex items-center gap-2 h-9 px-4 border border-border-light dark:border-border-dark text-muted-light dark:text-muted-dark hover:text-primary-light dark:hover:text-primary-dark hover:border-primary-light dark:hover:border-primary-dark transition-colors text-f10 font-mono tracking-[0.15em] uppercase focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark"
+              className="shrink-0 flex items-center gap-1.5 h-8 px-3 border border-border-light dark:border-border-dark text-muted-light dark:text-muted-dark hover:text-primary-light dark:hover:text-primary-dark hover:border-primary-light dark:hover:border-primary-dark transition-colors text-f10 font-mono tracking-widest uppercase focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark"
             >
-              <LayoutDashboard size={13} aria-hidden="true" />
-              Dashboard
+              <LayoutDashboard size={12} aria-hidden="true" />
+              <span className="hidden xs:inline">Dashboard</span>
             </Link>
           </div>
         </FadeUp>
 
         {/* ── Stats ── */}
         <FadeUp delay={0.05} className="mb-6">
-          <div className="grid grid-cols-2 1000:grid-cols-3 border border-border-light dark:border-border-dark">
-            <StatTile value={stats.totalRevenue} label="Total revenue" icon={DollarSign} delay={0.06} />
-            <StatTile value={stats.totalParleys} label="Face-2-Face" icon={Users} delay={0.09} />
+          <div className="grid grid-cols-3 border-t border-l border-border-light dark:border-border-dark">
+            <StatTile value={stats.totalRevenue} label="Revenue" icon={DollarSign} delay={0.06} />
+            <StatTile value={stats.totalParleys} label="Meetings" icon={Users} delay={0.09} />
             <StatTile value={stats.totalReferrals} label="Referrals" icon={Activity} delay={0.12} />
-            <StatTile value={stats.totalAnchors} label="Closed business" icon={Clock} delay={0.15} />
-            <StatTile value={stats.activeMembers} label="Active members" icon={Users} delay={0.18} />
-            <StatTile value={stats.pendingApps} label="Pending apps" icon={FileText} delay={0.21} />
+            <StatTile value={stats.totalAnchors} label="Closed" icon={Clock} delay={0.15} />
+            <StatTile value={stats.activeMembers} label="Members" icon={Users} delay={0.18} />
+            <StatTile value={stats.pendingApps} label="Pending" icon={FileText} delay={0.21} />
           </div>
         </FadeUp>
 

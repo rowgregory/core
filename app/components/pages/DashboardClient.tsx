@@ -112,21 +112,18 @@ export default function DashboardClient({
 
         {/* ── Onboarding preview ── */}
         <FadeUp delay={0.4} className="pt-6">
-          <div className="border border-border-light dark:border-border-dark px-4 py-4 flex items-center justify-between gap-4">
+          <div className="border border-border-light dark:border-border-dark px-4 py-3 flex items-center justify-between gap-3">
             <div className="min-w-0">
               <p className="text-f10 font-mono tracking-[0.15em] uppercase text-primary-light dark:text-primary-dark mb-0.5">
                 Coming Soon
               </p>
-              <p className="text-[13px] font-sora font-bold text-text-light dark:text-text-dark leading-tight">
-                New Member Setup — Preview
-              </p>
-              <p className="text-[12px] font-nunito text-muted-light dark:text-muted-dark mt-0.5">
-                See what the new member payment flow will look like once online payments go live.
+              <p className="text-[13px] font-sora font-bold text-text-light dark:text-text-dark leading-tight truncate">
+                New Member Payment Flow
               </p>
             </div>
             <Link
               href="/onboarding"
-              className="shrink-0 h-9 px-4 border border-border-light dark:border-border-dark text-muted-light dark:text-muted-dark hover:text-primary-light dark:hover:text-primary-dark hover:border-primary-light dark:hover:border-primary-dark transition-colors text-f10 font-mono tracking-widest uppercase focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark inline-flex items-center"
+              className="shrink-0 h-8 px-3 border border-border-light dark:border-border-dark text-muted-light dark:text-muted-dark hover:text-primary-light dark:hover:text-primary-dark hover:border-primary-light dark:hover:border-primary-dark transition-colors text-f10 font-mono tracking-widest uppercase focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark inline-flex items-center"
             >
               Preview →
             </Link>

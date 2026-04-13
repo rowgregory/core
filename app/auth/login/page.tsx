@@ -44,26 +44,24 @@ const LoginPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-bg-light dark:bg-bg-dark flex items-center justify-center p-6">
-      <div className="w-full max-w-md">
-        {/* Header */}
+    <div className="min-h-screen bg-bg-light dark:bg-bg-dark flex items-center justify-center px-4 py-10">
+      <div className="w-full max-w-sm">
         <LoginHeader />
 
-        {/* Error */}
         {urlError && (
           <motion.div
             initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="mb-6 border-l-2 border-red-500 bg-red-50 dark:bg-red-500/5 px-4 py-3"
+            className="mb-5 border-l-2 border-red-500 bg-red-50 dark:bg-red-500/5 px-3 py-2.5"
           >
-            <div className="flex items-start gap-3">
-              <ShieldX className="w-4 h-4 text-red-500 dark:text-red-400 mt-0.5 shrink-0" aria-hidden="true" />
+            <div className="flex items-start gap-2.5">
+              <ShieldX className="w-3.5 h-3.5 text-red-500 dark:text-red-400 mt-0.5 shrink-0" aria-hidden="true" />
               <div>
-                <p className="text-[13px] font-sora font-bold text-red-600 dark:text-red-400 mb-0.5">
+                <p className="text-[12.5px] font-sora font-bold text-red-600 dark:text-red-400 mb-0.5">
                   {errorInfo?.title}
                 </p>
-                <p className="text-[12.5px] font-nunito text-red-500 dark:text-red-400/80 leading-relaxed">
+                <p className="text-[12px] font-nunito text-red-500 dark:text-red-400/80 leading-relaxed">
                   {errorInfo?.message}
                 </p>
               </div>
@@ -71,7 +69,6 @@ const LoginPage = () => {
           </motion.div>
         )}
 
-        {/* Login card */}
         <LoginCard
           email={email}
           error={error}
@@ -83,15 +80,13 @@ const LoginPage = () => {
           setIsEmailSent={setIsEmailSent}
         />
 
-        {/* Features */}
         <LoginFeatures />
 
-        {/* Footer */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.5 }}
-          className="text-center mt-8 hidden sm:block"
+          className="text-center mt-6"
         >
           <p className="text-f10 font-mono tracking-widest text-muted-light dark:text-muted-dark">
             Coastal Referral Exchange

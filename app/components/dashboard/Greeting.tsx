@@ -1,5 +1,5 @@
-import { useSession } from 'next-auth/react'
-import { LayoutDashboard, UserCircle } from 'lucide-react'
+import { signOut, useSession } from 'next-auth/react'
+import { LayoutDashboard, LogOut, UserCircle } from 'lucide-react'
 import Link from 'next/link'
 import { getTodayLabel } from '@/app/lib/utils/time.utils'
 import { getGreeting } from '@/app/lib/utils/common/getGreeting'
@@ -9,31 +9,41 @@ const sharedCls = `flex items-center gap-2 h-9 px-4 border border-border-light d
 export function Greeting({ currentUser }) {
   const session = useSession()
   const firstName = currentUser.name.split(' ')[0]
-
   const greeting = getGreeting()
   const today = getTodayLabel()
+  const isAdmin = session.data?.user?.isAdmin ?? false
 
-  const isAdmin = session.data.user.isAdmin ?? false
   return (
-    <div className="flex items-start justify-between gap-2">
-      <div className="min-w-0">
-        <p className="text-f10 font-mono tracking-[0.18em] uppercase text-primary-light dark:text-primary-dark mb-1.5">
-          {today}
-        </p>
-        <h1 className="font-sora font-black text-[22px] xs:text-[30px] text-text-light dark:text-text-dark tracking-tight leading-[1.1] truncate">
-          {greeting}, {firstName}.
-        </h1>
+    <div className="flex flex-col gap-3">
+      <div className="flex items-start justify-between gap-2">
+        <div className="min-w-0">
+          <p className="text-f10 font-mono tracking-[0.18em] uppercase text-primary-light dark:text-primary-dark mb-1.5">
+            {today}
+          </p>
+          <h1 className="font-sora font-black text-[26px] xs:text-[30px] text-text-light dark:text-text-dark tracking-tight leading-[1.1]">
+            {greeting}, {firstName}.
+          </h1>
+        </div>
+        <button
+          onClick={() => signOut({ callbackUrl: '/auth/login' })}
+          className="shrink-0 mt-1 text-muted-light dark:text-muted-dark hover:text-text-light dark:hover:text-text-dark transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark"
+          aria-label="Sign out"
+        >
+          <LogOut size={15} />
+        </button>
       </div>
-      <div className="flex items-center gap-1.5 shrink-0 mt-1">
+
+      {/* Nav links on their own row */}
+      <div className="flex items-center gap-2">
         {isAdmin && (
           <Link href="/admin" className={sharedCls}>
             <LayoutDashboard size={12} aria-hidden="true" />
-            <span className="hidden xs-2:inline">Admin</span>
+            Admin
           </Link>
         )}
         <Link href="/profile" className={sharedCls}>
           <UserCircle size={12} aria-hidden="true" />
-          <span className="hidden xxs:inline">Profile</span>
+          Profile
         </Link>
       </div>
     </div>

@@ -106,26 +106,21 @@ export default function MembershipSetup({ hasAnnual, hasQuarterly }: { hasAnnual
       <div>
         <SectionLabel>Membership Setup</SectionLabel>
         <div className="flex flex-col gap-2">
-          {/* Room Dues — shown first since more likely to set up first */}
           {!quarterlyDone && (
             <motion.button
               initial={{ opacity: 0, x: -8 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3 }}
               onClick={() => setOpenModal('quarterly')}
-              className="w-full flex items-center justify-between gap-4 px-4 py-3.5 border border-border-light dark:border-border-dark border-l-2 border-l-secondary-light dark:border-l-secondary-dark bg-bg-light dark:bg-bg-dark hover:bg-surface-light dark:hover:bg-surface-dark transition-colors text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark"
+              className="w-full flex items-center justify-between gap-3 px-4 py-3 border border-border-light dark:border-border-dark border-l-2 border-l-secondary-light dark:border-l-secondary-dark bg-bg-light dark:bg-bg-dark hover:bg-surface-light dark:hover:bg-surface-dark transition-colors text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark"
             >
-              <div className="flex items-center gap-3 min-w-0">
-                <div className="w-8 h-8 shrink-0 border border-border-light dark:border-border-dark flex items-center justify-center">
-                  <CreditCard size={14} className="text-muted-light dark:text-muted-dark" aria-hidden="true" />
-                </div>
+              <div className="flex items-center gap-2.5 min-w-0">
+                <CreditCard size={13} className="text-muted-light dark:text-muted-dark shrink-0" aria-hidden="true" />
                 <div className="min-w-0">
-                  <p className="font-sora font-bold text-[13px] text-text-light dark:text-text-dark leading-tight">
-                    Set Up Room Dues
+                  <p className="font-sora font-bold text-[13px] text-text-light dark:text-text-dark leading-tight truncate">
+                    Room Dues
                   </p>
-                  <p className="text-f10 font-mono text-muted-light dark:text-muted-dark">
-                    $60 per quarter · recurring
-                  </p>
+                  <p className="text-f10 font-mono text-muted-light dark:text-muted-dark">$60/qtr</p>
                 </div>
               </div>
               <span className="text-f10 font-mono tracking-widest uppercase text-primary-light dark:text-primary-dark shrink-0">
@@ -134,24 +129,21 @@ export default function MembershipSetup({ hasAnnual, hasQuarterly }: { hasAnnual
             </motion.button>
           )}
 
-          {/* Annual Admission */}
           {!annualDone && (
             <motion.button
               initial={{ opacity: 0, x: -8 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3, delay: 0.05 }}
               onClick={() => setOpenModal('annual')}
-              className="w-full flex items-center justify-between gap-4 px-4 py-3.5 border border-border-light dark:border-border-dark border-l-2 border-l-primary-light dark:border-l-primary-dark bg-bg-light dark:bg-bg-dark hover:bg-surface-light dark:hover:bg-surface-dark transition-colors text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark"
+              className="w-full flex items-center justify-between gap-3 px-4 py-3 border border-border-light dark:border-border-dark border-l-2 border-l-primary-light dark:border-l-primary-dark bg-bg-light dark:bg-bg-dark hover:bg-surface-light dark:hover:bg-surface-dark transition-colors text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark"
             >
-              <div className="flex items-center gap-3 min-w-0">
-                <div className="w-8 h-8 shrink-0 border border-border-light dark:border-border-dark flex items-center justify-center">
-                  <CreditCard size={14} className="text-muted-light dark:text-muted-dark" aria-hidden="true" />
-                </div>
+              <div className="flex items-center gap-2.5 min-w-0">
+                <CreditCard size={13} className="text-muted-light dark:text-muted-dark shrink-0" aria-hidden="true" />
                 <div className="min-w-0">
-                  <p className="font-sora font-bold text-[13px] text-text-light dark:text-text-dark leading-tight">
-                    Set Up Annual Admission
+                  <p className="font-sora font-bold text-[13px] text-text-light dark:text-text-dark leading-tight truncate">
+                    Annual Admission
                   </p>
-                  <p className="text-f10 font-mono text-muted-light dark:text-muted-dark">$365 per year · recurring</p>
+                  <p className="text-f10 font-mono text-muted-light dark:text-muted-dark">$365/yr</p>
                 </div>
               </div>
               <span className="text-f10 font-mono tracking-widest uppercase text-primary-light dark:text-primary-dark shrink-0">

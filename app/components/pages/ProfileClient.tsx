@@ -131,15 +131,15 @@ export default function ProfileClient({ profile }: { profile: ProfileData }) {
           <svg
             viewBox="0 0 24 24"
             aria-hidden="true"
-            className="absolute right-3 top-1/2 -translate-y-1/2 w-16 h-16 text-slate-100 dark:text-slate-800 pointer-events-none select-none"
+            className="absolute right-2 top-1/2 -translate-y-1/2 w-12 h-12 text-slate-100 dark:text-slate-800 pointer-events-none select-none"
             fill="currentColor"
           >
             <path d="M12.545 10.239v3.821h5.445c-.712 2.315-2.647 3.972-5.445 3.972a6.033 6.033 0 1 1 0-12.064 5.96 5.96 0 0 1 4.123 1.632l2.913-2.913A9.969 9.969 0 0 0 12.545 2C7.021 2 2.543 6.477 2.543 12s4.478 10 10.002 10c8.396 0 10.249-7.85 9.426-11.748l-9.426-.013z" />
           </svg>
 
-          <div className="px-4 py-3 border-b border-border-light dark:border-border-dark relative z-10">
+          <div className="px-4 py-2.5 border-b border-border-light dark:border-border-dark relative z-10">
             <div className="flex items-center gap-2">
-              <span className="text-f10 font-mono tracking-[0.15em] shrink-0">
+              <span className="text-f10 font-mono shrink-0">
                 <span className="text-blue-500">G</span>
                 <span className="text-red-500">m</span>
                 <span className="text-yellow-500">a</span>
@@ -149,13 +149,13 @@ export default function ProfileClient({ profile }: { profile: ProfileData }) {
               <span className="text-border-light dark:text-border-dark" aria-hidden="true">
                 ·
               </span>
-              <p className="text-[11.5px] font-nunito text-muted-light dark:text-muted-dark">
-                Add your Gmail to sign in with Google — no more waiting for a magic link.
+              <p className="text-[11px] font-nunito text-muted-light dark:text-muted-dark truncate">
+                Sign in with Google — no magic link needed.
               </p>
             </div>
           </div>
 
-          <div className="px-4 py-4 relative z-10">
+          <div className="px-4 py-3 relative z-10">
             <label
               htmlFor="secondaryEmail"
               className="block text-f10 font-mono tracking-[0.18em] uppercase text-muted-light dark:text-muted-dark mb-1.5"
@@ -175,16 +175,14 @@ export default function ProfileClient({ profile }: { profile: ProfileData }) {
                 autoComplete="off"
                 autoCapitalize="off"
                 spellCheck={false}
-                className="flex-1 h-12 bg-white dark:bg-bg-dark border border-slate-300 dark:border-border-dark border-r-0 px-3.5 font-nunito text-[15px] text-text-light dark:text-text-dark placeholder:text-slate-400 dark:placeholder:text-muted-dark/50 focus:outline-none focus:border-primary-light dark:focus:border-primary-dark focus:ring-1 focus:ring-primary-light/20 dark:focus:ring-primary-dark/20 transition-colors rounded-none"
+                className="flex-1 h-10 bg-white dark:bg-bg-dark border border-slate-300 dark:border-border-dark border-r-0 px-3 font-nunito text-[14px] text-text-light dark:text-text-dark placeholder:text-slate-400 dark:placeholder:text-muted-dark/50 focus:outline-none focus:border-primary-light dark:focus:border-primary-dark transition-colors rounded-none"
               />
-              <div className="h-12 px-3.5 flex items-center bg-surface-light dark:bg-surface-dark border border-slate-300 dark:border-border-dark font-mono text-[13px] text-muted-light dark:text-muted-dark select-none whitespace-nowrap">
+              <div className="h-10 px-2.5 flex items-center bg-surface-light dark:bg-surface-dark border border-slate-300 dark:border-border-dark font-mono text-[11px] text-muted-light dark:text-muted-dark select-none whitespace-nowrap">
                 @gmail.com
               </div>
             </div>
             {form.secondaryEmail && (
-              <p className="text-f10 font-mono text-muted-light dark:text-muted-dark mt-1.5">
-                Sign in with: {form.secondaryEmail}
-              </p>
+              <p className="text-f10 font-mono text-muted-light dark:text-muted-dark mt-1">{form.secondaryEmail}</p>
             )}
           </div>
         </section>
