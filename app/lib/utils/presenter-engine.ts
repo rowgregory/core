@@ -2,30 +2,30 @@ export function getUpcomingMeetingDates(
   cancelledDates: string[],
   visitorDayDates: string[],
   count: number = 52
-): Date[] {
+): string[] {
   const results = []
   const cancelled = new Set(cancelledDates.map((d) => toDateKey(new Date(d))))
   const visitorDays = new Set(visitorDayDates.map((d) => toDateKey(new Date(d))))
 
-  // Force EST to avoid UTC server shifting dates back a day
   const nowEST = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }))
   nowEST.setHours(0, 0, 0, 0)
 
-  const current = new Date(nowEST)
-  while (current.getDay() !== 4) current.setDate(current.getDate() + 1)
+  const cursor = new Date(nowEST)
+  while (cursor.getDay() !== 4) cursor.setDate(cursor.getDate() + 1)
 
   let safety = 0
   while (results.length < count && safety < 500) {
     safety++
-    const key = toDateKey(current)
+    const key = toDateKey(cursor)
     if (!cancelled.has(key) && !visitorDays.has(key)) {
-      results.push(new Date(current))
+      results.push(key) // ← store as 'YYYY-M-D' string, not Date object
     }
-    current.setDate(current.getDate() + 7)
+    cursor.setDate(cursor.getDate() + 7)
   }
 
   return results
 }
+
 function toDateKey(d: Date) {
   return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`
 }

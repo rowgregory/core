@@ -18,15 +18,16 @@ import { createTestUser } from '@/app/lib/actions/user/createTestUser'
 import { useRouter } from 'next/navigation'
 import { ChapterSettingsPanel } from '../super-dash/ChapterSettingsPanel'
 import { Chapter } from '@/types/user'
+import { QueueMember } from '@/types/presenter-queue'
 
 type TSuperDashClient = {
   data: SuperUserDashboardData
-  queue: any
-  availableMembers: any
-  cancelledMeetings: any
-  visitorDays: any
-  dates: any
-  startIndex: any
+  queue: QueueMember[]
+  availableMembers: { id: string; name: string; company: string }[]
+  cancelledMeetings: { id: string; date: string; reason: string }[]
+  visitorDays: { id: string; date: string }[]
+  dates: string[]
+  startIndex: number
   chapter: Chapter
 }
 

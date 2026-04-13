@@ -2,6 +2,7 @@ import { cancelMeeting } from '@/app/lib/actions/cancelled-meeting/cancel-meetin
 import { restoreMeeting } from '@/app/lib/actions/cancelled-meeting/restoreMeeting'
 import { fmtDate } from '@/app/lib/utils/date.utils'
 import { getUpcomingMeetingDates } from '@/app/lib/utils/presenter-engine'
+import { toDateKey } from '@/app/lib/utils/time.utils'
 import { CancelledMeeting } from '@/types/cancelled-meeting'
 import { AnimatePresence, motion } from 'framer-motion'
 import { CalendarX, Plus, RotateCcw } from 'lucide-react'
@@ -51,7 +52,7 @@ export function CancelledMeetingsPanel({ cancelledMeetings: initial }: { cancell
   )
 
   const availableDates = upcomingDates.filter((d) => {
-    const key = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`
+    const key = toDateKey(new Date(d))
     return !cancelledSet.has(key)
   })
 
@@ -102,12 +103,13 @@ export function CancelledMeetingsPanel({ cancelledMeetings: initial }: { cancell
                       Select a date…
                     </option>
                     {availableDates.map((d) => (
-                      <option key={d.toISOString()} value={d.toISOString()}>
-                        {d.toLocaleDateString('en-US', {
+                      <option key={d} value={d}>
+                        {new Date(d).toLocaleDateString('en-US', {
                           weekday: 'long',
                           month: 'long',
                           day: 'numeric',
-                          year: 'numeric'
+                          year: 'numeric',
+                          timeZone: 'America/New_York'
                         })}
                       </option>
                     ))}

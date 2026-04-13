@@ -8,6 +8,7 @@ import { fmtDate } from '@/app/lib/utils/date.utils'
 import { useRouter } from 'next/navigation'
 import { addVisitorDay } from '@/app/lib/actions/visitor-day/addVisitorDay'
 import { removeVisitorDay } from '@/app/lib/actions/visitor-day/removeVisitorDay'
+import { toDateKey } from '@/app/lib/utils/time.utils'
 
 type TVisitorDaysPanel = {
   visitorDays: { id: string; date: string }[]
@@ -34,8 +35,9 @@ export default function VisitorDaysPanel({ visitorDays: initial, cancelledDates 
   )
 
   const upcomingDates = getUpcomingMeetingDates(cancelledDates, [], 20)
+
   const availableDates = upcomingDates.filter((d) => {
-    const key = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`
+    const key = toDateKey(new Date(d))
     return !visitorSet.has(key)
   })
 
@@ -107,12 +109,13 @@ export default function VisitorDaysPanel({ visitorDays: initial, cancelledDates 
                       Select a date…
                     </option>
                     {availableDates.map((d) => (
-                      <option key={d.toISOString()} value={d.toISOString()}>
-                        {d.toLocaleDateString('en-US', {
+                      <option key={d} value={d}>
+                        {new Date(d).toLocaleDateString('en-US', {
                           weekday: 'long',
                           month: 'long',
                           day: 'numeric',
-                          year: 'numeric'
+                          year: 'numeric',
+                          timeZone: 'America/New_York'
                         })}
                       </option>
                     ))}

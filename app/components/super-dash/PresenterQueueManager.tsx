@@ -16,8 +16,8 @@ import { getInitials } from '@/app/lib/utils/common/getInitials'
 interface Props {
   initialQueue: QueueMember[]
   availableMembers: { id: string; name: string; company: string }[]
-  dates: any
-  startIndex: any
+  dates: string[]
+  startIndex: number
 }
 
 // ─── Main ──────────────────────────────────────────────────────────────────────
@@ -30,7 +30,6 @@ export default function PresenterQueueManager({ initialQueue, availableMembers, 
   const [showAdd, setShowAdd] = useState(false)
   const router = useRouter()
 
-  // Compute upcoming Thursdays skipping cancelled dates
   function getDateForIndex(queueIndex: number) {
     return dates[queueIndex] ? fmtDate(dates[queueIndex]) : '—'
   }
