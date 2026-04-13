@@ -40,9 +40,12 @@ export type SuperMemberEditData = {
   secondaryEmail: string
   title: string
   isPublic: boolean
+  isAdmin: boolean
+  isMembership: boolean
   membershipStatus: string
   profileImage: string | null
   profileImageFilename: string | null
+  yearsInBusiness?: string
   activity: {
     face2face: MemberParleyActivity[]
     tyfcb: MemberAnchorActivity[]
@@ -72,9 +75,12 @@ export async function getUserById(userId: string): Promise<{
           secondaryEmail: true,
           title: true,
           isPublic: true,
+          isAdmin: true,
+          isMembership: true,
           membershipStatus: true,
           profileImage: true,
-          profileImageFilename: true
+          profileImageFilename: true,
+          yearsInBusiness: true
         }
       }),
       prisma.parley.findMany({
@@ -130,9 +136,12 @@ export async function getUserById(userId: string): Promise<{
         secondaryEmail: user.secondaryEmail,
         title: user.title,
         isPublic: user.isPublic,
+        isAdmin: user.isAdmin,
+        isMembership: user.isMembership,
         membershipStatus: user.membershipStatus,
         profileImage: user.profileImage,
         profileImageFilename: user.profileImageFilename,
+        yearsInBusiness: user.yearsInBusiness,
         activity: {
           face2face: face2face.map((p) => ({
             ...p,

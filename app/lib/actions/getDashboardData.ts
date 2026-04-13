@@ -25,6 +25,7 @@ export async function getDashboardData() {
         chapterId: true,
         hasAnnualSubscription: true,
         hasQuarterlySubscription: true,
+        weeklyTreasureWishlist: true,
         chapter: { select: { name: true } }
       }
     })
@@ -37,7 +38,7 @@ export async function getDashboardData() {
         id: { not: user.id },
         membershipStatus: 'ACTIVE'
       },
-      select: { id: true, name: true, industry: true, phone: true, email: true },
+      select: { id: true, name: true, industry: true, phone: true, email: true, weeklyTreasureWishlist: true },
       orderBy: { name: 'asc' }
     })
 
@@ -174,7 +175,8 @@ export async function getDashboardData() {
           email: user.email,
           secondaryEmail: user.secondaryEmail,
           hasAnnualSubscription: user.hasAnnualSubscription,
-          hasQuarterlySubscription: user.hasQuarterlySubscription
+          hasQuarterlySubscription: user.hasQuarterlySubscription,
+          weeklyTreasureWishlist: user.weeklyTreasureWishlist
         },
         members,
         stats: {

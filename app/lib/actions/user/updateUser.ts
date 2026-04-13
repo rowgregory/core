@@ -14,9 +14,12 @@ export async function updateMember(
     secondaryEmail?: string
     title?: string
     isPublic?: boolean
+    isAdmin?: boolean
+    isMembership?: boolean
     membershipStatus?: MembershipStatus
     profileImage?: string | null
     profileImageFilename?: string | null
+    yearsInBusiness?: string | null
   }
 ): Promise<{ success: boolean; error?: string }> {
   try {
@@ -32,9 +35,12 @@ export async function updateMember(
         secondaryEmail: data.secondaryEmail ?? undefined,
         title: data.title ?? undefined,
         isPublic: data.isPublic ?? undefined,
+        isAdmin: data.isAdmin ?? undefined,
+        isMembership: data.isMembership ?? undefined,
         membershipStatus: data.membershipStatus ?? undefined,
         profileImage: data.profileImage ?? undefined,
-        profileImageFilename: data.profileImageFilename ?? undefined
+        profileImageFilename: data.profileImageFilename ?? undefined,
+        yearsInBusiness: data.yearsInBusiness ?? undefined
       }
     })
 

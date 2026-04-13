@@ -10,39 +10,29 @@ import { moveQueueMember } from '@/app/lib/actions/presenter-queue/moveQueueMemb
 import { removeFromQueue } from '@/app/lib/actions/presenter-queue/removeFromQueue'
 import { swapQueuePositions } from '@/app/lib/actions/presenter-queue/swapQueuePositions'
 import { addToQueue } from '@/app/lib/actions/presenter-queue/addToQueue'
+import { getInitials } from '@/app/lib/utils/common/getInitials'
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 interface Props {
   initialQueue: QueueMember[]
   availableMembers: { id: string; name: string; company: string }[]
-  cancelledDates: string[]
   dates: any
-}
-
-// ─── Helpers ───────────────────────────────────────────────────────────────────
-function initials(name: string) {
-  return name
-    .split(' ')
-    .filter(Boolean)
-    .map((n) => n[0])
-    .slice(0, 2)
-    .join('')
-    .toUpperCase()
+  startIndex: any
 }
 
 // ─── Main ──────────────────────────────────────────────────────────────────────
-export default function PresenterQueueManager({ initialQueue, availableMembers, cancelledDates, dates }: Props) {
-  const [queue, setQueue] = useState([...initialQueue].sort((a, b) => a.position - b.position))
-  const [available, setAvailable] = useState(availableMembers)
+export default function PresenterQueueManager({ initialQueue, availableMembers, dates, startIndex }: Props) {
+  const sorted = [...initialQueue].sort((a, b) => a.position - b.position)
+  const queue = [...sorted.slice(startIndex), ...sorted.slice(0, startIndex)]
+
   const [swapA, setSwapA] = useState<string | null>(null)
   const [loadingId, setLoadingId] = useState<string | null>(null)
   const [showAdd, setShowAdd] = useState(false)
   const router = useRouter()
 
   // Compute upcoming Thursdays skipping cancelled dates
-
-  function getDateForIndex(i: number) {
-    return dates[i] ? fmtDate(dates[i]) : '—'
+  function getDateForIndex(queueIndex: number) {
+    return dates[queueIndex] ? fmtDate(dates[queueIndex]) : '—'
   }
 
   // ── Move up/down ──────────────────────────────────────────────────────────────
@@ -137,13 +127,13 @@ export default function PresenterQueueManager({ initialQueue, availableMembers, 
               <p className="text-f10 font-mono tracking-[0.15em] uppercase text-muted-light dark:text-muted-dark mb-2">
                 Add to end of queue
               </p>
-              {available.length === 0 ? (
+              {availableMembers?.length === 0 ? (
                 <p className="text-[12.5px] font-nunito text-muted-light dark:text-muted-dark py-1">
                   All active members are already in the queue.
                 </p>
               ) : (
                 <div className="flex flex-col divide-y divide-border-light dark:divide-border-dark max-h-48 overflow-y-auto border border-border-light dark:border-border-dark">
-                  {available.map((m) => (
+                  {availableMembers?.map((m) => (
                     <button
                       key={m.id}
                       onClick={() => add(m.id, m.name, m.company)}
@@ -192,7 +182,7 @@ export default function PresenterQueueManager({ initialQueue, availableMembers, 
 
               {/* avatar */}
               <div className="w-7 h-7 shrink-0 flex items-center justify-center bg-primary-light/10 dark:bg-primary-dark/10 border border-primary-light/20 dark:border-primary-dark/20 text-f10 font-mono font-bold text-primary-light dark:text-primary-dark">
-                {initials(m.name)}
+                {getInitials(m.name)}
               </div>
 
               {/* name + company */}

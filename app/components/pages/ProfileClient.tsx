@@ -127,19 +127,38 @@ export default function ProfileClient({ profile }: { profile: ProfileData }) {
         </div>
 
         {/* ── Secondary Email ── */}
-        <section className="border border-border-light dark:border-border-dark mb-6">
-          <div className="px-4 py-3 border-b border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark">
-            <p className="text-f10 font-mono tracking-[0.2em] uppercase text-primary-light dark:text-primary-dark">
-              Gmail Sign-In
-            </p>
-            <p className="text-[11.5px] font-nunito text-muted-light dark:text-muted-dark mt-0.5">
-              Add your Gmail address to sign in with either email
-            </p>
+        <section className="relative overflow-hidden border border-border-light dark:border-border-dark mb-6">
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            className="absolute right-3 top-1/2 -translate-y-1/2 w-16 h-16 text-slate-100 dark:text-slate-800 pointer-events-none select-none"
+            fill="currentColor"
+          >
+            <path d="M12.545 10.239v3.821h5.445c-.712 2.315-2.647 3.972-5.445 3.972a6.033 6.033 0 1 1 0-12.064 5.96 5.96 0 0 1 4.123 1.632l2.913-2.913A9.969 9.969 0 0 0 12.545 2C7.021 2 2.543 6.477 2.543 12s4.478 10 10.002 10c8.396 0 10.249-7.85 9.426-11.748l-9.426-.013z" />
+          </svg>
+
+          <div className="px-4 py-3 border-b border-border-light dark:border-border-dark relative z-10">
+            <div className="flex items-center gap-2">
+              <span className="text-f10 font-mono tracking-[0.15em] shrink-0">
+                <span className="text-blue-500">G</span>
+                <span className="text-red-500">m</span>
+                <span className="text-yellow-500">a</span>
+                <span className="text-blue-500">i</span>
+                <span className="text-green-500">l</span>
+              </span>
+              <span className="text-border-light dark:text-border-dark" aria-hidden="true">
+                ·
+              </span>
+              <p className="text-[11.5px] font-nunito text-muted-light dark:text-muted-dark">
+                Add your Gmail to sign in with Google — no more waiting for a magic link.
+              </p>
+            </div>
           </div>
-          <div className="px-4 py-4">
+
+          <div className="px-4 py-4 relative z-10">
             <label
-              className="text-f10 font-mono tracking-[0.18em] uppercase text-muted-light dark:text-muted-dark"
               htmlFor="secondaryEmail"
+              className="block text-f10 font-mono tracking-[0.18em] uppercase text-muted-light dark:text-muted-dark mb-1.5"
             >
               Gmail Address
             </label>

@@ -24,8 +24,9 @@ type TSuperDashClient = {
   queue: any
   availableMembers: any
   cancelledMeetings: any
-  dates: any
   visitorDays: any
+  dates: any
+  startIndex: any
   chapter: Chapter
 }
 
@@ -36,8 +37,9 @@ export default function SuperDashClient({
   queue,
   availableMembers,
   cancelledMeetings,
-  dates,
   visitorDays,
+  dates,
+  startIndex,
   chapter
 }: TSuperDashClient) {
   const router = useRouter()
@@ -127,8 +129,8 @@ export default function SuperDashClient({
             <PresenterQueueManager
               initialQueue={queue}
               availableMembers={availableMembers}
-              cancelledDates={cancelledMeetings.map((c) => c.date)}
               dates={dates}
+              startIndex={startIndex}
             />
             <CancelledMeetingsPanel cancelledMeetings={cancelledMeetings} />
             <VisitorDaysPanel visitorDays={visitorDays} cancelledDates={cancelledMeetings.map((c) => c.date)} />

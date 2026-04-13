@@ -12,6 +12,7 @@ import { updateMember } from '@/app/lib/actions/user/updateUser'
 import { MembershipStatus } from '@/types/user'
 import { SuperDashStatusBadge } from '../super-dash/SuperDashStatusBadge'
 import { deleteUser } from '@/app/lib/actions/user/deleteUser'
+import { getInitials } from '@/app/lib/utils/common/getInitials'
 
 // ─── Constants ─────────────────────────────────────────────────────────────────
 const MEMBERSHIP_STATUSES = ['PENDING', 'ACTIVE', 'REJECTED'] as const
@@ -60,13 +61,7 @@ export default function SuperDashMemberEditClient({ member }: { member: SuperMem
     if (res.success) router.push('/super')
   }
 
-  const initials = form.name
-    .split(' ')
-    .filter(Boolean)
-    .map((n) => n[0])
-    .slice(0, 2)
-    .join('')
-    .toUpperCase()
+  const initials = getInitials(form.name)
 
   function set<K extends keyof SuperMemberEditData>(key: K, value: SuperMemberEditData[K]) {
     setSaved(false)
@@ -116,9 +111,12 @@ export default function SuperDashMemberEditClient({ member }: { member: SuperMem
       secondaryEmail: form.secondaryEmail,
       title: form.title,
       isPublic: form.isPublic,
+      isAdmin: form.isAdmin,
+      isMembership: form.isMembership,
       membershipStatus: form.membershipStatus as MembershipStatus,
       profileImage: form.profileImage,
-      profileImageFilename: form.profileImageFilename
+      profileImageFilename: form.profileImageFilename,
+      yearsInBusiness: form.yearsInBusiness
     })
     setSaving(false)
     if (!res.success) return setError(res.error ?? 'Something went wrong.')
@@ -246,14 +244,30 @@ export default function SuperDashMemberEditClient({ member }: { member: SuperMem
             </Field>
           </div>
 
-          <Field label="Secondary Email" htmlFor="secondaryEmail">
-            <input
-              id="secondaryEmail"
-              type="text"
-              value={form.secondaryEmail ?? ''}
-              onChange={(e) => set('secondaryEmail', e.target.value)}
-              className={inputCls}
-            />
+          <Field label="Gmail Sign-In" htmlFor="secondaryEmail">
+            <div className="flex items-stretch">
+              <input
+                id="secondaryEmail"
+                type="text"
+                value={(form.secondaryEmail ?? '').replace('@gmail.com', '')}
+                onChange={(e) => {
+                  const val = e.target.value.replace(/[@\s]/g, '')
+                  set('secondaryEmail', val ? `${val}@gmail.com` : '')
+                }}
+                placeholder="yourusername"
+                autoCapitalize="off"
+                spellCheck={false}
+                className={`${inputCls} flex-1 border-r-0`}
+              />
+              <div className="h-12 px-3.5 flex items-center bg-surface-light dark:bg-surface-dark border border-slate-300 dark:border-border-dark font-mono text-[13px] text-muted-light dark:text-muted-dark select-none whitespace-nowrap">
+                @gmail.com
+              </div>
+            </div>
+            {form.secondaryEmail && (
+              <p className="text-f10 font-mono text-muted-light dark:text-muted-dark mt-1.5">
+                Sign in with: {form.secondaryEmail}
+              </p>
+            )}
           </Field>
 
           <Field label="Company" htmlFor="company">
@@ -271,6 +285,15 @@ export default function SuperDashMemberEditClient({ member }: { member: SuperMem
               type="text"
               value={form.title}
               onChange={(e) => set('title', e.target.value)}
+              className={inputCls}
+            />
+          </Field>
+          <Field label="Years In Business" htmlFor="yearsInBusiness">
+            <input
+              id="yearsInBusiness"
+              type="text"
+              value={form.yearsInBusiness ?? ''}
+              onChange={(e) => set('yearsInBusiness', e.target.value)}
               className={inputCls}
             />
           </Field>
@@ -292,14 +315,48 @@ export default function SuperDashMemberEditClient({ member }: { member: SuperMem
             </div>
           </Field>
 
-          <div className="border border-border-light dark:border-border-dark px-4 py-3.5">
-            <Switch
-              name="isPublic"
-              checked={form.isPublic}
-              onChange={() => set('isPublic', !form.isPublic)}
-              label="Public profile"
-              description={form.isPublic ? 'Visible to the public' : 'Only visible to you'}
-            />
+          <div className="flex flex-col gap-2">
+            <div className="border border-border-light dark:border-border-dark px-4 py-3.5">
+              <Switch
+                name="isPublic"
+                checked={form.isPublic ?? false}
+                onChange={() => set('isPublic', !form.isPublic)}
+                label="Public Profile"
+                description={
+                  form.isPublic
+                    ? 'Your profile is visible on the public member directory'
+                    : 'Your profile is hidden from the public member directory'
+                }
+              />
+            </div>
+
+            <div className="border border-border-light dark:border-border-dark px-4 py-3.5">
+              <Switch
+                name="isAdmin"
+                checked={form.isAdmin ?? false}
+                onChange={() => set('isAdmin', !form.isAdmin)}
+                label="Admin Access"
+                description={
+                  form.isAdmin
+                    ? 'This member can manage chapter settings and members'
+                    : 'This member does not have admin privileges'
+                }
+              />
+            </div>
+
+            <div className="border border-border-light dark:border-border-dark px-4 py-3.5">
+              <Switch
+                name="isMembership"
+                checked={form.isMembership ?? false}
+                onChange={() => set('isMembership', !form.isMembership)}
+                label="Membership Role"
+                description={
+                  form.isMembership
+                    ? 'This member handles membership and billing inquiries'
+                    : 'This member does not have a membership role'
+                }
+              />
+            </div>
           </div>
         </div>
 
