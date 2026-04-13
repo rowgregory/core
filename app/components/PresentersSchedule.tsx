@@ -2,9 +2,19 @@
 
 import { motion } from 'framer-motion'
 import { Mic } from 'lucide-react'
-import { fmtDate } from '../lib/utils/date.utils'
 import { daysUntil } from '../lib/utils/time.utils'
 import { ScheduledPresenter } from '@/types/presenter-queue'
+
+export function fmtDate(iso: string) {
+  const d = iso.includes('T') ? new Date(iso) : new Date(`${iso}T12:00:00`)
+  return d.toLocaleDateString('en-US', {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+    timeZone: 'America/New_York'
+  })
+}
 
 export default function PresenterSchedule({
   schedule,

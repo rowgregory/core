@@ -157,6 +157,9 @@ model User {
   weeklyTreasureWishlist     String?
   hasAnnualSubscription      Boolean                    @default(false)
   hasQuarterlySubscription   Boolean                    @default(false)
+  stripeCustomerId           String?
+  annualSubscriptionId       String?
+  quarterlySubscriptionId    String?
   accounts                   Account[]
   givenCredits               Anchor[]                   @relation("AnchorGiver")
   receivedCredits            Anchor[]                   @relation("AnchorReceiver")
