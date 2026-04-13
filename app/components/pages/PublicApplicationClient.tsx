@@ -1,6 +1,6 @@
 'use client'
 
-import validateApplicationForm from '@/app/components/forms/validations/validateApplicationForm'
+import validateApplicationForm from '@/app/lib/validations/validateApplicationForm'
 import { createUser } from '@/app/lib/actions/createUser'
 import { createFormActions } from '@/app/lib/redux/features/formSlice'
 import { showToast } from '@/app/lib/redux/features/toastSlice'

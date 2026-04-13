@@ -41,3 +41,11 @@ export function daysUntil(iso: string) {
 export function toDateKey(d: Date) {
   return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`
 }
+
+export function getTodayLabel(): string {
+  return new Date().toLocaleDateString('en-US', {
+    weekday: 'long',
+    month: 'short',
+    day: 'numeric'
+  })
+}

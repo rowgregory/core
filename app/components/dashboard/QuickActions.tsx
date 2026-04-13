@@ -1,16 +1,17 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import { motion, useInView, AnimatePresence } from 'framer-motion'
-import { Users, Activity, DollarSign, X, ChevronDown } from 'lucide-react'
+import { motion, useInView } from 'framer-motion'
+import { Users, Activity, DollarSign, ChevronDown } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import { createAnchor } from '@/app/lib/actions/createAnchor'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { createFace2Face } from '@/app/lib/actions/createFace2Face'
 import { createReferral } from '@/app/lib/actions/referral/createReferral'
 import useSoundEffect from '@/hooks/useSoundEffect'
 import { formatPhone } from '@/app/lib/utils/phone.utils'
 import { formatAmountInput } from '@/app/lib/utils/currency.utils'
+import { Modal } from '../common/Modal'
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 export interface Member {
@@ -162,106 +163,29 @@ function MemberOptions({ members, showOutOfChapterMember }: { members: Member[];
   )
 }
 
-function Modal({
-  open,
-  onClose,
-  accentColor,
-  tag,
-  tagColor,
-  title,
-  submitLabel,
-  onSubmit,
-  pending,
-  error,
-  children
-}: {
-  open: boolean
-  onClose: () => void
-  accentColor: string
-  tag: string
-  tagColor: string
-  title: string
-  submitLabel: string
-  onSubmit: () => void
-  pending: boolean
-  error: string | null
-  children: React.ReactNode
-}) {
-  const searchParams = useSearchParams()
-  const action = searchParams.get('action')
-
-  const mouseDownTarget = useRef<EventTarget | null>(null)
+function QuickActionButton({ action, onClick }: { action: (typeof ACTIONS)[number]; onClick: () => void }) {
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-32px' })
+  const { icon: Icon, colors, tagShort, label, desc } = action
 
   return (
-    <AnimatePresence>
-      {open && (
-        <motion.div
-          onMouseDown={(e) => {
-            mouseDownTarget.current = e.target
-          }}
-          onMouseUp={(e) => {
-            if (mouseDownTarget.current === e.currentTarget) onClose()
-          }}
-          className="fixed inset-x-0 bottom-0 z-50 flex justify-center"
-          initial={{ y: 28, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 28, opacity: 0 }}
-          transition={{ duration: 0.22, delay: action ? 0.1 : 0, ease: [0.25, 0.46, 0.45, 0.94] }}
-          role="dialog"
-          aria-modal="true"
-          aria-label={title}
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-170 bg-bg-light dark:bg-surface-dark border-t-[3px] px-5 pt-7"
-            style={{ borderTopColor: accentColor, paddingBottom: 'max(2rem, env(safe-area-inset-bottom))' }}
-          >
-            <div className="flex items-start justify-between mb-5">
-              <div>
-                <p className="text-f10 font-mono tracking-[0.22em] uppercase mb-1.5" style={{ color: tagColor }}>
-                  {tag}
-                </p>
-                <h2 className="font-sora font-black text-[22px] text-text-light dark:text-text-dark tracking-tight leading-none">
-                  {title}
-                </h2>
-              </div>
-              <button
-                onClick={onClose}
-                className="mt-0.5 p-1 text-muted-light dark:text-muted-dark hover:text-text-light dark:hover:text-text-dark transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark rounded-sm"
-                aria-label="Close"
-              >
-                <X size={18} />
-              </button>
-            </div>
-
-            <div className="flex flex-col gap-4">{children}</div>
-
-            {error && (
-              <p className="mt-3 text-[12.5px] font-nunito text-red-500 dark:text-red-400" role="alert">
-                {error}
-              </p>
-            )}
-
-            <div className="flex gap-2.5 mt-6">
-              <button
-                onClick={onClose}
-                disabled={pending}
-                className="h-12 px-5 border border-slate-300 dark:border-border-dark text-muted-light dark:text-muted-dark font-nunito text-sm hover:bg-surface-light dark:hover:bg-surface-dark transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark disabled:opacity-50"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={onSubmit}
-                disabled={pending}
-                className="flex-1 h-12 bg-primary-light dark:bg-button-dark text-white font-sora font-bold text-sm tracking-wide hover:opacity-90 active:opacity-80 transition-opacity disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark focus-visible:ring-offset-2"
-              >
-                {pending ? 'Saving…' : submitLabel}
-              </button>
-            </div>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+    <motion.button
+      ref={ref}
+      initial={{ opacity: 0 }}
+      animate={inView ? { opacity: 1 } : {}}
+      transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+      onClick={onClick}
+      style={{ WebkitTapHighlightColor: 'transparent' }}
+      className={`w-full text-left flex items-center gap-4 px-5 py-5 ${colors.bg} ${colors.border} border ${colors.hover} active:scale-[0.985] transition-[transform,background-color] duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark focus-visible:ring-offset-2`}
+      aria-label={`Open ${label} form`}
+    >
+      <Icon size={22} className={`${colors.tag} shrink-0`} strokeWidth={1.75} aria-hidden="true" />
+      <div className="flex-1 min-w-0">
+        <p className={`text-f10 font-mono tracking-[0.2em] uppercase mb-1 ${colors.tag}`}>{tagShort}</p>
+        <p className={`font-sora font-bold text-[17px] leading-tight tracking-tight mb-0.5 ${colors.title}`}>{label}</p>
+        <p className={`text-[12.5px] font-nunito ${colors.desc}`}>{desc}</p>
+      </div>
+    </motion.button>
   )
 }
 
@@ -376,30 +300,9 @@ export default function QuickActions({ members, variant }: QuickActionsProps) {
     <>
       {/* ── Buttons ── */}
       <div className={variant === 'card' ? 'flex flex-col gap-3' : 'grid grid-cols-1 xs:grid-cols-3 gap-3 mb-6'}>
-        {ACTIONS.map((a, i) => {
-          const { icon: Icon, colors } = a
-
-          if (variant === 'card') {
-            return <CardButton key={a.key} action={a} delay={0.12 + i * 0.06} onClick={() => openModal(a.key)} />
-          }
-
-          return (
-            <button
-              key={a.key}
-              onClick={() => openModal(a.key)}
-              style={{ WebkitTapHighlightColor: 'transparent' }}
-              className={`flex items-center gap-3 px-4 py-3.5 ${colors.bg} ${colors.border} border ${colors.hover} active:scale-[0.985] transition-[transform,background-color] duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark text-left w-full`}
-              aria-label={`Open ${a.label} form`}
-            >
-              <Icon size={16} className={`${colors.tag} shrink-0`} aria-hidden="true" />
-              <div>
-                <p className={`text-f10 font-mono tracking-[0.18em] uppercase ${colors.tag}`}>{a.tagShort}</p>
-                <p className={`font-sora font-bold text-[13px] ${colors.title} leading-tight`}>{a.label}</p>
-                <p className={`text-[11px] font-nunito ${colors.desc} mt-0.5`}>{a.desc}</p>
-              </div>
-            </button>
-          )
-        })}
+        {ACTIONS.map((a) => (
+          <QuickActionButton key={a.key} action={a} onClick={() => openModal(a.key)} />
+        ))}
       </div>
 
       {/* ── Modals ── */}
@@ -559,40 +462,5 @@ export default function QuickActions({ members, variant }: QuickActionsProps) {
         </>
       )}
     </>
-  )
-}
-
-// ─── Card button (member dashboard variant) ────────────────────────────────────
-function CardButton({
-  action,
-  delay,
-  onClick
-}: {
-  action: (typeof ACTIONS)[number]
-  delay: number
-  onClick: () => void
-}) {
-  const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-32px' })
-  const { icon: Icon, colors, tagShort, label, desc } = action
-
-  return (
-    <motion.button
-      ref={ref}
-      initial={{ opacity: 0, y: 20 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.5, delay, ease: [0.25, 0.46, 0.45, 0.94] }}
-      onClick={onClick}
-      style={{ WebkitTapHighlightColor: 'transparent' }}
-      className={`w-full text-left flex items-center gap-4 px-5 py-5 ${colors.bg} ${colors.border} border ${colors.hover} active:scale-[0.985] transition-[transform,background-color] duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark focus-visible:ring-offset-2`}
-      aria-label={`Open ${label} form`}
-    >
-      <Icon size={22} className={`${colors.tag} shrink-0`} strokeWidth={1.75} aria-hidden="true" />
-      <div className="flex-1 min-w-0">
-        <p className={`text-f10 font-mono tracking-[0.2em] uppercase mb-1 ${colors.tag}`}>{tagShort}</p>
-        <p className={`font-sora font-bold text-[17px] leading-tight tracking-tight mb-0.5 ${colors.title}`}>{label}</p>
-        <p className={`text-[12.5px] font-nunito ${colors.desc}`}>{desc}</p>
-      </div>
-    </motion.button>
   )
 }

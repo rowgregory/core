@@ -1,6 +1,7 @@
 import prisma from '@/prisma/client'
 import { auth } from '../auth'
 import { getInitials } from '../utils/common/getInitials'
+import { timeAgo } from '../utils/time.utils'
 
 export async function getDashboardData() {
   try {
@@ -19,8 +20,11 @@ export async function getDashboardData() {
       select: {
         id: true,
         name: true,
+        email: true,
         secondaryEmail: true,
         chapterId: true,
+        hasAnnualSubscription: true,
+        hasQuarterlySubscription: true,
         chapter: { select: { name: true } }
       }
     })
@@ -33,7 +37,7 @@ export async function getDashboardData() {
         id: { not: user.id },
         membershipStatus: 'ACTIVE'
       },
-      select: { id: true, name: true, industry: true, phone: true },
+      select: { id: true, name: true, industry: true, phone: true, email: true },
       orderBy: { name: 'asc' }
     })
 
@@ -156,7 +160,7 @@ export async function getDashboardData() {
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
       .map((a) => ({
         ...a,
-        timeAgo: formatTimeAgo(a.createdAt),
+        timeAgo: timeAgo(a.createdAt.toISOString()),
         createdAt: a.createdAt.toISOString()
       }))
 
@@ -167,7 +171,10 @@ export async function getDashboardData() {
           id: user.id,
           name: user.name ?? 'Member',
           initials: getInitials(user.name ?? ''),
-          secondaryEmail: user.secondaryEmail
+          email: user.email,
+          secondaryEmail: user.secondaryEmail,
+          hasAnnualSubscription: user.hasAnnualSubscription,
+          hasQuarterlySubscription: user.hasQuarterlySubscription
         },
         members,
         stats: {
@@ -189,17 +196,4 @@ export async function getDashboardData() {
       error: error instanceof Error ? error.message : 'Failed to load dashboard'
     }
   }
-}
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
-function formatTimeAgo(date: Date) {
-  const seconds = Math.floor((Date.now() - date.getTime()) / 1000)
-  if (seconds < 3_600) return `${Math.floor(seconds / 60)}m ago`
-  if (seconds < 86_400) return `${Math.floor(seconds / 3_600)}h ago`
-  if (seconds < 604_800) {
-    const d = Math.floor(seconds / 86_400)
-    return d === 1 ? 'Yesterday' : `${d}d ago`
-  }
-  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 }
