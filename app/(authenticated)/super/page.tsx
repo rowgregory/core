@@ -35,7 +35,7 @@ export default async function SuperDashPage() {
   const queueData = queue.data ?? []
 
   const dates = getUpcomingMeetingDates(cancelledDates, visitorDates, queueData.length + 20)
-  const anchor = new Date('2026-04-10')
+  const anchor = new Date('2026-04-09T12:00:00')
   const pastCount = countPastMeetingThursdays(anchor, cancelledDates, visitorDates)
   const startIndex = queueData.length > 0 ? pastCount % queueData.length : 0
 

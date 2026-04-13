@@ -20,13 +20,13 @@ interface Props {
 }
 
 export function fmtDate(iso: string) {
-  // Add time to prevent UTC midnight shifting to previous day
   const d = iso.includes('T') ? new Date(iso) : new Date(`${iso}T12:00:00`)
   return d.toLocaleDateString('en-US', {
     weekday: 'long',
     month: 'long',
     day: 'numeric',
-    year: 'numeric'
+    year: 'numeric',
+    timeZone: 'America/New_York'
   })
 }
 
