@@ -109,8 +109,14 @@ export const startOfNextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 
 // ─── Chapter-specific helpers ──────────────────────────────────────────────────
 export function getAllUpcomingThursdays(count: number): Date[] {
   const results: Date[] = []
-  const cursor = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+
+  // Use EST explicitly
+  const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }))
+  now.setHours(0, 0, 0, 0)
+
+  const cursor = new Date(now)
   while (cursor.getDay() !== 4) cursor.setDate(cursor.getDate() + 1)
+
   while (results.length < count) {
     results.push(new Date(cursor))
     cursor.setDate(cursor.getDate() + 7)

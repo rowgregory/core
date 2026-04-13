@@ -1,4 +1,3 @@
-// Get next N meeting Thursdays from today, skipping vacations + cancelled rendezvous
 export function getUpcomingMeetingDates(
   cancelledDates: string[],
   visitorDayDates: string[],
@@ -8,8 +7,11 @@ export function getUpcomingMeetingDates(
   const cancelled = new Set(cancelledDates.map((d) => toDateKey(new Date(d))))
   const visitorDays = new Set(visitorDayDates.map((d) => toDateKey(new Date(d))))
 
-  const current = new Date()
-  current.setHours(0, 0, 0, 0)
+  // Force EST to avoid UTC server shifting dates back a day
+  const nowEST = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }))
+  nowEST.setHours(0, 0, 0, 0)
+
+  const current = new Date(nowEST)
   while (current.getDay() !== 4) current.setDate(current.getDate() + 1)
 
   let safety = 0
@@ -24,7 +26,6 @@ export function getUpcomingMeetingDates(
 
   return results
 }
-
 function toDateKey(d: Date) {
   return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`
 }
@@ -57,13 +58,14 @@ export function getAllThursdaysFrom(startDate: Date, count: number): Date[] {
 
 // Count past actual meeting Thursdays since a given date
 export function countPastMeetingThursdays(since: Date, cancelledDates: string[], visitorDates: string[]): number {
-  const now = new Date()
-  now.setHours(0, 0, 0, 0)
+  const nowEST = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }))
+  nowEST.setHours(0, 0, 0, 0)
+
   const cancelled = new Set(cancelledDates.map((d) => toDateKey(new Date(d))))
   const visitors = new Set(visitorDates.map((d) => toDateKey(new Date(d))))
 
   return getAllThursdaysFrom(since, 200).filter((d) => {
-    if (d >= now) return false
+    if (d >= nowEST) return false
     const key = toDateKey(d)
     if (cancelled.has(key)) return false
     if (visitors.has(key)) return false
