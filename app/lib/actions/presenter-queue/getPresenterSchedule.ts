@@ -50,50 +50,46 @@ export async function getPresenterSchedule(): Promise<{
     const dates = getUpcomingMeetingDates(cancelledDates, visitorDates, 52)
     const scheduled = buildSchedule(
       queue.map((q) => ({ userId: q.userId, name: q.user.name ?? '', position: q.position })),
-      dates,
-      startIndex // ← automatically advances each Thursday
+      dates.map((d) => new Date(`${d}T12:00:00`)),
+      startIndex
     )
 
-    const allThursdays = getAllUpcomingThursdays(52) // new helper — every Thursday no matter what
+    const allThursdays = getAllUpcomingThursdays(52)
 
     const data: ScheduledPresenter[] = allThursdays
       .slice(0, 24)
-      .map((date, i) => {
-        const key = toDateKey(date)
+      .map((dateStr, i) => {
+        const key = dateStr // already in YYYY-MM-DD format
 
-        // Is it a cancelled meeting?
         if (cancelledDates.some((d) => toDateKey(new Date(d)) === key)) {
           return {
             userId: null,
             name: 'No Meeting',
             company: 'Cancelled',
-            date: date.toISOString(),
+            date: `${dateStr}T12:00:00`,
             isNext: false,
             isYou: false,
             type: 'off' as const
           }
         }
 
-        // Is it a visitor day?
         if (visitorDates.some((d) => toDateKey(new Date(d)) === key)) {
           return {
             userId: null,
             name: 'Visitor Day',
             company: 'Open to guests',
-            date: date.toISOString(),
+            date: `${dateStr}T12:00:00`,
             isNext: false,
             isYou: false,
             type: 'visitor_day' as const
           }
         }
 
-        // It's a presenter slot — pull from scheduled queue
         const presenterIndex =
           allThursdays.slice(0, i + 1).filter((d) => {
-            const k = toDateKey(d)
             return (
-              !cancelledDates.some((c) => toDateKey(new Date(c)) === k) &&
-              !visitorDates.some((v) => toDateKey(new Date(v)) === k)
+              !cancelledDates.some((c) => toDateKey(new Date(c)) === d) &&
+              !visitorDates.some((v) => toDateKey(new Date(v)) === d)
             )
           }).length - 1
 
@@ -104,14 +100,13 @@ export async function getPresenterSchedule(): Promise<{
           userId: s.userId,
           name: s.name,
           company: queue.find((q) => q.userId === s.userId)?.user.company ?? '',
-          date: date.toISOString(),
+          date: `${dateStr}T12:00:00`,
           isNext: presenterIndex === 0,
           isYou: s.userId === session.user.id,
           type: 'presenter' as const
         }
       })
       .filter(Boolean) as ScheduledPresenter[]
-
     return { success: true, data }
   } catch (error) {
     return { success: false, error: 'Failed to load presenter schedule' }

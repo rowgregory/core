@@ -39,8 +39,8 @@ export function daysUntil(iso: string) {
 }
 
 export function toDateKey(d: Date): string {
-  // Use local time — but all dates must be generated in EST context
-  return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`
+  const est = new Date(d.toLocaleString('en-US', { timeZone: 'America/New_York' }))
+  return `${est.getFullYear()}-${String(est.getMonth() + 1).padStart(2, '0')}-${String(est.getDate()).padStart(2, '0')}`
 }
 
 export function getTodayLabel(): string {
