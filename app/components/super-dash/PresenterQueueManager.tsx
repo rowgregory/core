@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronUp, ChevronDown, X, Plus, ArrowLeftRight } from 'lucide-react'
-import { fmtDate } from '@/app/lib/utils/date.utils'
 import { useRouter } from 'next/navigation'
 import { QueueMember } from '@/types/presenter-queue'
 import { moveQueueMember } from '@/app/lib/actions/presenter-queue/moveQueueMember'
@@ -18,6 +17,17 @@ interface Props {
   availableMembers: { id: string; name: string; company: string }[]
   dates: string[]
   startIndex: number
+}
+
+export function fmtDate(iso: string) {
+  // Add time to prevent UTC midnight shifting to previous day
+  const d = iso.includes('T') ? new Date(iso) : new Date(`${iso}T12:00:00`)
+  return d.toLocaleDateString('en-US', {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric'
+  })
 }
 
 // ─── Main ──────────────────────────────────────────────────────────────────────

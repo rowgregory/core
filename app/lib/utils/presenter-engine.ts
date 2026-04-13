@@ -4,21 +4,19 @@ export function getUpcomingMeetingDates(
   count: number = 52
 ): string[] {
   const results = []
-  const cancelled = new Set(cancelledDates.map((d) => toDateKey(new Date(d))))
-  const visitorDays = new Set(visitorDayDates.map((d) => toDateKey(new Date(d))))
+  const cancelled = new Set(cancelledDates.map((d) => d.split('T')[0]))
+  const visitorDays = new Set(visitorDayDates.map((d) => d.split('T')[0]))
 
-  const nowEST = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }))
-  nowEST.setHours(0, 0, 0, 0)
-
-  const cursor = new Date(nowEST)
+  const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }))
+  const cursor = new Date(now.getFullYear(), now.getMonth(), now.getDate())
   while (cursor.getDay() !== 4) cursor.setDate(cursor.getDate() + 1)
 
   let safety = 0
   while (results.length < count && safety < 500) {
     safety++
-    const key = toDateKey(cursor)
+    const key = `${cursor.getFullYear()}-${String(cursor.getMonth() + 1).padStart(2, '0')}-${String(cursor.getDate()).padStart(2, '0')}`
     if (!cancelled.has(key) && !visitorDays.has(key)) {
-      results.push(key) // ← store as 'YYYY-M-D' string, not Date object
+      results.push(key)
     }
     cursor.setDate(cursor.getDate() + 7)
   }
@@ -26,8 +24,9 @@ export function getUpcomingMeetingDates(
   return results
 }
 
-function toDateKey(d: Date) {
-  return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`
+export function toDateKey(d: Date): string {
+  const est = new Date(d.toLocaleString('en-US', { timeZone: 'America/New_York' }))
+  return `${est.getFullYear()}-${String(est.getMonth() + 1).padStart(2, '0')}-${String(est.getDate()).padStart(2, '0')}`
 }
 
 // Zip queue with upcoming dates — wraps around infinitely

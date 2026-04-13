@@ -39,7 +39,8 @@ export function daysUntil(iso: string) {
 }
 
 export function toDateKey(d: Date): string {
-  return `${d.getUTCFullYear()}-${d.getUTCMonth()}-${d.getUTCDate()}`
+  // Use local time — but all dates must be generated in EST context
+  return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`
 }
 
 export function getTodayLabel(): string {
