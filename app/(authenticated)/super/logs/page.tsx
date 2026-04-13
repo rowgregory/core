@@ -1,0 +1,24 @@
+import { redirect } from 'next/navigation'
+import { auth } from '@/app/lib/auth'
+import { getLogs } from '@/app/lib/actions/log/log-actions'
+import LogsClient from '@/app/components/pages/SuperLogsClient'
+
+export default async function LogsPage() {
+  const session = await auth()
+  if (!session?.user) redirect('/auth/login')
+  if (!session.user.isSuperUser) redirect('/dashboard')
+
+  const result = await getLogs({ page: 1 })
+
+  if (!result.success || !result.data) {
+    return (
+      <div className="min-h-screen bg-bg-light dark:bg-bg-dark flex items-center justify-center px-4">
+        <p className="font-nunito text-sm text-muted-light dark:text-muted-dark text-center">
+          Unable to load logs. Please refresh.
+        </p>
+      </div>
+    )
+  }
+
+  return <LogsClient initialByLevel={result.data.byLevel} />
+}

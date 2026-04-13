@@ -24,113 +24,100 @@ const MobileNavigationDrawer: FC<{ links: any }> = ({ links }) => {
     <AnimatePresence>
       {mobileNavigation && (
         <>
-          {/* Backdrop Overlay */}
           <Backdrop onClose={close} />
 
-          {/* Drawer */}
           <Drawer>
             {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-gray-700/50">
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2, duration: 0.4 }}
-              >
-                <h2 className="text-xl font-bold bg-linear-to-r from-cyan-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-border-light dark:border-border-dark">
+              <div>
+                <p className="text-f10 font-mono tracking-[0.2em] uppercase text-primary-light dark:text-primary-dark mb-0.5">
+                  Coastal Referral Exchange
+                </p>
+                <h2 className="font-sora font-black text-[18px] text-text-light dark:text-text-dark tracking-tight leading-none">
                   Navigation
                 </h2>
-                <p className="text-xs text-gray-500 mt-1">Core Chapter Management</p>
-              </motion.div>
-
-              <motion.button
-                whileHover={{ scale: 1.1, rotate: 90 }}
-                whileTap={{ scale: 0.9 }}
+              </div>
+              <button
                 onClick={close}
-                className="p-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-all"
-                initial={{ opacity: 0, rotate: -90 }}
-                animate={{ opacity: 1, rotate: 0 }}
-                transition={{ delay: 0.3, duration: 0.4 }}
+                className="w-8 h-8 flex items-center justify-center text-muted-light dark:text-muted-dark hover:text-text-light dark:hover:text-text-dark transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark"
+                aria-label="Close navigation"
               >
-                <X className="w-5 h-5" />
-              </motion.button>
+                <X size={16} />
+              </button>
             </div>
 
-            {/* Navigation Items */}
-            <nav className="flex-1 overflow-y-auto py-4 px-2">
-              <div className="space-y-1">
-                {links.map((item: any, index: number) => (
-                  <Link key={item.id} href={item.linkKey} onClick={close}>
-                    <motion.div
-                      key={item.id}
-                      custom={index}
-                      variants={itemVariants}
-                      initial="closed"
-                      animate="open"
-                      className={`group w-full flex items-center justify-between p-4 rounded-xl font-medium transition-all duration-300 text-left ${
-                        selectedPage === item.id
-                          ? 'bg-linear-to-r from-cyan-600/20 to-blue-600/20 text-white border border-cyan-500/30 shadow-lg'
-                          : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
-                      }`}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      <div className="flex items-center space-x-4">
+            {/* Nav items */}
+            <nav className="flex-1 overflow-y-auto py-3 px-3" aria-label="Mobile navigation">
+              <div className="flex flex-col gap-1">
+                {links.map((item: any, index: number) => {
+                  const isActive = selectedPage === item.id
+                  return (
+                    <Link key={item.id} href={item.linkKey} onClick={close}>
+                      <motion.div
+                        custom={index}
+                        variants={itemVariants}
+                        initial="closed"
+                        animate="open"
+                        className={`flex items-center gap-4 px-4 py-3.5 transition-colors ${
+                          isActive
+                            ? 'bg-primary-light/8 dark:bg-primary-dark/10 border-l-2 border-primary-light dark:border-primary-dark'
+                            : 'hover:bg-surface-light dark:hover:bg-surface-dark border-l-2 border-transparent'
+                        }`}
+                      >
                         <div
-                          className={`p-2 rounded-lg transition-all ${
-                            selectedPage === item.id
-                              ? 'bg-cyan-500/20 text-cyan-400'
-                              : 'bg-gray-800/50 text-gray-500 group-hover:bg-gray-700/50 group-hover:text-gray-300'
+                          className={`shrink-0 ${
+                            isActive
+                              ? 'text-primary-light dark:text-primary-dark'
+                              : 'text-muted-light dark:text-muted-dark'
                           }`}
                         >
-                          <item.icon className="w-5 h-5" />
+                          <item.icon size={18} aria-hidden="true" />
                         </div>
-
                         <div className="flex-1 min-w-0">
-                          <div
-                            className={`font-semibold transition-colors ${
-                              selectedPage === item.id ? 'text-white' : 'text-gray-300 group-hover:text-white'
+                          <p
+                            className={`font-sora font-bold text-[13px] leading-tight ${
+                              isActive
+                                ? 'text-primary-light dark:text-primary-dark'
+                                : 'text-text-light dark:text-text-dark'
                             }`}
                           >
                             {item.label}
-                          </div>
-                          <div
-                            className={`text-xs transition-colors ${
-                              selectedPage === item.id ? 'text-cyan-300' : 'text-gray-500 group-hover:text-gray-400'
-                            }`}
-                          >
-                            {item.description}
-                          </div>
+                          </p>
+                          {item.description && (
+                            <p className="text-f10 font-nunito text-muted-light dark:text-muted-dark mt-0.5 truncate">
+                              {item.description}
+                            </p>
+                          )}
                         </div>
-                      </div>
-                    </motion.div>
-                  </Link>
-                ))}
+                      </motion.div>
+                    </Link>
+                  )
+                })}
               </div>
             </nav>
 
-            {/* Footer */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="p-4 border-t border-gray-800"
-            >
-              <div className="flex items-center space-x-3 p-3 bg-gray-800/50 rounded-xl">
-                <div className="w-8 h-8 bg-linear-to-r from-teal-400 via-cyan-400 to-blue-400 rounded-full flex items-center justify-center text-white font-bold">
+            {/* Footer — user info */}
+            <div className="px-5 py-4 border-t border-border-light dark:border-border-dark">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 shrink-0 bg-primary-light/10 dark:bg-primary-dark/10 border border-primary-light/20 dark:border-primary-dark/20 flex items-center justify-center">
                   {user?.isSuperUser ? (
-                    <Crown className="w-4 h-4" />
+                    <Crown size={14} className="text-primary-light dark:text-primary-dark" aria-hidden="true" />
                   ) : user?.isAdmin ? (
-                    <Shield className="w-4 h-4" />
+                    <Shield size={14} className="text-primary-light dark:text-primary-dark" aria-hidden="true" />
                   ) : (
-                    user?.name?.charAt(0)
+                    <span className="text-f10 font-mono font-bold text-primary-light dark:text-primary-dark">
+                      {user?.name?.charAt(0).toUpperCase()}
+                    </span>
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-white text-sm font-medium truncate">{user?.name}</p>
-                  <p className="text-gray-400 text-xs truncate">{user?.email}</p>
+                  <p className="font-sora font-bold text-[13px] text-text-light dark:text-text-dark truncate">
+                    {user?.name}
+                  </p>
+                  <p className="text-f10 font-mono text-muted-light dark:text-muted-dark truncate">{user?.email}</p>
                 </div>
               </div>
-            </motion.div>
+            </div>
           </Drawer>
         </>
       )}

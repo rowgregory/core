@@ -1,5 +1,5 @@
 import { sliceCron } from '@/app/lib/constants/api/sliceNames'
-import coreTemplate from '@/app/lib/email-templates/core'
+import { coreTemplate } from '@/app/lib/email-templates/core'
 import { createLog } from '@/app/lib/utils/api/createLog'
 import { handleApiError } from '@/app/lib/utils/api/handleApiError'
 import prisma from '@/prisma/client'
@@ -40,7 +40,7 @@ async function sendCoreReminders(req: NextRequest) {
       const batchPromises = batch.map(async (user) => {
         try {
           const result = await resend.emails.send({
-            from: 'Coastal Referral Exchange <sqysh@coastal-referral-exchange.com>',
+            from: 'Coastal Referral Exchange <noreply@coastal-referral-exchange.com>',
             to: user.email,
             subject: 'Log Your Activities',
             html: coreTemplate(user.name.split(' ')[0] || user.email.split('@')[0])

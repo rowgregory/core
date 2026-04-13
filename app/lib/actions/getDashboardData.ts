@@ -1,0 +1,202 @@
+import prisma from '@/prisma/client'
+import { auth } from '../auth'
+import { getInitials } from '../utils/common/getInitials'
+
+export async function getDashboardData() {
+  try {
+    const session = await auth()
+    if (!session?.user?.id) return { success: false, error: 'Unauthorized' }
+
+    const now = new Date()
+    const dayOfWeek = now.getDay()
+    const diffToThursday = (dayOfWeek + 3) % 7
+    const startOfWeek = new Date(now)
+    startOfWeek.setDate(now.getDate() - diffToThursday)
+    startOfWeek.setHours(0, 0, 0, 0)
+
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: {
+        id: true,
+        name: true,
+        chapterId: true,
+        chapter: { select: { name: true } }
+      }
+    })
+    if (!user) return { success: false, error: 'User not found' }
+
+    // chapter members (excluding self)
+    const members = await prisma.user.findMany({
+      where: {
+        chapterId: user.chapterId ?? undefined,
+        id: { not: user.id },
+        membershipStatus: 'ACTIVE'
+      },
+      select: { id: true, name: true, industry: true, phone: true },
+      orderBy: { name: 'asc' }
+    })
+
+    const [
+      parleyThisWeek,
+      treasureMapsThisWeek,
+      anchorsThisWeekData,
+      totalParleys,
+      totalTreasureMaps,
+      totalAnchorsData
+    ] = await Promise.all([
+      prisma.parley.count({
+        where: {
+          OR: [{ requesterId: user.id }, { recipientId: user.id }],
+          scheduledAt: { gte: startOfWeek }
+        }
+      }),
+      prisma.treasureMap.count({
+        where: {
+          OR: [{ giverId: user.id }, { receiverId: user.id }],
+          createdAt: { gte: startOfWeek }
+        }
+      }),
+      prisma.anchor.findMany({
+        where: {
+          OR: [{ giverId: user.id }, { receiverId: user.id }],
+          closedDate: { gte: startOfWeek }
+        },
+        select: { businessValue: true }
+      }),
+      prisma.parley.count({
+        where: { OR: [{ requesterId: user.id }, { recipientId: user.id }] }
+      }),
+      prisma.treasureMap.count({
+        where: { OR: [{ giverId: user.id }, { receiverId: user.id }] }
+      }),
+      prisma.anchor.findMany({
+        where: { OR: [{ giverId: user.id }, { receiverId: user.id }] },
+        select: { businessValue: true }
+      })
+    ])
+
+    const anchorsThisWeek = anchorsThisWeekData.length
+    const closedAmountThisWeek = `$${anchorsThisWeekData.reduce((sum, a) => sum + Number(a.businessValue), 0).toLocaleString()}`
+
+    const totalAnchors = totalAnchorsData.length
+    const totalClosedAmount = `$${totalAnchorsData.reduce((sum, a) => sum + Number(a.businessValue), 0).toLocaleString()}`
+
+    // recent activity — merged + sorted
+    const [recentParleys, recentMaps, recentAnchors] = await Promise.all([
+      prisma.parley.findMany({
+        where: { OR: [{ requesterId: user.id }, { recipientId: user.id }] },
+        orderBy: { createdAt: 'desc' },
+        select: {
+          id: true,
+          createdAt: true,
+          requesterId: true,
+          requester: { select: { name: true } },
+          recipient: { select: { name: true } }
+        }
+      }),
+      prisma.treasureMap.findMany({
+        where: { OR: [{ giverId: user.id }, { receiverId: user.id }] }, // ← both directions
+        orderBy: { createdAt: 'desc' },
+        select: {
+          id: true,
+          createdAt: true,
+          giverId: true,
+          clientName: true,
+          clientPhone: true,
+          giver: { select: { name: true } },
+          receiver: { select: { name: true } }
+        }
+      }),
+      prisma.anchor.findMany({
+        where: { OR: [{ giverId: user.id }, { receiverId: user.id }] },
+        orderBy: { createdAt: 'desc' },
+        select: {
+          id: true,
+          createdAt: true,
+          businessValue: true,
+          receiverId: true,
+          giver: { select: { name: true } },
+          receiver: { select: { name: true } }
+        }
+      })
+    ])
+
+    const recentActivity = [
+      ...recentParleys.map((p) => ({
+        id: p.id,
+        type: 'MEETING' as const,
+        label:
+          p.requesterId === user.id
+            ? `Face-2-Face · You → ${p.recipient.name}`
+            : `Face-2-Face · ${p.requester.name} → You`,
+        createdAt: p.createdAt
+      })),
+      ...recentMaps.map((m) => ({
+        id: m.id,
+        type: 'REFERRAL' as const,
+        label:
+          m.giverId === user.id
+            ? `Referral · You → ${m.receiver.name} · ${m.clientName}`
+            : `Referral · ${m.giver.name} → You · ${m.clientName}`,
+        clientPhone: m.clientPhone ?? null,
+        createdAt: m.createdAt
+      })),
+      ...recentAnchors.map((a) => ({
+        id: a.id,
+        type: 'CLOSED' as const,
+        label:
+          a.receiverId === user.id
+            ? `Closed · ${a.giver?.name ?? 'External'} → You · $${Number(a.businessValue).toLocaleString()}`
+            : `Closed · You → ${a.receiver?.name ?? 'External'} · $${Number(a.businessValue).toLocaleString()}`,
+        createdAt: a.createdAt,
+        businessValue: Number(a.businessValue)
+      }))
+    ]
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+      .map((a) => ({
+        ...a,
+        timeAgo: formatTimeAgo(a.createdAt),
+        createdAt: a.createdAt.toISOString()
+      }))
+
+    return {
+      success: true,
+      data: {
+        currentUser: {
+          name: user.name ?? 'Member',
+          initials: getInitials(user.name ?? '')
+        },
+        members,
+        stats: {
+          parleyThisWeek,
+          treasureMapsThisWeek,
+          anchorsThisWeek,
+          totalParleys,
+          totalTreasureMaps,
+          totalAnchors,
+          totalClosedAmount,
+          closedAmountThisWeek
+        },
+        recentActivity
+      }
+    }
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to load dashboard'
+    }
+  }
+}
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function formatTimeAgo(date: Date) {
+  const seconds = Math.floor((Date.now() - date.getTime()) / 1000)
+  if (seconds < 3_600) return `${Math.floor(seconds / 60)}m ago`
+  if (seconds < 86_400) return `${Math.floor(seconds / 3_600)}h ago`
+  if (seconds < 604_800) {
+    const d = Math.floor(seconds / 86_400)
+    return d === 1 ? 'Yesterday' : `${d}d ago`
+  }
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+}

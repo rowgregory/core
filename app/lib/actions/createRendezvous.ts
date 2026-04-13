@@ -1,6 +1,5 @@
 'use server'
 
-import { revalidateTag } from 'next/cache'
 import { auth } from '../auth'
 import prisma from '@/prisma/client'
 import { chapterId } from '../constants/api/chapterId'
@@ -60,8 +59,6 @@ export async function createRendezvous(data: {
       rendezvousId: rendezvous.id,
       userId: session.user.id
     })
-
-    revalidateTag('Rendezvous', 'default')
 
     return {
       success: true,

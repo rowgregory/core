@@ -38,7 +38,7 @@ async function sendPresentationReminders(req: NextRequest) {
       const batchPromises = batch.map(async (user) => {
         try {
           const result = await resend.emails.send({
-            from: 'Coastal Referral Exchange <sqysh@coastal-referral-exchange.com>',
+            from: 'Coastal Referral Exchange <noreply@coastal-referral-exchange.com>',
             to: user.email,
             subject: 'Support Boys & Girls Club of Lynn',
             html: bgclTemplate(user?.name?.split(' ')[0])

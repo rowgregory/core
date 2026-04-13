@@ -38,7 +38,7 @@ async function sendSqyshGoogleReviewReminders(req: NextRequest) {
       const batchPromises = batch.map(async (user) => {
         try {
           const result = await resend.emails.send({
-            from: 'Coastal Referral Exchange <sqysh@coastal-referral-exchange.com>',
+            from: 'Coastal Referral Exchange <noreply@coastal-referral-exchange.com>',
             to: user.email,
             subject: 'Help Sqysh Grow - Share Your Experience',
             html: sqyshGoogleReviewTemplate(user?.name?.split(' ')[0])

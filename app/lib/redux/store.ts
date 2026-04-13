@@ -3,7 +3,6 @@
 import { combineReducers } from 'redux'
 import { configureStore } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
-import { api } from './services/api'
 import { formReducer } from './features/formSlice'
 import { logReducer } from './features/logSlice'
 import { adminReducer } from './features/adminSlice'
@@ -31,8 +30,7 @@ const rootReducer = combineReducers({
   treasureMap: treasureMapReducer,
   dashboard: dashboardReducer,
   grog: grogReducer,
-  report: reportReducer,
-  [api.reducerPath]: api.reducer
+  report: reportReducer
 })
 
 export const store = configureStore({
@@ -41,7 +39,7 @@ export const store = configureStore({
     getDefaultMiddleware({
       immutableCheck: false,
       serializableCheck: false
-    }).concat(api.middleware)
+    })
 })
 
 export type RootState = ReturnType<typeof store.getState>

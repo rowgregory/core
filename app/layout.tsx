@@ -3,7 +3,6 @@ import { auth } from './lib/auth'
 import { SessionProvider } from 'next-auth/react'
 import { Sora } from 'next/font/google'
 import { metadata as siteMetadata } from './metadata'
-import { getUsers } from './lib/actions/getUsers'
 import { GoogleAnalytics } from '@next/third-parties/google'
 import RootLayoutWrapper from './root-layout'
 
@@ -23,7 +22,6 @@ export default async function RootLayout({
   children: React.ReactNode
 }>) {
   const session = await auth()
-  const users = await getUsers()
 
   return (
     <html lang="en">
@@ -33,7 +31,7 @@ export default async function RootLayout({
       </head>
       <body className={`${sora.variable} antialiased`}>
         <SessionProvider session={session}>
-          <RootLayoutWrapper users={users}>{children}</RootLayoutWrapper>
+          <RootLayoutWrapper>{children}</RootLayoutWrapper>
         </SessionProvider>
       </body>
     </html>

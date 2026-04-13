@@ -17,7 +17,7 @@ const LoginPage = () => {
   const [error, setError] = useState('')
   const searchParams = useSearchParams()
   const urlError = searchParams.get('error')
-  const errorInfo = urlError ? getAuthErrorMessage(urlError) : null
+  const errorInfo = urlError ? getAuthErrorMessage(urlError, email) : null
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -28,7 +28,7 @@ const LoginPage = () => {
       const result = await signIn('email', {
         email,
         redirect: false,
-        callbackUrl: '/auth/custom-callback'
+        redirectTo: '/auth/login'
       })
 
       if (result?.error) {
@@ -44,31 +44,34 @@ const LoginPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 flex items-center justify-center p-6">
+    <div className="min-h-screen bg-bg-light dark:bg-bg-dark flex items-center justify-center p-6">
       <div className="w-full max-w-md">
         {/* Header */}
         <LoginHeader />
 
+        {/* Error */}
         {urlError && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-xl backdrop-blur-sm"
+            transition={{ duration: 0.4 }}
+            className="mb-6 border-l-2 border-red-500 bg-red-50 dark:bg-red-500/5 px-4 py-3"
           >
-            <div className="flex items-start space-x-3">
-              <div className="shrink-0">
-                <ShieldX className="w-5 h-5 text-red-400" />
-              </div>
+            <div className="flex items-start gap-3">
+              <ShieldX className="w-4 h-4 text-red-500 dark:text-red-400 mt-0.5 shrink-0" aria-hidden="true" />
               <div>
-                <h3 className="text-red-400 font-semibold text-sm mb-1">{errorInfo?.title}</h3>
-                <p className="text-red-300 text-sm leading-relaxed">{errorInfo?.message}</p>
+                <p className="text-[13px] font-sora font-bold text-red-600 dark:text-red-400 mb-0.5">
+                  {errorInfo?.title}
+                </p>
+                <p className="text-[12.5px] font-nunito text-red-500 dark:text-red-400/80 leading-relaxed">
+                  {errorInfo?.message}
+                </p>
               </div>
             </div>
           </motion.div>
         )}
 
-        {/* Login Card */}
+        {/* Login card */}
         <LoginCard
           email={email}
           error={error}
@@ -87,10 +90,12 @@ const LoginPage = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
           className="text-center mt-8 hidden sm:block"
         >
-          <p className="text-xs text-gray-500">Coastal Referral Exchange Management System</p>
+          <p className="text-f10 font-mono tracking-widest text-muted-light dark:text-muted-dark">
+            Coastal Referral Exchange
+          </p>
         </motion.div>
       </div>
     </div>

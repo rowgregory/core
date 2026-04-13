@@ -16,11 +16,13 @@ export async function getUsers() {
       FLAGGED: 3
     }
 
-    return users.sort((a, b) => {
+    const sortedUsers = users.sort((a, b) => {
       const aOrder = statusOrder[a.membershipStatus] ?? 99
       const bOrder = statusOrder[b.membershipStatus] ?? 99
       return aOrder - bOrder
     })
+
+    return { success: true, data: sortedUsers }
   } catch {
     return {
       success: false,

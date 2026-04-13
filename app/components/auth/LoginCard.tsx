@@ -1,7 +1,7 @@
 import { FC, FormEvent } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { AlertCircle, ArrowRight, Loader2, Mail } from 'lucide-react'
-import SailboatSVG from '@/public/svg/SailboatSVG'
+import { signIn } from 'next-auth/react'
 
 interface ILoginCard {
   isEmailSent: boolean
@@ -34,111 +34,166 @@ const LoginCard: FC<ILoginCard> = ({
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: 0.1 }}
-      className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-4 sm:p-8 shadow-2xl"
-      style={{ boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8)' }}
+      transition={{ duration: 0.5, delay: 0.1 }}
+      className="border border-border-light dark:border-border-dark bg-bg-light dark:bg-bg-dark p-6 xs:p-8"
     >
       <AnimatePresence mode="wait">
         {!isEmailSent ? (
           <motion.div
             key="login-form"
-            initial={{ opacity: 0, x: -20 }}
+            initial={{ opacity: 0, x: -16 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 20 }}
-            transition={{ duration: 0.3 }}
+            exit={{ opacity: 0, x: 16 }}
+            transition={{ duration: 0.25 }}
           >
             <div className="mb-6">
-              <h2 className="text-center sm:text-left text-xl font-semibold text-white mb-2">Sign in to The Bridge</h2>
-              <p className="text-center sm:text-left text-gray-400 text-sm">
+              <h2 className="font-sora font-black text-[22px] text-text-light dark:text-text-dark tracking-tight mb-1">
+                Sign in
+              </h2>
+              <p className="text-[13px] font-nunito text-muted-light dark:text-muted-dark">
                 Enter your email to receive a secure magic link
               </p>
             </div>
-            <form onSubmit={handleSubmit} className="space-y-6">
+
+            <form onSubmit={handleSubmit} className="space-y-5">
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
+                <label
+                  htmlFor="email"
+                  className="block text-f10 font-mono tracking-[0.18em] uppercase text-muted-light dark:text-muted-dark mb-1.5"
+                >
                   Email Address
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <Mail
+                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-light dark:text-muted-dark w-4 h-4 pointer-events-none"
+                    aria-hidden="true"
+                  />
                   <input
                     id="email"
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="refer_sqysh@sqysh.io"
+                    placeholder="you@example.com"
                     disabled={isLoading}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-800/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 focus:outline-none transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    autoComplete="email"
+                    className="w-full h-12 pl-10 pr-4 bg-white dark:bg-bg-dark border border-slate-300 dark:border-border-dark font-nunito text-[15px] text-text-light dark:text-text-dark placeholder:text-slate-400 dark:placeholder:text-muted-dark/50 focus:outline-none focus:border-primary-light dark:focus:border-primary-dark focus:ring-1 focus:ring-primary-light/20 dark:focus:ring-primary-dark/20 transition-colors rounded-none disabled:opacity-50 disabled:cursor-not-allowed"
                   />
                 </div>
               </div>
+
               {error && (
                 <motion.div
-                  initial={{ opacity: 0, y: -10 }}
+                  initial={{ opacity: 0, y: -8 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="flex items-center space-x-2 text-red-400 text-sm bg-red-400/10 border border-red-400/20 rounded-lg p-3"
+                  className="flex items-center gap-2 border-l-2 border-red-500 bg-red-50 dark:bg-red-500/5 px-3 py-2.5"
                 >
-                  <AlertCircle className="w-4 h-4 shrink-0" />
-                  <span>{error}</span>
+                  <AlertCircle className="w-3.5 h-3.5 text-red-500 dark:text-red-400 shrink-0" aria-hidden="true" />
+                  <span className="text-[12.5px] font-nunito text-red-600 dark:text-red-400">{error}</span>
                 </motion.div>
               )}
-              <motion.button
+
+              <button
                 type="submit"
                 disabled={isLoading || !email}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="w-full px-6 py-3 bg-linear-to-r from-blue-600 to-cyan-600 text-white rounded-lg hover:from-blue-500 hover:to-cyan-500 transition-all flex items-center justify-center space-x-2 font-semibold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 cursor-pointer"
-                style={{ boxShadow: '0 0 20px rgba(139, 92, 246, 0.4)' }}
+                className="w-full h-12 bg-primary-light dark:bg-button-dark text-white font-sora font-bold text-sm tracking-wide flex items-center justify-center gap-2 hover:opacity-90 active:opacity-80 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark focus-visible:ring-offset-2 cursor-pointer"
               >
                 {isLoading ? (
                   <>
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                    <span>Sending Magic Link...</span>
+                    <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />
+                    Sending…
                   </>
                 ) : (
                   <>
-                    <span>Send Magic Link</span>
-                    <ArrowRight className="w-5 h-5" />
+                    <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                    Send Magic Link
                   </>
                 )}
-              </motion.button>
+              </button>
+
+              {/* ── Divider ── */}
+              <div className="flex items-center gap-3 mt-5">
+                <div className="flex-1 h-px bg-border-light dark:bg-border-dark" />
+                <span className="text-f10 font-mono tracking-[0.15em] uppercase text-muted-light dark:text-muted-dark">
+                  or
+                </span>
+                <div className="flex-1 h-px bg-border-light dark:bg-border-dark" />
+              </div>
+
+              {/* ── Google ── */}
+              <button
+                type="button"
+                onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
+                disabled={isLoading}
+                className="mt-5 w-full h-12 border border-slate-300 dark:border-border-dark bg-white dark:bg-bg-dark text-text-light dark:text-text-dark font-sora font-bold text-sm flex items-center justify-center gap-3 hover:bg-surface-light dark:hover:bg-surface-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark focus-visible:ring-offset-2"
+              >
+                <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+                  <path
+                    fill="#4285F4"
+                    d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"
+                  />
+                  <path
+                    fill="#34A853"
+                    d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"
+                  />
+                  <path
+                    fill="#FBBC05"
+                    d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z"
+                  />
+                  <path
+                    fill="#EA4335"
+                    d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.166 6.656 3.58 9 3.58z"
+                  />
+                </svg>
+                Continue with Google
+              </button>
             </form>
-            <div className="mt-6 pt-6 border-t border-gray-700">
-              <p className="text-xs text-gray-500 text-center">
-                Only registered Core chapter members can access this system.
+
+            <div className="mt-6 pt-5 border-t border-border-light dark:border-border-dark">
+              <p className="text-f10 font-mono tracking-[0.08em] text-muted-light dark:text-muted-dark text-center leading-relaxed">
+                Only registered members can access this system.
                 <br />
-                Contact your chapter admin if you need access.
+                Contact Sqysh if you need access.
               </p>
             </div>
           </motion.div>
         ) : (
           <motion.div
             key="email-sent"
-            initial={{ opacity: 0, x: 20 }}
+            initial={{ opacity: 0, x: 16 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.3 }}
+            exit={{ opacity: 0, x: -16 }}
+            transition={{ duration: 0.25 }}
             className="text-center"
           >
-            <SailboatSVG />
-            <h2 className="text-xl font-semibold text-white mb-3">Check your email</h2>
-            <p className="text-gray-400 mb-2">We&apos;ve sent a secure magic link to:</p>
-            <p className="text-violet-400 font-medium mb-6">{email}</p>
-            <div className="bg-gray-700/30 border border-gray-600 rounded-lg p-4 mb-6">
-              <p className="text-sm text-gray-300 leading-relaxed">
-                Click the link in your email to sign in securely. The link will expire in 60 minutes for your security.
+            <div className="w-12 h-12 flex items-center justify-center bg-primary-light/10 dark:bg-primary-dark/10 border border-primary-light/20 dark:border-primary-dark/20 mx-auto mb-5">
+              <Mail className="w-5 h-5 text-primary-light dark:text-primary-dark" aria-hidden="true" />
+            </div>
+
+            <h2 className="font-sora font-black text-[22px] text-text-light dark:text-text-dark tracking-tight mb-2">
+              Check your email
+            </h2>
+            <p className="text-[13px] font-nunito text-muted-light dark:text-muted-dark mb-1">
+              We've sent a magic link to
+            </p>
+            <p className="font-mono text-[13px] text-primary-light dark:text-primary-dark font-bold mb-6 truncate">
+              {email}
+            </p>
+
+            <div className="border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark px-4 py-3 mb-6 text-left">
+              <p className="text-[12.5px] font-nunito text-text-light dark:text-text-dark leading-relaxed">
+                Click the link in your email to sign in. The link expires in <strong>24 hours</strong>.
               </p>
             </div>
-            <motion.button
+
+            <button
               onClick={handleTryAgain}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full px-6 py-3 border border-gray-600 text-gray-300 rounded-lg hover:bg-gray-700 hover:text-white transition-all font-medium"
+              className="w-full h-12 border border-slate-300 dark:border-border-dark text-muted-light dark:text-muted-dark font-nunito text-sm hover:bg-surface-light dark:hover:bg-surface-dark hover:text-text-light dark:hover:text-text-dark transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark"
             >
               Try a different email
-            </motion.button>
+            </button>
 
-            <p className="text-xs text-gray-500 mt-4">
-              Didn&apos;t receive the email? Check your spam folder or try again.
+            <p className="text-f10 font-mono tracking-[0.08em] text-muted-light dark:text-muted-dark mt-4">
+              Didn't receive it? Check your spam folder.
             </p>
           </motion.div>
         )}

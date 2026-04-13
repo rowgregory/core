@@ -1,67 +1,44 @@
-// src/components/ui/Toast.tsx
 import React, { useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, CheckCircle, AlertCircle, Info, AlertTriangle } from 'lucide-react'
-// import UIfx from 'uifx'
-import { useAppDispatch, useToastSelector } from '@/app/lib/redux/store'
+import { store, useToastSelector } from '@/app/lib/redux/store'
 import { hideToast } from '@/app/lib/redux/features/toastSlice'
 
-// Import your sound files
-// const successSound = new UIfx('/path/to/success-sound.mp3', { volume: 0.4 })
-// const errorSound = new UIfx('/path/to/error-sound.mp3', { volume: 0.4 })
+const TOAST_STYLES = {
+  success: {
+    icon: CheckCircle,
+    accent: 'border-l-emerald-400 dark:border-l-emerald-400',
+    iconCls: 'text-emerald-600 dark:text-emerald-400'
+  },
+  error: {
+    icon: AlertCircle,
+    accent: 'border-l-red-500 dark:border-l-red-400',
+    iconCls: 'text-red-600 dark:text-red-400'
+  },
+  warning: {
+    icon: AlertTriangle,
+    accent: 'border-l-amber-500 dark:border-l-amber-400',
+    iconCls: 'text-amber-600 dark:text-amber-400'
+  },
+  info: {
+    icon: Info,
+    accent: 'border-l-primary-light dark:border-l-primary-dark',
+    iconCls: 'text-primary-light dark:text-primary-dark'
+  }
+} as const
 
 const Toast: React.FC = () => {
-  const dispatch = useAppDispatch()
   const { isVisible, type, message, description, duration } = useToastSelector()
 
   useEffect(() => {
-    if (isVisible) {
-      // Play sound based on toast type
-      switch (type) {
-        case 'success':
-          // successSound.play()
-          break
-        case 'error':
-          // errorSound.play()
-          break
-      }
-
-      // Auto-hide toast
-      const timer = setTimeout(() => {
-        dispatch(hideToast())
-      }, duration)
-
-      return () => clearTimeout(timer)
-    }
-  }, [isVisible, type, dispatch, duration])
-
-  const getIcon = () => {
-    switch (type) {
-      case 'success':
-        return <CheckCircle className="w-6 h-6 text-green-400" />
-      case 'error':
-        return <AlertCircle className="w-6 h-6 text-red-400" />
-      case 'warning':
-        return <AlertTriangle className="w-6 h-6 text-yellow-400" />
-      case 'info':
-        return <Info className="w-6 h-6 text-blue-400" />
-    }
-  }
-
-  const getBackgroundColor = () => {
-    switch (type) {
-      case 'success':
-        return 'bg-green-950/80'
-      case 'error':
-        return 'bg-red-950/80'
-      case 'warning':
-        return 'bg-yellow-950/80'
-      case 'info':
-        return 'bg-blue-950/80'
-    }
-  }
+    if (!isVisible) return
+    const timer = setTimeout(() => store.dispatch(hideToast()), duration)
+    return () => clearTimeout(timer)
+  }, [isVisible, type, duration])
 
   if (!isVisible) return null
+
+  const { icon: Icon, accent, iconCls } = TOAST_STYLES[type]
 
   return (
     <AnimatePresence>
@@ -70,31 +47,30 @@ const Toast: React.FC = () => {
           key="toast"
           initial={{ opacity: 0, x: '100%' }}
           animate={{ opacity: 1, x: 0 }}
-          exit={{
-            opacity: 0,
-            x: '100%',
-            transition: {
-              duration: 0.3,
-              ease: 'easeInOut'
-            }
-          }}
-          transition={{
-            type: 'tween',
-            duration: 0.3,
-            ease: 'easeInOut'
-          }}
-          className={`
-          fixed top-4 right-4 left-4 lg:left-auto z-[100] ${getBackgroundColor()} backdrop-blur-md rounded-xl border border-white/10 shadow-2xl p-4 lg:max-w-sm
-        `}
+          exit={{ opacity: 0, x: '100%' }}
+          transition={{ type: 'tween', duration: 0.25, ease: 'easeInOut' }}
+          className={`fixed top-4 right-4 left-4 lg:left-auto lg:max-w-sm z-200 bg-bg-light dark:bg-surface-dark border border-border-light dark:border-border-dark border-l-2 ${accent} shadow-lg`}
+          role="alert"
+          aria-live="assertive"
         >
-          <div className="flex items-center space-x-3">
-            {getIcon()}
-            <div className="flex-1">
-              <h3 className="text-white font-semibold">{message}</h3>
-              {description && <p className="text-gray-400 text-sm mt-1">{description}</p>}
+          <div className="flex items-start gap-3 p-4">
+            <Icon className={`w-4 h-4 mt-0.5 shrink-0 ${iconCls}`} aria-hidden="true" />
+            <div className="flex-1 min-w-0">
+              <p className="font-sora font-bold text-[13px] text-text-light dark:text-text-dark leading-snug">
+                {message}
+              </p>
+              {description && (
+                <p className="text-[12px] font-nunito text-muted-light dark:text-muted-dark mt-1 leading-relaxed">
+                  {description}
+                </p>
+              )}
             </div>
-            <button onClick={() => dispatch(hideToast())} className="text-gray-400 hover:text-white transition-colors">
-              <X className="w-5 h-5" />
+            <button
+              onClick={() => store.dispatch(hideToast())}
+              className="text-muted-light dark:text-muted-dark hover:text-text-light dark:hover:text-text-dark transition-colors shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark rounded-sm"
+              aria-label="Dismiss"
+            >
+              <X className="w-4 h-4" />
             </button>
           </div>
         </motion.div>

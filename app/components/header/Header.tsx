@@ -1,64 +1,60 @@
+import { store } from '@/app/lib/redux/store'
+import { Menu } from 'lucide-react'
 import Link from 'next/link'
-import React from 'react'
+import { usePathname } from 'next/navigation'
 import LaunchAppButton from '../common/LaunchAppButton'
-import useCustomPathname from '@/hooks/useCustomPathname'
-import { Menu, ShipWheel } from 'lucide-react'
-import { useAppDispatch, useSettingsSelector } from '@/app/lib/redux/store'
 import { setOpenNavigationDrawer } from '@/app/lib/redux/features/appSlice'
 
-const Header = () => {
-  const path = useCustomPathname()
-  const { settings } = useSettingsSelector()
-  const dispatch = useAppDispatch()
+export const Header = () => {
+  const path = usePathname()
+
+  const navLinkCls = (active: boolean) =>
+    `text-f10 font-mono tracking-[0.18em] uppercase transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-dark focus-visible:ring-offset-2 ${
+      active ? 'text-primary-dark' : 'text-on-dark hover:text-text-dark'
+    }`
 
   return (
     <div
-      className={`${path === '/' ? 'bg-transparent' : 'bg-slate-900'} flex items-center justify-between space-x-4 py-3 px-6 h-[74px] relative z-20`}
+      className={`${
+        path === '/' ? 'bg-transparent' : 'bg-navbar-light dark:bg-navbar-dark'
+      } flex items-center justify-between px-6 h-18.5 relative z-20`}
     >
+      {/* ── Logo ── */}
       <Link
         href="/"
-        className="bg-linear-to-r from-cyan-400 via-blue-400 to-teal-400 bg-clip-text text-transparent uppercase text-2xl font-bold cursor-pointer hover:bg-linear-to-r hover:from-teal-400 hover:via-blue-400 hover:to-cyan-400 flex items-center"
+        className="font-sora font-black text-xl text-text-dark tracking-tight hover:text-primary-dark transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-dark"
+        aria-label="Coastal Referral Exchange — Home"
       >
-        C
-        <span>
-          <ShipWheel className="text-white w-5 h-5 shipwheel-storm" />
-        </span>
-        RE
+        CORE<span className="text-primary-dark">.</span>
       </Link>
-      <div className="absolute left-1/2 -translate-x-1/2 space-x-4 hidden md:block">
-        <Link
-          href="/"
-          className={`${path === '/' ? 'bg-linear-to-r from-cyan-400 via-blue-400 to-teal-400 bg-clip-text text-transparent' : 'text-white'} hover:bg-linear-to-r hover:from-cyan-400 hover:via-blue-400 hover:to-teal-400 hover:bg-clip-text hover:text-transparent hover:duration-300 text-[15px] uppercase font-sora font-bold`}
-        >
+
+      {/* ── Center nav ── */}
+      <nav
+        className="absolute left-1/2 -translate-x-1/2 hidden md:flex items-center gap-8"
+        aria-label="Main navigation"
+      >
+        <Link href="/" className={navLinkCls(path === '/')}>
           Home
         </Link>
-        <Link
-          href="/swabbie"
-          className={`${path === '/swabbie' ? 'bg-linear-to-r from-cyan-400 via-blue-400 to-teal-400 bg-clip-text text-transparent' : 'text-white'} hover:bg-linear-to-r hover:from-cyan-400 hover:via-blue-400 hover:to-teal-400 hover:bg-clip-text hover:text-transparent hover:duration-300 text-[15px] uppercase font-sora font-bold`}
-        >
-          Application
+        <Link href="/members" className={navLinkCls(path === '/members')}>
+          Members
         </Link>
-        <Link
-          href="/navigators"
-          className={`${path.includes('navigators') ? 'bg-linear-to-r from-cyan-400 via-blue-400 to-teal-400 bg-clip-text text-transparent' : 'text-white'} hover:bg-linear-to-r hover:from-cyan-400 hover:via-blue-400 hover:to-teal-400 hover:bg-clip-text hover:text-transparent hover:duration-300 text-[15px] uppercase font-sora font-bold`}
-        >
-          Navigators
+        <Link href="/application" className={navLinkCls(path === '/apply')}>
+          Apply
         </Link>
-        {settings?.hasUnlockedGrog && (
-          <Link
-            href="/events"
-            className={`${path === '/events' ? 'bg-linear-to-r from-cyan-400 via-blue-400 to-teal-400 bg-clip-text text-transparent' : 'text-white'} hover:bg-linear-to-r hover:from-cyan-400 hover:via-blue-400 hover:to-teal-400 hover:bg-clip-text hover:text-transparent hover:duration-300 text-[15px] uppercase font-sora font-bold`}
-          >
-            Events
-          </Link>
-        )}
-      </div>
-      <div className="flex items-center gap-x-6">
-        <Menu onClick={() => dispatch(setOpenNavigationDrawer())} className="w-5 h-5 block md:hidden text-white" />
+      </nav>
+
+      {/* ── Right side ── */}
+      <div className="flex items-center gap-5">
+        <button
+          onClick={() => store.dispatch(setOpenNavigationDrawer())}
+          className="block md:hidden text-on-dark hover:text-text-dark transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-dark"
+          aria-label="Open navigation menu"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
         {path !== '/auth/login' && <LaunchAppButton />}
       </div>
     </div>
   )
 }
-
-export default Header

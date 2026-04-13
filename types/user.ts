@@ -126,8 +126,8 @@ export interface Chapter {
   meetingDay: string
   meetingTime: string
   meetingFrequency: string
-  createdAt: string
-  updatedAt: string
+  createdAt?: string
+  updatedAt?: string
   hasUnlockedMuster: boolean
   hasUnlockedBooty: boolean
   hasUnlockedGrog: boolean
@@ -261,25 +261,45 @@ export interface UserWithMeta extends User {
 }
 
 export interface CreateUserInput {
-  chapterId: string
   name: string
   email: string
-  phone?: string | null
-  company?: string
-  industry?: string
-  location?: string
-  businessLicenseNumber?: string
-  isLicensed?: boolean
-  membershipStatus?: MembershipStatus
-  isAdmin?: boolean
-  hasCompletedApplication?: boolean
-  joinedAt?: string
-  expiresAt?: string
-  isAddedByAdmin?: boolean
+  phone: string | null
+  company: string
+  industry: string
+  location: string
+  businessLicenseNumber: string
 }
 
 export interface CreateUserResponse {
+  success?: any
   user: any
   error?: string
   fieldErrors?: any[]
 }
+
+export type ProfileData = {
+  name: string
+  email: string
+  secondaryEmail: string
+  phone: string
+  company: string
+  isPublic: boolean
+  profileImage: string | null
+  profileImageFilename: string | null
+  location: string
+  bio: string
+  businessLicenseNumber: string
+  industry: string
+  title: string
+  website: string
+  yearsInBusiness: string
+  facebookUrl: string
+  goal: string
+  linkedInUrl: string
+  threadsUrl: string
+  xUrl: string
+  youtubeUrl: string
+  weeklyTreasureWishlist: string
+}
+
+export type UpdateProfileInput = Partial<Omit<ProfileData, 'email' | 'profileImage' | 'profileImageFilename'>>

@@ -1,9 +1,9 @@
-const getInitials = (name: any) => {
+export function getInitials(name: string) {
   return name
     .split(' ')
-    .map((n: any[]) => n[0])
+    .filter(Boolean)
+    .map((n) => n[0])
+    .slice(0, 2)
     .join('')
     .toUpperCase()
 }
-
-export default getInitials

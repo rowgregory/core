@@ -1,62 +1,62 @@
-import { AlertTriangle, Clock, Compass, Lock, Mail, Shield } from 'lucide-react'
+import { AlertTriangle, Clock, Lock, Mail, Shield, Settings } from 'lucide-react'
 
-const getAuthErrorMessage = (error: string) => {
+const getAuthErrorMessage = (error: string, email: string) => {
   switch (error) {
     case 'AccessDenied':
       return {
         icon: Shield,
-        title: 'Ahoy There, Landlubber!',
+        title: 'Access Denied',
         message:
-          "Ye tried to board our ship, but unfortunately yer name ain't on the crew manifest, matey! Only registered seafarin' folk of this CORE chapter can access these waters."
+          'Your email is not registered with this chapter. Only approved members can sign in. If you believe this is a mistake, please contact your chapter administrator.'
       }
 
+    // on the error page, read the email from the URL if you stored it
     case 'Verification':
+      const isLikelyCorporate =
+        email?.endsWith('.org') || ['outlook', 'hotmail', 'live'].some((d) => email?.includes(d))
+
       return {
         icon: Clock,
-        title: 'Message in a Bottle Expired!',
-        message:
-          'That magic link has sailed away into the sunset, captain! The verification has expired or been used already. Request a fresh bottle with a new message.'
+        title: 'Link Expired',
+        message: isLikelyCorporate
+          ? 'Your email provider may have automatically clicked the link before you did — this is common with Microsoft Outlook and organization email accounts. Try signing in with a Gmail address instead, or ask your administrator to add your Gmail as a secondary email.'
+          : 'This sign-in link has expired or has already been used. Please request a new one.'
       }
 
     case 'EmailSignin':
       return {
         icon: Mail,
-        title: "Parrot Couldn't Deliver!",
-        message:
-          "Our messenger parrot had trouble deliverin' yer message, mate! The email couldn't be sent. Check yer email address and try sendin' another bottle."
+        title: 'Email Could Not Be Sent',
+        message: 'We had trouble sending your sign-in email. Please check your email address and try again.'
       }
 
     case 'OAuthSignin':
     case 'OAuthCallback':
       return {
         icon: AlertTriangle,
-        title: 'Rough Seas with the Provider!',
-        message:
-          "The winds weren't favorable with the signin service, captain! There was trouble connectin' to the authentication provider. Try again when the seas are calmer."
+        title: 'Sign-In Error',
+        message: 'There was a problem connecting to the sign-in provider. Please try again.'
       }
 
     case 'SessionRequired':
       return {
         icon: Lock,
-        title: 'Need to Show Yer Papers!',
-        message:
-          "This area be restricted to crew members only, savvy? Ye need to sign in first before explorin' these waters."
+        title: 'Sign In Required',
+        message: 'You need to be signed in to access this page.'
       }
 
     case 'Configuration':
       return {
-        icon: Compass,
-        title: "Ship's Navigation is Broken!",
-        message:
-          "There be somethin' wrong with the ship's compass, mate! Our technical crew is workin' on fixin' the navigation. Try again later."
+        icon: Settings,
+        title: 'Configuration Error',
+        message: 'There is a problem with the authentication setup. Please contact your administrator.'
       }
 
     default:
       return {
         icon: AlertTriangle,
-        title: 'Unknown Waters Ahead!',
-        message:
-          "We've sailed into uncharted territory, captain! Somethin' unexpected happened. Try navigatin' these waters again."
+        title: 'Something Went Wrong',
+        message: 'An unexpected error occurred. Please try again.'
       }
   }
 }

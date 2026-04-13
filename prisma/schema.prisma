@@ -94,6 +94,7 @@ model User {
   updatedAt                  DateTime                   @updatedAt
   name                       String
   email                      String                     @unique
+  secondaryEmail             String?                    @unique
   phone                      String?
   company                    String
   chapterId                  String
@@ -165,6 +166,8 @@ model User {
   receiver                   TreasureMap[]              @relation("TreasureMapReceiver")
   reporter                   SuspiciousActivityReport[] @relation("ReportedBy")
   chapter                    Chapter                    @relation(fields: [chapterId], references: [id])
+  presenterQueue             PresenterQueue?
+  signOutEvents              SignOutEvent[]
 }
 
 model Parley {
@@ -360,4 +363,48 @@ model SuspiciousActivityReport {
   status      String   @default("PENDING") // PENDING, REVIEWED, RESOLVED
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model PresenterQueue {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  position  Int // order in the queue
+  chapterId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([chapterId, position])
+  @@index([chapterId])
+}
+
+model CancelledMeeting {
+  id        String   @id @default(cuid())
+  date      DateTime // the Thursday that's cancelled
+  reason    String?
+  chapterId String
+  createdAt DateTime @default(now())
+
+  @@unique([chapterId, date])
+  @@index([chapterId])
+}
+
+model VisitorDay {
+  id        String   @id @default(cuid())
+  date      DateTime
+  chapterId String
+  createdAt DateTime @default(now())
+
+  @@unique([chapterId, date])
+  @@index([chapterId])
+}
+
+model SignOutEvent {
+  id        String   @id @default(cuid())
+  userId    String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([createdAt])
 }
