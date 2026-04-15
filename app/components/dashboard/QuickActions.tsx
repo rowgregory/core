@@ -1,11 +1,11 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { Users, Activity, DollarSign, ChevronDown } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import { createAnchor } from '@/app/lib/actions/createAnchor'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { createFace2Face } from '@/app/lib/actions/createFace2Face'
 import { createReferral } from '@/app/lib/actions/referral/createReferral'
 import useSoundEffect from '@/hooks/useSoundEffect'
@@ -209,6 +209,15 @@ export default function QuickActions({ members, variant }: QuickActionsProps) {
   const [closedAmount, setClosedAmount] = useState('')
   const [closedDesc, setClosedDesc] = useState('')
   const [closedDate, setClosedDate] = useState(new Date().toISOString().split('T')[0])
+
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    const action = searchParams.get('action')
+    if (action === 'f2f' || action === 'referral' || action === 'closed') {
+      setActiveModal(action)
+    }
+  }, [searchParams])
 
   const router = useRouter()
 
