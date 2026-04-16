@@ -7,7 +7,6 @@ interface ErrorHandlerOptions {
   error: any
   req: NextRequest
   action: string
-  sliceName: string
   statusCode?: number
 }
 
@@ -15,7 +14,6 @@ export async function handleApiError({
   error,
   req,
   action,
-  sliceName,
   statusCode = 500
 }: ErrorHandlerOptions): Promise<NextResponse> {
   const errorMessage = getErrorMessage(error) || error.message || 'An unexpected error occurred'
@@ -33,8 +31,7 @@ export async function handleApiError({
   return NextResponse.json(
     {
       message: `${action} failed`,
-      error: errorMessage,
-      sliceName
+      error: errorMessage
     },
     { status: statusCode }
   )

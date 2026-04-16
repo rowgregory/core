@@ -1,4 +1,3 @@
-import { sliceCron } from '@/app/lib/constants/api/sliceNames'
 import sqyshGoogleReviewTemplate from '@/app/lib/email-templates/sqysh-google-review'
 import { createLog } from '@/app/lib/utils/api/createLog'
 import { handleApiError } from '@/app/lib/utils/api/handleApiError'
@@ -125,7 +124,6 @@ async function sendSqyshGoogleReviewReminders(req: NextRequest) {
       error,
       req,
       action: 'send sqysh google review reminder email',
-      sliceName: sliceCron,
       statusCode: error.statusCode || error.status || 500
     })
   }

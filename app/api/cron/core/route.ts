@@ -1,4 +1,3 @@
-import { sliceCron } from '@/app/lib/constants/api/sliceNames'
 import { coreTemplate } from '@/app/lib/email-templates/core'
 import { createLog } from '@/app/lib/utils/api/createLog'
 import { handleApiError } from '@/app/lib/utils/api/handleApiError'
@@ -127,7 +126,6 @@ async function sendCoreReminders(req: NextRequest) {
       error,
       req,
       action: 'send core reminder email',
-      sliceName: sliceCron,
       statusCode: error.statusCode || error.status || 500
     })
   }

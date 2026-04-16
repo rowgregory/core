@@ -1,4 +1,3 @@
-import { sliceCron } from '@/app/lib/constants/api/sliceNames'
 import { createLog } from '@/app/lib/utils/api/createLog'
 import { handleApiError } from '@/app/lib/utils/api/handleApiError'
 import prisma from '@/prisma/client'
@@ -115,7 +114,6 @@ async function sendDirectoryReminders(req: NextRequest) {
       error,
       req,
       action: 'send directory reminder email',
-      sliceName: sliceCron,
       statusCode: error.statusCode || error.status || 500
     })
   }

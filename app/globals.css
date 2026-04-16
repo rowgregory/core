@@ -135,3 +135,36 @@ input[type="datetime-local"] {
 .dark input[type="datetime-local"] {
   color: var(--color-text-dark);
 }
+
+/* ─── KEYFRAMES - ANIMATIONS ─────────────────────────────────────────────────────────── */
+@keyframes rotateToTwoOClock {
+  0% {
+    transform: rotate(0deg);
+  }
+  40% {
+    transform: rotate(30deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@utility animate-rotate-clock {
+  animation: rotateToTwoOClock 0.4s ease-in-out;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@utility animate-marquee {
+  animation: marquee 14s linear infinite;
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}

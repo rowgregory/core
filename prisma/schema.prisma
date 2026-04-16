@@ -54,6 +54,12 @@ enum RendezvousStatus {
   CANCELLED
 }
 
+enum EventOrg {
+  LYNN_CHAMBER
+  NORTH_SHORE_LATINO
+  BOYS_AND_GIRLS_CLUB
+}
+
 model Account {
   id                String  @id @default(cuid())
   userId            String
@@ -251,12 +257,24 @@ model Chapter {
   hasUnlockedGrog           Boolean                    @default(false)
   hasUnlockedMuster         Boolean                    @default(false)
   anchors                   Anchor[]
-  grogs                     Grog[]
+  events                    Event[]
   parleys                   Parley[]
   rendezvous                Rendezvous[]
   treasureMaps              TreasureMap[]
   users                     User[]
   suspiciousActivityReports SuspiciousActivityReport[]
+}
+
+model Event {
+  id           String   @id @default(cuid())
+  org          EventOrg
+  name         String
+  description  String?
+  externalLink String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  chapterId    String
+  chapter      Chapter  @relation(fields: [chapterId], references: [id])
 }
 
 model Newsletter {
@@ -307,38 +325,6 @@ model TreasureMap {
   @@index([receiverId])
   @@index([status])
   @@index([createdAt])
-}
-
-model Grog {
-  id                   String      @id @default(cuid())
-  createdAt            DateTime    @default(now())
-  updatedAt            DateTime    @updatedAt
-  title                String
-  description          String?
-  category             String
-  type                 String
-  cost                 String?
-  dresscode            String?
-  date                 DateTime
-  time                 String
-  duration             String
-  location             String
-  maxAttendees         Int?
-  attendees            Int?
-  status               EventStatus @default(UPCOMING)
-  featured             Boolean     @default(false)
-  host                 String?
-  requirements         String?
-  materials            String?
-  registrationUrl      String?
-  meetingUrl           String?
-  viewCount            Int         @default(0)
-  clickCount           Int         @default(0)
-  chapterId            String
-  isPublic             Boolean     @default(true)
-  requiresRSVP         Boolean     @default(false)
-  registrationDeadline DateTime    @default(now())
-  chapter              Chapter     @relation(fields: [chapterId], references: [id])
 }
 
 model Rendezvous {

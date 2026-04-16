@@ -14,7 +14,6 @@ import { appReducer } from './features/appSlice'
 import { anchorReducer } from './features/anchorSlice'
 import { treasureMapReducer } from './features/treasureMapSlice'
 import { dashboardReducer } from './features/dashboardSlice'
-import { grogReducer } from './features/grogSlice'
 import { reportReducer } from './features/reportSlice'
 
 const rootReducer = combineReducers({
@@ -29,7 +28,6 @@ const rootReducer = combineReducers({
   anchor: anchorReducer,
   treasureMap: treasureMapReducer,
   dashboard: dashboardReducer,
-  grog: grogReducer,
   report: reportReducer
 })
 
@@ -61,6 +59,5 @@ export const useFormSelector = () => useAppSelector((state) => state.form)
 export const useAnchorSelector = () => useAppSelector((state) => state.anchor)
 export const useTreasureMapSelector = () => useAppSelector((state) => state.treasureMap)
 export const useDashboardSelector = () => useAppSelector((state) => state.dashboard)
-export const useGrogSelector = () => useAppSelector((state) => state.grog)
 export const useApplicationSelector = () => useAppSelector((state) => state.app)
 export const useReportSlice = () => useAppSelector((state) => state.report)

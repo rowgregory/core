@@ -16,6 +16,9 @@ import { SectionLabel } from '../common/SectionLabel'
 import { Greeting } from '../dashboard/Greeting'
 import { GmailConfirmation } from '../dashboard/GmailConfirmation'
 import { ActivityStats } from '../dashboard/ActivityStats'
+import { EventButton } from '../dashboard/EventButton'
+import { EventsList } from '../dashboard/EventsList'
+import { TEvent } from '@/types/event'
 
 export interface ActivityItem {
   id: string
@@ -53,6 +56,7 @@ export interface MemberDashboardProps {
   recentActivity: ActivityItem[]
   schedule: ScheduledPresenter[]
   linkedRecord: LinkedRecord
+  events: TEvent[]
 }
 
 // ─── Main dashboard ────────────────────────────────────────────────────────────
@@ -62,7 +66,8 @@ export default function DashboardClient({
   stats,
   recentActivity,
   schedule,
-  linkedRecord
+  linkedRecord,
+  events
 }: MemberDashboardProps) {
   const [open, setOpen] = useState(linkedRecord ? true : false)
 
@@ -100,6 +105,13 @@ export default function DashboardClient({
         <FadeUp delay={0.2} className="pt-6">
           <SectionLabel>Your Activity</SectionLabel>
           <ActivityStats stats={stats} />
+        </FadeUp>
+
+        {/* ── Events ── */}
+        <FadeUp delay={0.42} className="pt-6">
+          <SectionLabel>Events</SectionLabel>
+          <EventButton />
+          <EventsList events={events} />
         </FadeUp>
 
         {/* ── Membership setup ── */}
