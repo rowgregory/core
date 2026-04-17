@@ -19,7 +19,7 @@ const CTASection = () => {
             and opportunity.
           </p>
           <Link
-            href="/apply"
+            href="/application"
             className="px-8 py-4 bg-linear-to-r from-teal-500 via-cyan-500 to-blue-500 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-xl shadow-gray/25"
           >
             Apply Today

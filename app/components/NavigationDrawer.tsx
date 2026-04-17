@@ -15,7 +15,8 @@ const NavigationDrawer = () => {
 
   const navLinks = [
     { name: 'Home', href: '/' },
-    { name: 'Apply', href: '/apply' },
+    { name: 'Members', href: '/members' },
+    { name: 'Apply', href: '/application' },
     { name: 'Sign In', href: '/auth/login' }
   ]
 

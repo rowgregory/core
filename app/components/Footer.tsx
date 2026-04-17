@@ -50,7 +50,7 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/application" className={footerLinkCls(path === '/apply')}>
+                <Link href="/application" className={footerLinkCls(path === '/application')}>
                   Apply
                 </Link>
               </li>

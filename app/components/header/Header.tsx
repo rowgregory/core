@@ -9,7 +9,7 @@ export const Header = () => {
   const path = usePathname()
 
   const navLinkCls = (active: boolean) =>
-    `text-f10 font-mono tracking-[0.18em] uppercase transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-dark focus-visible:ring-offset-2 ${
+    `text-sm font-mono font-semibold tracking-[0.15em] uppercase transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-dark focus-visible:ring-offset-2 ${
       active ? 'text-primary-dark' : 'text-on-dark hover:text-text-dark'
     }`
 
@@ -39,7 +39,7 @@ export const Header = () => {
         <Link href="/members" className={navLinkCls(path === '/members')}>
           Members
         </Link>
-        <Link href="/application" className={navLinkCls(path === '/apply')}>
+        <Link href="/application" className={navLinkCls(path === '/application')}>
           Apply
         </Link>
       </nav>
