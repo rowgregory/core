@@ -10,6 +10,7 @@ export async function getProfile(): Promise<{ success: boolean; data?: ProfileDa
     const user = await prisma.user.findUnique({
       where: { id: session.user.id },
       select: {
+        id: true,
         name: true,
         email: true,
         secondaryEmail: true,
@@ -40,6 +41,7 @@ export async function getProfile(): Promise<{ success: boolean; data?: ProfileDa
     return {
       success: true,
       data: {
+        id: user.id,
         name: user.name,
         email: user.email,
         secondaryEmail: user.secondaryEmail ?? '',

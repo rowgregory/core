@@ -4,10 +4,11 @@ import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Globe, MapPin, Phone, Mail, ChevronRight, Target } from 'lucide-react'
-import { ProfileData, User } from '@/types/user'
+import { User } from '@/types/user'
 import FadeUp from '../common/FadeUp'
 import { getInitials } from '@/app/lib/utils/common/getInitials'
 import { formatPhone } from '@/app/lib/utils/phone.utils'
+import { useSession } from 'next-auth/react'
 
 // ─── X / Threads icons (lucide doesn't have these) ─────────────────────────────
 function XIcon({ size = 14 }: { size?: number }) {
@@ -153,12 +154,14 @@ export default function PublicMemberClient({
   users: User[]
 }) {
   const otherMembers = users.filter((m) => m.id !== user.id && m.isPublic)
+  const session = useSession()
+  const isLoggedIn = session.status === 'authenticated'
 
   return (
     <div className="min-h-screen bg-bg-light dark:bg-bg-dark">
       {/* ── Header ── */}
       <header className="border-b border-border-light dark:border-border-dark bg-bg-light dark:bg-bg-dark sticky top-0 z-30">
-        <div className="max-w-350 mx-auto px-4 xs:px-6 h-12 flex items-center justify-between">
+        <div className="max-w-350 mx-auto px-4 xs:px-6 h-12 flex items-center justify-between gap-3">
           <Link
             href="/"
             className="font-sora font-black text-[18px] tracking-tight focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark"
@@ -167,12 +170,32 @@ export default function PublicMemberClient({
             <span className="text-text-light dark:text-text-dark">CORE</span>
             <span className="text-primary-light dark:text-primary-dark">.</span>
           </Link>
-          <Link
-            href="/application"
-            className="h-8 px-4 bg-primary-light dark:bg-button-dark text-white font-sora font-bold text-[11px] tracking-wide hover:opacity-90 transition-opacity inline-flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark focus-visible:ring-offset-2"
-          >
-            Apply
-          </Link>
+
+          <div className="flex items-center gap-2">
+            {isLoggedIn ? (
+              <>
+                <Link
+                  href="/dashboard"
+                  className="h-8 px-4 border border-border-light dark:border-border-dark text-muted-light dark:text-muted-dark hover:text-text-light dark:hover:text-text-dark font-sora font-bold text-[11px] tracking-wide transition-colors inline-flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark focus-visible:ring-offset-2"
+                >
+                  Dashboard
+                </Link>
+                <Link
+                  href="/profile"
+                  className="h-8 px-4 bg-primary-light dark:bg-button-dark text-white font-sora font-bold text-[11px] tracking-wide hover:opacity-90 transition-opacity inline-flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark focus-visible:ring-offset-2"
+                >
+                  Profile
+                </Link>
+              </>
+            ) : (
+              <Link
+                href="/application"
+                className="h-8 px-4 bg-primary-light dark:bg-button-dark text-white font-sora font-bold text-[11px] tracking-wide hover:opacity-90 transition-opacity inline-flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark focus-visible:ring-offset-2"
+              >
+                Apply
+              </Link>
+            )}
+          </div>
         </div>
       </header>
       <div className="max-w-350 mx-auto px-4 xs:px-6 pb-16">

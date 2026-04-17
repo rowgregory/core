@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
-import { User, Briefcase, Globe, Share2, ArrowLeft, Check, AlertCircle, Eye, EyeOff } from 'lucide-react'
+import { User, Briefcase, Globe, Share2, ArrowLeft, Check, AlertCircle, Eye, EyeOff, ArrowRight } from 'lucide-react'
 import { ProfileData } from '@/types/user'
 import { updateProfile } from '@/app/lib/actions/updateProfile'
 import { getInitials } from '@/app/lib/utils/common/getInitials'
@@ -89,13 +89,22 @@ export default function ProfileClient({ profile }: { profile: ProfileData }) {
       <div className="max-w-170 mx-auto px-4 pb-16">
         {/* ── Header ── */}
         <div className="pt-7 pb-6 border-b border-border-light dark:border-border-dark mb-6">
-          <div className="flex items-center gap-3 mb-5">
+          <div className="flex items-center justify-between gap-3 mb-5">
             <Link
               href="/dashboard"
               className="flex items-center gap-1.5 text-f10 font-mono tracking-[0.15em] uppercase text-muted-light dark:text-muted-dark hover:text-primary-light dark:hover:text-primary-dark transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark"
             >
               <ArrowLeft size={13} aria-hidden="true" />
               Dashboard
+            </Link>
+
+            <Link
+              href={`/members/${form.id}`}
+              aria-label="View your public profile"
+              className="flex items-center gap-1.5 text-f10 font-mono tracking-[0.15em] uppercase text-muted-light dark:text-muted-dark hover:text-primary-light dark:hover:text-primary-dark transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark"
+            >
+              View Profile
+              <ArrowRight size={13} aria-hidden="true" />
             </Link>
           </div>
 
