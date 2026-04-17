@@ -1,5 +1,5 @@
 import { signOut, useSession } from 'next-auth/react'
-import { LayoutDashboard, LogOut, UserCircle } from 'lucide-react'
+import { Home, LayoutDashboard, LogOut, UserCircle } from 'lucide-react'
 import Link from 'next/link'
 import { getTodayLabel } from '@/app/lib/utils/time.utils'
 import { getGreeting } from '@/app/lib/utils/common/getGreeting'
@@ -35,16 +35,20 @@ export function Greeting({ currentUser }) {
 
       {/* Nav links on their own row */}
       <div className="flex items-center gap-2">
+        <Link href="/" className={sharedCls}>
+          <Home size={12} aria-hidden="true" />
+          Home
+        </Link>
+        <Link href="/profile" className={sharedCls}>
+          <UserCircle size={12} aria-hidden="true" />
+          Profile
+        </Link>
         {isAdmin && (
           <Link href="/admin" className={sharedCls}>
             <LayoutDashboard size={12} aria-hidden="true" />
             Admin
           </Link>
         )}
-        <Link href="/profile" className={sharedCls}>
-          <UserCircle size={12} aria-hidden="true" />
-          Profile
-        </Link>
       </div>
     </div>
   )
