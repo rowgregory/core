@@ -1,5 +1,5 @@
 import { signOut, useSession } from 'next-auth/react'
-import { Home, LayoutDashboard, LogOut, UserCircle } from 'lucide-react'
+import { Home, LayoutDashboard, LogOut, ShieldCheck, UserCircle } from 'lucide-react'
 import Link from 'next/link'
 import { getTodayLabel } from '@/app/lib/utils/time.utils'
 import { getGreeting } from '@/app/lib/utils/common/getGreeting'
@@ -47,6 +47,12 @@ export function Greeting({ currentUser }) {
           <Link href="/admin" className={sharedCls}>
             <LayoutDashboard size={12} aria-hidden="true" />
             Admin
+          </Link>
+        )}
+        {session.data?.user?.isSuperUser && (
+          <Link href="/super" className={sharedCls}>
+            <ShieldCheck size={12} aria-hidden="true" />
+            Super
           </Link>
         )}
       </div>

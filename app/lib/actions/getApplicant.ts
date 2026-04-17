@@ -1,5 +1,3 @@
-'use server'
-
 import prisma from '@/prisma/client'
 import { createLog } from '@/app/lib/utils/api/createLog'
 import { chapterId } from '@/app/lib/constants/api/chapterId'
@@ -39,7 +37,7 @@ export async function getApplicant(userId: string) {
 
     return { success: true, data: user }
   } catch (error) {
-    await createLog('error', 'Failed to fetch swabbie', {
+    await createLog('error', 'Failed to fetch applicant', {
       location: ['server action - getApplicant'],
       message: error instanceof Error ? error.message : 'Unknown error',
       name: 'GetApplicantError',
