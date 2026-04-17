@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import HeroSection from './components/home/HeroSection'
 import PurposeOverview from './components/home/PurposeOverview'
 import MemberExpectations from './components/home/MemberExpectations'

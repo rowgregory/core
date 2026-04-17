@@ -26,22 +26,38 @@ export async function updateMember(
     const session = await auth()
     if (!session?.user?.id) return { success: false, error: 'Unauthorized' }
 
+    const updateData: any = {
+      name: data.name,
+      phone: data.phone,
+      company: data.company,
+      secondaryEmail: data.secondaryEmail,
+      title: data.title,
+      isPublic: data.isPublic,
+      isAdmin: data.isAdmin,
+      isMembership: data.isMembership,
+      membershipStatus: data.membershipStatus,
+      yearsInBusiness: data.yearsInBusiness
+    }
+
+    // only skip undefined (but allow null)
+    Object.keys(updateData).forEach((key) => {
+      if (updateData[key] === undefined) {
+        delete updateData[key]
+      }
+    })
+
+    // explicitly include nullable fields
+    if (data.profileImage !== undefined) {
+      updateData.profileImage = data.profileImage
+    }
+
+    if (data.profileImageFilename !== undefined) {
+      updateData.profileImageFilename = data.profileImageFilename
+    }
+
     await prisma.user.update({
       where: { id: userId },
-      data: {
-        name: data.name ?? undefined,
-        phone: data.phone ?? undefined,
-        company: data.company ?? undefined,
-        secondaryEmail: data.secondaryEmail ?? undefined,
-        title: data.title ?? undefined,
-        isPublic: data.isPublic ?? undefined,
-        isAdmin: data.isAdmin ?? undefined,
-        isMembership: data.isMembership ?? undefined,
-        membershipStatus: data.membershipStatus ?? undefined,
-        profileImage: data.profileImage ?? undefined,
-        profileImageFilename: data.profileImageFilename ?? undefined,
-        yearsInBusiness: data.yearsInBusiness ?? undefined
-      }
+      data: updateData
     })
 
     await createLog('info', 'Member updated by superuser', {

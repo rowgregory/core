@@ -4,7 +4,8 @@ import Link from 'next/link'
 import { getTodayLabel } from '@/app/lib/utils/time.utils'
 import { getGreeting } from '@/app/lib/utils/common/getGreeting'
 
-const sharedCls = `flex items-center gap-2 h-9 px-4 border border-border-light dark:border-border-dark text-muted-light dark:text-muted-dark hover:text-primary-light dark:hover:text-primary-dark hover:border-primary-light dark:hover:border-primary-dark transition-colors text-f10 font-mono tracking-[0.15em] uppercase focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark`
+const sharedCls =
+  'flex items-center gap-1.5 xs:gap-2 h-7 xs:h-8 px-2.5 xs:px-3 sm:px-4 border border-border-light dark:border-border-dark text-[9px] xs:text-[10px] font-mono tracking-[0.12em] uppercase text-muted-light dark:text-muted-dark hover:text-primary-light dark:hover:text-primary-dark hover:border-primary-light dark:hover:border-primary-dark transition-colors whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark'
 
 export function Greeting({ currentUser }) {
   const session = useSession()
@@ -15,15 +16,19 @@ export function Greeting({ currentUser }) {
 
   return (
     <div className="flex flex-col gap-3">
+      {/* Top row */}
       <div className="flex items-start justify-between gap-2">
-        <div className="min-w-0">
-          <p className="text-f10 font-mono tracking-[0.18em] uppercase text-primary-light dark:text-primary-dark mb-1.5">
+        <div className="min-w-0 pr-2">
+          <p className="text-[9px] xs:text-f10 font-mono tracking-[0.18em] uppercase text-primary-light dark:text-primary-dark mb-1">
             {today}
           </p>
-          <h1 className="font-sora font-black text-[26px] xs:text-[30px] text-text-light dark:text-text-dark tracking-tight leading-[1.1]">
+
+          <h1 className="font-sora font-black text-[22px] xs:text-[26px] sm:text-[30px] text-text-light dark:text-text-dark tracking-tight leading-[1.1] truncate">
             {greeting}, {firstName}.
           </h1>
         </div>
+
+        {/* ALWAYS top right */}
         <button
           onClick={() => signOut({ callbackUrl: '/auth/login' })}
           className="shrink-0 mt-1 text-muted-light dark:text-muted-dark hover:text-text-light dark:hover:text-text-dark transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark"
@@ -33,25 +38,28 @@ export function Greeting({ currentUser }) {
         </button>
       </div>
 
-      {/* Nav links on their own row */}
-      <div className="flex items-center gap-2">
+      {/* Nav row - NEVER wraps */}
+      <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
         <Link href="/" className={sharedCls}>
-          <Home size={12} aria-hidden="true" />
+          <Home className="hidden sm:block sm:w-3 sm:h-3" />
           Home
         </Link>
+
         <Link href="/profile" className={sharedCls}>
-          <UserCircle size={12} aria-hidden="true" />
+          <UserCircle className="hidden sm:block sm:w-3 sm:h-3" />
           Profile
         </Link>
+
         {isAdmin && (
           <Link href="/admin" className={sharedCls}>
-            <LayoutDashboard size={12} aria-hidden="true" />
+            <LayoutDashboard className="hidden sm:block sm:w-3 sm:h-3" />
             Admin
           </Link>
         )}
+
         {session.data?.user?.isSuperUser && (
           <Link href="/super" className={sharedCls}>
-            <ShieldCheck size={12} aria-hidden="true" />
+            <ShieldCheck className="hidden sm:block sm:w-3 sm:h-3" />
             Super
           </Link>
         )}

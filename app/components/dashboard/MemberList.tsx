@@ -1,7 +1,7 @@
 import { User } from '@/types/user'
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ChevronDown, Mail, MessageSquare, Phone, X } from 'lucide-react'
+import { ChevronDown, Mail, MessageSquare, Phone } from 'lucide-react'
 import { getInitials } from '@/app/lib/utils/common/getInitials'
 import { MemberEmailModal } from '../modals/MemberEmailModal'
 

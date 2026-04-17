@@ -10,29 +10,40 @@ export async function updateProfile(data: UpdateProfileInput): Promise<{ success
     const session = await auth()
     if (!session?.user?.id) return { success: false, error: 'Unauthorized' }
 
+    const updateData: any = {
+      name: data.name ?? undefined,
+      phone: data.phone ?? undefined,
+      secondaryEmail: data.secondaryEmail ?? undefined,
+      company: data.company ?? undefined,
+      isPublic: data.isPublic ?? undefined,
+      location: data.location ?? undefined,
+      bio: data.bio ?? undefined,
+      businessLicenseNumber: data.businessLicenseNumber ?? undefined,
+      industry: data.industry ?? undefined,
+      title: data.title ?? undefined,
+      website: data.website ?? undefined,
+      yearsInBusiness: data.yearsInBusiness ?? undefined,
+      facebookUrl: data.facebookUrl ?? undefined,
+      goal: data.goal ?? undefined,
+      linkedInUrl: data.linkedInUrl ?? undefined,
+      threadsUrl: data.threadsUrl ?? undefined,
+      xUrl: data.xUrl ?? undefined,
+      youtubeUrl: data.youtubeUrl ?? undefined,
+      weeklyTreasureWishlist: data.weeklyTreasureWishlist ?? undefined
+    }
+
+    // explicitly include nullable fields
+    if (data.profileImage !== undefined) {
+      updateData.profileImage = data.profileImage
+    }
+
+    if (data.profileImageFilename !== undefined) {
+      updateData.profileImageFilename = data.profileImageFilename
+    }
+
     await prisma.user.update({
       where: { id: session.user.id },
-      data: {
-        name: data.name ?? undefined,
-        phone: data.phone ?? undefined,
-        secondaryEmail: data.secondaryEmail ?? undefined,
-        company: data.company ?? undefined,
-        isPublic: data.isPublic ?? undefined,
-        location: data.location ?? undefined,
-        bio: data.bio ?? undefined,
-        businessLicenseNumber: data.businessLicenseNumber ?? undefined,
-        industry: data.industry ?? undefined,
-        title: data.title ?? undefined,
-        website: data.website ?? undefined,
-        yearsInBusiness: data.yearsInBusiness ?? undefined,
-        facebookUrl: data.facebookUrl ?? undefined,
-        goal: data.goal ?? undefined,
-        linkedInUrl: data.linkedInUrl ?? undefined,
-        threadsUrl: data.threadsUrl ?? undefined,
-        xUrl: data.xUrl ?? undefined,
-        youtubeUrl: data.youtubeUrl ?? undefined,
-        weeklyTreasureWishlist: data.weeklyTreasureWishlist ?? undefined
-      }
+      data: updateData
     })
 
     await createLog('info', 'Profile updated', {

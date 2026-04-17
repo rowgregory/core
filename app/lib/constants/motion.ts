@@ -65,3 +65,21 @@ export const staggerContainer: any = {
     }
   }
 }
+
+// ─── Variants ─────────────────────────────────────────────────────────────────
+export const fadeUp = {
+  hidden: { opacity: 0, y: 48 },
+  visible: (d = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.9, easing: [0.16, 1, 0.3, 1], delay: d }
+  })
+}
+
+export const fadeIn = {
+  hidden: { opacity: 0 },
+  visible: (d = 0) => ({
+    opacity: 1,
+    transition: { duration: 1.0, easing: 'easeOut', delay: d }
+  })
+}

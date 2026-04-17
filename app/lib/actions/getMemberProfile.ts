@@ -21,6 +21,7 @@ export async function getMemberProfile(userId: string) {
       yearsInBusiness: true,
       bio: true,
       profileImage: true,
+      profileImageFilename: true,
       isPublic: true,
       goal: true,
       location: true,

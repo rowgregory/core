@@ -303,4 +303,4 @@ export type ProfileData = {
   weeklyTreasureWishlist: string
 }
 
-export type UpdateProfileInput = Partial<Omit<ProfileData, 'email' | 'profileImage' | 'profileImageFilename'>>
+export type UpdateProfileInput = Partial<Omit<ProfileData, 'email'>>

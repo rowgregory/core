@@ -40,7 +40,7 @@ export function MemberEmailModal({ emailTarget, sent, emailBody, setEmailBody, s
             exit={{ opacity: 0 }}
             transition={{ duration: 0.18 }}
             onClick={handleClose}
-            className="fixed inset-0 z-40 backdrop-blur-sm"
+            className="fixed inset-0 z-50 backdrop-blur-sm"
             style={{ backgroundColor: 'rgba(0,0,0,0.65)' }}
           />
           <motion.div
@@ -48,7 +48,7 @@ export function MemberEmailModal({ emailTarget, sent, emailBody, setEmailBody, s
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 28, opacity: 0 }}
             transition={{ duration: 0.22, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="fixed inset-x-0 bottom-0 z-50 flex justify-center"
+            className="fixed inset-x-0 bottom-0 z-60 flex justify-center"
           >
             <div
               className="w-full max-w-170 bg-bg-light dark:bg-surface-dark border-t-[3px] border-t-primary-light dark:border-t-primary-dark px-5 pt-6"

@@ -8,7 +8,7 @@ import { ArrowLeft, Upload, X, Check, AlertCircle } from 'lucide-react'
 import { Switch } from '@/app/components/ui/Switch'
 import { SuperMemberEditData } from '@/app/lib/actions/user/getUserById'
 import uploadFileToFirebase from '@/app/lib/utils/firebase/uploadFileToFirebase'
-import { updateMember } from '@/app/lib/actions/user/updateUser'
+import { updateMember } from '@/app/lib/actions/user/updateMember'
 import { MembershipStatus } from '@/types/user'
 import { SuperDashStatusBadge } from '../super-dash/SuperDashStatusBadge'
 import { deleteUser } from '@/app/lib/actions/user/deleteUser'
@@ -104,6 +104,8 @@ export default function SuperDashMemberEditClient({ member }: { member: SuperMem
   async function handleSave() {
     setSaving(true)
     setError(null)
+    console.log('FORM: ', form)
+
     const res = await updateMember(member.id, {
       name: form.name,
       phone: form.phone,
