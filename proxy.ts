@@ -48,7 +48,8 @@ export async function proxy(req: NextRequest) {
 
   // ── Protected API routes → 401 if not logged in ───────────────────────────
   if (protectedAPIRoutes.some((r) => nextUrl.pathname.startsWith(r)) && !isLoggedIn) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    const signInUrl = new URL('/auth/login', req.url)
+    return NextResponse.redirect(signInUrl)
   }
 
   return NextResponse.next()
