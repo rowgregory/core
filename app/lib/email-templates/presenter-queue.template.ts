@@ -19,7 +19,6 @@ export const presenterQueueTemplate = (
         <p style="margin: 0; color: ${s.isNext ? '#0c1e2e' : '#334155'}; font-size: 14px; font-weight: ${s.isNext ? '800' : '500'};">
           ${s.name}${s.isNext ? ' <span style="color: #0284c7; font-size: 11px; font-family: \'SF Mono\', monospace; text-transform: uppercase; letter-spacing: 0.1em; margin-left: 6px;">Next →</span>' : ''}
         </p>
-        <p style="margin: 2px 0 0 0; color: #94a3b8; font-size: 12px;">${s.company}</p>
       </td>
       <td style="padding: 10px 16px; border-bottom: 1px solid #e0f2fe; text-align: right; white-space: nowrap;">
         <span style="color: #64748b; font-size: 12px; font-family: 'SF Mono', 'Fira Code', monospace;">
@@ -39,11 +38,11 @@ export const presenterQueueTemplate = (
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Presenter Schedule — Coastal Referral Exchange</title>
 </head>
-<body style="margin: 0; padding: 0; background-color: #f0f9ff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f0f9ff;">
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
     <tr>
       <td style="padding: 32px 20px;">
-        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 520px; margin: 0 auto; background: #ffffff; border-top: 3px solid #0284c7;">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; margin: 0 auto; background: #ffffff; border-top: 3px solid #0284c7;">
 
           <!-- Header -->
           <tr>
@@ -121,9 +120,6 @@ export const presenterQueueTemplate = (
           <!-- Footer -->
           <tr>
             <td style="padding: 20px 32px 8px;">
-              <p style="margin: 0; color: #94a3b8; font-size: 11px; font-family: 'SF Mono', 'Fira Code', monospace; letter-spacing: 0.08em;">
-                Sent every Wednesday at 10:30 AM to all active members.
-              </p>
               <p style="margin: 4px 0 0 0; color: #cbd5e1; font-size: 11px; font-family: 'SF Mono', 'Fira Code', monospace; letter-spacing: 0.08em;">
                 © ${year} Coastal Referral Exchange
               </p>

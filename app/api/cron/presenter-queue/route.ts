@@ -48,7 +48,7 @@ async function sendPresenterQueue() {
   const schedule = rotated.slice(0, 8).map((q, i) => ({
     name: q.user.name ?? '',
     company: q.user.company ?? '',
-    date: fmtDate(dates[i] ?? ''),
+    date: dates[i] ? fmtDate(`${dates[i]}T12:00:00`) : '—',
     isNext: i === 0
   }))
 
