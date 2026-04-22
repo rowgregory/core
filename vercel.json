@@ -15,6 +15,10 @@
     {
       "path": "/api/cron/bgcl",
       "schedule": "0 16 * * 4"
+    },
+    {
+      "path": "/api/cron/presenter-queue",
+      "schedule": "30 15 * * 3"
     }
   ]
 }
