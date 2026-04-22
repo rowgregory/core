@@ -12,12 +12,10 @@ async function sendPresenterQueue() {
   const BASE_URL =
     process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'https://coastal-referral-exchange.com'
 
-  //   const members = await prisma.user.findMany({
-  //     where: { chapterId, membershipStatus: 'ACTIVE' },
-  //     select: { id: true, name: true, email: true }
-  //   })
-
-  const members = [{ id: 'test', name: 'Sqysh', email: 'sqysh@sqysh.io' }]
+  const members = await prisma.user.findMany({
+    where: { chapterId, membershipStatus: 'ACTIVE' },
+    select: { id: true, name: true, email: true }
+  })
 
   // Replace getPresenterSchedule() call with direct query
   const [queue, cancelledMeetings, visitorDays] = await Promise.all([
