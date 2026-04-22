@@ -77,7 +77,7 @@ export const presenterQueueTemplate = (
                 ${memberName},
               </p>
               <p style="margin: 0; color: #64748b; font-size: 14px; line-height: 1.6;">
-                Here's the upcoming presenter schedule for your chapter. See you Thursday morning.
+                Here's a look at what's coming up over the next few weeks.
               </p>
             </td>
           </tr>
