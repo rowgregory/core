@@ -1,33 +1,37 @@
 export const presenterQueueTemplate = (
   memberName: string,
-  schedule: { name: string; company: string; date: string; isNext: boolean }[],
+  schedule: { name: string; company: string; date: string; isNext: boolean; type: string }[],
   dashboardUrl: string
 ) => {
   const year = new Date().getFullYear()
 
   const rows = schedule
     .slice(0, 8)
-    .map(
-      (s, i) => `
-    <tr style="opacity: ${Math.max(0.2, 1 - i * 0.1)};">
-      <td style="padding: 10px 16px; border-bottom: 1px solid #e0f2fe; width: 24px;">
-        <span style="color: ${s.isNext ? '#0284c7' : '#94a3b8'}; font-size: 11px; font-family: 'SF Mono', 'Fira Code', monospace; font-weight: 700;">
-          ${String(i + 1).padStart(2, '0')}
-        </span>
-      </td>
-      <td style="padding: 10px 16px; border-bottom: 1px solid #e0f2fe;">
-        <p style="margin: 0; color: ${s.isNext ? '#0c1e2e' : '#334155'}; font-size: 14px; font-weight: ${s.isNext ? '800' : '500'};">
-          ${s.name}${s.isNext ? ' <span style="color: #0284c7; font-size: 11px; font-family: \'SF Mono\', monospace; text-transform: uppercase; letter-spacing: 0.1em; margin-left: 6px;">Next →</span>' : ''}
-        </p>
-      </td>
-      <td style="padding: 10px 16px; border-bottom: 1px solid #e0f2fe; text-align: right; white-space: nowrap;">
-        <span style="color: #64748b; font-size: 12px; font-family: 'SF Mono', 'Fira Code', monospace;">
-          ${s.date}
-        </span>
-      </td>
-    </tr>
+    .map((s, i) => {
+      const color = s.type === 'off' ? '#ef4444' : s.type === 'visitor' ? '#d97706' : s.isNext ? '#0c1e2e' : '#334155'
+      const numColor =
+        s.type === 'off' ? '#fca5a5' : s.type === 'visitor' ? '#fbbf24' : s.isNext ? '#0284c7' : '#94a3b8'
+
+      return `
+  <tr style="opacity: ${Math.max(0.25, 1 - i * 0.09)};">
+    <td style="padding: 10px 16px; border-bottom: 1px solid #e0f2fe; width: 24px;">
+      <span style="color: ${numColor}; font-size: 11px; font-family: 'SF Mono', 'Fira Code', monospace; font-weight: 700;">
+        ${s.type === 'presenter' ? String(i + 1).padStart(2, '0') : '—'}
+      </span>
+    </td>
+    <td style="padding: 10px 16px; border-bottom: 1px solid #e0f2fe;">
+      <p style="margin: 0; color: ${color}; font-size: 14px; font-weight: ${s.isNext ? '800' : '500'};">
+        ${s.name}${s.isNext ? ' <span style="color: #0284c7; font-size: 11px; font-family: \'SF Mono\', monospace; text-transform: uppercase; letter-spacing: 0.1em; margin-left: 6px;">Next →</span>' : ''}
+      </p>
+    </td>
+    <td style="padding: 10px 16px; border-bottom: 1px solid #e0f2fe; text-align: right; white-space: nowrap;">
+      <span style="color: #64748b; font-size: 12px; font-family: 'SF Mono', 'Fira Code', monospace;">
+        ${s.date}
+      </span>
+    </td>
+  </tr>
   `
-    )
+    })
     .join('')
 
   return `
