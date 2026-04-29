@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation'
 import { auth } from '@/app/lib/auth'
 import SuperDashClient from '@/app/components/pages/SuperDashClient'
 import { getSuperUserDashboardData } from '@/app/lib/actions/super-user/superUserActions'
-import { countPastMeetingThursdays, getUpcomingMeetingDates } from '@/app/lib/utils/presenter-engine'
+import { getUpcomingMeetingDates } from '@/app/lib/utils/presenter-engine'
 import { getVisitorDays } from '@/app/lib/actions/visitor-day/getVisitorDays'
 import { getPresenterQueue } from '@/app/lib/actions/presenter-queue/getPresenterQueue'
 import { getAvailableMembers } from '@/app/lib/actions/presenter-queue/getAvailableMembers'
@@ -35,11 +35,6 @@ export default async function SuperDashPage() {
   const queueData = queue.data ?? []
 
   const dates = getUpcomingMeetingDates(cancelledDates, visitorDates, queueData.length + 20)
-  const anchor = new Date('2026-04-09T12:00:00')
-  const pastCount = countPastMeetingThursdays(anchor, cancelledDates, visitorDates)
-  const startIndex = queueData.length > 0 ? pastCount % queueData.length : 0
-
-  console.log('pastCount', pastCount, 'startIndex', startIndex, 'queueLength', queueData.length)
 
   return (
     <SuperDashClient
@@ -49,7 +44,6 @@ export default async function SuperDashPage() {
       cancelledMeetings={cancelledMeetings.data ?? []}
       visitorDays={visitorDays.data ?? []}
       dates={dates}
-      startIndex={startIndex}
       chapter={result.data.chapter}
     />
   )

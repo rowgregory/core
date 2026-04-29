@@ -2,21 +2,17 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronUp, ChevronDown, X, Plus, ArrowLeftRight } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { QueueMember } from '@/types/presenter-queue'
-import { moveQueueMember } from '@/app/lib/actions/presenter-queue/moveQueueMember'
-import { removeFromQueue } from '@/app/lib/actions/presenter-queue/removeFromQueue'
-import { swapQueuePositions } from '@/app/lib/actions/presenter-queue/swapQueuePositions'
 import { addToQueue } from '@/app/lib/actions/presenter-queue/addToQueue'
 import { getInitials } from '@/app/lib/utils/common/getInitials'
+import { reorderQueue } from '@/app/lib/actions/presenter-queue/reorderQueue'
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 interface Props {
   initialQueue: QueueMember[]
   availableMembers: { id: string; name: string; company: string }[]
   dates: string[]
-  startIndex: number
 }
 
 export function fmtDate(iso: string) {
@@ -31,61 +27,23 @@ export function fmtDate(iso: string) {
 }
 
 // ─── Main ──────────────────────────────────────────────────────────────────────
-export default function PresenterQueueManager({ initialQueue, availableMembers, dates, startIndex }: Props) {
+export default function PresenterQueueManager({ initialQueue, availableMembers, dates }: Props) {
   const sorted = [...initialQueue].sort((a, b) => a.position - b.position)
-  const queue = [...sorted.slice(startIndex), ...sorted.slice(0, startIndex)]
+  const queue = sorted
 
-  const [swapA, setSwapA] = useState<string | null>(null)
   const [loadingId, setLoadingId] = useState<string | null>(null)
   const [showAdd, setShowAdd] = useState(false)
   const router = useRouter()
 
+  async function moveTo(id: string, newPosition: number) {
+    setLoadingId(id)
+    const res = await reorderQueue(id, newPosition)
+    if (res.success) router.refresh()
+    setLoadingId(null)
+  }
+
   function getDateForIndex(queueIndex: number) {
     return dates[queueIndex] ? fmtDate(dates[queueIndex]) : '—'
-  }
-
-  // ── Move up/down ──────────────────────────────────────────────────────────────
-  async function move(id: string, direction: 'up' | 'down') {
-    setLoadingId(id)
-
-    const res = await moveQueueMember(id, direction)
-    if (res.success) {
-      router.refresh()
-    }
-    setLoadingId(null)
-  }
-
-  // ── Remove ────────────────────────────────────────────────────────────────────
-  async function remove(id: string) {
-    setLoadingId(id)
-
-    const res = await removeFromQueue(id)
-    if (res.success) {
-      router.refresh()
-    }
-    setLoadingId(null)
-  }
-
-  // ── Swap ──────────────────────────────────────────────────────────────────────
-  async function handleSwap(id: string) {
-    if (!swapA) {
-      setSwapA(id)
-      return
-    }
-    if (swapA === id) {
-      setSwapA(null)
-      return
-    }
-
-    const idA = swapA
-    setSwapA(null)
-    setLoadingId(id)
-
-    const res = await swapQueuePositions(idA, id)
-    if (res.success) {
-      router.refresh()
-    }
-    setLoadingId(null)
   }
 
   // ── Add ───────────────────────────────────────────────────────────────────────
@@ -106,20 +64,6 @@ export default function PresenterQueueManager({ initialQueue, availableMembers, 
           <p className="text-f10 font-mono tracking-[0.2em] uppercase text-primary-light dark:text-primary-dark">
             Presenter Queue
           </p>
-        </div>
-        <div className="flex items-center gap-2">
-          {swapA && (
-            <span className="text-f10 font-mono tracking-[0.08em] text-amber-500 dark:text-amber-400">
-              Select who to swap with
-            </span>
-          )}
-          <button
-            onClick={() => setShowAdd((v) => !v)}
-            className="flex items-center gap-1.5 h-7 px-3 border border-border-light dark:border-border-dark text-muted-light dark:text-muted-dark hover:text-text-light dark:hover:text-text-dark hover:border-primary-light dark:hover:border-primary-dark transition-colors text-f10 font-mono tracking-widest uppercase focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark"
-          >
-            <Plus size={11} aria-hidden="true" />
-            Add
-          </button>
         </div>
       </div>
 
@@ -170,8 +114,6 @@ export default function PresenterQueueManager({ initialQueue, availableMembers, 
         )}
 
         {queue.map((m, i) => {
-          const isSwapSelected = swapA === m.id
-          const isLoading = loadingId === m.id
           const sortedIndex = sorted.findIndex((q) => q.id === m.id)
 
           return (
@@ -179,11 +121,7 @@ export default function PresenterQueueManager({ initialQueue, availableMembers, 
               key={m.id}
               layout
               transition={{ duration: 0.18 }}
-              className={`flex items-center gap-3 px-4 py-3 transition-colors ${
-                isSwapSelected
-                  ? 'bg-amber-50 dark:bg-amber-400/8 border-l-2 border-amber-400'
-                  : 'bg-bg-light dark:bg-bg-dark hover:bg-surface-light dark:hover:bg-surface-dark'
-              }`}
+              className={`flex items-center gap-3 px-4 py-3 transition-colors bg-bg-light dark:bg-bg-dark hover:bg-surface-light dark:hover:bg-surface-dark`}
             >
               {/* position number */}
               <span className="w-5 text-center font-mono text-[11px] text-muted-light dark:text-muted-dark shrink-0">
@@ -208,42 +146,18 @@ export default function PresenterQueueManager({ initialQueue, availableMembers, 
 
               {/* action buttons */}
               <div className="flex items-center gap-0.5 shrink-0">
-                <button
-                  disabled={sortedIndex === 0 || isLoading}
-                  onClick={() => move(m.id, 'up')}
-                  className="w-6 h-6 flex items-center justify-center text-muted-light dark:text-muted-dark hover:text-text-light dark:hover:text-text-dark disabled:opacity-25 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark"
-                  aria-label={`Move ${m.name} up`}
+                <select
+                  value={sortedIndex}
+                  onChange={(e) => moveTo(m.id, Number(e.target.value))}
+                  disabled={!!loadingId}
+                  className="h-6 text-f10 font-mono bg-bg-light dark:bg-bg-dark border border-border-light dark:border-border-dark text-muted-light dark:text-muted-dark focus:outline-none focus:border-primary-light dark:focus:border-primary-dark"
                 >
-                  <ChevronUp size={13} />
-                </button>
-                <button
-                  disabled={sortedIndex === sorted.length - 1 || isLoading}
-                  onClick={() => move(m.id, 'down')}
-                  className="w-6 h-6 flex items-center justify-center text-muted-light dark:text-muted-dark hover:text-text-light dark:hover:text-text-dark disabled:opacity-25 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark"
-                  aria-label={`Move ${m.name} down`}
-                >
-                  <ChevronDown size={13} />
-                </button>
-                <button
-                  onClick={() => handleSwap(m.id)}
-                  disabled={isLoading}
-                  className={`w-6 h-6 flex items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark disabled:opacity-25 ${
-                    isSwapSelected
-                      ? 'text-amber-500 dark:text-amber-400'
-                      : 'text-muted-light dark:text-muted-dark hover:text-primary-light dark:hover:text-primary-dark'
-                  }`}
-                  aria-label={isSwapSelected ? 'Cancel swap' : `Swap ${m.name}'s position`}
-                >
-                  <ArrowLeftRight size={12} />
-                </button>
-                <button
-                  onClick={() => remove(m.id)}
-                  disabled={isLoading}
-                  className="w-6 h-6 flex items-center justify-center text-muted-light dark:text-muted-dark hover:text-red-500 dark:hover:text-red-400 disabled:opacity-25 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark"
-                  aria-label={`Remove ${m.name} from queue`}
-                >
-                  <X size={12} />
-                </button>
+                  {sorted.map((_, idx) => (
+                    <option key={idx} value={idx}>
+                      {idx + 1}
+                    </option>
+                  ))}
+                </select>
               </div>
             </motion.div>
           )

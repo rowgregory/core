@@ -27,7 +27,6 @@ type TSuperDashClient = {
   cancelledMeetings: { id: string; date: string; reason: string }[]
   visitorDays: { id: string; date: string }[]
   dates: string[]
-  startIndex: number
   chapter: Chapter
 }
 
@@ -40,7 +39,6 @@ export default function SuperDashClient({
   cancelledMeetings,
   visitorDays,
   dates,
-  startIndex,
   chapter
 }: TSuperDashClient) {
   const router = useRouter()
@@ -127,12 +125,7 @@ export default function SuperDashClient({
         {/* ── Presenter management ── */}
         <FadeUp delay={0.32}>
           <div className="grid grid-cols-1 1000:grid-cols-3 gap-5">
-            <PresenterQueueManager
-              initialQueue={queue}
-              availableMembers={availableMembers}
-              dates={dates}
-              startIndex={startIndex}
-            />
+            <PresenterQueueManager initialQueue={queue} availableMembers={availableMembers} dates={dates} />
             <CancelledMeetingsPanel cancelledMeetings={cancelledMeetings} />
             <VisitorDaysPanel visitorDays={visitorDays} cancelledDates={cancelledMeetings.map((c) => c.date)} />
           </div>
