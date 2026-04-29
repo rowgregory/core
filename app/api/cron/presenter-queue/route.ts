@@ -23,7 +23,7 @@ async function sendPresenterQueue(req: NextRequest) {
   try {
     const [members, queue, cancelledMeetings, visitorDays] = await Promise.all([
       prisma.user.findMany({
-        where: { chapterId, membershipStatus: 'ACTIVE' },
+        where: { chapterId, membershipStatus: 'ACTIVE', email: 'sqysh@sqysh.io' },
         select: { id: true, name: true, email: true }
       }),
       prisma.presenterQueue.findMany({
@@ -40,10 +40,12 @@ async function sendPresenterQueue(req: NextRequest) {
       prisma.visitorDay.findMany({ where: { chapterId }, select: { date: true } })
     ])
 
+    console.log(`📋 Found ${members.length} active members`)
+
     const cancelledDates = cancelledMeetings.map((m) => m.date.toISOString())
     const visitorDates = visitorDays.map((v) => v.date.toISOString())
 
-    const anchor = queue[0].createdAt // ← match getPresenterSchedule
+    const anchor = queue[0].createdAt
     const pastCount = countPastMeetingThursdays(anchor, cancelledDates, visitorDates)
     const startIndex = queue.length > 0 ? pastCount % queue.length : 0
 
@@ -56,7 +58,8 @@ async function sendPresenterQueue(req: NextRequest) {
 
     const allThursdays = getAllUpcomingThursdays(52)
 
-    const schedule = allThursdays.slice(0, 8).map((dateStr, i) => {
+    let scheduledIndex = 0
+    const schedule = allThursdays.slice(0, 8).map((dateStr) => {
       if (cancelledDates.some((d) => toDateKey(new Date(d)) === dateStr)) {
         return {
           name: 'No Meeting',
@@ -76,20 +79,15 @@ async function sendPresenterQueue(req: NextRequest) {
         }
       }
 
-      const presenterIndex =
-        allThursdays.slice(0, i + 1).filter((d) => {
-          return (
-            !cancelledDates.some((c) => toDateKey(new Date(c)) === d) &&
-            !visitorDates.some((v) => toDateKey(new Date(v)) === d)
-          )
-        }).length - 1
+      const s = scheduled[scheduledIndex]
+      const isNext = scheduledIndex === 0
+      scheduledIndex++
 
-      const s = scheduled[presenterIndex % scheduled.length]
       return {
         name: s?.name ?? '',
         company: queue.find((q) => q.userId === s?.userId)?.user.company ?? '',
         date: fmtDate(`${dateStr}T12:00:00`),
-        isNext: presenterIndex === 0,
+        isNext,
         type: 'presenter' as const
       }
     })
@@ -112,8 +110,10 @@ async function sendPresenterQueue(req: NextRequest) {
                 `${BASE_URL}/dashboard`
               )
             })
+            console.log(`✅ Sent to ${member.email}`)
             return { success: true, email: member.email, result }
           } catch (error) {
+            console.error(`❌ Failed to send to ${member.email}:`, error)
             return {
               success: false,
               email: member.email,
@@ -142,17 +142,14 @@ async function sendPresenterQueue(req: NextRequest) {
       method: req.method
     })
 
-    if (failed > 0) {
+    if (failed > 0)
       await createLog('error', `Some presenter queue emails failed`, {
         location: ['app route - GET /api/cron/presenter-queue'],
         name: 'PresenterQueueEmailsPartialFailure',
         timestamp: new Date().toISOString(),
         metadata: { failedCount: failed, failures: failedEmails }
       })
-    }
-
-    return NextResponse.json({ success: true, sent: successful, failed })
-  } catch (error: any) {
+  } catch (error) {
     await createLog('error', `Presenter queue cron failed`, {
       location: ['app route - GET /api/cron/presenter-queue'],
       name: 'PresenterQueueCronError',
@@ -160,6 +157,8 @@ async function sendPresenterQueue(req: NextRequest) {
       error: error instanceof Error ? error.message : String(error)
     })
     return NextResponse.json({ success: false, error: 'Failed to send presenter queue emails' }, { status: 500 })
+  } finally {
+    await prisma.$disconnect()
   }
 }
 
