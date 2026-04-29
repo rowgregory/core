@@ -20,8 +20,7 @@ export async function moveQueueMember(
     const idx = all.findIndex((q) => q.id === id)
     if (idx === -1) return { success: false, error: 'Member not found' }
 
-    const swapIdx = direction === 'up' ? idx - 1 : idx + 1
-    if (swapIdx < 0 || swapIdx >= all.length) return { success: true } // already at edge
+    const swapIdx = direction === 'up' ? (idx - 1 + all.length) % all.length : (idx + 1) % all.length
 
     const a = all[idx]
     const b = all[swapIdx]

@@ -172,6 +172,7 @@ export default function PresenterQueueManager({ initialQueue, availableMembers, 
         {queue.map((m, i) => {
           const isSwapSelected = swapA === m.id
           const isLoading = loadingId === m.id
+          const sortedIndex = sorted.findIndex((q) => q.id === m.id)
 
           return (
             <motion.div
@@ -208,16 +209,16 @@ export default function PresenterQueueManager({ initialQueue, availableMembers, 
               {/* action buttons */}
               <div className="flex items-center gap-0.5 shrink-0">
                 <button
+                  disabled={sortedIndex === 0 || isLoading}
                   onClick={() => move(m.id, 'up')}
-                  disabled={i === 0 || isLoading}
                   className="w-6 h-6 flex items-center justify-center text-muted-light dark:text-muted-dark hover:text-text-light dark:hover:text-text-dark disabled:opacity-25 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark"
                   aria-label={`Move ${m.name} up`}
                 >
                   <ChevronUp size={13} />
                 </button>
                 <button
+                  disabled={sortedIndex === sorted.length - 1 || isLoading}
                   onClick={() => move(m.id, 'down')}
-                  disabled={i === queue.length - 1 || isLoading}
                   className="w-6 h-6 flex items-center justify-center text-muted-light dark:text-muted-dark hover:text-text-light dark:hover:text-text-dark disabled:opacity-25 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark"
                   aria-label={`Move ${m.name} down`}
                 >
