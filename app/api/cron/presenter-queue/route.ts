@@ -92,6 +92,8 @@ async function sendPresenterQueue(req: NextRequest) {
       }
     })
 
+    console.log('About to send emails, schedule:', JSON.stringify(schedule.slice(0, 3)))
+
     const results = []
 
     for (let i = 0; i < members.length; i += BATCH_SIZE) {
@@ -142,13 +144,16 @@ async function sendPresenterQueue(req: NextRequest) {
       method: req.method
     })
 
-    if (failed > 0)
+    if (failed > 0) {
       await createLog('error', `Some presenter queue emails failed`, {
         location: ['app route - GET /api/cron/presenter-queue'],
         name: 'PresenterQueueEmailsPartialFailure',
         timestamp: new Date().toISOString(),
         metadata: { failedCount: failed, failures: failedEmails }
       })
+    }
+
+    return NextResponse.json({ success: true, sent: successful, failed }) // ← was missing
   } catch (error) {
     await createLog('error', `Presenter queue cron failed`, {
       location: ['app route - GET /api/cron/presenter-queue'],
@@ -157,15 +162,23 @@ async function sendPresenterQueue(req: NextRequest) {
       error: error instanceof Error ? error.message : String(error)
     })
     return NextResponse.json({ success: false, error: 'Failed to send presenter queue emails' }, { status: 500 })
-  } finally {
-    await prisma.$disconnect()
   }
 }
 
 export async function GET(req: NextRequest) {
-  return sendPresenterQueue(req)
+  try {
+    return await sendPresenterQueue(req)
+  } catch (error) {
+    console.error('Unhandled error in presenter queue route:', error)
+    return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 })
+  }
 }
 
 export async function POST(req: NextRequest) {
-  return sendPresenterQueue(req)
+  try {
+    return await sendPresenterQueue(req)
+  } catch (error) {
+    console.error('Unhandled error in presenter queue route:', error)
+    return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 })
+  }
 }
