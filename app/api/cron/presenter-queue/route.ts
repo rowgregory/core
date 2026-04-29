@@ -18,7 +18,7 @@ async function sendPresenterQueue(req: NextRequest) {
   try {
     const [members, queue, cancelledMeetings, visitorDays] = await Promise.all([
       prisma.user.findMany({
-        where: { chapterId, membershipStatus: 'ACTIVE', email: 'sqysh@sqysh.io' },
+        where: { chapterId, membershipStatus: 'ACTIVE' },
         select: { id: true, name: true, email: true }
       }),
       prisma.presenterQueue.findMany({
