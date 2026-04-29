@@ -2,7 +2,7 @@ import { ScheduledPresenter } from '@/types/presenter-queue'
 import { auth } from '../../auth'
 import prisma from '@/prisma/client'
 import { chapterId } from '../../constants/api/chapterId'
-import { buildSchedule, countPastMeetingThursdays, getUpcomingMeetingDates } from '../../utils/presenter-engine'
+import { buildSchedule, getUpcomingMeetingDates } from '../../utils/presenter-engine'
 import { getAllUpcomingThursdays } from '../../utils/date.utils'
 import { toDateKey } from '../../utils/time.utils'
 
@@ -27,25 +27,15 @@ export async function getPresenterSchedule(): Promise<{
           user: { select: { name: true, company: true, industry: true } }
         }
       }),
-      prisma.cancelledMeeting.findMany({
-        where: { chapterId },
-        select: { date: true }
-      }),
-      prisma.visitorDay.findMany({
-        where: { chapterId },
-        select: { date: true }
-      })
+      prisma.cancelledMeeting.findMany({ where: { chapterId }, select: { date: true } }),
+      prisma.visitorDay.findMany({ where: { chapterId }, select: { date: true } })
     ])
 
     if (!queue.length) return { success: true, data: [] }
 
     const cancelledDates = cancelledMeetings.map((m) => m.date.toISOString())
     const visitorDates = visitorDays.map((v) => v.date.toISOString())
-
-    // Auto-calculate start index based on elapsed meeting Thursdays
-    const queueStartedAt = queue[0].createdAt
-    const pastMeetings = countPastMeetingThursdays(queueStartedAt, cancelledDates, visitorDates)
-    const startIndex = pastMeetings % queue.length
+    const startIndex = 0
 
     const dates = getUpcomingMeetingDates(cancelledDates, visitorDates, 52)
     const scheduled = buildSchedule(
@@ -56,12 +46,11 @@ export async function getPresenterSchedule(): Promise<{
 
     const allThursdays = getAllUpcomingThursdays(52)
 
+    let scheduledIndex = 0
     const data: ScheduledPresenter[] = allThursdays
       .slice(0, 24)
-      .map((dateStr, i) => {
-        const key = dateStr // already in YYYY-MM-DD format
-
-        if (cancelledDates.some((d) => toDateKey(new Date(d)) === key)) {
+      .map((dateStr) => {
+        if (cancelledDates.some((d) => toDateKey(new Date(d)) === dateStr)) {
           return {
             userId: null,
             name: 'No Meeting',
@@ -73,7 +62,7 @@ export async function getPresenterSchedule(): Promise<{
           }
         }
 
-        if (visitorDates.some((d) => toDateKey(new Date(d)) === key)) {
+        if (visitorDates.some((d) => toDateKey(new Date(d)) === dateStr)) {
           return {
             userId: null,
             name: 'Visitor Day',
@@ -85,15 +74,10 @@ export async function getPresenterSchedule(): Promise<{
           }
         }
 
-        const presenterIndex =
-          allThursdays.slice(0, i + 1).filter((d) => {
-            return (
-              !cancelledDates.some((c) => toDateKey(new Date(c)) === d) &&
-              !visitorDates.some((v) => toDateKey(new Date(v)) === d)
-            )
-          }).length - 1
+        const s = scheduled[scheduledIndex % scheduled.length]
+        const isNext = scheduledIndex === 0
+        scheduledIndex++
 
-        const s = scheduled[presenterIndex % scheduled.length]
         if (!s) return null
 
         return {
@@ -101,12 +85,13 @@ export async function getPresenterSchedule(): Promise<{
           name: s.name,
           company: queue.find((q) => q.userId === s.userId)?.user.company ?? '',
           date: `${dateStr}T12:00:00`,
-          isNext: presenterIndex === 0,
+          isNext,
           isYou: s.userId === session.user.id,
           type: 'presenter' as const
         }
       })
       .filter(Boolean) as ScheduledPresenter[]
+
     return { success: true, data }
   } catch (error) {
     return { success: false, error: 'Failed to load presenter schedule' }

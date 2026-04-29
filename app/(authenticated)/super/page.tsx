@@ -35,6 +35,7 @@ export default async function SuperDashPage() {
   const queueData = queue.data ?? []
 
   const dates = getUpcomingMeetingDates(cancelledDates, visitorDates, queueData.length + 20)
+  const startIndex = 0
 
   return (
     <SuperDashClient
@@ -44,6 +45,7 @@ export default async function SuperDashPage() {
       cancelledMeetings={cancelledMeetings.data ?? []}
       visitorDays={visitorDays.data ?? []}
       dates={dates}
+      startIndex={startIndex}
       chapter={result.data.chapter}
     />
   )

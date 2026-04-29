@@ -4,12 +4,7 @@ import prisma from '@/prisma/client'
 import { NextRequest, NextResponse } from 'next/server'
 import { presenterQueueTemplate } from '@/app/lib/email-templates/presenter-queue.template'
 import { chapterId } from '@/app/lib/constants/api/chapterId'
-import {
-  buildSchedule,
-  countPastMeetingThursdays,
-  getUpcomingMeetingDates,
-  toDateKey
-} from '@/app/lib/utils/presenter-engine'
+import { buildSchedule, getUpcomingMeetingDates, toDateKey } from '@/app/lib/utils/presenter-engine'
 import { fmtDate, getAllUpcomingThursdays } from '@/app/lib/utils/date.utils'
 
 const BATCH_SIZE = 2
@@ -40,14 +35,10 @@ async function sendPresenterQueue(req: NextRequest) {
       prisma.visitorDay.findMany({ where: { chapterId }, select: { date: true } })
     ])
 
-    console.log(`📋 Found ${members.length} active members`)
-
     const cancelledDates = cancelledMeetings.map((m) => m.date.toISOString())
     const visitorDates = visitorDays.map((v) => v.date.toISOString())
 
-    const anchor = queue[0].createdAt
-    const pastCount = countPastMeetingThursdays(anchor, cancelledDates, visitorDates)
-    const startIndex = queue.length > 0 ? pastCount % queue.length : 0
+    const startIndex = 0
 
     const dates = getUpcomingMeetingDates(cancelledDates, visitorDates, 52)
     const scheduled = buildSchedule(
@@ -91,8 +82,6 @@ async function sendPresenterQueue(req: NextRequest) {
         type: 'presenter' as const
       }
     })
-
-    console.log('About to send emails, schedule:', JSON.stringify(schedule.slice(0, 3)))
 
     const results = []
 

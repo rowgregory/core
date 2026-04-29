@@ -44,30 +44,30 @@ export function buildSchedule(
 }
 
 // Get ALL Thursdays (past and future) from a given start date
-export function getAllThursdaysFrom(startDate: Date, count: number): Date[] {
-  const results: Date[] = []
-  const cursor = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate())
-  while (cursor.getDay() !== 4) cursor.setDate(cursor.getDate() + 1)
-  while (results.length < count) {
-    results.push(new Date(cursor))
-    cursor.setDate(cursor.getDate() + 7)
-  }
-  return results
-}
+// export function getAllThursdaysFrom(startDate: Date, count: number): Date[] {
+//   const results: Date[] = []
+//   const cursor = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate())
+//   while (cursor.getDay() !== 4) cursor.setDate(cursor.getDate() + 1)
+//   while (results.length < count) {
+//     results.push(new Date(cursor))
+//     cursor.setDate(cursor.getDate() + 7)
+//   }
+//   return results
+// }
 
 // Count past actual meeting Thursdays since a given date
-export function countPastMeetingThursdays(since: Date, cancelledDates: string[], visitorDates: string[]): number {
-  const nowEST = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }))
-  nowEST.setHours(0, 0, 0, 0)
+// export function countPastMeetingThursdays(since: Date, cancelledDates: string[], visitorDates: string[]): number {
+//   const nowEST = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }))
+//   nowEST.setHours(0, 0, 0, 0)
 
-  const cancelled = new Set(cancelledDates.map((d) => toDateKey(new Date(d))))
-  const visitors = new Set(visitorDates.map((d) => toDateKey(new Date(d))))
+//   const cancelled = new Set(cancelledDates.map((d) => toDateKey(new Date(d))))
+//   const visitors = new Set(visitorDates.map((d) => toDateKey(new Date(d))))
 
-  return getAllThursdaysFrom(since, 200).filter((d) => {
-    if (d >= nowEST) return false
-    const key = toDateKey(d)
-    if (cancelled.has(key)) return false
-    if (visitors.has(key)) return false
-    return true
-  }).length
-}
+//   return getAllThursdaysFrom(since, 200).filter((d) => {
+//     if (d >= nowEST) return false
+//     const key = toDateKey(d)
+//     if (cancelled.has(key)) return false
+//     if (visitors.has(key)) return false
+//     return true
+//   }).length
+// }

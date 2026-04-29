@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { Plus } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { QueueMember } from '@/types/presenter-queue'
 import { addToQueue } from '@/app/lib/actions/presenter-queue/addToQueue'
@@ -13,6 +14,7 @@ interface Props {
   initialQueue: QueueMember[]
   availableMembers: { id: string; name: string; company: string }[]
   dates: string[]
+  startIndex: number
 }
 
 export function fmtDate(iso: string) {
@@ -27,7 +29,7 @@ export function fmtDate(iso: string) {
 }
 
 // ─── Main ──────────────────────────────────────────────────────────────────────
-export default function PresenterQueueManager({ initialQueue, availableMembers, dates }: Props) {
+export default function PresenterQueueManager({ initialQueue, availableMembers, dates, startIndex }: Props) {
   const sorted = [...initialQueue].sort((a, b) => a.position - b.position)
   const queue = sorted
 
@@ -42,8 +44,9 @@ export default function PresenterQueueManager({ initialQueue, availableMembers, 
     setLoadingId(null)
   }
 
-  function getDateForIndex(queueIndex: number) {
-    return dates[queueIndex] ? fmtDate(dates[queueIndex]) : '—'
+  function getDateForIndex(rawIndex: number) {
+    const offset = (rawIndex - startIndex + sorted.length) % sorted.length
+    return dates[offset] ? fmtDate(dates[offset]) : '—'
   }
 
   // ── Add ───────────────────────────────────────────────────────────────────────
