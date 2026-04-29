@@ -11,7 +11,8 @@ import useSoundEffect from '@/hooks/useSoundEffect'
 const EVENT_ORGS = [
   { value: 'LYNN_CHAMBER', label: 'Lynn Chamber of Commerce' },
   { value: 'NORTH_SHORE_LATINO', label: 'North Shore Latino Business Association' },
-  { value: 'BOYS_AND_GIRLS_CLUB', label: 'Boys & Girls Club of Lynn' }
+  { value: 'BOYS_AND_GIRLS_CLUB', label: 'Boys & Girls Club of Lynn' },
+  { value: 'TOUCHSTONE', label: 'Touchstone Closing & Escrow, LLC.' }
 ]
 
 const inputCls =
@@ -20,7 +21,9 @@ const inputCls =
 export function EventButton() {
   const router = useRouter()
   const [open, setOpen] = useState(false)
-  const [org, setOrg] = useState<'LYNN_CHAMBER' | 'NORTH_SHORE_LATINO' | 'BOYS_AND_GIRLS_CLUB'>('LYNN_CHAMBER')
+  const [org, setOrg] = useState<'LYNN_CHAMBER' | 'NORTH_SHORE_LATINO' | 'BOYS_AND_GIRLS_CLUB' | 'TOUCHSTONE'>(
+    'LYNN_CHAMBER'
+  )
   const [name, setName] = useState('')
   const [desc, setDesc] = useState('')
   const [link, setLink] = useState('')

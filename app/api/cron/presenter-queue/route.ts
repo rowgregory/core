@@ -4,7 +4,12 @@ import prisma from '@/prisma/client'
 import { NextRequest, NextResponse } from 'next/server'
 import { presenterQueueTemplate } from '@/app/lib/email-templates/presenter-queue.template'
 import { chapterId } from '@/app/lib/constants/api/chapterId'
-import { countPastMeetingThursdays, toDateKey } from '@/app/lib/utils/presenter-engine'
+import {
+  buildSchedule,
+  countPastMeetingThursdays,
+  getUpcomingMeetingDates,
+  toDateKey
+} from '@/app/lib/utils/presenter-engine'
 import { fmtDate, getAllUpcomingThursdays } from '@/app/lib/utils/date.utils'
 
 const BATCH_SIZE = 2
@@ -27,6 +32,7 @@ async function sendPresenterQueue(req: NextRequest) {
         select: {
           userId: true,
           position: true,
+          createdAt: true,
           user: { select: { name: true, company: true } }
         }
       }),
@@ -37,20 +43,21 @@ async function sendPresenterQueue(req: NextRequest) {
     const cancelledDates = cancelledMeetings.map((m) => m.date.toISOString())
     const visitorDates = visitorDays.map((v) => v.date.toISOString())
 
-    const anchor = new Date('2026-04-09T12:00:00')
+    const anchor = queue[0].createdAt // ← match getPresenterSchedule
     const pastCount = countPastMeetingThursdays(anchor, cancelledDates, visitorDates)
     const startIndex = queue.length > 0 ? pastCount % queue.length : 0
 
-    const sorted = [...queue].sort((a, b) => a.position - b.position)
-    const rotated = [...sorted.slice(startIndex), ...sorted.slice(0, startIndex)]
+    const dates = getUpcomingMeetingDates(cancelledDates, visitorDates, 52)
+    const scheduled = buildSchedule(
+      queue.map((q) => ({ userId: q.userId, name: q.user.name ?? '', position: q.position })),
+      dates.map((d) => new Date(`${d}T12:00:00`)),
+      startIndex
+    )
 
-    const allThursdays = getAllUpcomingThursdays(12)
+    const allThursdays = getAllUpcomingThursdays(52)
 
     const schedule = allThursdays.slice(0, 8).map((dateStr, i) => {
-      const isCancelled = cancelledDates.some((d) => toDateKey(new Date(d)) === dateStr)
-      const isVisitor = visitorDates.some((d) => toDateKey(new Date(d)) === dateStr)
-
-      if (isCancelled)
+      if (cancelledDates.some((d) => toDateKey(new Date(d)) === dateStr)) {
         return {
           name: 'No Meeting',
           company: 'Cancelled',
@@ -58,7 +65,8 @@ async function sendPresenterQueue(req: NextRequest) {
           isNext: false,
           type: 'off' as const
         }
-      if (isVisitor)
+      }
+      if (visitorDates.some((d) => toDateKey(new Date(d)) === dateStr)) {
         return {
           name: 'Visitor Day',
           company: 'Open to guests',
@@ -66,8 +74,9 @@ async function sendPresenterQueue(req: NextRequest) {
           isNext: false,
           type: 'visitor' as const
         }
+      }
 
-      const presenterSlot =
+      const presenterIndex =
         allThursdays.slice(0, i + 1).filter((d) => {
           return (
             !cancelledDates.some((c) => toDateKey(new Date(c)) === d) &&
@@ -75,12 +84,12 @@ async function sendPresenterQueue(req: NextRequest) {
           )
         }).length - 1
 
-      const q = rotated[presenterSlot % rotated.length]
+      const s = scheduled[presenterIndex % scheduled.length]
       return {
-        name: q?.user.name ?? '',
-        company: q?.user.company ?? '',
+        name: s?.name ?? '',
+        company: queue.find((q) => q.userId === s?.userId)?.user.company ?? '',
         date: fmtDate(`${dateStr}T12:00:00`),
-        isNext: presenterSlot === 0,
+        isNext: presenterIndex === 0,
         type: 'presenter' as const
       }
     })

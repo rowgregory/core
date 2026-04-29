@@ -1,6 +1,6 @@
 export type TEvent = {
   id: string
-  org: 'LYNN_CHAMBER' | 'NORTH_SHORE_LATINO' | 'BOYS_AND_GIRLS_CLUB'
+  org: 'LYNN_CHAMBER' | 'NORTH_SHORE_LATINO' | 'BOYS_AND_GIRLS_CLUB' | 'TOUCHSTONE'
   name: string
   description: string | null
   externalLink: string | null
