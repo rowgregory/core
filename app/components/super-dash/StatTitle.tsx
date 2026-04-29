@@ -27,7 +27,10 @@ export function StatTile({
         <Icon size={16} className="text-primary-light dark:text-primary-dark" aria-hidden="true" />
       </div>
       <div>
-        <p className="font-sora font-black text-xl text-primary-light dark:text-primary-dark tabular-nums leading-none mb-0.5">
+        <p
+          className="font-sora font-black text-xl text-primary-light dark:text-primary-dark tabular-nums leading-none mb-0.5"
+          suppressHydrationWarning
+        >
           {value}
         </p>
         <p className="text-f10 font-mono tracking-[0.15em] uppercase text-muted-light dark:text-muted-dark">{label}</p>
