@@ -104,7 +104,6 @@ export default function SuperDashMemberEditClient({ member }: { member: SuperMem
   async function handleSave() {
     setSaving(true)
     setError(null)
-    console.log('FORM: ', form)
 
     const res = await updateMember(member.id, {
       name: form.name,

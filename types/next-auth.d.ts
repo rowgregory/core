@@ -9,6 +9,7 @@ declare module 'next-auth' {
     isSuperUser?: boolean
     isMembership?: boolean
     membershipStatus?: string
+    signedInWith?: 'email' | 'secondaryEmail'
   }
 
   interface Session {
@@ -17,7 +18,8 @@ declare module 'next-auth' {
       role?: string
       isAdmin?: boolean
       isSuperUser?: boolean
-      isMembership
+      isMembership?: boolean
+      signedInWith?: 'email' | 'secondaryEmail'
     } & DefaultSession['user']
   }
 }
@@ -27,9 +29,10 @@ declare module '@auth/core/adapters' {
     role?: string
     isAdmin?: boolean
     isSuperUser?: boolean
-    isMembership
+    isMembership?: boolean
     membershipStatus?: string
     lastLoginAt?: Date
+    signedInWith?: 'email' | 'secondaryEmail'
   }
 }
 
@@ -39,6 +42,7 @@ declare module '@auth/core/jwt' {
     role?: string
     isAdmin?: boolean
     isSuperUser?: boolean
-    isMembership
+    isMembership?: boolean
+    signedInWith?: 'email' | 'secondaryEmail'
   }
 }

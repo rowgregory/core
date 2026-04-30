@@ -21,8 +21,9 @@ import { updateProfile } from '@/app/lib/actions/updateProfile'
 import { getInitials } from '@/app/lib/utils/common/getInitials'
 import { formatPhone } from '@/app/lib/utils/phone.utils'
 import uploadFileToFirebase from '@/app/lib/utils/firebase/uploadFileToFirebase'
-import { store } from '@/app/lib/redux/store'
 import { MemberEmailModal } from '../modals/MemberEmailModal'
+import { PrimaryEmailPrompt } from '../dashboard/PrimaryEmailPrompt'
+import { useSession } from 'next-auth/react'
 
 // ─── Shared classes ────────────────────────────────────────────────────────────
 const inputCls =
@@ -85,6 +86,8 @@ export default function ProfileClient({ profile }: { profile: ProfileData }) {
   const [emailTarget, setEmailTarget] = useState<{ name: string; email: string } | null>(null)
   const [emailBody, setEmailBody] = useState('')
   const [sent, setSent] = useState(false)
+  const session = useSession()
+  const signedInWith = session.data.user.signedInWith
 
   const initials = getInitials(form.name)
 
@@ -246,66 +249,79 @@ export default function ProfileClient({ profile }: { profile: ProfileData }) {
             </div>
           </div>
 
-          {/* ── Secondary Email ── */}
-          <section className="relative overflow-hidden border border-border-light dark:border-border-dark mb-6">
-            <svg
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-              className="absolute right-2 top-1/2 -translate-y-1/2 w-12 h-12 text-slate-100 dark:text-slate-800 pointer-events-none select-none"
-              fill="currentColor"
-            >
-              <path d="M12.545 10.239v3.821h5.445c-.712 2.315-2.647 3.972-5.445 3.972a6.033 6.033 0 1 1 0-12.064 5.96 5.96 0 0 1 4.123 1.632l2.913-2.913A9.969 9.969 0 0 0 12.545 2C7.021 2 2.543 6.477 2.543 12s4.478 10 10.002 10c8.396 0 10.249-7.85 9.426-11.748l-9.426-.013z" />
-            </svg>
+          <p className="text-f10 font-mono tracking-[0.15em] uppercase text-muted-light dark:text-muted-dark mb-3">
+            Signed in with{' '}
+            <span className="text-primary-light dark:text-primary-dark">
+              {signedInWith === 'email' ? 'Primary' : 'Secondary'}
+            </span>
+          </p>
 
-            <div className="px-4 py-2.5 border-b border-border-light dark:border-border-dark relative z-10">
-              <div className="flex items-center gap-2">
-                <span className="text-f10 font-mono shrink-0">
-                  <span className="text-blue-500">G</span>
-                  <span className="text-red-500">m</span>
-                  <span className="text-yellow-500">a</span>
-                  <span className="text-blue-500">i</span>
-                  <span className="text-green-500">l</span>
-                </span>
-                <span className="text-border-light dark:text-border-dark" aria-hidden="true">
-                  ·
-                </span>
-                <p className="text-[11px] font-nunito text-muted-light dark:text-muted-dark truncate">
-                  Sign in with Google — no magic link needed.
-                </p>
-              </div>
-            </div>
-
-            <div className="px-4 py-3 relative z-10">
-              <label
-                htmlFor="secondaryEmail"
-                className="block text-f10 font-mono tracking-[0.18em] uppercase text-muted-light dark:text-muted-dark mb-1.5"
+          {signedInWith === 'email' ? (
+            /* ── Secondary Email ── */
+            <section className="relative overflow-hidden border border-border-light dark:border-border-dark mb-6">
+              <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-12 h-12 text-slate-100 dark:text-slate-800 pointer-events-none select-none"
+                fill="currentColor"
               >
-                Gmail Address
-              </label>
-              <div className="flex items-stretch">
-                <input
-                  id="secondaryEmail"
-                  type="text"
-                  value={(form.secondaryEmail ?? '').replace('@gmail.com', '')}
-                  onChange={(e) => {
-                    const val = e.target.value.replace(/[@\s]/g, '')
-                    set('secondaryEmail', val ? `${val}@gmail.com` : '')
-                  }}
-                  placeholder="yourusername"
-                  autoComplete="off"
-                  autoCapitalize="off"
-                  spellCheck={false}
-                  className="flex-1 h-10 bg-white dark:bg-bg-dark border border-slate-300 dark:border-border-dark border-r-0 px-3 font-nunito text-[14px] text-text-light dark:text-text-dark placeholder:text-slate-400 dark:placeholder:text-muted-dark/50 focus:outline-none focus:border-primary-light dark:focus:border-primary-dark transition-colors rounded-none"
-                />
-                <div className="h-10 px-2.5 flex items-center bg-surface-light dark:bg-surface-dark border border-slate-300 dark:border-border-dark font-mono text-[11px] text-muted-light dark:text-muted-dark select-none whitespace-nowrap">
-                  @gmail.com
+                <path d="M12.545 10.239v3.821h5.445c-.712 2.315-2.647 3.972-5.445 3.972a6.033 6.033 0 1 1 0-12.064 5.96 5.96 0 0 1 4.123 1.632l2.913-2.913A9.969 9.969 0 0 0 12.545 2C7.021 2 2.543 6.477 2.543 12s4.478 10 10.002 10c8.396 0 10.249-7.85 9.426-11.748l-9.426-.013z" />
+              </svg>
+
+              <div className="px-4 py-2.5 border-b border-border-light dark:border-border-dark relative z-10">
+                <div className="flex items-center gap-2">
+                  <span className="text-f10 font-mono shrink-0">
+                    <span className="text-blue-500">G</span>
+                    <span className="text-red-500">m</span>
+                    <span className="text-yellow-500">a</span>
+                    <span className="text-blue-500">i</span>
+                    <span className="text-green-500">l</span>
+                  </span>
+                  <span className="text-border-light dark:text-border-dark" aria-hidden="true">
+                    ·
+                  </span>
+                  <p className="text-[11px] font-nunito text-muted-light dark:text-muted-dark truncate">
+                    Sign in with Google — no magic link needed.
+                  </p>
                 </div>
               </div>
-              {form.secondaryEmail && (
-                <p className="text-f10 font-mono text-muted-light dark:text-muted-dark mt-1">{form.secondaryEmail}</p>
-              )}
+
+              <div className="px-4 py-3 relative z-10">
+                <label
+                  htmlFor="secondaryEmail"
+                  className="block text-f10 font-mono tracking-[0.18em] uppercase text-muted-light dark:text-muted-dark mb-1.5"
+                >
+                  Gmail Address
+                </label>
+                <div className="flex items-stretch">
+                  <input
+                    id="secondaryEmail"
+                    type="text"
+                    value={(form.secondaryEmail ?? '').replace('@gmail.com', '')}
+                    onChange={(e) => {
+                      const val = e.target.value.replace(/[@\s]/g, '')
+                      set('secondaryEmail', val ? `${val}@gmail.com` : '')
+                    }}
+                    placeholder="yourusername"
+                    autoComplete="off"
+                    autoCapitalize="off"
+                    spellCheck={false}
+                    className="flex-1 h-10 bg-white dark:bg-bg-dark border border-slate-300 dark:border-border-dark border-r-0 px-3 font-nunito text-[14px] text-text-light dark:text-text-dark placeholder:text-slate-400 dark:placeholder:text-muted-dark/50 focus:outline-none focus:border-primary-light dark:focus:border-primary-dark transition-colors rounded-none"
+                  />
+                  <div className="h-10 px-2.5 flex items-center bg-surface-light dark:bg-surface-dark border border-slate-300 dark:border-border-dark font-mono text-[11px] text-muted-light dark:text-muted-dark select-none whitespace-nowrap">
+                    @gmail.com
+                  </div>
+                </div>
+                {form.secondaryEmail && (
+                  <p className="text-f10 font-mono text-muted-light dark:text-muted-dark mt-1">{form.secondaryEmail}</p>
+                )}
+              </div>
+            </section>
+          ) : (
+            <div className="mb-6">
+              <PrimaryEmailPrompt />
             </div>
-          </section>
+          )}
 
           <p className="text-[9px] xs:text-[10px] font-mono tracking-[0.12em] uppercase text-muted-light dark:text-muted-dark mb-6">
             To update your primary email,{' '}

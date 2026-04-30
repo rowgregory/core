@@ -19,12 +19,17 @@ export async function getVisitorDays(): Promise<{
     const days = await prisma.visitorDay.findMany({
       where: { chapterId },
       orderBy: { date: 'asc' },
-      select: { id: true, date: true }
+      select: { id: true, date: true, presenterCompany: true, presenterName: true }
     })
 
     return {
       success: true,
-      data: days.map((d) => ({ id: d.id, date: d.date.toISOString() }))
+      data: days.map((d) => ({
+        id: d.id,
+        date: d.date.toISOString(),
+        presenterName: d.presenterName,
+        presenterCompany: d.presenterCompany
+      }))
     }
   } catch (error) {
     return { success: false, error: 'Failed to load visitor days' }

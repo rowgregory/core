@@ -19,6 +19,7 @@ import { useRouter } from 'next/navigation'
 import { ChapterSettingsPanel } from '../super-dash/ChapterSettingsPanel'
 import { Chapter } from '@/types/user'
 import { QueueMember } from '@/types/presenter-queue'
+import { VisitorPanel } from '../super-dash/VisitorPanel'
 
 type TSuperDashClient = {
   data: SuperUserDashboardData
@@ -44,7 +45,7 @@ export default function SuperDashClient({
   chapter
 }: TSuperDashClient) {
   const router = useRouter()
-  const { stats, members, applicants, parleys, referrals, anchors } = data
+  const { stats, members, applicants, parleys, referrals, anchors, visitors } = data
 
   return (
     <div className="min-h-screen bg-bg-light dark:bg-bg-dark">
@@ -105,6 +106,11 @@ export default function SuperDashClient({
             {applicants.length > 0 && (
               <FadeUp delay={0.22}>
                 <ApplicantsPanel applicants={applicants} />
+              </FadeUp>
+            )}
+            {visitors.length > 0 && (
+              <FadeUp delay={0.24}>
+                <VisitorPanel visitors={visitors} />
               </FadeUp>
             )}
             <FadeUp delay={0.26}>

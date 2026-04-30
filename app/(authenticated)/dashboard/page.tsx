@@ -4,7 +4,6 @@ import DashboardClient from '@/app/components/pages/DashboardClient'
 import { getDashboardData } from '@/app/lib/actions/getDashboardData'
 import { getPresenterSchedule } from '@/app/lib/actions/presenter-queue/getPresenterSchedule'
 import { getLinkedRecord } from '@/app/lib/actions/getLinkedRecord'
-import { getEvents } from '@/app/lib/actions/event/getEvents'
 
 export default async function DashboardPage({
   searchParams
@@ -16,11 +15,10 @@ export default async function DashboardPage({
 
   const { action, id } = await searchParams
 
-  const [result, schedule, linkedRecord, events] = await Promise.all([
+  const [result, schedule, linkedRecord] = await Promise.all([
     getDashboardData(),
     getPresenterSchedule(),
-    action && id ? getLinkedRecord(action, id) : Promise.resolve(null),
-    getEvents()
+    action && id ? getLinkedRecord(action, id) : Promise.resolve(null)
   ])
 
   if (!result.success || !result.data) {
@@ -43,7 +41,9 @@ export default async function DashboardPage({
       recentActivity={recentActivity}
       schedule={schedule.data}
       linkedRecord={linkedRecord}
-      events={events?.data}
+      events={result.data.events}
+      visitors={result.data.visitors}
+      closestVisitorDay={result.data.closestVisitorDay}
     />
   )
 }

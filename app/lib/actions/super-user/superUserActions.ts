@@ -5,6 +5,7 @@ import { auth } from '../../auth'
 import { chapterId } from '../../constants/api/chapterId'
 import { createLog } from '../../utils/api/createLog'
 import { Chapter } from '@/types/user'
+import { Visitor } from '@/types/visitor'
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 export type SuperUserMember = {
@@ -88,9 +89,9 @@ export type SuperUserDashboardData = {
   referrals: SuperUserReferral[]
   anchors: SuperUserAnchor[]
   chapter: Chapter
+  visitors: Visitor[]
 }
 
-// ─── Get superuser dashboard data ─────────────────────────────────────────────
 export async function getSuperUserDashboardData(): Promise<
   { success: true; data: SuperUserDashboardData } | { success: false; error: string }
 > {
@@ -98,140 +99,184 @@ export async function getSuperUserDashboardData(): Promise<
     const session = await auth()
     if (!session?.user) return { success: false, error: 'Unauthorized' }
 
-    // ── members with activity counts ──
-    const members = await prisma.user.findMany({
-      where: { chapterId },
-      select: {
-        id: true,
-        name: true,
-        company: true,
-        title: true,
-        industry: true,
-        role: true,
-        membershipStatus: true,
-        isActive: true,
-        isAdmin: true,
-        isMembership: true,
-        lastLoginAt: true,
-        profileImage: true,
-        joinedAt: true,
-        _count: {
-          select: {
-            requestedMeetings: true,
-            giver: true,
-            givenCredits: true
-          }
-        }
-      },
-      orderBy: { lastLoginAt: 'desc' }
-    })
-
-    const applicants = await prisma.user.findMany({
-      where: {
-        chapterId,
-        OR: [
-          { membershipStatus: { in: ['PENDING', 'REJECTED'] } },
-          { membershipStatus: 'ACTIVE', hasCompletedApplication: true }
-        ]
-      },
-      select: {
-        id: true,
-        name: true,
-        company: true,
-        industry: true,
-        email: true,
-        phone: true,
-        membershipStatus: true,
-        hasCompletedApplication: true,
-        businessLicenseNumber: true,
-        createdAt: true,
-        finalDecisionAt: true
-      },
-      orderBy: { createdAt: 'desc' }
-    })
-
-    // ── recent parleys ──
-    const parleys = await prisma.parley.findMany({
-      where: { chapterId },
-      orderBy: { createdAt: 'desc' },
-      select: {
-        id: true,
-        scheduledAt: true,
-        status: true,
-        notes: true,
-        createdAt: true,
-        requester: { select: { id: true, name: true, company: true } },
-        recipient: { select: { id: true, name: true, company: true } }
-      }
-    })
-
-    // ── recent referrals ──
-    const referrals = await prisma.treasureMap.findMany({
-      where: { chapterId },
-      orderBy: { createdAt: 'desc' },
-      select: {
-        id: true,
-        clientName: true,
-        serviceNeeded: true,
-        status: true,
-        createdAt: true,
-        giver: { select: { id: true, name: true, company: true } },
-        receiver: { select: { id: true, name: true, company: true } }
-      }
-    })
-
-    // ── recent anchors ──
-    const anchors = await prisma.anchor.findMany({
-      where: { chapterId },
-      orderBy: { createdAt: 'desc' },
-      select: {
-        id: true,
-        businessValue: true,
-        description: true,
-        status: true,
-        closedDate: true,
-        createdAt: true,
-        giver: { select: { id: true, name: true, company: true } },
-        receiver: { select: { id: true, name: true, company: true } }
-      }
-    })
-
-    const chapter = await prisma.chapter.findUnique({
-      where: { id: chapterId },
-      select: {
-        name: true,
-        location: true,
-        meetingDay: true,
-        meetingTime: true,
-        meetingFrequency: true,
-        hasUnlockedBooty: true,
-        hasUnlockedGrog: true,
-        hasUnlockedMuster: true
-      }
-    })
-
-    // ── stats ──
-    const [meetingsTotal, referralsOpen, anchorsAllTime] = await Promise.all([
-      prisma.parley.count({
-        where: { chapterId, status: { not: 'CANCELLED' } }
-      }),
-      prisma.treasureMap.count({
-        where: { chapterId, status: 'GIVEN' }
-      }),
-      prisma.anchor.findMany({
-        where: { chapterId },
-        select: { businessValue: true }
-      })
-    ])
-
-    const closedTotal = anchorsAllTime.reduce((s, a) => s + Number(a.businessValue), 0)
-    const activeMembers = members.filter((m) => m.membershipStatus === 'ACTIVE').length
-
-    const stats: SuperUserStats = {
-      totalMembers: members.length,
-      activeMembers,
+    const [
+      members,
+      applicants,
+      parleys,
+      referrals,
+      anchors,
+      visitors,
+      chapter,
       meetingsTotal,
       referralsOpen,
+      anchorsAllTime
+    ] = await Promise.all([
+      prisma.user
+        .findMany({
+          where: { chapterId },
+          select: {
+            id: true,
+            name: true,
+            company: true,
+            title: true,
+            industry: true,
+            role: true,
+            membershipStatus: true,
+            isActive: true,
+            isAdmin: true,
+            isMembership: true,
+            lastLoginAt: true,
+            profileImage: true,
+            joinedAt: true,
+            _count: {
+              select: {
+                requestedMeetings: true,
+                giver: true,
+                givenCredits: true
+              }
+            }
+          },
+          orderBy: { lastLoginAt: 'desc' }
+        })
+        .catch(() => null),
+
+      prisma.user
+        .findMany({
+          where: {
+            chapterId,
+            OR: [
+              { membershipStatus: { in: ['PENDING', 'REJECTED'] } },
+              { membershipStatus: 'ACTIVE', hasCompletedApplication: true }
+            ]
+          },
+          select: {
+            id: true,
+            name: true,
+            company: true,
+            industry: true,
+            email: true,
+            phone: true,
+            membershipStatus: true,
+            hasCompletedApplication: true,
+            businessLicenseNumber: true,
+            createdAt: true,
+            finalDecisionAt: true
+          },
+          orderBy: { createdAt: 'desc' }
+        })
+        .catch(() => null),
+
+      prisma.parley
+        .findMany({
+          where: { chapterId },
+          orderBy: { createdAt: 'desc' },
+          select: {
+            id: true,
+            scheduledAt: true,
+            status: true,
+            notes: true,
+            createdAt: true,
+            requester: { select: { id: true, name: true, company: true } },
+            recipient: { select: { id: true, name: true, company: true } }
+          }
+        })
+        .catch(() => null),
+
+      prisma.treasureMap
+        .findMany({
+          where: { chapterId },
+          orderBy: { createdAt: 'desc' },
+          select: {
+            id: true,
+            clientName: true,
+            serviceNeeded: true,
+            status: true,
+            createdAt: true,
+            giver: { select: { id: true, name: true, company: true } },
+            receiver: { select: { id: true, name: true, company: true } }
+          }
+        })
+        .catch(() => null),
+
+      prisma.anchor
+        .findMany({
+          where: { chapterId },
+          orderBy: { createdAt: 'desc' },
+          select: {
+            id: true,
+            businessValue: true,
+            description: true,
+            status: true,
+            closedDate: true,
+            createdAt: true,
+            giver: { select: { id: true, name: true, company: true } },
+            receiver: { select: { id: true, name: true, company: true } }
+          }
+        })
+        .catch(() => null),
+
+      prisma.visitor
+        .findMany({
+          where: { chapterId },
+          orderBy: { visitDate: 'asc' },
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+            company: true,
+            industry: true,
+            visitDate: true,
+            createdAt: true,
+            invitedBy: { select: { name: true } }
+          }
+        })
+        .catch(() => null),
+
+      prisma.chapter
+        .findUnique({
+          where: { id: chapterId },
+          select: {
+            name: true,
+            location: true,
+            meetingDay: true,
+            meetingTime: true,
+            meetingFrequency: true,
+            hasUnlockedBooty: true,
+            hasUnlockedGrog: true,
+            hasUnlockedMuster: true
+          }
+        })
+        .catch(() => null),
+
+      prisma.parley
+        .count({
+          where: { chapterId, status: { not: 'CANCELLED' } }
+        })
+        .catch(() => 0),
+
+      prisma.treasureMap
+        .count({
+          where: { chapterId, status: 'GIVEN' }
+        })
+        .catch(() => 0),
+
+      prisma.anchor
+        .findMany({
+          where: { chapterId },
+          select: { businessValue: true }
+        })
+        .catch(() => [])
+    ])
+
+    const closedTotal = (anchorsAllTime ?? []).reduce((s, a) => s + Number(a.businessValue), 0)
+    const activeMembers = (members ?? []).filter((m) => m.membershipStatus === 'ACTIVE').length
+
+    const stats: SuperUserStats = {
+      totalMembers: members?.length ?? 0,
+      activeMembers,
+      meetingsTotal: meetingsTotal ?? 0,
+      referralsOpen: referralsOpen ?? 0,
       closedTotal: formatCurrency(closedTotal)
     }
 
@@ -239,7 +284,7 @@ export async function getSuperUserDashboardData(): Promise<
       success: true,
       data: {
         stats,
-        members: members.map((m) => ({
+        members: (members ?? []).map((m) => ({
           id: m.id,
           name: m.name,
           company: m.company,
@@ -252,18 +297,18 @@ export async function getSuperUserDashboardData(): Promise<
           isMembership: m.isMembership,
           lastLoginAt: m.lastLoginAt?.toISOString() ?? null,
           joinedAt: m.joinedAt?.toISOString() ?? null,
-          loginCount: 0, // extend if you add a loginCount field to User
+          loginCount: 0,
           parleyCount: m._count.requestedMeetings,
           referralCount: m._count.giver,
           closedCount: m._count.givenCredits,
           profileImage: m.profileImage
         })),
-        applicants: applicants.map((m) => ({
-          ...m,
-          createdAt: m.createdAt.toISOString(),
-          finalDecisionAt: m.finalDecisionAt
+        applicants: (applicants ?? []).map((a) => ({
+          ...a,
+          createdAt: a.createdAt.toISOString(),
+          finalDecisionAt: a.finalDecisionAt
         })),
-        parleys: parleys.map((p) => ({
+        parleys: (parleys ?? []).map((p) => ({
           id: p.id,
           scheduledAt: p.scheduledAt.toISOString(),
           status: p.status,
@@ -272,7 +317,7 @@ export async function getSuperUserDashboardData(): Promise<
           requester: p.requester,
           recipient: p.recipient
         })),
-        referrals: referrals.map((r) => ({
+        referrals: (referrals ?? []).map((r) => ({
           id: r.id,
           clientName: r.clientName,
           serviceNeeded: r.serviceNeeded,
@@ -281,7 +326,7 @@ export async function getSuperUserDashboardData(): Promise<
           giver: r.giver,
           receiver: r.receiver
         })),
-        anchors: anchors.map((a) => ({
+        anchors: (anchors ?? []).map((a) => ({
           id: a.id,
           businessValue: Number(a.businessValue).toFixed(2),
           description: a.description,
@@ -291,19 +336,25 @@ export async function getSuperUserDashboardData(): Promise<
           giver: a.giver,
           receiver: a.receiver
         })),
-        chapter: {
-          ...chapter,
-          id: chapterId
-        }
+        visitors: (visitors ?? []).map((v) => ({
+          id: v.id,
+          firstName: v.firstName,
+          lastName: v.lastName,
+          email: v.email,
+          company: v.company,
+          industry: v.industry,
+          visitDate: v.visitDate,
+          createdAt: v.createdAt,
+          invitedBy: v.invitedBy ? { name: v.invitedBy.name } : null
+        })),
+        chapter: { ...chapter, id: chapterId }
       }
     }
   } catch (error) {
     await createLog('error', 'Failed to load superuser dashboard', {
-      location: ['server action - getSuperUserDashboardData'],
+      location: 'getSuperUserDashboardData',
       message: error instanceof Error ? error.message : 'Unknown error',
-      name: 'SuperUserDashboardError',
-      timestamp: new Date().toISOString(),
-      error
+      timestamp: new Date().toISOString()
     })
     return { success: false, error: 'Failed to load dashboard' }
   }

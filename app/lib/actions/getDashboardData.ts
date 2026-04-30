@@ -2,6 +2,7 @@ import prisma from '@/prisma/client'
 import { auth } from '../auth'
 import { getInitials } from '../utils/common/getInitials'
 import { timeAgo } from '../utils/time.utils'
+import { getClosestVisitorDay } from './visitor-day/getClosestVisitorDay'
 
 export async function getDashboardData() {
   try {
@@ -48,7 +49,10 @@ export async function getDashboardData() {
       anchorsThisWeekData,
       totalParleys,
       totalTreasureMaps,
-      totalAnchorsData
+      totalAnchorsData,
+      events,
+      visitors,
+      closestVisitorDay
     ] = await Promise.all([
       prisma.parley.count({
         where: {
@@ -78,7 +82,33 @@ export async function getDashboardData() {
       prisma.anchor.findMany({
         where: { OR: [{ giverId: user.id }, { receiverId: user.id }] },
         select: { businessValue: true }
-      })
+      }),
+      prisma.event.findMany({
+        orderBy: { createdAt: 'desc' },
+        select: {
+          id: true,
+          org: true,
+          name: true,
+          description: true,
+          externalLink: true,
+          createdAt: true
+        }
+      }),
+      prisma.visitor.findMany({
+        orderBy: { createdAt: 'desc' },
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          email: true,
+          visitDate: true,
+          createdAt: true,
+          invitedBy: {
+            select: { name: true }
+          }
+        }
+      }),
+      getClosestVisitorDay()
     ])
 
     const anchorsThisWeek = anchorsThisWeekData.length
@@ -189,7 +219,16 @@ export async function getDashboardData() {
           totalClosedAmount,
           closedAmountThisWeek
         },
-        recentActivity
+        recentActivity,
+        events: events.map((e) => ({
+          ...e,
+          createdAt: e.createdAt.toISOString()
+        })),
+        visitors: visitors.map((e) => ({
+          ...e,
+          createdAt: e.createdAt.toISOString()
+        })),
+        closestVisitorDay
       }
     }
   } catch (error) {

@@ -18,25 +18,21 @@ export async function handleGoogleCallback(user: NextAuthUser, account: Account)
     })
   }
 
-  // ── No account — log interest and block ──
   if (!existingUser) {
     await createLog('info', `Google sign-in attempted — no account found for ${user.email}`, {
-      location: ['googleProvider.ts - handleGoogleCallback'],
-      name: 'GoogleSignInInterested',
+      location: 'handleGoogleCallback',
       timestamp: new Date().toISOString(),
       email: user.email
     })
     return false
   }
 
-  // ── Has account but not active — block ──
   if (existingUser.membershipStatus !== 'ACTIVE') {
     await createLog(
       'warning',
       `Google sign-in blocked — membership is ${existingUser.membershipStatus}: ${user.email}`,
       {
-        location: ['googleProvider.ts - handleGoogleCallback'],
-        name: 'GoogleSignInBlockedInactiveMember',
+        location: 'handleGoogleCallback',
         timestamp: new Date().toISOString(),
         email: user.email,
         membershipStatus: existingUser.membershipStatus
@@ -45,7 +41,6 @@ export async function handleGoogleCallback(user: NextAuthUser, account: Account)
     return false
   }
 
-  // ── Active member — link account if needed ──
   const existingAccount = await prisma.account.findFirst({
     where: { userId: existingUser.id, provider: 'google' }
   })
@@ -67,7 +62,6 @@ export async function handleGoogleCallback(user: NextAuthUser, account: Account)
     })
   }
 
-  // Update last login
   await prisma.user.update({
     where: { id: existingUser.id },
     data: { lastLoginAt: new Date(), emailVerified: new Date() }
@@ -76,8 +70,7 @@ export async function handleGoogleCallback(user: NextAuthUser, account: Account)
   user.id = existingUser.id
 
   await createLog('info', `${existingUser.name} signed in with Google`, {
-    location: ['googleProvider.ts - handleGoogleCallback'],
-    name: 'GoogleSignInSuccess',
+    location: 'handleGoogleCallback',
     timestamp: new Date().toISOString(),
     email: user.email,
     userId: existingUser.id

@@ -1,7 +1,6 @@
 import prisma from '@/prisma/client'
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import NextAuth from 'next-auth'
-import { createLog } from './utils/api/createLog'
 import googleProvider from './config/googleProvider'
 import { magicLinkConfig } from './config/magicLinkConfig'
 import { handleEmailCallback } from './callbacks/handleEmailCallback'
@@ -22,20 +21,28 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async signIn({ user, account }) {
       switch (account?.provider) {
         case 'email':
+          user.signedInWith = 'email'
           return handleEmailCallback(user)
         case 'google':
+          user.signedInWith = 'secondaryEmail'
           return handleGoogleCallback(user, account)
         default:
           return true
       }
     },
 
-    async jwt({ token, user }) {
-      if (!user?.email) return token
+    async jwt({ token, user, account }) {
+      if (!user?.id) return token
 
       const dbUser = await prisma.user.findUnique({
-        where: { email: user.email },
-        select: { id: true, role: true, isAdmin: true, isSuperUser: true, isMembership: true }
+        where: { id: user.id },
+        select: {
+          id: true,
+          role: true,
+          isAdmin: true,
+          isSuperUser: true,
+          isMembership: true
+        }
       })
 
       if (dbUser) {
@@ -44,13 +51,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.isAdmin = dbUser.isAdmin
         token.isSuperUser = dbUser.isSuperUser
         token.isMembership = dbUser.isMembership
-      } else {
-        await createLog('error', `JWT build failed — user not found: ${user.email}`, {
-          location: ['auth.ts - jwt'],
-          name: 'JWTUserNotFound',
-          timestamp: new Date().toISOString(),
-          email: user.email
-        })
+        token.signedInWith = account?.provider === 'google' ? 'secondaryEmail' : 'email'
       }
 
       return token
@@ -63,13 +64,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         session.user.isAdmin = token.isAdmin as boolean
         session.user.isSuperUser = token.isSuperUser as boolean
         session.user.isMembership = token.isMembership as boolean
-      } else {
-        await createLog('error', `Session build failed — no userId in token for ${session.user.email}`, {
-          location: ['auth.ts - session'],
-          name: 'SessionMissingToken',
-          timestamp: new Date().toISOString(),
-          email: session.user.email
-        })
+        session.user.signedInWith = token.signedInWith as 'email' | 'secondaryEmail'
       }
       return session
     }

@@ -19,6 +19,10 @@ import { ActivityStats } from '../dashboard/ActivityStats'
 import { EventButton } from '../dashboard/EventButton'
 import { EventsList } from '../dashboard/EventsList'
 import { TEvent } from '@/types/event'
+import VisitorPanel from '../dashboard/VisitorPanel'
+import { Visitor } from '@/types/visitor'
+import { useSession } from 'next-auth/react'
+import { PrimaryEmailPrompt } from '../dashboard/PrimaryEmailPrompt'
 
 export interface ActivityItem {
   id: string
@@ -57,6 +61,8 @@ export interface MemberDashboardProps {
   schedule: ScheduledPresenter[]
   linkedRecord: LinkedRecord
   events: TEvent[]
+  visitors: Visitor[]
+  closestVisitorDay: string
 }
 
 // ─── Main dashboard ────────────────────────────────────────────────────────────
@@ -67,8 +73,12 @@ export default function DashboardClient({
   recentActivity,
   schedule,
   linkedRecord,
-  events
+  events,
+  visitors,
+  closestVisitorDay
 }: MemberDashboardProps) {
+  const session = useSession()
+  const signedInWith = session.data.user.signedInWith
   const [open, setOpen] = useState(linkedRecord ? true : false)
 
   return (
@@ -76,46 +86,52 @@ export default function DashboardClient({
       <LinkedRecordModal record={linkedRecord} setOpen={setOpen} open={open} />
       <main className="max-w-170 mx-auto px-4 pb-12">
         {/* ── Greeting ── */}
-        <FadeUp className="pt-7 pb-5">
+        <FadeUp delay={0.025} className="pt-7 pb-5">
           <Greeting currentUser={currentUser} />
         </FadeUp>
 
-        <FadeUp delay={0.05}>
+        <FadeUp delay={0.5}>
           <div className="h-px bg-border-light dark:bg-border-dark" role="separator" />
         </FadeUp>
 
-        {/* ── Gmail prompt ── */}
-        {!currentUser.secondaryEmail ? (
-          <FadeUp delay={0.08} className="pt-4">
-            <GmailPrompt />
-          </FadeUp>
+        {signedInWith === 'secondaryEmail' ? (
+          <PrimaryEmailPrompt />
         ) : (
-          <FadeUp delay={0.08} className="pt-4">
-            <GmailConfirmation />
-          </FadeUp>
+          <>
+            {/* ── Gmail prompt ── */}
+            {!currentUser.secondaryEmail ? (
+              <FadeUp delay={0.1} className="pt-4">
+                <GmailPrompt />
+              </FadeUp>
+            ) : (
+              <FadeUp delay={0.1} className="pt-4">
+                <GmailConfirmation />
+              </FadeUp>
+            )}
+          </>
         )}
 
         {/* ── Quick actions ── */}
-        <FadeUp delay={0.1} className="pt-6">
+        <FadeUp delay={0.15} className="pt-6">
           <SectionLabel>Quick Actions</SectionLabel>
           <QuickActions members={members} variant="card" />
         </FadeUp>
 
         {/* Activity Stats */}
-        <FadeUp delay={0.2} className="pt-6">
+        <FadeUp delay={0.15} className="pt-6">
           <SectionLabel>Your Activity</SectionLabel>
           <ActivityStats stats={stats} />
         </FadeUp>
 
         {/* ── Events ── */}
-        <FadeUp delay={0.42} className="pt-6">
+        <FadeUp delay={0.15} className="pt-6">
           <SectionLabel>Events</SectionLabel>
           <EventButton />
           <EventsList events={events} />
         </FadeUp>
 
         {/* ── Membership setup ── */}
-        <FadeUp delay={0.3} className="pt-6">
+        <FadeUp delay={0.15} className="pt-6">
           <MembershipSetup
             hasAnnual={currentUser.hasAnnualSubscription}
             hasQuarterly={currentUser.hasQuarterlySubscription}
@@ -123,7 +139,7 @@ export default function DashboardClient({
         </FadeUp>
 
         {/* ── Onboarding preview ── */}
-        <FadeUp delay={0.4} className="pt-6">
+        <FadeUp delay={0.15} className="pt-6">
           <div className="border border-border-light dark:border-border-dark px-4 py-3 flex items-center justify-between gap-3">
             <div className="min-w-0">
               <p className="text-f10 font-mono tracking-[0.15em] uppercase text-primary-light dark:text-primary-dark mb-0.5">
@@ -143,19 +159,25 @@ export default function DashboardClient({
         </FadeUp>
 
         {/* ── History ── */}
-        <FadeUp delay={0.5} className="pt-6">
+        <FadeUp delay={0.15} className="pt-6">
+          <SectionLabel>Visitors</SectionLabel>
+          <VisitorPanel visitors={visitors} closestVisitorDay={closestVisitorDay} />
+        </FadeUp>
+
+        {/* ── History ── */}
+        <FadeUp delay={0.15} className="pt-6">
           <SectionLabel>History</SectionLabel>
           <HistoryTabs recentActivity={recentActivity} />
         </FadeUp>
 
         {/* ── Members ── */}
-        <FadeUp delay={0.6} className="pt-6">
+        <FadeUp delay={0.15} className="pt-6">
           <SectionLabel>Members</SectionLabel>
           <MemberList members={members} />
         </FadeUp>
 
         {/* Presenter Schedle */}
-        <FadeUp delay={0.7} className="pt-6">
+        <FadeUp delay={0.15} className="pt-6">
           <PresenterSchedule schedule={schedule ?? []} className="pt-6" />
         </FadeUp>
       </main>

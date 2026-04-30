@@ -179,6 +179,7 @@ model User {
   chapter                    Chapter                    @relation(fields: [chapterId], references: [id])
   presenterQueue             PresenterQueue?
   signOutEvents              SignOutEvent[]
+  visitorInvites             Visitor[]                  @relation("VisitorInvites")
 }
 
 model Parley {
@@ -263,6 +264,7 @@ model Chapter {
   treasureMaps              TreasureMap[]
   users                     User[]
   suspiciousActivityReports SuspiciousActivityReport[]
+  visitors                  Visitor[]
 }
 
 model Event {
@@ -381,10 +383,12 @@ model CancelledMeeting {
 }
 
 model VisitorDay {
-  id        String   @id @default(cuid())
-  date      DateTime
-  chapterId String
-  createdAt DateTime @default(now())
+  id               String   @id @default(cuid())
+  date             DateTime
+  chapterId        String
+  createdAt        DateTime @default(now())
+  presenterName    String?
+  presenterCompany String?
 
   @@unique([chapterId, date])
   @@index([chapterId])
@@ -398,4 +402,22 @@ model SignOutEvent {
 
   @@index([userId])
   @@index([createdAt])
+}
+
+model Visitor {
+  id        String   @id @default(cuid())
+  firstName String
+  lastName  String
+  email     String
+  company   String?
+  industry  String?
+  phone     String?
+  visitDate DateTime
+  createdAt DateTime @default(now())
+
+  chapterId String
+  chapter   Chapter @relation(fields: [chapterId], references: [id])
+
+  invitedById String
+  invitedBy   User   @relation("VisitorInvites", fields: [invitedById], references: [id])
 }
