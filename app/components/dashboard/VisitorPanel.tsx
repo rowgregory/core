@@ -97,6 +97,7 @@ export default function VisitorPanel({
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
   const onOpen = () => setOpen(true)
+  const onClose = () => setOpen(false)
 
   function handleClose() {}
 
@@ -162,7 +163,7 @@ export default function VisitorPanel({
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
               className="fixed inset-0 z-40 bg-black/50 backdrop-blur-[2px]"
-              onClick={handleClose}
+              onClick={onClose}
               aria-hidden="true"
             />
 
@@ -170,7 +171,7 @@ export default function VisitorPanel({
             <CreateVisitorModal
               errorMsg={errorMsg}
               form={form}
-              handleClose={handleClose}
+              handleClose={onClose}
               handleSubmit={handleSubmit}
               setForm={setForm}
               open={open}
