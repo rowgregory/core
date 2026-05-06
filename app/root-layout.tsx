@@ -13,9 +13,17 @@ import { loadStripe } from '@stripe/stripe-js'
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
 
 const showLink = (path: string) =>
-  !['/admin', '/members', '/application', '/auth/login', '/dashboard', '/super', '/profile', '/onboarding'].some(
-    (str) => path.includes(str)
-  )
+  ![
+    '/admin',
+    '/members',
+    '/application',
+    '/auth/login',
+    '/dashboard',
+    '/super',
+    '/profile',
+    '/onboarding',
+    '/visitor-day'
+  ].some((str) => path.includes(str))
 
 export default function RootLayoutWrapper({ children }) {
   const path = usePathname()
