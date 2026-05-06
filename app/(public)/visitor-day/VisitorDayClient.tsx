@@ -1,5 +1,7 @@
 'use client'
 
+import Spline from '@splinetool/react-spline'
+
 import { useState } from 'react'
 import { Moon, Sun } from 'lucide-react'
 
@@ -69,9 +71,24 @@ export default function VisitorDayTV({
   }
 
   return (
-    <div className={`h-screen w-screen overflow-hidden ${t.bg} ${t.text} flex flex-col transition-colors duration-300`}>
+    <div
+      className={`h-screen w-screen overflow-hidden ${t.bg} ${t.text} flex flex-col transition-colors duration-300 relative overflow-hidden`}
+    >
+      {/* Globe — behind everything */}
+      <div className="absolute right-[-15%] top-1/2 -translate-y-1/2 z-0 pointer-events-none w-[1000px] h-[1000px]">
+        {/* Left fade overlay */}
+        <div
+          className={`absolute inset-0 z-1 pointer-events-none bg-linear-to-r ${
+            dark ? 'from-bg-dark via-bg-dark/70 to-transparent' : 'from-bg-light via-bg-light/80 to-transparent'
+          }`}
+        />
+        <Spline
+          scene="https://prod.spline.design/nSlEQFeacYQgy4hm/scene.splinecode"
+          style={{ background: 'transparent' }}
+        />
+      </div>
       {/* ── Top bar ── */}
-      <div className={`flex items-center justify-between px-10 py-4 border-b ${t.border} shrink-0`}>
+      <div className={`flex items-center justify-between px-10 py-4 border-b ${t.border} shrink-0 relative z-10`}>
         <div className="flex items-center gap-4">
           <span
             className={`block w-6 h-px ${dark ? 'bg-primary-dark' : 'bg-primary-light'} shrink-0`}
@@ -92,7 +109,7 @@ export default function VisitorDayTV({
       </div>
 
       {/* ── Main content ── */}
-      <div className="flex flex-1 min-h-0">
+      <div className="flex flex-1 min-h-0 relative z-10">
         {/* ── Left column ── */}
         <div className={`flex flex-col justify-between px-10 py-8 flex-1 border-r ${t.border}`}>
           {/* Title */}
