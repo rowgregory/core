@@ -156,7 +156,7 @@ export default function VisitorClient({
   }
 
   return (
-    <div className="min-h-screen bg-bg-light dark:bg-bg-dark">
+    <div className="min-h-screen bg-bg-light dark:bg-bg-dark pb-20">
       {/* ── Floating emojis ── */}
       <AnimatePresence>
         {floaters.map((f) => (
@@ -327,15 +327,15 @@ export default function VisitorClient({
           <p className="text-f10 font-mono tracking-widest uppercase text-muted-light dark:text-muted-dark mb-3 text-center">
             React to the room
           </p>
-          <div className="flex items-center justify-center gap-3 sm:gap-5">
+          <div className="grid grid-cols-5 gap-2 w-full">
             {REACTIONS.map(({ emoji, label }) => (
               <button
                 key={emoji}
                 onClick={() => handleReaction(emoji)}
                 aria-label={label}
-                className="flex flex-col items-center gap-1 group focus-visible:outline-none"
+                className="flex flex-col items-center gap-1 group focus-visible:outline-none py-1"
               >
-                <span className="text-2xl sm:text-3xl transition-transform duration-150 group-hover:scale-125 group-active:scale-95 select-none">
+                <span className="text-2xl transition-transform duration-150 group-hover:scale-125 group-active:scale-95 select-none">
                   {emoji}
                 </span>
                 {reactionCounts[emoji] ? (

@@ -19,7 +19,8 @@ const showLink = (path: string) =>
     '/super',
     '/profile',
     '/onboarding',
-    '/visitor-day'
+    '/visitor-day',
+    '/visitor'
   ].some((str) => path.includes(str))
 
 export default function RootLayoutWrapper({ children }) {
