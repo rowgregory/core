@@ -260,7 +260,7 @@ export default function VisitorDayTV({
         <div className="hidden lg:flex flex-col justify-between px-10 py-8 w-95 xl:w-105 shrink-0">
           <div>
             {/* Schedule */}
-            <div className="flex items-center gap-3 mb-4">
+            {/* <div className="flex items-center gap-3 mb-4">
               <span className={`block w-4 h-px ${t.primaryBar} shrink-0`} aria-hidden="true" />
               <p className={`text-xs lg:text-sm font-mono tracking-[0.2em] uppercase ${t.primary}`}>Today's Schedule</p>
             </div>
@@ -276,7 +276,7 @@ export default function VisitorDayTV({
                   </p>
                 </div>
               ))}
-            </div>
+            </div> */}
 
             {/* Presenter */}
             {presenterName && (
