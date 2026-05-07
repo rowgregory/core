@@ -230,7 +230,7 @@ export default function AttendanceTVPage({
       pusher.unsubscribe('visitor-reactions')
       pusher.disconnect()
     }
-  }, [])
+  }, [play])
 
   function removeFloater(id: string) {
     setFloaters((prev) => prev.filter((f) => f.id !== id))
