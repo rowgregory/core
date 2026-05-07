@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from './app/lib/auth'
 
-const publicRoutes = ['/auth/login']
+const publicRoutes = ['/auth/login', '/visitor', '/visitor-day', '/attendance']
 const protectedAPIRoutes = ['/api/pdf/member-directory']
 
 export async function proxy(req: NextRequest) {
@@ -13,7 +13,8 @@ export async function proxy(req: NextRequest) {
     nextUrl.pathname.startsWith('/_next') ||
     nextUrl.pathname.includes('.') ||
     nextUrl.pathname.startsWith('/icon') ||
-    nextUrl.pathname.startsWith('/api/placeholder')
+    nextUrl.pathname.startsWith('/api/placeholder') ||
+    nextUrl.pathname.startsWith('/api/webhooks/')
   ) {
     return NextResponse.next()
   }
@@ -22,7 +23,10 @@ export async function proxy(req: NextRequest) {
   const isLoggedIn = !!session?.user
 
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname)
-  const isProtectedPage = nextUrl.pathname.startsWith('/dashboard') || nextUrl.pathname.startsWith('/super')
+  const isProtectedPage =
+    nextUrl.pathname.startsWith('/dashboard') ||
+    nextUrl.pathname.startsWith('/super') ||
+    nextUrl.pathname.startsWith('/check-in')
   const isSuperUserRoute = nextUrl.pathname.startsWith('/super')
 
   // ── Logged-in user hitting a public route → redirect to their home ────────

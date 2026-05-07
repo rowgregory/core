@@ -33,20 +33,8 @@ interface VisitorDayTVProps {
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-const SCHEDULE = [
-  { time: '7:00 AM', label: 'Arrive' },
-  { time: '7:00–7:15', label: 'Open Networking' },
-  { time: '7:15 AM', label: 'Meeting Starts' },
-  { time: '', label: 'Education Moment' },
-  { time: 'Commercials', label: '60-Second Commercials' },
-  { time: 'Feature', label: 'Feature Presentation' },
-  { time: 'Events', label: 'Member Announcements' },
-  { time: 'Round Up', label: 'Group Round-Up' }
-]
-
 const COMPANIES = [
   { name: 'Sqysh' },
-  { name: 'Saltwater Bookkeeping' },
   { name: 'Century21' },
   { name: 'Eastern Bank' },
   { name: 'Touchstone Closing & Escrow' },

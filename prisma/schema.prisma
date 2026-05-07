@@ -197,6 +197,7 @@ model User {
   giver             TreasureMap[]              @relation("TreasureMapGiver")
   receiver          TreasureMap[]              @relation("TreasureMapReceiver")
   reporter          SuspiciousActivityReport[] @relation("ReportedBy")
+  attendances       Attendance[]
 }
 
 model Parley {
@@ -282,6 +283,7 @@ model Chapter {
   users                     User[]
   suspiciousActivityReports SuspiciousActivityReport[]
   visitors                  Visitor[]
+  meetings                  Meeting[]
 }
 
 model Event {
@@ -477,6 +479,31 @@ model PaymentMethod {
 
   user User @relation(fields: [userId], references: [id])
 
+  @@index([userId])
+}
+
+model Meeting {
+  id          String       @id @default(cuid())
+  chapterId   String
+  date        DateTime
+  createdAt   DateTime     @default(now())
+  chapter     Chapter      @relation(fields: [chapterId], references: [id])
+  attendances Attendance[]
+
+  @@unique([chapterId, date])
+  @@index([chapterId])
+}
+
+model Attendance {
+  id        String   @id @default(cuid())
+  meetingId String
+  userId    String
+  createdAt DateTime @default(now())
+  meeting   Meeting  @relation(fields: [meetingId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([meetingId, userId])
+  @@index([meetingId])
   @@index([userId])
 }
 
