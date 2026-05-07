@@ -2,13 +2,11 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Sun, Moon, Check } from 'lucide-react'
-// import dynamic from 'next/dynamic'
+import { Sun, Moon } from 'lucide-react'
 import Pusher from 'pusher-js'
 import Marquee from 'react-fast-marquee'
 import { QRCodeSVG } from 'qrcode.react'
-
-// const Spline = dynamic(() => import('@splinetool/react-spline'), { ssr: false })
+import useSoundEffect from '@/hooks/useSoundEffect'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -27,7 +25,7 @@ interface Member {
 interface AttendanceTVProps {
   date?: string
   members: Member[]
-  initialAttendees: string[] // user ids
+  initialAttendees: string[]
   initialReactionCount?: number
 }
 
@@ -68,96 +66,140 @@ function FloatingEmojiEl({ emoji, x, onDone }: { emoji: string; x: number; onDon
   )
 }
 
-// ─── Member card ──────────────────────────────────────────────────────────────
+// ─── Name tile ────────────────────────────────────────────────────────────────
 
-function MemberCard({ member, checkedIn, t }: { member: Member; checkedIn: boolean; t: Record<string, string> }) {
+function NameTile({
+  member,
+  checkedIn,
+  justCheckedIn,
+  t
+}: {
+  member: Member
+  checkedIn: boolean
+  justCheckedIn: boolean
+  t: Record<string, string>
+}) {
+  const firstName = member.name.split(' ')[0]
+  const lastName = member.name.split(' ').slice(1).join(' ')
+
   return (
     <motion.div
       layout
-      className={`relative flex items-center gap-3 px-3 py-3 border transition-all duration-500 ${
-        checkedIn ? `border-green-500/50 bg-green-500/10` : `${t.border} opacity-40`
+      animate={
+        justCheckedIn
+          ? {
+              scale: [1, 1.06, 0.98, 1]
+            }
+          : { scale: 1 }
+      }
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      className={`relative flex items-center justify-center overflow-hidden transition-all duration-500 border ${
+        checkedIn ? 'border-green-500/50 bg-green-500/10' : `${t.border} opacity-25`
       }`}
     >
-      {/* Check indicator */}
-      <div
-        className={`shrink-0 w-5 h-5 flex items-center justify-center border transition-all duration-500 ${
-          checkedIn ? 'border-green-500 bg-green-500' : `${t.border}`
-        }`}
-      >
-        <AnimatePresence>
-          {checkedIn && (
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <Check size={11} className="text-white" />
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+      {/* Shimmer sweep */}
+      <AnimatePresence>
+        {justCheckedIn && (
+          <motion.div
+            key="shimmer"
+            initial={{ x: '-100%', opacity: 0.9 }}
+            animate={{ x: '200%', opacity: 0 }}
+            exit={{}}
+            transition={{ duration: 0.7, ease: 'easeInOut' }}
+            className="absolute inset-0 z-20 pointer-events-none"
+            style={{
+              background: 'linear-gradient(105deg, transparent 30%, rgba(134,239,172,0.6) 50%, transparent 70%)',
+              width: '100%'
+            }}
+          />
+        )}
+      </AnimatePresence>
 
-      {/* Info */}
-      <div className="min-w-0 flex-1">
+      {/* Green flash overlay */}
+      <AnimatePresence>
+        {justCheckedIn && (
+          <motion.div
+            key="flash"
+            initial={{ opacity: 0.5 }}
+            animate={{ opacity: 0 }}
+            transition={{ duration: 1.2 }}
+            className="absolute inset-0 bg-green-400/30 pointer-events-none z-10"
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Ripple */}
+      <AnimatePresence>
+        {justCheckedIn && (
+          <motion.div
+            key="ripple"
+            initial={{ scale: 0, opacity: 0.6 }}
+            animate={{ scale: 3, opacity: 0 }}
+            transition={{ duration: 0.8, ease: 'easeOut' }}
+            className="absolute inset-0 m-auto w-8 h-8 rounded-full bg-green-400 pointer-events-none z-10"
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Content */}
+      <div className="relative z-30 text-center px-2 py-3">
         <p
-          className={`font-sora font-bold text-sm lg:text-base leading-tight truncate transition-colors duration-500 ${
-            checkedIn ? 'text-text-dark' : t.text
+          className={`font-sora font-black leading-none transition-colors duration-500 ${
+            checkedIn ? 'text-white' : t.text
           }`}
+          style={{ fontSize: 'clamp(1.25rem, 2.5vw, 2.25rem)' }}
         >
-          {member.name}
+          {firstName}
         </p>
         <p
-          className={`text-f10 lg:text-xs font-mono truncate transition-colors duration-500 ${
+          className={`font-sora font-black leading-none transition-colors duration-500 ${
             checkedIn ? 'text-green-400' : t.muted
           }`}
+          style={{ fontSize: 'clamp(1rem, 2vw, 1.75rem)' }}
         >
-          {member.company}
+          {lastName}
         </p>
-      </div>
 
-      {/* Glow on check in */}
-      {checkedIn && (
-        <motion.div
-          initial={{ opacity: 0.6 }}
-          animate={{ opacity: 0 }}
-          transition={{ duration: 1.5 }}
-          className="absolute inset-0 bg-green-400/20 pointer-events-none"
-        />
-      )}
+        {checkedIn && (
+          <motion.div
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="mt-1.5 flex justify-center"
+          >
+            <motion.div
+              animate={justCheckedIn ? { scale: [1, 2, 1], opacity: [1, 0.3, 1] } : {}}
+              transition={{ duration: 0.8, repeat: justCheckedIn ? 3 : 0 }}
+              className="w-2 h-2 rounded-full bg-green-500"
+            />
+          </motion.div>
+        )}
+      </div>
     </motion.div>
   )
 }
 
-function speak(name: string) {
-  const utterance = new SpeechSynthesisUtterance(`Thank you for checking in, ${name}`)
-  utterance.rate = 0.9
-  utterance.pitch = 1
-  window.speechSynthesis.speak(utterance)
-}
-
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
-export default function AttendanceClient({
+export default function AttendanceTVPage({
   date = 'Thursday',
   members,
   initialAttendees = [],
   initialReactionCount = 0
 }: AttendanceTVProps) {
-  const [dark, setDark] = useState(true)
+  const [dark] = useState(true)
   const [floaters, setFloaters] = useState<FloatingEmoji[]>([])
   const [totalReactions, setTotalReactions] = useState(initialReactionCount)
   const [checkedInIds, setCheckedInIds] = useState<Set<string>>(new Set(initialAttendees))
+  const [justCheckedInId, setJustCheckedInId] = useState<string | null>(null)
+  const { play } = useSoundEffect('/images/portal.mp3', true)
 
   const t = {
     bg: dark ? 'bg-bg-dark' : 'bg-bg-light',
     border: dark ? 'border-border-dark' : 'border-border-light',
-    divide: dark ? 'divide-border-dark' : 'divide-border-light',
     text: dark ? 'text-text-dark' : 'text-text-light',
     muted: dark ? 'text-muted-dark' : 'text-muted-light',
     primary: dark ? 'text-primary-dark' : 'text-primary-light',
-    primaryBar: dark ? 'bg-primary-dark' : 'bg-primary-light',
-    primaryBorder: dark ? 'border-primary-dark/40' : 'border-primary-light/40',
-    primaryBg: dark ? 'bg-primary-dark/10' : 'bg-primary-light/10'
+    primaryBar: dark ? 'bg-primary-dark' : 'bg-primary-light'
   }
 
   useEffect(() => {
@@ -165,10 +207,12 @@ export default function AttendanceClient({
       cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!
     })
 
-    const channel = pusher.subscribe('meeting-attendance')
-    channel.bind('check-in', (data: { userId: string; emoji: string; count: number; name: string }) => {
+    const attendanceChannel = pusher.subscribe('meeting-attendance')
+    attendanceChannel.bind('check-in', (data: { userId: string }) => {
       setCheckedInIds((prev) => new Set([...prev, data.userId]))
-      speak(data.name.split(' ')[0]) // just first name
+      setJustCheckedInId(data.userId)
+      play()
+      setTimeout(() => setJustCheckedInId(null), 3000)
     })
 
     const reactionChannel = pusher.subscribe('visitor-reactions')
@@ -180,7 +224,7 @@ export default function AttendanceClient({
     })
 
     return () => {
-      channel.unbind_all()
+      attendanceChannel.unbind_all()
       reactionChannel.unbind_all()
       pusher.unsubscribe('meeting-attendance')
       pusher.unsubscribe('visitor-reactions')
@@ -208,7 +252,7 @@ export default function AttendanceClient({
 
       {/* ── Top bar ── */}
       <div
-        className={`flex items-center justify-between px-5 lg:px-10 py-4 border-b ${t.border} shrink-0 relative z-10`}
+        className={`flex items-center justify-between px-5 lg:px-10 py-3 border-b ${t.border} shrink-0 relative z-10`}
       >
         <div className="flex items-center gap-3 lg:gap-4">
           <span className={`block w-5 lg:w-6 h-px ${t.primaryBar} shrink-0`} aria-hidden="true" />
@@ -220,65 +264,65 @@ export default function AttendanceClient({
           <p className={`text-xs lg:text-sm font-mono tracking-[0.15em] uppercase ${t.muted} hidden sm:block`}>
             {date} · 25 N Common St · Lynn, MA 01902
           </p>
-          <button
-            onClick={() => setDark((d) => !d)}
-            aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
-            className={`w-7 h-7 flex items-center justify-center border ${t.border} ${t.muted} transition-colors focus-visible:outline-none`}
-          >
-            {dark ? <Sun size={13} /> : <Moon size={13} />}
-          </button>
         </div>
       </div>
 
       {/* ── Main content ── */}
       <div className="flex flex-1 min-h-0 relative z-10">
-        {/* ── Left — member grid (dominant) ── */}
-        <div className={`flex flex-col flex-1 px-5 lg:px-8 py-6 border-r ${t.border} min-h-0`}>
-          <div className="flex items-center justify-between mb-4 shrink-0">
+        {/* ── Left — name grid ── */}
+        <div className="flex flex-col flex-1 min-h-0">
+          <div className={`flex items-center justify-between px-5 lg:px-8 py-2 border-b ${t.border} shrink-0`}>
             <div className="flex items-center gap-3">
               <span className={`block w-4 h-px ${t.primaryBar} shrink-0`} aria-hidden="true" />
-              <p className={`text-xs lg:text-sm font-mono tracking-[0.2em] uppercase ${t.primary}`}>Attendance</p>
+              <p className={`text-xs font-mono tracking-[0.2em] uppercase ${t.primary}`}>Attendance</p>
             </div>
-            <p className={`text-xs lg:text-sm font-mono tracking-widest uppercase ${t.muted}`}>
-              {checkedInCount} / {members.length} checked in
+            <p className={`text-xs font-mono tracking-widest uppercase ${t.muted}`}>
+              {checkedInCount} / {members.length}
             </p>
           </div>
 
-          {/* Member grid */}
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 overflow-y-auto flex-1">
+          {/* Name grid — 4 or 5 cols depending on count */}
+          <div
+            className="flex-1 grid p-3 gap-2"
+            style={{ gridTemplateColumns: `repeat(${members.length <= 12 ? 4 : 5}, 1fr)` }}
+          >
             {sortedMembers.map((member) => (
-              <MemberCard key={member.id} member={member} checkedIn={checkedInIds.has(member.id)} t={t} />
+              <NameTile
+                key={member.id}
+                member={member}
+                checkedIn={checkedInIds.has(member.id)}
+                justCheckedIn={justCheckedInId === member.id}
+                t={t}
+              />
             ))}
           </div>
         </div>
 
         {/* ── Right — instructions + QR ── */}
-        <div className="hidden lg:flex flex-col justify-between px-8 py-6 w-80 xl:w-96 shrink-0">
-          {/* Instructions */}
+        <div className={`hidden lg:flex flex-col justify-between px-6 py-5 w-72 xl:w-80 shrink-0 border-l ${t.border}`}>
           <div>
             <div className="flex items-center gap-3 mb-5">
               <span className={`block w-4 h-px ${t.primaryBar} shrink-0`} aria-hidden="true" />
-              <p className={`text-xs lg:text-sm font-mono tracking-[0.2em] uppercase ${t.primary}`}>How to Check In</p>
+              <p className={`text-xs font-mono tracking-[0.2em] uppercase ${t.primary}`}>How to Check In</p>
             </div>
 
             <div className="flex flex-col gap-4">
               {[
                 { step: '01', text: 'Open your phone camera' },
-                { step: '02', text: 'Point it at the QR code below' },
+                { step: '02', text: 'Point it at the QR code' },
                 { step: '03', text: 'Tap the link that appears' },
                 { step: '04', text: 'Sign in if prompted' },
-                { step: '05', text: "You're checked in — watch for your name!" }
+                { step: '05', text: 'Watch your name light up!' }
               ].map(({ step, text }) => (
                 <div key={step} className="flex items-start gap-3">
-                  <span className={`text-xs font-mono ${t.primary} shrink-0 mt-0.5`}>{step}</span>
+                  <span className={`text-xs font-mono ${t.primary} shrink-0`}>{step}</span>
                   <p className={`font-nunito text-sm lg:text-base ${t.text} leading-snug`}>{text}</p>
                 </div>
               ))}
             </div>
 
-            {/* Reaction count */}
             {totalReactions > 0 && (
-              <div className="mt-8">
+              <div className="mt-6">
                 <AnimatePresence mode="wait">
                   <motion.p
                     key={totalReactions}
@@ -286,7 +330,7 @@ export default function AttendanceClient({
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 8, scale: 0.9 }}
                     transition={{ duration: 0.2 }}
-                    className={`font-sora font-black text-5xl xl:text-6xl ${t.primary} leading-none`}
+                    className={`font-sora font-black text-4xl xl:text-5xl ${t.primary} leading-none`}
                   >
                     {totalReactions}
                   </motion.p>
@@ -299,16 +343,14 @@ export default function AttendanceClient({
           </div>
 
           {/* QR Code */}
-          <div className={`border ${t.border} p-4 flex flex-col items-center gap-3`}>
+          <div className={`border ${t.border} p-3 flex flex-col items-center gap-2`}>
             <QRCodeSVG
               value="https://coastal-referral-exchange.com/check-in"
-              size={220}
+              size={200}
               bgColor="transparent"
               fgColor={dark ? '#f8fafc' : '#0f172a'}
             />
-            <p className={`text-xs lg:text-sm font-mono tracking-[0.2em] uppercase ${t.primary} text-center`}>
-              Scan to check in
-            </p>
+            <p className={`text-xs font-mono tracking-[0.2em] uppercase ${t.primary} text-center`}>Scan to check in</p>
           </div>
         </div>
       </div>
@@ -319,17 +361,17 @@ export default function AttendanceClient({
       >
         <div className="flex items-center">
           <div
-            className={`shrink-0 flex items-center gap-2 px-4 py-3 border-r-2 ${dark ? 'border-primary-dark bg-primary-dark text-white' : 'border-primary-light bg-primary-light text-white'}`}
+            className={`shrink-0 flex items-center gap-2 px-4 py-2 border-r-2 ${dark ? 'border-primary-dark bg-primary-dark text-white' : 'border-primary-light bg-primary-light text-white'}`}
           >
             <span className="w-2 h-2 rounded-full bg-white animate-pulse shrink-0" />
-            <p className="text-xs lg:text-sm font-mono tracking-[0.2em] uppercase whitespace-nowrap">CORE</p>
+            <p className="text-xs font-mono tracking-[0.2em] uppercase whitespace-nowrap">CORE</p>
           </div>
           <div className="overflow-hidden flex-1">
             <Marquee speed={40} gradientWidth={0} pauseOnHover={false}>
               {TICKER_MESSAGES.map((msg, i) => (
                 <span
                   key={i}
-                  className={`mx-16 text-xs lg:text-sm font-mono tracking-[0.15em] uppercase ${t.text} py-3 inline-block`}
+                  className={`mx-16 text-xs font-mono tracking-[0.15em] uppercase ${t.text} py-2 inline-block`}
                 >
                   {msg}
                 </span>
