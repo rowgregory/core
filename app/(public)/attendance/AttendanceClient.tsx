@@ -191,7 +191,7 @@ export default function AttendanceTVPage({
   const [totalReactions, setTotalReactions] = useState(initialReactionCount)
   const [checkedInIds, setCheckedInIds] = useState<Set<string>>(new Set(initialAttendees))
   const [justCheckedInId, setJustCheckedInId] = useState<string | null>(null)
-  const { play } = useSoundEffect('/images/portal.mp3', true)
+  const { play } = useSoundEffect('/sound-effects/portal.mp3', true)
 
   const t = {
     bg: dark ? 'bg-bg-dark' : 'bg-bg-light',
