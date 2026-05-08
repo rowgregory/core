@@ -52,6 +52,8 @@ export interface User {
   isPublic?: boolean
   profileImage?: string | null
   profileImageFilename?: string | null
+  profileVideo?: string | null
+  profileVideoFilename?: string | null
   image?: string | null
   lastLoginAt?: Date | null
 
@@ -287,6 +289,8 @@ export type ProfileData = {
   isPublic: boolean
   profileImage: string | null
   profileImageFilename: string | null
+  profileVideo: string | null
+  profileVideoFilename: string | null
   location: string
   bio: string
   businessLicenseNumber: string

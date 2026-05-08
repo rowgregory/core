@@ -123,15 +123,15 @@ export default function DashboardClient({
           <HistoryTabs recentActivity={recentActivity} />
         </FadeUp>
 
+        {/* Presenter Schedle */}
+        <FadeUp delay={0.15} className="pt-6">
+          <PresenterSchedule schedule={schedule ?? []} className="pt-6" />
+        </FadeUp>
+
         {/* ── Members ── */}
         <FadeUp delay={0.15} className="pt-6">
           <SectionLabel>Members</SectionLabel>
           <MemberList members={members} />
-        </FadeUp>
-
-        {/* Presenter Schedle */}
-        <FadeUp delay={0.15} className="pt-6">
-          <PresenterSchedule schedule={schedule ?? []} className="pt-6" />
         </FadeUp>
       </main>
     </div>

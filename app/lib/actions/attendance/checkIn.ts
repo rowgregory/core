@@ -53,7 +53,12 @@ export async function checkIn(): Promise<{
     await pusher.trigger('meeting-attendance', 'check-in', {
       userId: user.id,
       name: user.name,
-      company: user.company
+      company: user.company,
+      checkedInAt: new Date().toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+      })
     })
 
     await createLog('info', `${user.name} checked in`, {

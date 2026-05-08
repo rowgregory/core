@@ -101,6 +101,8 @@ export default function ProfileClient({ profile }: { profile: ProfileData }) {
     const file = e.target.files?.[0]
     if (!file) return
 
+    const isVideo = file.type.startsWith('video/')
+
     // Preview
     const reader = new FileReader()
     reader.onload = (ev) => setPreview(ev.target?.result as string)
@@ -110,8 +112,22 @@ export default function ProfileClient({ profile }: { profile: ProfileData }) {
     setUploading(true)
     setUploadProgress(0)
     try {
-      const url = await uploadFileToFirebase(file, (p) => setUploadProgress(p), 'image')
-      setForm((prev) => ({ ...prev, profileImage: url, profileImageFilename: file.name }))
+      const url = await uploadFileToFirebase(file, (p) => setUploadProgress(p), isVideo ? 'video' : 'image')
+
+      if (isVideo) {
+        setForm((prev) => ({
+          ...prev,
+          profileVideo: url,
+          profileVideoFilename: file.name
+        }))
+      } else {
+        setForm((prev) => ({
+          ...prev,
+          profileImage: url,
+          profileImageFilename: file.name
+        }))
+      }
+
       setSaved(false)
     } catch {
       setError('Image upload failed. Please try again.')
@@ -123,7 +139,13 @@ export default function ProfileClient({ profile }: { profile: ProfileData }) {
 
   function removeImage() {
     setPreview(null)
-    setForm((prev) => ({ ...prev, profileImage: null, profileImageFilename: null }))
+    setForm((prev) => ({
+      ...prev,
+      profileImage: null,
+      profileImageFilename: null,
+      profileVideo: null,
+      profileVideoFilename: null
+    }))
     if (fileRef.current) fileRef.current.value = ''
     setSaved(false)
   }
@@ -180,7 +202,16 @@ export default function ProfileClient({ profile }: { profile: ProfileData }) {
               {/* avatar + upload */}
               <div className="flex flex-col items-center gap-2">
                 <div className="w-14 h-14 shrink-0 bg-primary-light/10 dark:bg-primary-dark/10 border border-primary-light/20 dark:border-primary-dark/20 flex items-center justify-center overflow-hidden relative">
-                  {preview || form.profileImage ? (
+                  {form.profileVideo ? (
+                    <video
+                      src={form.profileVideo}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="w-full h-full object-cover"
+                    />
+                  ) : preview || form.profileImage ? (
                     <img src={preview || form.profileImage} alt={form.name} className="w-full h-full object-cover" />
                   ) : (
                     <span className="font-sora font-black text-lg text-primary-light dark:text-primary-dark">
@@ -189,11 +220,11 @@ export default function ProfileClient({ profile }: { profile: ProfileData }) {
                   )}
                 </div>
 
-                {/* hidden input */}
+                {/* hidden input — now accepts video too */}
                 <input
                   ref={fileRef}
                   type="file"
-                  accept="image/*"
+                  accept="image/*,video/*"
                   onChange={handleImageChange}
                   className="sr-only"
                   id="profile-image-upload"
@@ -210,7 +241,7 @@ export default function ProfileClient({ profile }: { profile: ProfileData }) {
                 </label>
 
                 {/* remove */}
-                {(preview || form.profileImage) && !uploading && (
+                {(preview || form.profileImage || form.profileVideo) && !uploading && (
                   <button
                     onClick={removeImage}
                     className="text-[9px] font-mono uppercase tracking-widest text-red-500 hover:text-red-600"

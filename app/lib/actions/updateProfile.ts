@@ -40,6 +40,14 @@ export async function updateProfile(data: UpdateProfileInput): Promise<{ success
     if (data.profileImageFilename !== undefined) {
       updateData.profileImageFilename = data.profileImageFilename
     }
+    // explicitly include nullable fields
+    if (data.profileVideo !== undefined) {
+      updateData.profileVideo = data.profileVideo
+    }
+
+    if (data.profileVideoFilename !== undefined) {
+      updateData.profileVideoFilename = data.profileVideoFilename
+    }
 
     await prisma.user.update({
       where: { id: session.user.id },

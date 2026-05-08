@@ -2,12 +2,13 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Sun, Moon } from 'lucide-react'
+import { Sun, Moon, Check } from 'lucide-react'
 import Pusher from 'pusher-js'
 import Marquee from 'react-fast-marquee'
 import { QRCodeSVG } from 'qrcode.react'
 import Picture from '@/app/components/common/Picture'
 import { getInitials } from '@/app/lib/utils/common/getInitials'
+import useSoundEffect from '@/hooks/useSoundEffect'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -22,6 +23,7 @@ interface Member {
   name: string
   company: string
   profileImage?: string | null
+  profileVideo?: string | null
 }
 
 interface AttendanceTVProps {
@@ -73,13 +75,13 @@ function FloatingEmojiEl({ emoji, x, onDone }: { emoji: string; x: number; onDon
 export function NameTile({
   member,
   checkedIn,
-  justCheckedIn,
-  index
+  checkedInTime,
+  justCheckedIn
 }: {
   member: Member
   checkedIn: boolean
+  checkedInTime: string | null
   justCheckedIn: boolean
-  index: number
 }) {
   const firstName = member.name.split(' ')[0]
   const lastName = member.name.split(' ').slice(1).join(' ')
@@ -89,24 +91,37 @@ export function NameTile({
       layout
       animate={justCheckedIn ? { scale: [1, 1.05, 0.98, 1] } : { scale: 1 }}
       transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-      className={`relative overflow-hidden h-full w-full transition-all duration-700  ${
-        checkedIn ? 'ring-2 ring-green-500 shadow-[0_0_30px_rgba(34,197,94,0.4)]' : 'opacity-40 grayscale'
-      }`}
+      className="relative overflow-hidden h-full w-full"
     >
-      {/* Photo or initials */}
-      {member.profileImage ? (
+      {/* Photo / video / initials */}
+      {member.profileVideo ? (
+        <video
+          src={member.profileVideo}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className={`object-cover w-full h-full transition-all duration-700 ${
+            checkedIn ? 'brightness-100 saturate-100' : 'brightness-[0.15] saturate-0'
+          }`}
+        />
+      ) : member.profileImage ? (
         <Picture
           src={member.profileImage}
           alt={member.name}
           priority
-          className={`object-cover w-full h-full transition-all aspect-auto duration-700 ${checkedIn ? 'brightness-100' : 'brightness-50'}`}
+          className={`object-cover transition-all duration-700 w-full h-full ${
+            checkedIn ? 'brightness-100 saturate-100' : 'brightness-[0.15] saturate-0'
+          }`}
         />
       ) : (
-        <div className="absolute inset-0 bg-bg-dark flex items-center justify-center">
+        <div
+          className={`absolute inset-0 flex items-center justify-center transition-all duration-700 ${
+            checkedIn ? 'bg-bg-dark' : 'bg-bg-dark/30'
+          }`}
+        >
           <span
-            className={`font-sora font-black transition-colors duration-700 ${
-              checkedIn ? 'text-white' : 'text-muted-dark'
-            }`}
+            className={`font-sora font-black transition-all duration-700 ${checkedIn ? 'text-white' : 'text-white/10'}`}
             style={{ fontSize: 'clamp(2rem, 5vw, 4rem)' }}
           >
             {getInitials(member.name)}
@@ -114,10 +129,14 @@ export function NameTile({
         </div>
       )}
 
-      {/* Dark gradient overlay — always */}
-      <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/20 to-transparent" />
+      {/* Dark gradient overlay */}
+      <div
+        className={`absolute inset-0 bg-linear-to-t from-black/90 via-black/10 to-transparent transition-opacity duration-700 ${
+          checkedIn ? 'opacity-100' : 'opacity-40'
+        }`}
+      />
 
-      {/* Shimmer sweep on check-in */}
+      {/* Shimmer sweep */}
       <AnimatePresence>
         {justCheckedIn && (
           <motion.div
@@ -127,21 +146,21 @@ export function NameTile({
             transition={{ duration: 0.8, ease: 'easeInOut' }}
             className="absolute inset-0 z-20 pointer-events-none"
             style={{
-              background: 'linear-gradient(105deg, transparent 30%, rgba(134,239,172,0.7) 50%, transparent 70%)'
+              background: 'linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.6) 50%, transparent 70%)'
             }}
           />
         )}
       </AnimatePresence>
 
-      {/* Green flash */}
+      {/* Flash */}
       <AnimatePresence>
         {justCheckedIn && (
           <motion.div
             key="flash"
-            initial={{ opacity: 0.5 }}
+            initial={{ opacity: 0.4 }}
             animate={{ opacity: 0 }}
             transition={{ duration: 1.5 }}
-            className="absolute inset-0 bg-green-400/30 pointer-events-none z-10"
+            className="absolute inset-0 bg-white/30 pointer-events-none z-10"
           />
         )}
       </AnimatePresence>
@@ -151,60 +170,69 @@ export function NameTile({
         {justCheckedIn && (
           <motion.div
             key="ripple"
-            initial={{ scale: 0, opacity: 0.7 }}
+            initial={{ scale: 0, opacity: 0.6 }}
             animate={{ scale: 4, opacity: 0 }}
             transition={{ duration: 1, ease: 'easeOut' }}
-            className="absolute inset-0 m-auto w-10 h-10 rounded-full bg-green-400 pointer-events-none z-10"
+            className="absolute inset-0 m-auto w-10 h-10 rounded-full bg-white/40 pointer-events-none z-10"
           />
         )}
       </AnimatePresence>
 
-      {/* Lower third — name */}
-      <div className="absolute bottom-0 left-0 right-0 px-2 pb-2 pt-4 z-30">
+      {/* ── Checkmark badge — top right ── */}
+      <div className="absolute top-2 right-2 z-30">
+        <AnimatePresence>
+          {checkedIn && (
+            <motion.div
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0, opacity: 0 }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="w-7 h-7 rounded-full bg-green-500 flex items-center justify-center shadow-lg"
+            >
+              <Check size={14} className="text-white" strokeWidth={3} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Lower third */}
+      <div className="absolute bottom-0 left-0 right-0 px-2 pb-2 pt-6 z-30">
         <p
-          className={`font-sora font-black leading-none transition-colors duration-500 ${
-            checkedIn ? 'text-white' : 'text-white/50'
+          className={`font-sora font-black leading-none transition-all duration-700 ${
+            checkedIn ? 'text-white' : 'text-white/20'
           }`}
           style={{ fontSize: 'clamp(0.9rem, 1.8vw, 1.5rem)' }}
         >
           {firstName}
         </p>
         <p
-          className={`font-sora font-bold leading-none mt-0.5 transition-colors duration-500 ${
-            checkedIn ? 'text-green-400' : 'text-white/30'
+          className={`font-sora font-bold leading-none mt-0.5 transition-all duration-700 ${
+            checkedIn ? 'text-white/80' : 'text-white/10'
           }`}
-          style={{ fontSize: 'clamp(0.75rem, 1.4vw, 1.2rem)' }}
+          style={{ fontSize: 'clamp(0.7rem, 1.3vw, 1.1rem)' }}
         >
           {lastName}
         </p>
 
-        {/* Checked-in pulse dot */}
-        {checkedIn && (
-          <motion.div initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="mt-1.5">
-            <motion.div
-              animate={justCheckedIn ? { scale: [1, 2, 1], opacity: [1, 0.3, 1] } : {}}
-              transition={{ duration: 0.8, repeat: justCheckedIn ? 3 : 0 }}
-              className="w-1.5 h-1.5 rounded-full bg-green-500"
-            />
-          </motion.div>
-        )}
+        {/* Check-in time */}
+        <AnimatePresence>
+          {checkedIn && checkedInTime && (
+            <motion.p
+              initial={{ opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.2 }}
+              className="text-[10px] font-mono tracking-widest uppercase text-green-400/80 mt-1"
+            >
+              {checkedInTime}
+            </motion.p>
+          )}
+        </AnimatePresence>
       </div>
     </motion.div>
   )
 }
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
-
-const RAINBOW = [
-  'ring-red-500 shadow-[0_0_30px_rgba(239,68,68,0.4)]',
-  'ring-orange-500 shadow-[0_0_30px_rgba(249,115,22,0.4)]',
-  'ring-yellow-400 shadow-[0_0_30px_rgba(250,204,21,0.4)]',
-  'ring-green-500 shadow-[0_0_30px_rgba(34,197,94,0.4)]',
-  'ring-cyan-400 shadow-[0_0_30px_rgba(34,211,238,0.4)]',
-  'ring-blue-500 shadow-[0_0_30px_rgba(59,130,246,0.4)]',
-  'ring-purple-500 shadow-[0_0_30px_rgba(168,85,247,0.4)]',
-  'ring-pink-500 shadow-[0_0_30px_rgba(236,72,153,0.4)]'
-]
 
 export default function AttendanceTVPage({
   date = 'Thursday',
@@ -215,8 +243,9 @@ export default function AttendanceTVPage({
   const [dark, setDark] = useState(true)
   const [floaters, setFloaters] = useState<FloatingEmoji[]>([])
   const [totalReactions, setTotalReactions] = useState(initialReactionCount)
-  const [checkedInIds, setCheckedInIds] = useState<Set<string>>(new Set(initialAttendees))
+  const [checkedInIds, setCheckedInIds] = useState<Map<string, string>>(new Map(initialAttendees.map((id) => [id, ''])))
   const [justCheckedInId, setJustCheckedInId] = useState<string | null>(null)
+  const { play } = useSoundEffect('/sound-effects/portal.mp3', true)
 
   const t = {
     bg: dark ? 'bg-bg-dark' : 'bg-bg-light',
@@ -233,8 +262,9 @@ export default function AttendanceTVPage({
     })
 
     const attendanceChannel = pusher.subscribe('meeting-attendance')
-    attendanceChannel.bind('check-in', (data: { userId: string }) => {
-      setCheckedInIds((prev) => new Set([...prev, data.userId]))
+    attendanceChannel.bind('check-in', (data: { userId: string; checkedInAt: string }) => {
+      play()
+      setCheckedInIds((prev) => new Map([...prev, [data.userId, data.checkedInAt]]))
       setJustCheckedInId(data.userId)
       setTimeout(() => setJustCheckedInId(null), 3000)
     })
@@ -254,7 +284,7 @@ export default function AttendanceTVPage({
       pusher.unsubscribe('visitor-reactions')
       pusher.disconnect()
     }
-  }, [])
+  }, [play])
 
   function removeFloater(id: string) {
     setFloaters((prev) => prev.filter((f) => f.id !== id))
@@ -280,7 +310,13 @@ export default function AttendanceTVPage({
           onClick={() => {
             const unchecked = sortedMembers.find((m) => !checkedInIds.has(m.id))
             if (!unchecked) return
-            setCheckedInIds((prev) => new Set([...prev, unchecked.id]))
+            play()
+            const time = new Date().toLocaleTimeString('en-US', {
+              hour: 'numeric',
+              minute: '2-digit',
+              hour12: true
+            })
+            setCheckedInIds((prev) => new Map([...prev, [unchecked.id, time]]))
             setJustCheckedInId(unchecked.id)
             setTimeout(() => setJustCheckedInId(null), 3000)
           }}
@@ -341,8 +377,8 @@ export default function AttendanceTVPage({
                 key={member.id}
                 member={member}
                 checkedIn={checkedInIds.has(member.id)}
+                checkedInTime={checkedInIds.get(member.id) ?? null}
                 justCheckedIn={justCheckedInId === member.id}
-                index={i}
               />
             ))}
           </div>

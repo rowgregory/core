@@ -145,6 +145,8 @@ model User {
   yearsInBusiness      String? @default("")
   profileImage         String?
   profileImageFilename String?
+  profileVideo         String?
+  profileVideoFilename String?
   coverImage           String?
   coverImageFilename   String?
   goal                 String?

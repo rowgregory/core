@@ -30,7 +30,16 @@ function MemberCard({ member, index }: { member: User; index: number }) {
     >
       {/* Image */}
       <div className="relative aspect-square overflow-hidden bg-primary-light/5 dark:bg-primary-dark/5 border-b border-border-light dark:border-border-dark">
-        {member.profileImage ? (
+        {member.profileVideo ? (
+          <video
+            src={member.profileVideo}
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
+          />
+        ) : member.profileImage ? (
           <Picture
             priority
             src={member.profileImage}
@@ -57,7 +66,7 @@ function MemberCard({ member, index }: { member: User; index: number }) {
         {/* years badge */}
         {member.yearsInBusiness && (
           <div className="absolute bottom-3 right-3">
-            <span className="bg-primary-light dark:bg-primary-dark text-white px-2.5 py-1 text-f9 font-mono tracking-[0.1em]">
+            <span className="bg-primary-light dark:bg-primary-dark text-white px-2.5 py-1 text-f9 font-mono tracking-widest">
               {member.yearsInBusiness} yrs
             </span>
           </div>
