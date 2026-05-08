@@ -18,7 +18,7 @@ const LoginPage = () => {
   const searchParams = useSearchParams()
   const urlError = searchParams.get('error')
   const errorInfo = urlError ? getAuthErrorMessage(urlError, email) : null
-  const redirectUrl = searchParams.get('callbackUrl') ?? '/dashboard'
+  const redirectTo = searchParams.get('callbackUrl') ?? '/dashboard'
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -29,7 +29,7 @@ const LoginPage = () => {
       const result = await signIn('email', {
         email,
         redirect: false,
-        redirectUrl
+        redirectTo
       })
 
       if (result?.error) {
@@ -80,7 +80,7 @@ const LoginPage = () => {
             setEmail={setEmail}
             setError={setError}
             setIsEmailSent={setIsEmailSent}
-            redirectUrl={redirectUrl}
+            redirectTo={redirectTo}
           />
 
           <LoginFeatures />
