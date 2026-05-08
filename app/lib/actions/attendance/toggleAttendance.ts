@@ -2,15 +2,14 @@
 
 import { auth } from '@/app/lib/auth'
 import prisma from '@/prisma/client'
-import { chapterId } from '../../constants/api/chapterId'
 import { createLog } from '../../utils/api/createLog'
 
 export async function toggleAttendance({
-  date,
+  meetingId,
   userId,
   attended
 }: {
-  date: string // YYYY-MM-DD
+  meetingId: string
   userId: string
   attended: boolean
 }): Promise<{ success: boolean; error?: string }> {
@@ -18,18 +17,6 @@ export async function toggleAttendance({
   if (!session?.user?.isSuperUser) return { success: false, error: 'Unauthorized' }
 
   try {
-    const meetingDate = new Date(`${date}T00:00:00.000Z`)
-
-    console.log('meeting date: ', meetingDate)
-    console.log('date: ', date)
-
-    const meeting = await prisma.meeting.upsert({
-      where: { chapterId_date: { chapterId, date: meetingDate } },
-      create: { chapterId, date: meetingDate },
-      update: {},
-      select: { id: true }
-    })
-
     const user = await prisma.user.findUnique({
       where: { id: userId },
       select: { name: true }
@@ -38,25 +25,25 @@ export async function toggleAttendance({
     if (attended) {
       // Remove attendance
       await prisma.attendance.deleteMany({
-        where: { meetingId: meeting.id, userId }
+        where: { meetingId, userId }
       })
-      await createLog('info', `${session.user.name} removed attendance for ${user?.name} on ${date}`, {
+      await createLog('info', `${session.user.name} removed attendance for ${user?.name} `, {
         action: 'TOGGLE_ATTENDANCE',
         userId,
-        date,
+        meetingId,
         attended: false
       })
     } else {
       // Add attendance
       await prisma.attendance.upsert({
-        where: { meetingId_userId: { meetingId: meeting.id, userId } },
-        create: { meetingId: meeting.id, userId },
+        where: { meetingId_userId: { meetingId, userId } },
+        create: { meetingId, userId },
         update: {}
       })
-      await createLog('info', `${session.user.name} marked ${user?.name} as attended on ${date}`, {
+      await createLog('info', `${session.user.name} marked ${user?.name} as attended`, {
         action: 'TOGGLE_ATTENDANCE',
         userId,
-        date,
+        meetingId,
         attended: true
       })
     }

@@ -4,14 +4,14 @@ import { useState, useTransition } from 'react'
 
 export function MemberChip({
   member,
-  date,
   attended: initialAttended,
-  checkedInTime
+  checkedInTime,
+  meetingId
 }: {
   member: { id: string; name: string }
-  date: string
   attended: boolean
   checkedInTime?: string
+  meetingId: string
 }) {
   const [attended, setAttended] = useState(initialAttended)
   const [isPending, startTransition] = useTransition()
@@ -22,10 +22,10 @@ export function MemberChip({
 
   function handleToggle() {
     const next = !attended
-    setAttended(next) // optimistic
+    setAttended(next)
     startTransition(async () => {
       await toggleAttendance({
-        date,
+        meetingId,
         userId: member.id,
         attended
       })

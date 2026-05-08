@@ -86,9 +86,9 @@ export function MeetingRow({
           <MemberChip
             key={member.id}
             member={member}
-            date={row.date}
             attended={row.attendedIds.includes(member.id)}
             checkedInTime={row.checkedInTimes[member.id]}
+            meetingId={row.id}
           />
         ))}
       </div>
