@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
-import { CheckCircle, Clock } from 'lucide-react'
+import { Calendar, CheckCircle, Clock } from 'lucide-react'
 
 interface CheckInClientProps {
   result: {
@@ -39,6 +39,8 @@ export default function CheckInClient({ result, userName }: CheckInClientProps) 
   const [showParticles, setShowParticles] = useState(false)
   const firstName = userName.split(' ')[0]
 
+  const isWindowError = result.error?.includes('7:00 AM')
+
   useEffect(() => {
     if (result.success && !result.alreadyCheckedIn) {
       setShowParticles(true)
@@ -60,7 +62,11 @@ export default function CheckInClient({ result, userName }: CheckInClientProps) 
         className="w-full max-w-sm border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark relative z-10"
       >
         {/* Top accent */}
-        <div className="h-1 bg-primary-light dark:bg-primary-dark w-full" />
+        <div
+          className={`h-1 w-full ${
+            result.success ? 'bg-primary-light dark:bg-primary-dark' : isWindowError ? 'bg-amber-500' : 'bg-red-500'
+          }`}
+        />
 
         <div className="px-6 py-8 flex flex-col items-center text-center gap-4">
           {result.success ? (
@@ -90,9 +96,34 @@ export default function CheckInClient({ result, userName }: CheckInClientProps) 
                 </p>
               </div>
             </>
+          ) : isWindowError ? (
+            <>
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 0.4, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <Calendar size={48} className="text-amber-500" />
+              </motion.div>
+              <div>
+                <p className="text-f10 font-mono tracking-[0.2em] uppercase text-amber-500 mb-1">Not Available</p>
+                <h1 className="font-sora font-black text-2xl text-text-light dark:text-text-dark leading-tight">
+                  See you Thursday!
+                </h1>
+                <p className="font-nunito text-sm text-muted-light dark:text-muted-dark mt-2 leading-relaxed">
+                  Check-in is only available on Thursdays between 7:00 AM and 8:30 AM EST.
+                </p>
+              </div>
+            </>
           ) : (
             <>
-              <Clock size={48} className="text-muted-light dark:text-muted-dark" />
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 0.4, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <Clock size={48} className="text-muted-light dark:text-muted-dark" />
+              </motion.div>
               <div>
                 <p className="text-f10 font-mono tracking-[0.2em] uppercase text-red-500 mb-1">Check-In Failed</p>
                 <h1 className="font-sora font-black text-2xl text-text-light dark:text-text-dark leading-tight">

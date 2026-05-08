@@ -161,3 +161,12 @@ export function getQuarterlyBillingAnchor(): number {
   const next = quarters.find((q) => q > today)!
   return Math.floor(next.getTime() / 1000)
 }
+
+export function fmtThursday(iso: string) {
+  return new Date(`${iso}T12:00:00`).toLocaleDateString('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+  })
+}

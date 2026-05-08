@@ -501,7 +501,7 @@ model Attendance {
   meetingId String
   userId    String
   createdAt DateTime @default(now())
-  meeting   Meeting  @relation(fields: [meetingId], references: [id])
+  meeting   Meeting  @relation(fields: [meetingId], references: [id], onDelete: Cascade)
   user      User     @relation(fields: [userId], references: [id])
 
   @@unique([meetingId, userId])

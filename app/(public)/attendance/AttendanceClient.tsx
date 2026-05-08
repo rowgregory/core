@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Sun, Moon, Check } from 'lucide-react'
+import { Check } from 'lucide-react'
 import Pusher from 'pusher-js'
 import Marquee from 'react-fast-marquee'
 import { QRCodeSVG } from 'qrcode.react'
@@ -232,15 +232,60 @@ export function NameTile({
   )
 }
 
+function NextMeetingCountdown() {
+  const [timeLeft, setTimeLeft] = useState('')
+
+  useEffect(() => {
+    function getNextThursday() {
+      const now = new Date()
+      const est = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }))
+      const day = est.getDay()
+      const daysUntil = day <= 4 ? 4 - day : 7 - day + 4
+      const next = new Date(est)
+      next.setDate(est.getDate() + (daysUntil === 0 && est.getHours() >= 8 ? 7 : daysUntil))
+      next.setHours(7, 0, 0, 0)
+      return next
+    }
+
+    function update() {
+      const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }))
+      const next = getNextThursday()
+      const diff = next.getTime() - now.getTime()
+
+      if (diff <= 0) {
+        setTimeLeft('Meeting is now!')
+        return
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000)
+
+      setTimeLeft(days > 0 ? `${days}d ${hours}h ${minutes}m ${seconds}s` : `${hours}h ${minutes}m ${seconds}s`)
+    }
+
+    update()
+    const interval = setInterval(update, 1000)
+    return () => clearInterval(interval)
+  }, [])
+
+  return (
+    <p className={`text-xs lg:text-sm font-mono tracking-[0.15em] uppercase text-primary-dark hidden sm:block`}>
+      Next meeting in <span className="font-bold">{timeLeft}</span>
+    </p>
+  )
+}
+
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
-export default function AttendanceTVPage({
+export default function AttendanceClient({
   date = 'Thursday',
   members,
   initialAttendees = [],
   initialReactionCount = 0
 }: AttendanceTVProps) {
-  const [dark, setDark] = useState(true)
+  const [dark] = useState(true)
   const [floaters, setFloaters] = useState<FloatingEmoji[]>([])
   const [totalReactions, setTotalReactions] = useState(initialReactionCount)
   const [checkedInIds, setCheckedInIds] = useState<Map<string, string>>(new Map(initialAttendees.map((id) => [id, ''])))
@@ -340,13 +385,9 @@ export default function AttendanceTVPage({
           <p className={`text-xs lg:text-sm font-mono tracking-[0.15em] uppercase ${t.muted} hidden sm:block`}>
             {date} · 25 N Common St · Lynn, MA 01902
           </p>
-          <button
-            onClick={() => setDark((d) => !d)}
-            aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
-            className={`w-7 h-7 flex items-center justify-center border ${t.border} ${t.muted} transition-colors focus-visible:outline-none`}
-          >
-            {dark ? <Sun size={13} /> : <Moon size={13} />}
-          </button>
+
+          {/* Countdown */}
+          <NextMeetingCountdown />
         </div>
       </div>
 

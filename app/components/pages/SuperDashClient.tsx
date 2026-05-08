@@ -49,7 +49,7 @@ export default function SuperDashClient({
 
   return (
     <div className="min-h-screen bg-bg-light dark:bg-bg-dark">
-      <div className="max-w-350 mx-auto px-4 xs:px-6 pb-12">
+      <div className="max-w-480 w-full mx-auto px-4 xs:px-6 pb-12">
         {/* ── Header ── */}
         <FadeUp className="pt-7 pb-6 border-b border-border-light dark:border-border-dark mb-6">
           <div className="flex items-end justify-between gap-4">
@@ -71,6 +71,10 @@ export default function SuperDashClient({
               >
                 Add Test User
               </button>
+              <Link href="/super/attendance-history" className={sharedBtnStyles}>
+                <Users size={13} aria-hidden="true" />
+                Attendance History
+              </Link>
               <Link href="/super/logs" className={sharedBtnStyles}>
                 <Logs size={13} aria-hidden="true" />
                 Logs
