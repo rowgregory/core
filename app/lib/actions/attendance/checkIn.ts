@@ -23,21 +23,25 @@ export async function checkIn({ date }: { date?: string } = {}): Promise<{
 
     if (!user) return { success: false, error: 'User not found' }
 
-    const now = new Date()
-    const estTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }))
+    const hasDateParam = !!date
 
-    const day = estTime.getDay() // 0 = Sunday, 4 = Thursday
-    const hour = estTime.getHours()
-    const minute = estTime.getMinutes()
-    const totalMinutes = hour * 60 + minute
+    if (!hasDateParam) {
+      const now = new Date()
+      const estTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }))
 
-    const isThursday = day === 4
-    const isInWindow = totalMinutes >= 7 * 60 && totalMinutes <= 8 * 60 + 30 // 7:00 AM - 8:30 AM
+      const day = estTime.getDay()
+      const hour = estTime.getHours()
+      const minute = estTime.getMinutes()
+      const totalMinutes = hour * 60 + minute
 
-    if (!isThursday || !isInWindow) {
-      return {
-        success: false,
-        error: 'Check-in is only available on Thursdays between 7:00 AM and 8:30 AM EST.'
+      const isThursday = day === 4
+      const isInWindow = totalMinutes >= 7 * 60 && totalMinutes <= 8 * 60 + 30
+
+      if (!isThursday || !isInWindow) {
+        return {
+          success: false,
+          error: 'Check-in is only available on Thursdays between 7:00 AM and 8:30 AM EST.'
+        }
       }
     }
 
