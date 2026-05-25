@@ -30,16 +30,14 @@ export function getNextQuarterlyDueDate(from: Date = new Date()): string {
 
 /**
  * Compute a Stripe billing anchor (Unix timestamp in seconds) for the next
- * annual renewal date. Uses the given month/day, rolling forward to next year
- * if the date has already passed this year. Used to align subscription renewals
- * with a member's join anniversary.
- * @example getAnnualBillingAnchor(5, 14) → next May 14 as Unix seconds.
+ * annual renewal date based on the join anniversary (UTC midnight).
+ * Rolls forward to next year if the date has already passed this year.
  */
 export function getAnnualBillingAnchor(month: number, day: number): number {
   const today = new Date()
-  let anchor = new Date(today.getFullYear(), month - 1, day)
+  let anchor = new Date(Date.UTC(today.getUTCFullYear(), month - 1, day))
   if (anchor <= today) {
-    anchor = new Date(today.getFullYear() + 1, month - 1, day)
+    anchor = new Date(Date.UTC(today.getUTCFullYear() + 1, month - 1, day))
   }
   return Math.floor(anchor.getTime() / 1000)
 }
@@ -47,19 +45,20 @@ export function getAnnualBillingAnchor(month: number, day: number): number {
 /**
  * Compute a Stripe billing anchor (Unix timestamp in seconds) for the next
  * fiscal quarter start. Returns whichever of Jan 1, Apr 1, Jul 1, or Oct 1
- * comes next after today. Used to align quarterly subscriptions so all members
- * are billed at the same time each quarter regardless of when they joined.
+ * comes next after today (UTC midnight). Used to align quarterly subscriptions
+ * so all members are billed at the same time each quarter regardless of when
+ * they joined.
  */
 export function getQuarterlyBillingAnchor(): number {
   const today = new Date()
-  const year = today.getFullYear()
+  const year = today.getUTCFullYear()
 
   const quarters = [
-    new Date(year, 0, 1),
-    new Date(year, 3, 1),
-    new Date(year, 6, 1),
-    new Date(year, 9, 1),
-    new Date(year + 1, 0, 1)
+    new Date(Date.UTC(year, 0, 1)),
+    new Date(Date.UTC(year, 3, 1)),
+    new Date(Date.UTC(year, 6, 1)),
+    new Date(Date.UTC(year, 9, 1)),
+    new Date(Date.UTC(year + 1, 0, 1))
   ]
 
   const next = quarters.find((q) => q > today)!

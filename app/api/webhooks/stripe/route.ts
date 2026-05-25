@@ -120,6 +120,20 @@ export async function handleSubscriptionCreated(sub: Stripe.Subscription) {
     return
   }
 
+  // Idempotency guard — webhook events can fire multiple times for the same subscription
+  // (retries, manual replays, network issues), so skip if we've already created an Order
+  const existingOrder = await prisma.order.findFirst({
+    where: { stripeSubId: sub.id }
+  })
+
+  if (existingOrder) {
+    await createLog('info', 'handleSubscriptionCreated — order already exists, skipping', {
+      subId: sub.id,
+      orderId: existingOrder.id
+    })
+    return
+  }
+
   const user = await prisma.user.findFirst({
     where: { stripeCustomerId },
     select: { id: true, name: true, email: true }
