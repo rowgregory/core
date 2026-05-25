@@ -136,6 +136,8 @@ export async function handleSubscriptionCreated(sub: Stripe.Subscription) {
   const type = isAnnual ? 'ANNUAL' : 'QUARTERLY'
   const amount = (sub.items.data[0]?.price?.unit_amount ?? 0) / 100
 
+  const billingAnchor = sub.billing_cycle_anchor ? new Date(sub.billing_cycle_anchor * 1000) : null
+
   await Promise.all([
     prisma.order.create({
       data: {
@@ -148,7 +150,7 @@ export async function handleSubscriptionCreated(sub: Stripe.Subscription) {
         stripeSubId: sub.id,
         stripePriceId: priceId,
         currentPeriodStart: null,
-        currentPeriodEnd: null
+        currentPeriodEnd: billingAnchor
       }
     }),
     prisma.user.update({
