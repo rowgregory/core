@@ -3,9 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js'
 import { useRouter } from 'next/navigation'
 import { Lock } from 'lucide-react'
-import { createSubscription } from '@/app/lib/actions/stripe/createSubscription'
 import { RootState, useAppSelector } from '@/app/lib/redux/store'
 import { useSounds } from '@/app/lib/hooks/useSounds'
+import { createSubscriptions } from '@/app/lib/actions/stripe/createSubscriptions'
 
 interface MembershipSetupFormProps {
   onClose: () => void
@@ -48,7 +48,7 @@ export function MembershipSetupForm({
     setStatus('loading')
     setErrorMsg('')
 
-    const res = await createSubscription({
+    const res = await createSubscriptions({
       joinMonth: parseInt(joinMonth),
       joinDay: parseInt(joinDay)
     })

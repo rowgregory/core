@@ -6,7 +6,7 @@ import { stripe } from '../../stripe'
 import { getAnnualBillingAnchor, getQuarterlyBillingAnchor } from '../../utils/billing.utils'
 import { ANNUAL_PRICE_ID, QUARTERLY_PRICE_ID } from '../../constants/stripe.constants'
 
-export async function createSubscription({ joinMonth, joinDay }: { joinMonth: number; joinDay: number }): Promise<{
+export async function createSubscriptions({ joinMonth, joinDay }: { joinMonth: number; joinDay: number }): Promise<{
   success: boolean
   clientSecret?: string
   error?: string
@@ -42,7 +42,8 @@ export async function createSubscription({ joinMonth, joinDay }: { joinMonth: nu
     if (!stripeCustomerId) {
       const customer = await stripe.customers.create({
         name: user.name,
-        email: user.email
+        email: user.email,
+        metadata: { userId: user.id }
       })
       stripeCustomerId = customer.id
       await prisma.user.update({
