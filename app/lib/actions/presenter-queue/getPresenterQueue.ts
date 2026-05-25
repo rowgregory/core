@@ -1,4 +1,4 @@
-import { QueueMember } from '@/types/presenter-queue'
+import { QueueMember } from '@/types/presenter-queue.types'
 import { auth } from '../../auth'
 import prisma from '@/prisma/client'
 import { chapterId } from '../../constants/api/chapterId'

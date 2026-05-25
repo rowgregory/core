@@ -2,20 +2,9 @@
 
 import { motion } from 'framer-motion'
 import { Mic } from 'lucide-react'
-import { daysUntil } from '../lib/utils/time.utils'
-import { ScheduledPresenter } from '@/types/presenter-queue'
-import { getInitials } from '../lib/utils/common/getInitials'
-
-export function fmtDate(iso: string, options?: any) {
-  const d = iso.includes('T') ? new Date(iso) : new Date(`${iso}T12:00:00`)
-  return d.toLocaleDateString('en-US', {
-    weekday: 'short',
-    month: 'short',
-    day: 'numeric',
-    timeZone: 'America/New_York',
-    ...options
-  })
-}
+import { ScheduledPresenter } from '@/types/presenter-queue.types'
+import { daysUntil, fmtDate } from '../lib/utils/date.utils'
+import { getInitials } from '../lib/utils/shared.utils'
 
 export default function PresenterSchedule({
   schedule,
@@ -49,9 +38,7 @@ export default function PresenterSchedule({
             <p className="font-sora font-black text-[15px] text-primary-light dark:text-primary-dark">
               {daysUntil(next.date)}
             </p>
-            <p className="text-f10 font-mono text-muted-light dark:text-muted-dark">
-              {fmtDate(next.date, { weekday: 'long', month: 'long' })}
-            </p>
+            <p className="text-f10 font-mono text-muted-light dark:text-muted-dark">{fmtDate(next.date)}</p>
           </div>
         </div>
         {next.isYou && (

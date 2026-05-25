@@ -1,8 +1,8 @@
 import { signOut, useSession } from 'next-auth/react'
 import { Home, LayoutDashboard, LogOut, ShieldCheck, UserCircle } from 'lucide-react'
 import Link from 'next/link'
-import { getTodayLabel } from '@/app/lib/utils/time.utils'
-import { getGreeting } from '@/app/lib/utils/common/getGreeting'
+import { getTodayLabel } from '@/app/lib/utils/date.utils'
+import { getGreeting } from '@/app/lib/utils/shared.utils'
 
 const sharedCls =
   'flex items-center gap-1.5 xs:gap-2 h-7 xs:h-8 px-2.5 xs:px-3 sm:px-4 border border-border-light dark:border-border-dark text-[9px] xs:text-[10px] font-mono tracking-[0.12em] uppercase text-muted-light dark:text-muted-dark hover:text-primary-light dark:hover:text-primary-dark hover:border-primary-light dark:hover:border-primary-dark transition-colors whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark'
@@ -30,7 +30,7 @@ export function Greeting({ currentUser }) {
 
         {/* ALWAYS top right */}
         <button
-          onClick={() => signOut({ callbackUrl: '/auth/login' })}
+          onClick={() => signOut({ redirectTo: '/login' })}
           className="shrink-0 mt-1 text-muted-light dark:text-muted-dark hover:text-text-light dark:hover:text-text-dark transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark"
           aria-label="Sign out"
         >

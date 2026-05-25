@@ -1,4 +1,4 @@
-import { User } from '@/types/user'
+import { User } from '@/types/user.types'
 import React from 'react'
 import Picture from '../common/Picture'
 import { useUserSelector } from '@/app/lib/redux/store'

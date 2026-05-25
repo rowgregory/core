@@ -1,27 +1,26 @@
-import { SuperUserParley } from '@/app/lib/actions/super-user/superUserActions'
 import { useState } from 'react'
 import { Panel } from '../common/Panel'
 import { motion } from 'framer-motion'
 import { SectionLabel } from '../common/SectionLabel'
-import { fmtDate } from '@/app/lib/utils/date.utils'
+import { fmtDate, timeAgo } from '@/app/lib/utils/date.utils'
 import { SuperDashStatusBadge } from './SuperDashStatusBadge'
 import { InlineActionBtn } from './InlineActionButton'
-import { timeAgo } from '@/app/lib/utils/time.utils'
 import { deleteFace2Face } from '@/app/lib/actions/super-user/deleteFace2Face'
 import { useRouter } from 'next/navigation'
-import useSoundEffect from '@/hooks/useSoundEffect'
+import { useSounds } from '@/app/lib/hooks/useSounds'
+import { SuperUserParley } from '@/types/super.types'
 
 export function Face2FacePanel({ parleys: face2faces }: { parleys: SuperUserParley[] }) {
   const router = useRouter()
   const [loadingId, setLoadingId] = useState<string | null>(null)
   const [confirmId, setConfirmId] = useState<string | null>(null)
-  const { play } = useSoundEffect('/sound-effects/droplet.mp3', true)
+  const { play } = useSounds({ enabled: true, volume: 0.4 })
 
   async function handleDelete(id: string) {
     setLoadingId(id)
     const res = await deleteFace2Face(id)
     if (res.success) {
-      play()
+      play('se7')
       router.refresh()
       setLoadingId(null)
       setConfirmId(null)

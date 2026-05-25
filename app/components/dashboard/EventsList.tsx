@@ -1,6 +1,6 @@
 'use client'
 
-import { TEvent } from '@/types/event'
+import { TEvent } from '@/types/event.types'
 import { ExternalLink } from 'lucide-react'
 
 const ORG_LABELS: Record<string, string> = {

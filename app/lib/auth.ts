@@ -14,7 +14,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     updateAge: 24 * 60 * 60
   },
   adapter: PrismaAdapter(prisma),
-  pages: { error: '/auth/login' },
+  pages: { error: '/login' },
   providers: [googleProvider, magicLinkConfig],
 
   callbacks: {

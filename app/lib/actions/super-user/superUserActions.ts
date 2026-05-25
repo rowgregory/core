@@ -4,105 +4,8 @@ import prisma from '@/prisma/client'
 import { auth } from '../../auth'
 import { chapterId } from '../../constants/api/chapterId'
 import { createLog } from '../../utils/api/createLog'
-import { Chapter } from '@/types/user'
-import { Visitor } from '@/types/visitor'
-import { EventOrg, EventStatus } from '@prisma/client'
-
-// ─── Types ─────────────────────────────────────────────────────────────────────
-export type SuperUserMember = {
-  profileImage: any
-  id: string
-  name: string
-  company: string
-  title: string
-  industry: string
-  role: string
-  membershipStatus: string
-  isActive: boolean
-  isAdmin: boolean
-  isMembership: boolean
-  lastLoginAt: string | null
-  joinedAt: string | null
-  loginCount: number
-  parleyCount: number
-  referralCount: number
-  closedCount: number
-}
-
-export type SuperUserParley = {
-  id: string
-  scheduledAt: string
-  status: string
-  notes: string | null
-  requester: { id: string; name: string; company: string }
-  recipient: { id: string; name: string; company: string }
-  createdAt: string
-}
-
-export type SuperUserReferral = {
-  id: string
-  clientName: string
-  serviceNeeded: string
-  status: string
-  createdAt: string
-  giver: { id: string; name: string; company: string }
-  receiver: { id: string; name: string; company: string }
-}
-
-export type SuperUserAnchor = {
-  id: string
-  businessValue: string
-  description: string
-  status: string
-  closedDate: string
-  createdAt: string
-  giver: { id: string; name: string; company: string } | null
-  receiver: { id: string; name: string; company: string } | null
-}
-
-export type SuperUserStats = {
-  totalMembers: number
-  activeMembers: number
-  meetingsTotal: number
-  referralsOpen: number
-  closedTotal: string
-}
-
-export type SuperUserApplicant = {
-  id: string
-  name: string
-  company: string
-  industry: string
-  email: string
-  phone: string | null
-  membershipStatus: string
-  hasCompletedApplication: boolean
-  businessLicenseNumber: string
-  createdAt: string
-  finalDecisionAt: string
-}
-
-export type SuperUserDashboardData = {
-  stats: SuperUserStats
-  members: SuperUserMember[]
-  applicants: SuperUserApplicant[]
-  parleys: SuperUserParley[]
-  referrals: SuperUserReferral[]
-  anchors: SuperUserAnchor[]
-  chapter: Chapter
-  visitors: Visitor[]
-  events: SuperUserEvent[]
-}
-
-export interface SuperUserEvent {
-  id: string
-  name: string
-  org: EventOrg
-  description?: string | null
-  externalLink?: string | null
-  status: EventStatus
-  createdAt: string
-}
+import { formatCurrency } from '../../utils/currency.utils'
+import { SuperUserDashboardData, SuperUserStats } from '@/types/super.types'
 
 export async function getSuperUserDashboardData(): Promise<
   { success: true; data: SuperUserDashboardData } | { success: false; error: string }
@@ -394,44 +297,6 @@ export async function getSuperUserDashboardData(): Promise<
 }
 
 // ─── Inline actions ────────────────────────────────────────────────────────────
-export async function updateParleyStatus(id: string, status: string) {
-  try {
-    const session = await auth()
-    if (!session?.user) return { success: false, error: 'Unauthorized' }
-
-    await prisma.parley.update({
-      where: { id },
-      data: { status, ...(status === 'COMPLETED' ? { completed: true, completedAt: new Date() } : {}) }
-    })
-    return { success: true }
-  } catch {
-    return { success: false, error: 'Failed to update meeting' }
-  }
-}
-
-export async function updateReferralStatus(id: string, status: string) {
-  try {
-    const session = await auth()
-    if (!session?.user) return { success: false, error: 'Unauthorized' }
-
-    await prisma.treasureMap.update({ where: { id }, data: { status } })
-    return { success: true }
-  } catch {
-    return { success: false, error: 'Failed to update referral' }
-  }
-}
-
-export async function updateAnchorStatus(id: string, status: string) {
-  try {
-    const session = await auth()
-    if (!session?.user) return { success: false, error: 'Unauthorized' }
-
-    await prisma.anchor.update({ where: { id }, data: { status } })
-    return { success: true }
-  } catch {
-    return { success: false, error: 'Failed to update closed business' }
-  }
-}
 
 export async function deleteAnchor(id: string) {
   try {
@@ -443,11 +308,4 @@ export async function deleteAnchor(id: string) {
   } catch {
     return { success: false, error: 'Failed to delete' }
   }
-}
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-function formatCurrency(n: number) {
-  if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`
-  if (n >= 1_000) return `$${(n / 1_000).toFixed(0)}k`
-  return `$${n.toFixed(0)}`
 }

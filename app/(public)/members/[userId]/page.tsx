@@ -1,6 +1,6 @@
 import PublicMemberClient from '@/app/components/pages/PublicMemberClient'
-import { getMemberProfile } from '@/app/lib/actions/getMemberProfile'
-import { getUsers } from '@/app/lib/actions/getUsers'
+import { getMemberProfile } from '@/app/lib/actions/user/getMemberProfile'
+import { getUsers } from '@/app/lib/actions/user/getUsers'
 
 export default async function PublicMemberPage({ params }: { params: Promise<{ userId: string }> }) {
   const { userId } = await params

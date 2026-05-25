@@ -1,7 +1,7 @@
 import Picture from '../common/Picture'
 import { ChevronRight } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { User } from '@/types/user'
+import { User } from '@/types/user.types'
 
 export const PublicMemberCard = ({ member }: { member: User }) => {
   const { push } = useRouter()

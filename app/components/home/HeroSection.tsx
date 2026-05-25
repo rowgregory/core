@@ -1,93 +1,196 @@
-import { FC } from 'react'
+'use client'
+
+import { Fragment } from 'react'
+import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { fadeInUp } from '@/app/lib/constants/motion'
-import LaunchAppButton from '../common/LaunchAppButton'
-import Marquee from 'react-fast-marquee'
+import dynamic from 'next/dynamic'
+import { store } from '@/app/lib/redux/store'
+import { setOpenNavigationDrawer } from '@/app/lib/redux/slices/appSlice'
+import { Menu } from 'lucide-react'
+import { LaunchAppButton } from '../common/LaunchAppButton'
+import { AnimatedHeadline } from './AnimatedHeadline'
 
-export const logos = [
-  { name: 'Sqysh', src: '/logos/company1.png' },
-  { name: 'Saltwater Bookkeepping', src: '/logos/company2.png' },
-  { name: 'Century21', src: '/logos/company3.png' },
-  { name: 'Eastern Bank', src: '/logos/company4.png' },
-  { name: 'Touchstone Closing & Escrow', src: '/logos/company5.png' },
-  { name: 'Boys & Girls Club of Lynn', src: '/logos/company6.png' },
-  { name: 'The Drummlin Group', src: '/logos/company7.png' },
-  { name: 'Zellik Insurance', src: '/logos/company8.png' },
-  { name: 'CrossCountry Mortgage LLC', src: '/logos/company9.png' },
-  { name: 'Northwestern Mutual', src: '/logos/company10.png' },
-  { name: 'Commonwealth Payroll & HR', src: '/logos/company11.png' },
-  { name: 'Prudential Life Insurance', src: '/logos/company12.png' },
-  { name: 'Finneran & Nicholson', src: '/logos/company13.png' }
-]
+const Spline = dynamic(() => import('@splinetool/react-spline'), { ssr: false })
 
-const StepMarquee = () => {
-  const allLogos = [...logos, ...logos, ...logos]
+const navLinkCls = (active: boolean) =>
+  `text-f10 font-mono tracking-[0.2em] uppercase transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${
+    active ? 'text-white' : 'text-white/50 hover:text-white'
+  }`
 
+export default function HeroSection() {
   return (
-    <div className="w-full py-1 absolute bottom-10">
-      <div className="max-w-6xl mx-auto">
-        <Marquee speed={75} gradientWidth={100} pauseOnHover={false}>
-          {allLogos.map((logo, index) => (
-            <div key={`${logo.name}-${index}`} className="mx-16 flex items-center justify-center font-sora text-white">
-              {logo.name}
-            </div>
-          ))}
-        </Marquee>
-      </div>
-    </div>
-  )
-}
-
-const HeroSection: FC<{ isVisible: boolean }> = ({ isVisible }) => {
-  return (
-    <motion.section
-      className="-mt-18.5 py-16 md:py-28 flex flex-col items-center justify-center text-white overflow-hidden relative bg-no-repeat bg-cover bg-center w-full min-h-screen"
-      initial="hidden"
-      animate={isVisible ? 'visible' : 'hidden'}
-      style={{ backgroundImage: `url('/images/hero.png')` }}
-    >
-      {/* Dark overlay */}
-      <div className="absolute inset-0 bg-black/40 z-10" />
-
-      {/* Gradient blobs - optimized for mobile */}
-      <div className="absolute top-1/2 -translate-y-1/2 right-0 translate-x-1/2 w-64 h-64 md:w-96 md:h-96 opacity-20 md:opacity-30">
-        <div className="w-full h-full bg-teal-500 rounded-full blur-3xl"></div>
-      </div>
-      <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-64 h-64 md:w-96 md:h-96 opacity-20 md:opacity-30">
-        <div className="w-full h-full bg-blue-600 rounded-full blur-3xl"></div>
-      </div>
-      <div className="absolute top-1/2 -translate-y-1/2 left-0 -translate-x-1/2 w-64 h-64 md:w-96 md:h-96 opacity-20 md:opacity-30">
-        <div className="w-full h-full bg-cyan-500 rounded-full blur-3xl"></div>
+    <section className="relative h-screen">
+      {/* ── Ocean Spline — full screen ── */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <Spline
+          scene="https://prod.spline.design/2IXftBG73k86x6wG/scene.splinecode"
+          style={{
+            background: 'transparent',
+            width: '100%',
+            height: '100%'
+          }}
+        />
+        {/* Dark overlay so text stays readable over the bright ocean */}
+        <div className="absolute inset-0 bg-black/30 pointer-events-none z-10" />
+        {/* Bottom fade into page */}
+        <div className="absolute inset-x-0 bottom-0 h-32 bg-linear-to-t from-bg-dark to-transparent pointer-events-none z-10" />
       </div>
 
-      <div className="relative z-20 max-w-7xl mx-auto px-4 md:px-6 text-center">
-        <motion.div variants={fadeInUp} className="flex items-center justify-center flex-col">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[80px] font-bold mb-4 md:mb-6 font-sora leading-tight">
-            <span className="bg-linear-to-r from-white to-blue-200 bg-clip-text text-transparent drop-shadow-2xl">
-              Where business meets
-            </span>
-            <br />
-            the{' '}
-            <span className="relative inline-block">
-              <span className="absolute inset-0 bg-linear-to-r from-blue-600/40 to-cyan-600/40 -z-10 transform -skew-x-2 rounded-lg"></span>
-              <span className="relative bg-linear-to-r from-white to-blue-100 bg-clip-text text-transparent drop-shadow-2xl px-3 md:px-6 py-1 md:py-2">
-                horizon
-              </span>
-            </span>
-          </h1>
-          <div className="mb-6 md:mb-8 max-w-2xl w-full text-base sm:text-lg md:text-xl text-[#cfddde] font-sora font-bold px-4">
-            Join forces with like-minded entrepreneurs who believe in connection, collaboration, and creating real
-            opportunities that lead to lasting growth.
-          </div>
-        </motion.div>
+      {/* ── Header — embedded ── */}
+      <div className="absolute inset-x-0 top-0 z-30 flex items-center justify-between px-6 h-18.5">
+        <Link
+          href="/"
+          className="font-sora font-black text-xl text-white tracking-tight hover:text-white/80 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          aria-label="Coastal Referral Exchange — Home"
+        >
+          CORE<span className="text-primary-dark">.</span>
+        </Link>
 
-        <div className="flex items-center justify-center">
+        <nav
+          className="absolute left-1/2 -translate-x-1/2 hidden md:flex items-center gap-8"
+          aria-label="Main navigation"
+        >
+          <Link href="/" className={navLinkCls(true)}>
+            Home
+          </Link>
+          <Link href="/platform" className={navLinkCls(true)}>
+            Platform
+          </Link>
+          <Link href="/members" className={navLinkCls(false)}>
+            Members
+          </Link>
+          <Link href="/visitors-welcome" className={navLinkCls(false)}>
+            Visitors
+          </Link>
+          <Link href="/application" className={navLinkCls(false)}>
+            Apply
+          </Link>
+        </nav>
+
+        <div className="flex items-center gap-5">
+          <button
+            onClick={() => store.dispatch(setOpenNavigationDrawer())}
+            className="block md:hidden text-white hover:text-white/70 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+            aria-label="Open navigation menu"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
           <LaunchAppButton />
         </div>
       </div>
-      <StepMarquee />
-    </motion.section>
+
+      {/* ── Content — centered on desktop, bottom-left on laptop ── */}
+      <div className="relative z-20 h-full flex flex-col justify-end lg:justify-center px-6 sm:px-12 lg:px-20 max-w-3xl lg:max-w-none lg:w-1/2 pointer-events-none">
+        {/* Tag */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="flex items-center gap-3 mb-6"
+        >
+          <span className="block w-5 h-px bg-white/60 shrink-0" aria-hidden="true" />
+          <p className="text-f10 font-mono tracking-[0.25em] uppercase text-white/60">
+            Coastal Referral Exchange · Boston's North Shore
+          </p>
+        </motion.div>
+
+        {/* Headline */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="mb-5"
+        >
+          <h1 className="font-sora font-black text-5xl sm:text-6xl lg:text-7xl leading-[1.05] tracking-tight drop-shadow-lg">
+            <AnimatedHeadline />
+          </h1>
+        </motion.div>
+
+        {/* Description */}
+        <motion.p
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="font-nunito text-base sm:text-lg text-white/70 leading-relaxed max-w-sm mb-8 drop-shadow"
+        >
+          North Shore professionals meeting every Thursday at 7 AM. One seat per industry. No competition — only
+          collaboration.
+        </motion.p>
+
+        {/* CTAs */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+          className="flex items-center gap-4 flex-wrap mb-12 pointer-events-auto"
+        >
+          <Link
+            href="/login"
+            className="h-12 px-8 bg-white text-bg-dark font-sora font-bold text-sm tracking-wide hover:bg-white/90 active:bg-white/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 inline-flex items-center"
+          >
+            Launch App
+          </Link>
+          <Link
+            href="/application"
+            className="h-12 px-8 border border-white/40 text-white/80 font-sora font-bold text-sm tracking-wide hover:bg-white/10 hover:border-white/70 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white inline-flex items-center"
+          >
+            Apply to Join →
+          </Link>
+        </motion.div>
+
+        {/* Stats */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.65 }}
+          className="flex items-center gap-8 sm:gap-12 pointer-events-none"
+        >
+          {[
+            { value: '14', label: 'Active Members' },
+            { value: '1', label: 'Seat Per Industry' },
+            { value: '7AM', label: 'Every Thursday' }
+          ].map(({ value, label }, i) => (
+            <Fragment key={i}>
+              <div>
+                <p className="font-sora font-black text-2xl sm:text-3xl text-white leading-none drop-shadow">{value}</p>
+                <p className="text-f10 font-mono tracking-widest uppercase text-white/50 mt-1">{label}</p>
+              </div>
+              {i < 2 && <span key={`sep-${i}`} className="w-px h-8 bg-white/20 shrink-0" aria-hidden="true" />}
+            </Fragment>
+          ))}
+        </motion.div>
+      </div>
+
+      {/* ── Right sidebar ── */}
+      <div className="absolute right-6 sm:right-10 top-1/2 -translate-y-1/2 z-20 hidden lg:flex flex-col items-center gap-6">
+        {/* Scroll indicator */}
+        <div className="flex flex-col items-center gap-2">
+          <p className="text-[9px] font-mono tracking-[0.3em] uppercase text-white/40 rotate-90 mb-4">Scroll</p>
+          <motion.div
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+            className="w-px h-12 bg-linear-to-b from-white/40 to-transparent"
+          />
+        </div>
+
+        {/* Divider */}
+        <div className="w-px h-8 bg-white/20" />
+
+        {/* Facebook */}
+
+        <a
+          href="https://facebook.com/coastalreferralexchange"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Facebook"
+          className="text-white/40 hover:text-white/80 transition-colors"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+          </svg>
+        </a>
+      </div>
+      <div className="absolute inset-x-0 h-[50%] bottom-0 bg-linear-to-t from-white dark:from-bg-dark via-transparent to-transparent/0 pointer-events-none z-10" />
+    </section>
   )
 }
-
-export default HeroSection

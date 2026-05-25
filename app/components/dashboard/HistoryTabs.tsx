@@ -1,29 +1,8 @@
 import { motion } from 'framer-motion'
 import { useState } from 'react'
-import { ActivityItem } from '../../(authenticated)/dashboard/DashboardClient'
 import { formatPhone } from '@/app/lib/utils/phone.utils'
-
-// ─── Constants ─────────────────────────────────────────────────────────────────
-const ACCENT = {
-  meeting: '#38bdf8', // sky-400
-  referral: '#22d3ee', // cyan-400
-  closed: '#34d399' // emerald-400
-} as const
-
-const TABS = [
-  { key: 'ALL', label: 'All' },
-  { key: 'MEETING', label: 'Meetings' },
-  { key: 'REFERRAL', label: 'Referrals' },
-  { key: 'CLOSED', label: 'Closed' }
-] as const
-
-const DOT_COLOR: Record<ActivityItem['type'], string> = {
-  MEETING: ACCENT.meeting,
-  REFERRAL: ACCENT.referral,
-  CLOSED: ACCENT.closed
-}
-
-type Tab = (typeof TABS)[number]['key']
+import { ActivityItem, Tab } from '@/types/dashboard.types'
+import { DOT_COLOR, TABS } from '@/app/lib/constants/dashboard.constants'
 
 export function HistoryTabs({ recentActivity }: { recentActivity: ActivityItem[] }) {
   const [activeTab, setActiveTab] = useState<Tab>('ALL')

@@ -3,10 +3,11 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useRouter } from 'next/navigation'
-import { QueueMember } from '@/types/presenter-queue'
+import { QueueMember } from '@/types/presenter-queue.types'
 import { addToQueue } from '@/app/lib/actions/presenter-queue/addToQueue'
-import { getInitials } from '@/app/lib/utils/common/getInitials'
 import { reorderQueue } from '@/app/lib/actions/presenter-queue/reorderQueue'
+import { fmtDate } from '@/app/lib/utils/date.utils'
+import { getInitials } from '@/app/lib/utils/shared.utils'
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 interface Props {
@@ -14,17 +15,6 @@ interface Props {
   availableMembers: { id: string; name: string; company: string }[]
   dates: string[]
   startIndex: number
-}
-
-export function fmtDate(iso: string) {
-  const d = iso.includes('T') ? new Date(iso) : new Date(`${iso}T12:00:00`)
-  return d.toLocaleDateString('en-US', {
-    weekday: 'long',
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-    timeZone: 'America/New_York'
-  })
 }
 
 // ─── Main ──────────────────────────────────────────────────────────────────────

@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Sun, Moon } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import Pusher from 'pusher-js'
-import Marquee from 'react-fast-marquee'
 import { QRCodeSVG } from 'qrcode.react'
 
 const Spline = dynamic(() => import('@splinetool/react-spline'), { ssr: false })
@@ -33,20 +32,20 @@ interface VisitorDayTVProps {
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-const COMPANIES = [
-  { name: 'Sqysh' },
-  { name: 'Century21' },
-  { name: 'Eastern Bank' },
-  { name: 'Touchstone Closing & Escrow' },
-  { name: 'Boys & Girls Club of Lynn' },
-  { name: 'The Drumlin Group' },
-  { name: 'Zellik Insurance' },
-  { name: 'CrossCountry Mortgage LLC' },
-  { name: 'Northwestern Mutual' },
-  { name: 'Commonwealth Payroll & HR' },
-  { name: 'Prudential Life Insurance' },
-  { name: 'Finneran & Nicholson' }
-]
+// const COMPANIES = [
+//   { name: 'Sqysh' },
+//   { name: 'Century21' },
+//   { name: 'Eastern Bank' },
+//   { name: 'Touchstone Closing & Escrow' },
+//   { name: 'Boys & Girls Club of Lynn' },
+//   { name: 'The Drumlin Group' },
+//   { name: 'Zellik Insurance' },
+//   { name: 'CrossCountry Mortgage LLC' },
+//   { name: 'Northwestern Mutual' },
+//   { name: 'Commonwealth Payroll & HR' },
+//   { name: 'Prudential Life Insurance' },
+//   { name: 'Finneran & Nicholson' }
+// ]
 
 function formatCurrency(n: number) {
   if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`
@@ -318,7 +317,7 @@ export default function VisitorDayTV({
             <p className="text-xs lg:text-sm font-mono tracking-[0.2em] uppercase whitespace-nowrap">Represented</p>
           </div>
           <div className="overflow-hidden flex-1">
-            <Marquee speed={50} gradientWidth={0} pauseOnHover={false}>
+            {/* <Marquee speed={50} gradientWidth={0} pauseOnHover={false}>
               {[...COMPANIES, ...COMPANIES].map((company, i) => (
                 <span
                   key={`${company.name}-${i}`}
@@ -327,7 +326,7 @@ export default function VisitorDayTV({
                   ◆ {company.name}
                 </span>
               ))}
-            </Marquee>
+            </Marquee> */}
           </div>
         </div>
       </div>

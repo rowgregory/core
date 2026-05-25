@@ -2,6 +2,7 @@
 
 import prisma from '@/prisma/client'
 import { chapterId } from '../../constants/api/chapterId'
+import { auth } from '../../auth'
 
 export interface AttendanceMember {
   id: string
@@ -13,6 +14,7 @@ export interface AttendanceRow {
   date: string // YYYY-MM-DD
   attendedIds: string[]
   checkedInTimes: Record<string, string>
+  reinstatedUserIds: Set<string>
 }
 
 export async function getAttendanceHistory(): Promise<{
@@ -23,8 +25,9 @@ export async function getAttendanceHistory(): Promise<{
   }
   error?: string
 }> {
+  const session = await auth()
   try {
-    const [members, meetings] = await Promise.all([
+    const [members, meetings, corrections] = await Promise.all([
       prisma.user
         .findMany({
           where: { chapterId, membershipStatus: 'ACTIVE' },
@@ -45,13 +48,21 @@ export async function getAttendanceHistory(): Promise<{
             }
           }
         })
-        .catch(() => [])
+        .catch(() => []),
+      prisma.order.findMany({
+        where: {
+          userId: session.user.id,
+          type: 'ATTENDANCE_CORRECTION'
+        },
+        select: { meetingId: true, userId: true }
+      })
     ])
 
     const rows: AttendanceRow[] = meetings.map((m) => ({
       id: m.id,
       date: m.date.toISOString().slice(0, 10),
       attendedIds: m.attendances.map((a) => a.userId),
+      reinstatedUserIds: new Set(corrections.filter((c) => c.meetingId === m.id).map((c) => c.userId)),
       checkedInTimes: Object.fromEntries(
         m.attendances.map((a) => [
           a.userId,

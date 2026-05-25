@@ -2,7 +2,7 @@
 
 import prisma from '@/prisma/client'
 import { auth } from '../../auth'
-import { buildLogMessage, getRequestContext } from '../../utils/parseUserAgent'
+import { buildLogMessage, getRequestContext } from '../../utils/log.utils'
 import { getActor } from '../user/getActor'
 import { createLog } from '../../utils/api/createLog'
 

@@ -17,7 +17,7 @@ const NavigationDrawer = () => {
     { name: 'Home', href: '/' },
     { name: 'Members', href: '/members' },
     { name: 'Apply', href: '/application' },
-    { name: 'Sign In', href: '/auth/login' }
+    { name: 'Sign In', href: '/login' }
   ]
 
   return (

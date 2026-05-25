@@ -1,6 +1,6 @@
-import { getDashboardData } from '../getDashboardData'
 import { getLinkedRecord } from '../getLinkedRecord'
 import { getPresenterSchedule } from '../presenter-queue/getPresenterSchedule'
+import { getDashboardData } from './getDashboardData'
 
 export async function getDashboardPageData(action?: string, id?: string) {
   const [dashboard, schedule, linkedRecord] = await Promise.all([

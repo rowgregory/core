@@ -9,13 +9,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1
     },
     {
-      url: 'https://coastal-referral-exchange.com/application',
+      url: 'https://coastal-referral-exchange.com/platform',
+      lastModified: new Date(),
+      changeFrequency: 'daily',
+      priority: 1
+    },
+    {
+      url: 'https://coastal-referral-exchange.com/members',
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.8
     },
     {
-      url: 'https://coastal-referral-exchange.com/members',
+      url: 'https://coastal-referral-exchange.com/visitors-welcome',
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8
+    },
+    {
+      url: 'https://coastal-referral-exchange.com/application',
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.8

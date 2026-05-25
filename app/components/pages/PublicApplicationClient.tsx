@@ -1,7 +1,7 @@
 'use client'
 
 import validateApplicationForm from '@/app/lib/validations/validateApplicationForm'
-import { createUser } from '@/app/lib/actions/createUser'
+import { createUser } from '@/app/lib/actions/user/createUser'
 import { createFormActions } from '@/app/lib/redux/slices/formSlice'
 import { showToast } from '@/app/lib/redux/slices/toastSlice'
 import { store, useAppSelector } from '@/app/lib/redux/store'
@@ -11,8 +11,8 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { MemberApplicationForm } from '@/app/components/forms/MemberApplicationForm'
 import Link from 'next/link'
-import { CreateUserInput } from '@/types/user'
-import useSoundEffect from '@/hooks/useSoundEffect'
+import { CreateUserInput } from '@/types/user.types'
+import { useSounds } from '@/app/lib/hooks/useSounds'
 
 export const useFormSelector = () => useAppSelector((state) => state.form.forms)
 
@@ -23,7 +23,7 @@ export default function PublicApplicationClient() {
   const errors = applicationForm?.errors
   const { push, refresh } = useRouter()
   const [isLoading, setIsLoading] = useState(false)
-  const { play } = useSoundEffect('/sound-effects/se-2.mp3', true)
+  const { play } = useSounds({ enabled: true, volume: 0.4 })
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
@@ -43,7 +43,7 @@ export default function PublicApplicationClient() {
       )
       return
     }
-    play()
+    play('se2')
     resetForm()
     refresh()
     push(`/application/${result.user.id}`)
@@ -62,7 +62,7 @@ export default function PublicApplicationClient() {
             <span className="text-primary-light dark:text-primary-dark">.</span>
           </Link>
           <Link
-            href="/auth/login"
+            href="/login"
             className="h-8 px-4 bg-primary-light dark:bg-button-dark text-white font-sora font-bold text-[11px] tracking-wide hover:opacity-90 transition-opacity inline-flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark focus-visible:ring-offset-2"
           >
             Sign In

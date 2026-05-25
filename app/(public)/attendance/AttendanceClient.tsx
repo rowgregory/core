@@ -4,11 +4,10 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Check } from 'lucide-react'
 import Pusher from 'pusher-js'
-import Marquee from 'react-fast-marquee'
 import { QRCodeSVG } from 'qrcode.react'
 import Picture from '@/app/components/common/Picture'
-import { getInitials } from '@/app/lib/utils/common/getInitials'
-import useSoundEffect from '@/hooks/useSoundEffect'
+import { useSounds } from '@/app/lib/hooks/useSounds'
+import { getInitials } from '@/app/lib/utils/shared.utils'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -35,13 +34,13 @@ interface AttendanceTVProps {
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-const TICKER_MESSAGES = [
-  "⚓ Scan the QR code to check in for today's meeting",
-  '📋 Attendance is recorded every Thursday',
-  '✦ Check in to keep your membership in good standing',
-  '👋 Welcome — grab some food and find a seat',
-  '📱 Open your camera and point it at the QR code'
-]
+// const TICKER_MESSAGES = [
+//   "⚓ Scan the QR code to check in for today's meeting",
+//   '📋 Attendance is recorded every Thursday',
+//   '✦ Check in to keep your membership in good standing',
+//   '👋 Welcome — grab some food and find a seat',
+//   '📱 Open your camera and point it at the QR code'
+// ]
 
 // ─── Floating emoji ───────────────────────────────────────────────────────────
 
@@ -290,7 +289,7 @@ export default function AttendanceClient({
   const [totalReactions, setTotalReactions] = useState(initialReactionCount)
   const [checkedInIds, setCheckedInIds] = useState<Map<string, string>>(new Map(initialAttendees.map((id) => [id, ''])))
   const [justCheckedInId, setJustCheckedInId] = useState<string | null>(null)
-  const { play } = useSoundEffect('/sound-effects/portal.mp3', true)
+  const { play } = useSounds({ enabled: true, volume: 0.4 })
 
   const t = {
     bg: dark ? 'bg-bg-dark' : 'bg-bg-light',
@@ -308,7 +307,7 @@ export default function AttendanceClient({
 
     const attendanceChannel = pusher.subscribe('meeting-attendance')
     attendanceChannel.bind('check-in', (data: { userId: string; checkedInAt: string }) => {
-      play()
+      play('se0')
       setCheckedInIds((prev) => new Map([...prev, [data.userId, data.checkedInAt]]))
       setJustCheckedInId(data.userId)
       setTimeout(() => setJustCheckedInId(null), 3000)
@@ -355,7 +354,7 @@ export default function AttendanceClient({
           onClick={() => {
             const unchecked = sortedMembers.find((m) => !checkedInIds.has(m.id))
             if (!unchecked) return
-            play()
+            play('se0')
             const time = new Date().toLocaleTimeString('en-US', {
               hour: 'numeric',
               minute: '2-digit',
@@ -494,7 +493,7 @@ export default function AttendanceClient({
             <p className="text-xs font-mono tracking-[0.2em] uppercase whitespace-nowrap">CORE</p>
           </div>
           <div className="overflow-hidden flex-1">
-            <Marquee speed={40} gradientWidth={0} pauseOnHover={false}>
+            {/* <Marquee speed={40} gradientWidth={0} pauseOnHover={false}>
               {TICKER_MESSAGES.map((msg, i) => (
                 <span
                   key={i}
@@ -503,7 +502,7 @@ export default function AttendanceClient({
                   {msg}
                 </span>
               ))}
-            </Marquee>
+            </Marquee> */}
           </div>
         </div>
       </div>

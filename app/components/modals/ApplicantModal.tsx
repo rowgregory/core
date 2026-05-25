@@ -1,11 +1,11 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { SuperDashStatusBadge } from '../super-dash/SuperDashStatusBadge'
 import { X } from 'lucide-react'
-import { fmtDate } from '@/app/lib/utils/date.utils'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { updateUserStatus } from '@/app/lib/actions/super-user/updateUserStatus'
 import { deleteUser } from '@/app/lib/actions/user/deleteUser'
+import { fmtDate } from '@/app/lib/utils/date.utils'
 
 export function ApplicantModal({ selected, setSelected }) {
   const router = useRouter()
@@ -113,7 +113,9 @@ export function ApplicantModal({ selected, setSelected }) {
                     <p className="text-f10 font-mono tracking-[0.15em] uppercase text-muted-light dark:text-muted-dark mb-0.5">
                       {label}
                     </p>
-                    <p className="text-[13px] font-nunito text-text-light dark:text-text-dark break-words">{value}</p>
+                    <p className="text-[13px] font-nunito text-text-light dark:text-text-dark wrap-break-word">
+                      {value}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -155,13 +157,13 @@ export function ApplicantModal({ selected, setSelected }) {
                     <button
                       onClick={handleDelete}
                       disabled={loading === 'delete'}
-                      className="h-8 px-3 bg-red-500 dark:bg-red-600 text-white text-f10 font-mono tracking-[0.1em] uppercase hover:opacity-90 transition-opacity disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+                      className="h-8 px-3 bg-red-500 dark:bg-red-600 text-white text-f10 font-mono tracking-widest uppercase hover:opacity-90 transition-opacity disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
                     >
                       {loading === 'delete' ? '…' : 'Confirm'}
                     </button>
                     <button
                       onClick={() => setConfirmDelete(false)}
-                      className="h-8 px-3 text-f10 font-mono tracking-[0.1em] uppercase text-muted-light dark:text-muted-dark hover:text-text-light dark:hover:text-text-dark transition-colors focus-visible:outline-none"
+                      className="h-8 px-3 text-f10 font-mono tracking-widest uppercase text-muted-light dark:text-muted-dark hover:text-text-light dark:hover:text-text-dark transition-colors focus-visible:outline-none"
                     >
                       Cancel
                     </button>
@@ -169,7 +171,7 @@ export function ApplicantModal({ selected, setSelected }) {
                 ) : (
                   <button
                     onClick={() => setConfirmDelete(true)}
-                    className="shrink-0 h-8 px-3 border border-red-200 dark:border-red-400/30 text-red-500 dark:text-red-400 text-f10 font-mono tracking-[0.1em] uppercase hover:bg-red-100 dark:hover:bg-red-400/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+                    className="shrink-0 h-8 px-3 border border-red-200 dark:border-red-400/30 text-red-500 dark:text-red-400 text-f10 font-mono tracking-widest uppercase hover:bg-red-100 dark:hover:bg-red-400/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
                   >
                     Delete
                   </button>

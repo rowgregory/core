@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from './app/lib/auth'
 
-const publicRoutes = ['/auth/login', '/visitor', '/visitor-day', '/attendance']
-const protectedAPIRoutes = ['/api/pdf/member-directory']
+const publicRoutes = ['/login', '/visitor', '/visitor-day', '/attendance']
+const protectedAPIRoutes = ['/api/pdf/member-directory', '/billing']
 
 export async function proxy(req: NextRequest) {
   const { nextUrl } = req
@@ -31,7 +31,7 @@ export async function proxy(req: NextRequest) {
 
   // ── Logged-in user hitting a public route → redirect to their home ────────
   if (isLoggedIn && isPublicRoute) {
-    if (nextUrl.pathname === '/auth/login') {
+    if (nextUrl.pathname === '/login') {
       const dest = session.user.isSuperUser ? '/super' : '/dashboard'
       return NextResponse.redirect(new URL(dest, nextUrl))
     }
@@ -40,7 +40,7 @@ export async function proxy(req: NextRequest) {
 
   // ── Protected page → send to login ───────────────────────────────────────
   if (isProtectedPage && !isLoggedIn) {
-    const loginUrl = new URL('/auth/login', nextUrl)
+    const loginUrl = new URL('/login', nextUrl)
     loginUrl.searchParams.set('callbackUrl', nextUrl.pathname)
     return NextResponse.redirect(loginUrl)
   }
@@ -52,7 +52,7 @@ export async function proxy(req: NextRequest) {
 
   // ── Protected API routes → 401 if not logged in ───────────────────────────
   if (protectedAPIRoutes.some((r) => nextUrl.pathname.startsWith(r)) && !isLoggedIn) {
-    const signInUrl = new URL('/auth/login', req.url)
+    const signInUrl = new URL('/login', req.url)
     return NextResponse.redirect(signInUrl)
   }
 

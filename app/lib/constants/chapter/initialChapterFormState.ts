@@ -1,4 +1,4 @@
-import { Chapter } from '@/types/user'
+import { Chapter } from '@/types/user.types'
 
 export const initialChapterFormState: Chapter = {
   id: '',

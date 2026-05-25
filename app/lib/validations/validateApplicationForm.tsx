@@ -1,4 +1,4 @@
-import isValidEmail from '@/app/regex/isValidEmail'
+import isValidEmail from '@/app/lib/regex/isValidEmail'
 
 interface ApplicationFormInputs {
   name: string

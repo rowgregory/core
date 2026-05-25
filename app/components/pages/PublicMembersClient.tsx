@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Search, ArrowRight, ChevronRight } from 'lucide-react'
-import { User } from '@/types/user'
+import { User } from '@/types/user.types'
 import FadeUp from '../common/FadeUp'
 import Picture from '../common/Picture'
 

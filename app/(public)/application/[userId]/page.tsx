@@ -1,7 +1,7 @@
 'use server'
 
 import ApplicationConfirmationClient from '@/app/components/pages/ApplicationConfirmationClient'
-import { getApplicant } from '@/app/lib/actions/getApplicant'
+import { getApplicant } from '@/app/lib/actions/user/getApplicant'
 
 export default async function ApplicationConfirmationPage({ params }: { params: Promise<{ userId: string }> }) {
   const { userId } = await params

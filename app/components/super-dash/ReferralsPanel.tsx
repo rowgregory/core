@@ -1,27 +1,27 @@
-import { SuperUserReferral } from '@/app/lib/actions/super-user/superUserActions'
 import { useState } from 'react'
 import { Panel } from '../common/Panel'
 import { SectionLabel } from '../common/SectionLabel'
 import { motion } from 'framer-motion'
 import { SuperDashStatusBadge } from './SuperDashStatusBadge'
 import { InlineActionBtn } from './InlineActionButton'
-import { timeAgo } from '@/app/lib/utils/time.utils'
 import { useRouter } from 'next/navigation'
 import { deleteReferral } from '@/app/lib/actions/referral/deleteReferral'
-import useSoundEffect from '@/hooks/useSoundEffect'
+import { useSounds } from '@/app/lib/hooks/useSounds'
+import { SuperUserReferral } from '@/types/super.types'
+import { timeAgo } from '@/app/lib/utils/date.utils'
 
 export function ReferralsPanel({ referrals }: { referrals: SuperUserReferral[] }) {
   const router = useRouter()
   const [loadingId, setLoadingId] = useState<string | null>(null)
   const [confirmId, setConfirmId] = useState<string | null>(null)
-  const { play } = useSoundEffect('/sound-effects/droplet.mp3', true)
+  const { play } = useSounds({ enabled: true, volume: 0.4 })
 
   async function handleDelete(id: string) {
     setLoadingId(id)
     const res = await deleteReferral(id)
     if (res.success) {
       router.refresh()
-      play()
+      play('se7')
       setLoadingId(null)
       setConfirmId(null)
     }

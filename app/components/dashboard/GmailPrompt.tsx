@@ -2,15 +2,15 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { updateProfile } from '@/app/lib/actions/updateProfile'
+import { updateProfile } from '@/app/lib/actions/user/updateProfile'
 import { useRouter } from 'next/navigation'
-import useSoundEffect from '@/hooks/useSoundEffect'
+import { useSounds } from '@/app/lib/hooks/useSounds'
 
 export function GmailPrompt() {
   const [username, setUsername] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
-  const { play } = useSoundEffect('/sound-effects/se-3.mp3', true)
+  const { play } = useSounds({ enabled: true, volume: 0.4 })
 
   async function handleSave() {
     if (!username.trim()) return
@@ -18,7 +18,7 @@ export function GmailPrompt() {
     const res = await updateProfile({ secondaryEmail: `${username.trim()}@gmail.com` })
     setIsLoading(false)
     if (res.success) {
-      play()
+      play('se3')
       router.refresh()
     }
   }

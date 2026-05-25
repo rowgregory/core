@@ -1,9 +1,9 @@
-import { User } from '@/types/user'
+import { User } from '@/types/user.types'
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ChevronDown, Mail, MessageSquare, Phone } from 'lucide-react'
-import { getInitials } from '@/app/lib/utils/common/getInitials'
 import { MemberEmailModal } from '../modals/MemberEmailModal'
+import { getInitials } from '@/app/lib/utils/shared.utils'
 
 export function MemberList({ members }: { members: User[] }) {
   const [activeId, setActiveId] = useState<string | null>(null)

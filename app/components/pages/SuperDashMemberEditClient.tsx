@@ -9,10 +9,10 @@ import { Switch } from '@/app/components/ui/Switch'
 import { SuperMemberEditData } from '@/app/lib/actions/user/getUserById'
 import uploadFileToFirebase from '@/app/lib/utils/firebase/uploadFileToFirebase'
 import { updateMember } from '@/app/lib/actions/user/updateMember'
-import { MembershipStatus } from '@/types/user'
+import { MembershipStatus } from '@/types/user.types'
 import { SuperDashStatusBadge } from '../super-dash/SuperDashStatusBadge'
 import { deleteUser } from '@/app/lib/actions/user/deleteUser'
-import { getInitials } from '@/app/lib/utils/common/getInitials'
+import { getInitials } from '@/app/lib/utils/shared.utils'
 
 // ─── Constants ─────────────────────────────────────────────────────────────────
 const MEMBERSHIP_STATUSES = ['PENDING', 'ACTIVE', 'REJECTED'] as const

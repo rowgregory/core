@@ -8,6 +8,7 @@ export interface AppStatePayload {
   actionDropdown: boolean
   itemAction: string | null
   isDark: boolean
+  membershipPaymentSetupModal: boolean
 }
 
 const initialAppState: AppStatePayload = {
@@ -17,7 +18,8 @@ const initialAppState: AppStatePayload = {
   isNavigationCollapsed: false,
   actionDropdown: false,
   itemAction: null,
-  isDark: false
+  isDark: false,
+  membershipPaymentSetupModal: false
 }
 
 export const appSlice = createSlice({
@@ -62,6 +64,12 @@ export const appSlice = createSlice({
     },
     setIsDark: (state, { payload }) => {
       state.isDark = payload
+    },
+    setOpenMembershipPaymentSetupModal: (state) => {
+      state.membershipPaymentSetupModal = true
+    },
+    setCloseMembershipPaymentSetupModal: (state) => {
+      state.membershipPaymentSetupModal = false
     }
   }
 })
@@ -81,5 +89,7 @@ export const {
   setOpenActionDropdownSubmenu,
   setCloseActionDropdownSubmenu,
   setToggleActionDropdown,
-  setIsDark
+  setIsDark,
+  setCloseMembershipPaymentSetupModal,
+  setOpenMembershipPaymentSetupModal
 } = appSlice.actions

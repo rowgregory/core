@@ -1,4 +1,5 @@
 import { chapterId } from '@/app/lib/constants/api/chapterId'
+import { ANNUAL_PRICE_ID, QUARTERLY_PRICE_ID, statusMap, WEBHOOK_SECRET } from '@/app/lib/constants/stripe.constants'
 import { pusher } from '@/app/lib/pusher'
 import { stripe } from '@/app/lib/stripe'
 import { createLog } from '@/app/lib/utils/api/createLog'
@@ -6,29 +7,14 @@ import prisma from '@/prisma/client'
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!
-const ANNUAL_PRICE_ID = process.env.STRIPE_ANNUAL_PRICE_ID!
-const QUARTERLY_PRICE_ID = process.env.STRIPE_QUARTERLY_PRICE_ID!
-
-const statusMap: Record<string, string> = {
-  active: 'ACTIVE',
-  past_due: 'PAST_DUE',
-  canceled: 'CANCELLED',
-  unpaid: 'PAST_DUE',
-  incomplete: 'INCOMPLETE'
-}
-
 export async function POST(req: NextRequest) {
   const body = await req.text()
   const signature = req.headers.get('stripe-signature')!
 
-  console.log('webhook secret:', process.env.STRIPE_WEBHOOK_SECRET?.slice(0, 10))
-  console.log('signature:', req.headers.get('stripe-signature')?.slice(0, 20))
-
   let event: Stripe.Event
 
   try {
-    event = stripe.webhooks.constructEvent(body, signature, webhookSecret)
+    event = stripe.webhooks.constructEvent(body, signature, WEBHOOK_SECRET)
   } catch (error) {
     console.log('WEBHOOK ERROR:', error instanceof Error ? error.message : error)
 
@@ -82,6 +68,17 @@ export async function POST(req: NextRequest) {
         await handlePaymentMethodUpdated(event.data.object as Stripe.PaymentMethod)
         break
 
+      case 'payment_intent.succeeded': {
+        const intent = event.data.object as Stripe.PaymentIntent
+        const type = intent.metadata?.type
+
+        if (type === 'ATTENDANCE_CORRECTION') {
+          await handleAttendanceCorrectionPayment(intent)
+        }
+
+        break
+      }
+
       default:
         await createLog('info', 'Unhandled webhook event', {
           eventType: event.type,
@@ -125,7 +122,7 @@ export async function handleSubscriptionCreated(sub: Stripe.Subscription) {
 
   const user = await prisma.user.findFirst({
     where: { stripeCustomerId },
-    select: { id: true, name: true }
+    select: { id: true, name: true, email: true }
   })
 
   if (!user) {
@@ -138,31 +135,26 @@ export async function handleSubscriptionCreated(sub: Stripe.Subscription) {
 
   const type = isAnnual ? 'ANNUAL' : 'QUARTERLY'
   const amount = (sub.items.data[0]?.price?.unit_amount ?? 0) / 100
-  const item = sub.items.data[0]
-  const currentPeriodStart = new Date((item as any).current_period_start * 1000)
-  const currentPeriodEnd = new Date((item as any).current_period_end * 1000)
 
   await Promise.all([
-    // Create order record
     prisma.order.create({
       data: {
         userId: user.id,
-        chapterId: chapterId,
+        chapterId,
         type,
-        status: 'ACTIVE',
+        status: 'SCHEDULED',
         amount,
         stripeCustomerId,
         stripeSubId: sub.id,
         stripePriceId: priceId,
-        currentPeriodStart,
-        currentPeriodEnd
+        currentPeriodStart: null,
+        currentPeriodEnd: null
       }
     }),
-
-    // Update user subscription flags
     prisma.user.update({
       where: { id: user.id },
       data: {
+        membershipStatus: 'ACTIVE',
         ...(isAnnual
           ? { hasAnnualSubscription: true, annualSubscriptionId: sub.id }
           : { hasQuarterlySubscription: true, quarterlySubscriptionId: sub.id })
@@ -186,7 +178,6 @@ export async function handleSubscriptionCreated(sub: Stripe.Subscription) {
   })
 }
 
-//  keeping Order.status in sync with whatever Stripe says the subscription status is
 export async function handleSubscriptionUpdated(sub: Stripe.Subscription) {
   const stripeCustomerId = sub.customer as string
   const newStatus = statusMap[sub.status]
@@ -201,21 +192,61 @@ export async function handleSubscriptionUpdated(sub: Stripe.Subscription) {
 
   const order = await prisma.order.findFirst({
     where: { stripeSubId: sub.id },
-    select: { id: true, status: true, type: true, userId: true, user: { select: { name: true } } }
+    select: {
+      id: true,
+      status: true,
+      type: true,
+      userId: true,
+      cancelledAt: true,
+      user: { select: { name: true } }
+    }
   })
 
   if (!order) {
+    if (sub.status === 'active') {
+      await createLog('info', 'handleSubscriptionUpdated — no order yet, treating as creation', {
+        subId: sub.id,
+        stripeCustomerId
+      })
+      await handleSubscriptionCreated(sub)
+      return
+    }
+
     await createLog('error', 'handleSubscriptionUpdated — no order found for subscription', {
       subId: sub.id,
-      stripeCustomerId
+      stripeCustomerId,
+      status: sub.status
     })
     return
   }
 
-  // No change — skip
+  // ── Detect cancel_at_period_end transition ─────────────────────────
+  // When the user clicks cancel, Stripe sends an `updated` event with
+  // status still 'active' but cancel_at_period_end = true. Capture that
+  // moment for audit/UI purposes.
+  const isPendingCancellation = sub.cancel_at_period_end === true && !order.cancelledAt
+
+  if (isPendingCancellation) {
+    await prisma.order.update({
+      where: { id: order.id },
+      data: { cancelledAt: new Date() }
+    })
+
+    await createLog('info', `${order.user.name} scheduled subscription cancellation at period end`, {
+      action: 'SUBSCRIPTION_CANCEL_SCHEDULED',
+      userId: order.userId,
+      subId: sub.id,
+      type: order.type,
+      cancelAt: sub.cancel_at ? new Date(sub.cancel_at * 1000).toISOString() : null
+    })
+
+    // If the Order status hasn't changed, we're done — don't fall through
+    if (order.status === newStatus) return
+  }
+
+  // No status change — skip
   if (order.status === newStatus) return
 
-  // If cancelled or unpaid, update user subscription flags
   const isTerminated = sub.status === 'canceled' || sub.status === 'unpaid'
 
   await Promise.all([
@@ -223,7 +254,7 @@ export async function handleSubscriptionUpdated(sub: Stripe.Subscription) {
       where: { id: order.id },
       data: {
         status: newStatus as any,
-        ...(isTerminated ? { cancelledAt: new Date() } : {})
+        ...(isTerminated && !order.cancelledAt ? { cancelledAt: new Date() } : {})
       }
     }),
 
@@ -254,7 +285,7 @@ export async function handleSubscriptionDeleted(sub: Stripe.Subscription) {
 
   const order = await prisma.order.findFirst({
     where: { stripeSubId: sub.id },
-    select: { id: true, type: true, userId: true, user: { select: { name: true } } }
+    select: { id: true, type: true, userId: true, user: { select: { name: true } }, cancelledAt: true }
   })
 
   if (!order) {
@@ -268,7 +299,10 @@ export async function handleSubscriptionDeleted(sub: Stripe.Subscription) {
   await Promise.all([
     prisma.order.update({
       where: { id: order.id },
-      data: { status: 'CANCELLED', cancelledAt: new Date() }
+      data: {
+        status: 'CANCELLED',
+        ...(order.cancelledAt ? {} : { cancelledAt: new Date() })
+      }
     }),
 
     prisma.user.update({
@@ -309,15 +343,19 @@ export async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
     return
   }
 
-  const currentPeriodStart = invoice.period_start ? new Date(invoice.period_start * 1000) : null
-  const currentPeriodEnd = invoice.period_end ? new Date(invoice.period_end * 1000) : null
+  const lineItem = invoice.lines.data[0] as any
+  const currentPeriodStart = lineItem?.period?.start ? new Date(lineItem.period.start * 1000) : null
+  const currentPeriodEnd = lineItem?.period?.end ? new Date(lineItem.period.end * 1000) : null
 
   await prisma.order.update({
     where: { id: order.id },
     data: {
       status: 'ACTIVE',
       currentPeriodStart,
-      currentPeriodEnd
+      currentPeriodEnd,
+      hostedInvoiceUrl: invoice.hosted_invoice_url,
+      invoicePdfUrl: invoice.invoice_pdf,
+      invoiceNumber: invoice.number
     }
   })
 
@@ -467,5 +505,75 @@ export async function handlePaymentMethodUpdated(pm: Stripe.PaymentMethod) {
     paymentMethodId: pm.id,
     brand: pm.card.brand,
     last4: pm.card.last4
+  })
+}
+
+export async function handleAttendanceCorrectionPayment(intent: Stripe.PaymentIntent) {
+  const { meetingId, userId, userName, tipSqysh } = intent.metadata
+
+  if (!meetingId || !userId) {
+    await createLog('error', 'handleAttendanceCorrectionPayment — missing metadata', {
+      paymentIntentId: intent.id
+    })
+    return
+  }
+
+  const amount = intent.amount / 100 // $150 or $200
+
+  const [order] = await Promise.all([
+    // Create order record
+    prisma.order.create({
+      data: {
+        userId,
+        chapterId,
+        type: 'ATTENDANCE_CORRECTION',
+        status: 'ACTIVE',
+        amount,
+        stripeCustomerId: intent.customer as string,
+        stripeSubId: null,
+        stripePriceId: null,
+        currentPeriodStart: new Date(),
+        currentPeriodEnd: new Date(),
+        meetingId
+      }
+    }),
+
+    // Reinstate attendance
+    prisma.attendance.upsert({
+      where: { meetingId_userId: { meetingId, userId } },
+      create: { meetingId, userId },
+      update: {}
+    })
+  ])
+
+  // Grab the receipt URL from the expanded charge
+  try {
+    const expandedIntent = await stripe.paymentIntents.retrieve(intent.id, {
+      expand: ['latest_charge']
+    })
+
+    const charge = expandedIntent.latest_charge as Stripe.Charge | null
+    if (charge?.receipt_url) {
+      await prisma.order.update({
+        where: { id: order.id },
+        data: { hostedInvoiceUrl: charge.receipt_url }
+      })
+    }
+  } catch (err) {
+    // Don't fail the webhook if receipt URL retrieval fails
+    await createLog('error', 'Could not retrieve receipt URL for attendance correction', {
+      orderId: order.id,
+      paymentIntentId: intent.id,
+      error: err instanceof Error ? err.message : 'Unknown error'
+    })
+  }
+
+  await createLog('info', `${userName} attendance reinstated via correction payment`, {
+    action: 'ATTENDANCE_REINSTATED_WEBHOOK',
+    meetingId,
+    userId,
+    paymentIntentId: intent.id,
+    amount,
+    tipSqysh: tipSqysh === 'true'
   })
 }

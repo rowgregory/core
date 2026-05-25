@@ -5,7 +5,7 @@ import prisma from '@/prisma/client'
 import { chapterId } from '../../constants/api/chapterId'
 import { pusher } from '../../pusher'
 import { createLog } from '../../utils/api/createLog'
-import { toDateKey } from '../../utils/time.utils'
+import { toDateKey } from '../../utils/date.utils'
 
 export async function checkIn({ date }: { date?: string } = {}): Promise<{
   success: boolean

@@ -1,11 +1,10 @@
 import Link from 'next/link'
-import React from 'react'
 
-const LaunchAppButton = () => {
+export const LaunchAppButton = () => {
   return (
     <Link
-      href="/auth/login"
-      className="relative z-10 px-3.5 py-1.5 md:px-5 md:py-2.5 rounded-full text-lg text-white backdrop-blur-lg border border-white/10 overflow-hidden group transition-all duration-300 hover:border-white/30"
+      href="/login"
+      className="relative z-10 px-3.5 py-1.5 md:px-5 md:py-2.5 text-lg text-white backdrop-blur-lg border border-white/10 overflow-hidden group transition-all duration-300 hover:border-white/30"
     >
       <span className="relative z-10 text-sm md:text-base font-sora font-bold">Launch App</span>
 
@@ -17,5 +16,3 @@ const LaunchAppButton = () => {
     </Link>
   )
 }
-
-export default LaunchAppButton

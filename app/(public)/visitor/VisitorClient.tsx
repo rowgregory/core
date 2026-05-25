@@ -6,6 +6,7 @@ import Link from 'next/link'
 import Pusher from 'pusher-js'
 import { triggerReaction } from '@/app/lib/actions/triggerReaction'
 import { useRouter } from 'next/navigation'
+import { formatCurrency } from '@/app/lib/utils/currency.utils'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -41,12 +42,6 @@ const REACTIONS = [
   { emoji: '💰', label: 'Money' },
   { emoji: '🚀', label: 'Rocket' }
 ]
-
-function formatCurrency(n: number) {
-  if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`
-  if (n >= 1_000) return `$${(n / 1_000).toFixed(0)}K`
-  return `$${n}`
-}
 
 const SCHEDULE = [
   { time: '7:00 AM', label: 'Arrive', note: 'Grab food, grab a seat.' },

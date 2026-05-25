@@ -1,53 +1,11 @@
-// ─── Types ─────────────────────────────────────────────────────────────────────
-export type DateInput = string | number | Date | null | undefined
-
-export interface DateFormatOptions {
-  style?: 'short' | 'medium' | 'long' | 'full' | 'month-day'
-  includeTime?: boolean
-  includeSeconds?: boolean
-  fallback?: string
+/**
+ * Convert any Date to a YYYY-MM-DD key in Eastern time.
+ * Used to normalize dates for comparison/lookup.
+ */
+export function toDateKey(d: Date): string {
+  const est = new Date(d.toLocaleString('en-US', { timeZone: 'America/New_York' }))
+  return `${est.getFullYear()}-${String(est.getMonth() + 1).padStart(2, '0')}-${String(est.getDate()).padStart(2, '0')}`
 }
-
-// ─── Core formatter ────────────────────────────────────────────────────────────
-export const formatDate = (date: DateInput, options: DateFormatOptions = {}): string => {
-  const { style = 'medium', includeTime = false, includeSeconds = false, fallback = 'Never' } = options
-
-  if (!date) return fallback
-  const d = new Date(date)
-  if (isNaN(d.getTime())) return fallback
-
-  let fmt: Intl.DateTimeFormatOptions = {}
-
-  switch (style) {
-    case 'short':
-    case 'medium':
-      fmt = { year: 'numeric', month: 'short', day: 'numeric' }
-      break
-    case 'long':
-      fmt = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
-      break
-    case 'full':
-      fmt = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit' }
-      if (includeSeconds) fmt.second = '2-digit'
-      break
-    case 'month-day':
-      fmt = { month: 'short', day: 'numeric' }
-      break
-  }
-
-  if (includeTime && style !== 'full') {
-    fmt.hour = 'numeric'
-    fmt.minute = '2-digit'
-    if (includeSeconds) fmt.second = '2-digit'
-  }
-
-  return new Intl.DateTimeFormat('en-US', { ...fmt, timeZone: 'America/New_York' }).format(d)
-}
-
-// ─── Convenience formatters ────────────────────────────────────────────────────
-export const formatDateShort = (date: DateInput) => formatDate(date, { style: 'short' })
-export const formatDateLong = (date: DateInput) => formatDate(date, { style: 'long' })
-export const formatDateTime = (date: DateInput) => formatDate(date, { style: 'medium', includeTime: true })
 
 export function fmtDate(iso: string) {
   const d = iso.includes('T') ? new Date(iso) : new Date(`${iso}T12:00:00`)
@@ -60,113 +18,99 @@ export function fmtDate(iso: string) {
   })
 }
 
-// ─── Input formatters ──────────────────────────────────────────────────────────
-export const convertToDateFormat = (date: string | Date): string => {
-  if (!date) return ''
-  return (date instanceof Date ? date : new Date(date)).toISOString().split('T')[0]
+export function fmtPeriod(start: string | null, end: string | null) {
+  if (!start || !end) return null
+  return `${fmtDate(start)} – ${fmtDate(end)}`
 }
 
-export const formatDateForInput = (iso: string): string => {
-  if (!iso) return ''
-  const d = new Date(iso)
-  return [d.getFullYear(), String(d.getMonth() + 1).padStart(2, '0'), String(d.getDate()).padStart(2, '0')].join('-')
+/**
+ * Returns the start of the current "Thursday week" — used to scope this-week stats.
+ * If today is Tuesday, returns last Thursday. If today is Thursday, returns today.
+ */
+export function getStartOfThursdayWeek(): Date {
+  const now = new Date()
+  const diffToThursday = (now.getDay() + 3) % 7
+  const start = new Date(now)
+  start.setDate(now.getDate() - diffToThursday)
+  start.setHours(0, 0, 0, 0)
+  return start
 }
 
-export const formatDateTimeForInput = (iso: string): string => {
-  if (!iso) return ''
-  const d = new Date(iso)
-  return (
-    [d.getFullYear(), String(d.getMonth() + 1).padStart(2, '0'), String(d.getDate()).padStart(2, '0')].join('-') +
-    'T' +
-    [String(d.getHours()).padStart(2, '0'), String(d.getMinutes()).padStart(2, '0')].join(':')
-  )
-}
-
-// ─── Range / month helpers ─────────────────────────────────────────────────────
-export const formatDateRange = (startDays: number, endDays: number): string => {
-  const start = new Date()
-  start.setDate(start.getDate() + startDays)
-  const end = new Date()
-  end.setDate(end.getDate() + endDays)
-  return `${start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${end.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
-}
-
-export const formatMonth = (date: Date): string => date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
-
-export const isCurrentMonth = (date: Date, currentMonth: Date): boolean =>
-  date.getMonth() === currentMonth.getMonth() && date.getFullYear() === currentMonth.getFullYear()
-
-export const isToday = (date: Date): boolean => {
-  const today = new Date()
-  return (
-    date.getDate() === today.getDate() &&
-    date.getMonth() === today.getMonth() &&
-    date.getFullYear() === today.getFullYear()
-  )
-}
-
-// ─── Common date ranges ────────────────────────────────────────────────────────
-const now = new Date()
-
-export const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
-export const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1)
-export const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1)
-export const startOfNextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1)
-
-// ─── Chapter-specific helpers ──────────────────────────────────────────────────
-export function getAllUpcomingThursdays(count: number): string[] {
-  const results: string[] = []
-  const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }))
-  const cursor = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-  while (cursor.getDay() !== 4) cursor.setDate(cursor.getDate() + 1)
-
-  while (results.length < count) {
-    const key = `${cursor.getFullYear()}-${String(cursor.getMonth() + 1).padStart(2, '0')}-${String(cursor.getDate()).padStart(2, '0')}`
-    results.push(key)
-    cursor.setDate(cursor.getDate() + 7)
+/**
+ * Format an ISO date as a relative time string.
+ * Less than 1 hour → "5m ago". Less than 1 day → "3h ago".
+ * Less than 1 week → "Yesterday" or "5d ago". Older → "May 14".
+ */
+export function timeAgo(iso: string): string {
+  const date = new Date(iso)
+  const s = Math.floor((Date.now() - date.getTime()) / 1000)
+  if (s < 3_600) return `${Math.floor(s / 60)}m ago`
+  if (s < 86_400) return `${Math.floor(s / 3_600)}h ago`
+  if (s < 604_800) {
+    const d = Math.floor(s / 86_400)
+    return d === 1 ? 'Yesterday' : `${d}d ago`
   }
-  return results
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 }
 
-export function getQuarterlyDates(): string[] {
-  return [
-    new Date(2026, 3, 15), // Apr 15
-    new Date(2026, 6, 15), // Jul 15
-    new Date(2026, 9, 15), // Oct 15
-    new Date(2027, 0, 15) // Jan 15
-  ].map((d) => d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }))
+/**
+ * Format an ISO date as a coarse-grained "last seen" label.
+ * Today, Yesterday, "3d ago", "2w ago", "5mo ago". Null returns "Never".
+ */
+export function lastSeenLabel(iso: string | null) {
+  if (!iso) return 'Never'
+  const days = Math.floor((Date.now() - new Date(iso).getTime()) / 86_400_000)
+  if (days === 0) return 'Today'
+  if (days === 1) return 'Yesterday'
+  if (days < 7) return `${days}d ago`
+  if (days < 30) return `${Math.floor(days / 7)}w ago`
+  return `${Math.floor(days / 30)}mo ago`
 }
 
-export function getAnnualBillingAnchor(month: number, day: number): number {
+/**
+ * Map a "last seen" date to a Tailwind text-color class for activity status.
+ * Within 7 days → emerald, within 30 days → amber, older or null → red.
+ */
+export function lastSeenColor(iso: string | null) {
+  if (!iso) return 'text-red-400'
+  const days = Math.floor((Date.now() - new Date(iso).getTime()) / 86_400_000)
+  if (days <= 7) return 'text-emerald-400'
+  if (days <= 30) return 'text-amber-400'
+  return 'text-red-400'
+}
+
+/**
+ * Format an ISO date as a countdown label from today.
+ * Same day → "Today", next day → "Tomorrow", otherwise → "3d".
+ */
+export function daysUntil(iso: string) {
   const today = new Date()
-  let anchor = new Date(today.getFullYear(), month - 1, day)
-  if (anchor <= today) {
-    anchor = new Date(today.getFullYear() + 1, month - 1, day)
-  }
-  return Math.floor(anchor.getTime() / 1000)
+  today.setHours(0, 0, 0, 0)
+  const target = new Date(iso)
+  target.setHours(0, 0, 0, 0)
+  const diff = Math.round((target.getTime() - today.getTime()) / 86_400_000)
+  if (diff === 0) return 'Today'
+  if (diff === 1) return 'Tomorrow'
+  return `${diff}d`
 }
 
-export function getQuarterlyBillingAnchor(): number {
-  const today = new Date()
-  const year = today.getFullYear()
-
-  const quarters = [
-    new Date(year, 0, 1),
-    new Date(year, 3, 1),
-    new Date(year, 6, 1),
-    new Date(year, 9, 1),
-    new Date(year + 1, 0, 1)
-  ]
-
-  const next = quarters.find((q) => q > today)!
-  return Math.floor(next.getTime() / 1000)
-}
-
-export function fmtThursday(iso: string) {
-  return new Date(`${iso}T12:00:00`).toLocaleDateString('en-US', {
-    weekday: 'short',
+/**
+ * Returns today's date formatted as a long weekday + short month + day label.
+ * Example: "Saturday, May 23"
+ */
+export function getTodayLabel(): string {
+  return new Date().toLocaleDateString('en-US', {
+    weekday: 'long',
     month: 'short',
-    day: 'numeric',
-    year: 'numeric'
+    day: 'numeric'
   })
+}
+
+/**
+ * Calculate expiration date (1 year from joined date)
+ */
+export function calculateExpiresAt(): Date {
+  const expiresAt = new Date()
+  expiresAt.setFullYear(expiresAt.getFullYear() + 1)
+  return expiresAt
 }

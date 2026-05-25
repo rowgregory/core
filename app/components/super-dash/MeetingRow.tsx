@@ -2,9 +2,9 @@ import { AttendanceMember, AttendanceRow } from '@/app/lib/actions/attendance/ge
 import { deleteMeeting } from '@/app/lib/actions/meeting/deleteMeeting'
 import { useState, useTransition } from 'react'
 import { motion } from 'framer-motion'
-import { fmtThursday } from '@/app/lib/utils/date.utils'
 import { MemberChip } from './MemberChip'
 import { useRouter } from 'next/navigation'
+import { fmtDate } from '@/app/lib/utils/date.utils'
 
 export function MeetingRow({
   row,
@@ -40,7 +40,7 @@ export function MeetingRow({
       {/* Date + stats */}
       <div className="shrink-0 sm:w-48">
         <p className="font-sora font-bold text-[13px] text-text-light dark:text-text-dark leading-tight">
-          {fmtThursday(row.date)}
+          {fmtDate(row.date)}
         </p>
         <p className="text-f10 font-mono tracking-widest uppercase text-muted-light dark:text-muted-dark mt-1">
           {attendedCount} / {members.length} attended
@@ -89,6 +89,7 @@ export function MeetingRow({
             attended={row.attendedIds.includes(member.id)}
             checkedInTime={row.checkedInTimes[member.id]}
             meetingId={row.id}
+            reinstated={row.reinstatedUserIds.has(member.id)}
           />
         ))}
       </div>

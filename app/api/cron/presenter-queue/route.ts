@@ -4,8 +4,9 @@ import prisma from '@/prisma/client'
 import { NextRequest, NextResponse } from 'next/server'
 import { presenterQueueTemplate } from '@/app/lib/email-templates/presenter-queue.template'
 import { chapterId } from '@/app/lib/constants/api/chapterId'
-import { buildSchedule, getUpcomingMeetingDates, toDateKey } from '@/app/lib/utils/presenter-engine'
-import { fmtDate, getAllUpcomingThursdays } from '@/app/lib/utils/date.utils'
+import { buildSchedule, getUpcomingMeetingDates } from '@/app/lib/utils/presenter-engine.utils'
+import { fmtDate, toDateKey } from '@/app/lib/utils/date.utils'
+import { getAllUpcomingThursdays } from '@/app/lib/utils/attendance.utils'
 
 const BATCH_SIZE = 2
 const DELAY_MS = 1000

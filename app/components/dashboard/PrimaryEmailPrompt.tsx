@@ -3,10 +3,10 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import useSoundEffect from '@/hooks/useSoundEffect'
 import { emailRegex } from '@/app/lib/utils/regex'
 import { updateEmail } from '@/app/lib/actions/user/updateEmail'
 import { useSession } from 'next-auth/react'
+import { useSounds } from '@/app/lib/hooks/useSounds'
 
 export function PrimaryEmailPrompt() {
   const session = useSession()
@@ -15,7 +15,7 @@ export function PrimaryEmailPrompt() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const router = useRouter()
-  const { play } = useSoundEffect('/sound-effects/se-3.mp3', true)
+  const { play } = useSounds({ enabled: true, volume: 0.4 })
 
   const unchanged = email.trim() === currentEmail
 
@@ -30,7 +30,7 @@ export function PrimaryEmailPrompt() {
     const res = await updateEmail(email.trim())
     setIsLoading(false)
     if (res.success) {
-      play()
+      play('se3')
       router.refresh()
     }
   }

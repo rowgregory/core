@@ -51,7 +51,7 @@ export async function updateUserStatus(userId: string, membershipStatus: 'ACTIVE
       from: `Coastal Referral Exchange <noreply@coastal-referral-exchange.com>`,
       to: [existingUser.email],
       subject: "You've been accepted — welcome to Coastal Referral Exchange",
-      html: memberAcceptedTemplate(existingUser.name.split(' ')[0], `${baseUrl}/auth/login`)
+      html: memberAcceptedTemplate(existingUser.name.split(' ')[0], `${baseUrl}/login`)
     })
   } else {
     await resend.emails.send({

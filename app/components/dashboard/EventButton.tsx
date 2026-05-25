@@ -6,29 +6,21 @@ import { Calendar, X } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { createEvent } from '@/app/lib/actions/event/createEvent'
 import { EventOrg } from '@prisma/client'
-import useSoundEffect from '@/hooks/useSoundEffect'
-
-const EVENT_ORGS = [
-  { value: 'LYNN_CHAMBER', label: 'Lynn Chamber of Commerce' },
-  { value: 'NORTH_SHORE_LATINO', label: 'North Shore Latino Business Association' },
-  { value: 'BOYS_AND_GIRLS_CLUB', label: 'Boys & Girls Club of Lynn' },
-  { value: 'TOUCHSTONE', label: 'Touchstone Closing & Escrow, LLC.' }
-]
-
-const inputCls =
-  'w-full h-11 bg-white dark:bg-bg-dark border border-slate-300 dark:border-border-dark px-3.5 font-nunito text-[14px] text-text-light dark:text-text-dark placeholder:text-slate-400 dark:placeholder:text-muted-dark/50 focus:outline-none focus:border-primary-light dark:focus:border-primary-dark transition-colors rounded-none'
+import { useSounds } from '@/app/lib/hooks/useSounds'
+import { EVENT_ORGS } from '@/app/lib/constants/event.constants'
+import { inputCls } from '../common/Field'
 
 export function EventButton() {
   const router = useRouter()
   const [open, setOpen] = useState(false)
-  const [org, setOrg] = useState<'LYNN_CHAMBER' | 'NORTH_SHORE_LATINO' | 'BOYS_AND_GIRLS_CLUB' | 'TOUCHSTONE'>(
-    'LYNN_CHAMBER'
-  )
+  const [org, setOrg] = useState<
+    'LYNN_CHAMBER' | 'NORTH_SHORE_LATINO' | 'BOYS_AND_GIRLS_CLUB' | 'TOUCHSTONE' | 'JONAH_GROUP' | 'OTHER'
+  >('LYNN_CHAMBER')
   const [name, setName] = useState('')
   const [desc, setDesc] = useState('')
   const [link, setLink] = useState('')
   const [loading, setLoading] = useState(false)
-  const { play } = useSoundEffect('/sound-effects/se-3.mp3', true)
+  const { play } = useSounds({ enabled: true, volume: 0.4 })
 
   function handleClose() {
     setOpen(false)
@@ -44,7 +36,7 @@ export function EventButton() {
     const res = await createEvent({ org, name, description: desc, externalLink: link })
     setLoading(false)
     if (res.success) {
-      play()
+      play('se3')
       handleClose()
       router.refresh()
     }

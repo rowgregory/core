@@ -4,11 +4,11 @@ import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Globe, MapPin, Phone, Mail, ChevronRight, Target } from 'lucide-react'
-import { User } from '@/types/user'
+import { User } from '@/types/user.types'
 import FadeUp from '../common/FadeUp'
-import { getInitials } from '@/app/lib/utils/common/getInitials'
 import { formatPhone } from '@/app/lib/utils/phone.utils'
 import { useSession } from 'next-auth/react'
+import { getInitials } from '@/app/lib/utils/shared.utils'
 
 // ─── X / Threads icons (lucide doesn't have these) ─────────────────────────────
 function XIcon({ size = 14 }: { size?: number }) {

@@ -3,10 +3,8 @@
 import { auth } from '@/app/lib/auth'
 import prisma from '@/prisma/client'
 import { stripe } from '../../stripe'
-import { getAnnualBillingAnchor, getQuarterlyBillingAnchor } from '../../utils/date.utils'
-
-const ANNUAL_PRICE_ID = process.env.STRIPE_ANNUAL_PRICE_ID!
-const QUARTERLY_PRICE_ID = process.env.STRIPE_QUARTERLY_PRICE_ID!
+import { getAnnualBillingAnchor, getQuarterlyBillingAnchor } from '../../utils/billing.utils'
+import { ANNUAL_PRICE_ID, QUARTERLY_PRICE_ID } from '../../constants/stripe.constants'
 
 export async function createSubscription({ joinMonth, joinDay }: { joinMonth: number; joinDay: number }): Promise<{
   success: boolean

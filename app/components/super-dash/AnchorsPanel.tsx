@@ -1,28 +1,28 @@
-import { deleteAnchor, SuperUserAnchor } from '@/app/lib/actions/super-user/superUserActions'
+import { deleteAnchor } from '@/app/lib/actions/super-user/superUserActions'
 import { useState } from 'react'
 import { Panel } from '../common/Panel'
 import { SectionLabel } from '../common/SectionLabel'
 import { motion } from 'framer-motion'
 import { fmtCurrency } from '@/app/lib/utils/currency.utils'
 import { SuperDashStatusBadge } from './SuperDashStatusBadge'
-import { fmtDate } from '@/app/lib/utils/date.utils'
 import { InlineActionBtn } from './InlineActionButton'
-import { timeAgo } from '@/app/lib/utils/time.utils'
 import { useRouter } from 'next/navigation'
-import useSoundEffect from '@/hooks/useSoundEffect'
+import { SuperUserAnchor } from '@/types/super.types'
+import { useSounds } from '@/app/lib/hooks/useSounds'
+import { fmtDate, timeAgo } from '@/app/lib/utils/date.utils'
 
 export function AnchorsPanel({ anchors }: { anchors: SuperUserAnchor[] }) {
   const [loadingId, setLoadingId] = useState<string | null>(null)
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null)
   const router = useRouter()
-  const { play } = useSoundEffect('/sound-effects/droplet.mp3', true)
+  const { play } = useSounds({ enabled: true, volume: 0.4 })
 
   async function remove(id: string) {
     setLoadingId(id)
 
     const res = await deleteAnchor(id)
     if (res.success) {
-      play()
+      play('se7')
       router.refresh()
       setLoadingId(null)
       setConfirmDelete(null)

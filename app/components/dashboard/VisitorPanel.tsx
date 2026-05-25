@@ -1,14 +1,14 @@
 'use client'
 
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { createVisitor } from '@/app/lib/actions/visitor/createVisitor'
 import { emailRegex } from '@/app/lib/utils/regex'
 import { CreateVisitorModal } from '../modals/CreateVisitorModal'
-import { Visitor } from '@/types/visitor'
+import { Visitor } from '@/types/visitor.types'
 import { useRouter } from 'next/navigation'
-import useSoundEffect from '@/hooks/useSoundEffect'
 import Link from 'next/link'
+import { useSounds } from '@/app/lib/hooks/useSounds'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -91,7 +91,7 @@ export default function VisitorPanel({
   visitors: Visitor[]
   closestVisitorDay: string
 }) {
-  const { play } = useSoundEffect('/sound-effects/se-2.mp3', true)
+  const { play } = useSounds({ enabled: true, volume: 0.4 })
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [form, setForm] = useState<FormState>(INITIAL_STATE)
@@ -99,8 +99,6 @@ export default function VisitorPanel({
   const [errorMsg, setErrorMsg] = useState('')
   const onOpen = () => setOpen(true)
   const onClose = () => setOpen(false)
-
-  function handleClose() {}
 
   async function handleSubmit() {
     if (status === 'loading') return
@@ -132,11 +130,11 @@ export default function VisitorPanel({
       company: form.company.trim(),
       industry: form.industry.trim(),
       phone: form.phone.trim() || undefined,
-      visitDate: closestVisitorDay
+      visitDate: closestVisitorDay || form.visitDate
     })
 
     if (result.success) {
-      play()
+      play('se2')
       router.refresh()
       setOpen(false)
 
@@ -151,35 +149,34 @@ export default function VisitorPanel({
 
   return (
     <>
-      <AnimatePresence>
-        {open && (
-          <>
-            {/* Backdrop */}
-            <motion.div
-              key="backdrop"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 z-40 bg-black/50 backdrop-blur-[2px]"
-              onClick={onClose}
-              aria-hidden="true"
-            />
+      {open && (
+        <>
+          {/* Backdrop */}
+          <motion.div
+            key="backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-40 bg-black/50 backdrop-blur-[2px]"
+            onClick={onClose}
+            aria-hidden="true"
+          />
 
-            {/* Modal */}
-            <CreateVisitorModal
-              errorMsg={errorMsg}
-              form={form}
-              handleClose={onClose}
-              handleSubmit={handleSubmit}
-              setForm={setForm}
-              open={open}
-              status={status}
-              closestVisitorDay={closestVisitorDay}
-            />
-          </>
-        )}
-      </AnimatePresence>
+          {/* Modal */}
+          <CreateVisitorModal
+            errorMsg={errorMsg}
+            form={form}
+            handleClose={onClose}
+            handleSubmit={handleSubmit}
+            setForm={setForm}
+            open={open}
+            status={status}
+            closestVisitorDay={closestVisitorDay}
+          />
+        </>
+      )}
+
       <div className="border border-border-light dark:border-border-dark">
         {/* Header */}
         <div className="px-4 py-3 border-b border-border-light dark:border-border-dark flex items-center justify-between gap-3">
@@ -207,10 +204,11 @@ export default function VisitorPanel({
         ) : (
           <div className="px-4 py-3">
             <p className="text-xs font-nunito text-muted-light dark:text-muted-dark leading-relaxed">
-              Bringing a guest to Visitor Day? Log them here so the group knows who to expect.
+              Bringing a guest to a meeting? Log them here so the group knows who to expect.
             </p>
             <p className="text-f10 font-mono tracking-widest uppercase text-muted-light dark:text-muted-dark mt-2">
-              Next Visitor Day · <span className="text-primary-light dark:text-primary-dark">September 24th, 2026</span>
+              No Visitor Day scheduled ·{' '}
+              <span className="text-primary-light dark:text-primary-dark">Add a visitor for any Thursday</span>
             </p>
           </div>
         )}

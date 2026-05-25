@@ -2,7 +2,7 @@
 
 import prisma from '@/prisma/client'
 import { auth } from '../../auth'
-import { MembershipStatus } from '@/types/user'
+import { MembershipStatus } from '@/types/user.types'
 import { createLog } from '../../utils/api/createLog'
 
 export async function updateMember(

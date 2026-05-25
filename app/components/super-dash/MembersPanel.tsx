@@ -1,10 +1,10 @@
-import { SuperUserMember } from '@/app/lib/actions/super-user/superUserActions'
 import { useState } from 'react'
 import { Panel } from '../common/Panel'
 import { SectionLabel } from '../common/SectionLabel'
 import { SuperDashStatusBadge } from './SuperDashStatusBadge'
-import { lastSeenColor, lastSeenLabel } from '@/app/lib/utils/time.utils'
 import { MotionLink } from '../common/MotionLink'
+import { SuperUserMember } from '@/types/super.types'
+import { lastSeenColor, lastSeenLabel } from '@/app/lib/utils/date.utils'
 
 export function MembersPanel({ members }: { members: SuperUserMember[] }) {
   const [sort, setSort] = useState<'lastLogin' | 'activity' | 'name'>('lastLogin')

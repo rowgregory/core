@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import { updateChapter } from '@/app/lib/actions/updateChapter'
+import { updateChapter } from '@/app/lib/actions/chapter/updateChapter'
 import { Panel } from '../common/Panel'
 import { SectionLabel } from '../common/SectionLabel'
 

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X } from 'lucide-react'
-import { LinkedRecord } from '@/types/common'
+import { LinkedRecord } from '@/types/common.types'
 import { useRouter } from 'next/navigation'
 import { formatPhone } from '@/app/lib/utils/phone.utils'
 

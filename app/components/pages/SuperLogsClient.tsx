@@ -5,8 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { ArrowLeft, Search, Trash2, ChevronDown, ChevronUp, RefreshCw, X } from 'lucide-react'
 import { clearLogs, deleteLog, getLogs, LogEntry, LogsByLevel } from '@/app/lib/actions/log/log-actions'
-import { timeAgo } from '@/app/lib/utils/time.utils'
-import { fmtDate } from '@/app/lib/utils/date.utils'
+import { fmtDate, timeAgo } from '@/app/lib/utils/date.utils'
 import FadeUp from '../common/FadeUp'
 
 function parseMetadata(metadata: Record<string, unknown> | null): string[] {

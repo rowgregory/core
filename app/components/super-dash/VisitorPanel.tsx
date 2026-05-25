@@ -1,27 +1,26 @@
-import { Visitor } from '@/types/visitor'
+import { Visitor } from '@/types/visitor.types'
 import { Panel } from '../common/Panel'
 import { SectionLabel } from '../common/SectionLabel'
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { deleteVisitor } from '@/app/lib/actions/super-user/deleteVisitor'
-import { timeAgo } from '@/app/lib/utils/time.utils'
-import { toDateKey } from '@/app/lib/utils/presenter-engine'
 import { useRouter } from 'next/navigation'
 import { InlineActionBtn } from './InlineActionButton'
-import useSoundEffect from '@/hooks/useSoundEffect'
+import { useSounds } from '@/app/lib/hooks/useSounds'
+import { timeAgo, toDateKey } from '@/app/lib/utils/date.utils'
 
 export function VisitorPanel({ visitors }: { visitors: Visitor[] }) {
   const router = useRouter()
   const [loadingId, setLoadingId] = useState<string | null>(null)
   const [confirmId, setConfirmId] = useState<string | null>(null)
-  const { play } = useSoundEffect('/sound-effects/droplet.mp3', true)
+  const { play } = useSounds({ enabled: true, volume: 0.4 })
 
   async function handleDelete(id: string) {
     setLoadingId(id)
     const res = await deleteVisitor({ id })
     if (res.success) {
       router.refresh()
-      play()
+      play('se7')
       setLoadingId(null)
       setConfirmId(null)
     }

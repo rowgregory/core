@@ -1,5 +1,5 @@
 import prisma from '@/prisma/client'
-import { toDateKey } from '../../utils/time.utils'
+import { toDateKey } from '../../utils/date.utils'
 
 export async function getClosestVisitorDay(): Promise<string | null> {
   const today = new Date()

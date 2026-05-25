@@ -2,95 +2,19 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { Users, Activity, DollarSign } from 'lucide-react'
 import { useSession } from 'next-auth/react'
-import { createAnchor } from '@/app/lib/actions/createAnchor'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createFace2Face } from '@/app/lib/actions/createFace2Face'
 import { createReferral } from '@/app/lib/actions/referral/createReferral'
-import useSoundEffect from '@/hooks/useSoundEffect'
 import { formatPhone } from '@/app/lib/utils/phone.utils'
 import { formatAmountInput } from '@/app/lib/utils/currency.utils'
 import { Modal } from '../common/Modal'
 import { Field, inputCls } from '../common/Field'
 import { SelectField } from '../common/SelectField'
-
-// ─── Types ─────────────────────────────────────────────────────────────────────
-export interface Member {
-  id: string
-  name: string
-  industry: string | null
-}
-
-export interface QuickActionsProps {
-  members: Member[]
-  variant: 'card' | 'compact'
-}
-
-type ModalKey = 'f2f' | 'referral' | 'closed' | null
-
-// ─── Action metadata ───────────────────────────────────────────────────────────
-const ACTIONS = [
-  {
-    key: 'f2f' as const,
-    icon: Users,
-    tag: '01 · Meeting',
-    tagShort: 'Meeting',
-    label: 'Face-2-Face',
-    desc: 'Log a 1-on-1 with a member',
-    accentHex: '#38bdf8',
-    tagColor: '#0284c7',
-    submitLabel: 'Log Meeting',
-    colors: {
-      bg: 'bg-sky-50 dark:bg-sky-400/8',
-      border: 'border-sky-200 dark:border-sky-400/20',
-      hover: 'hover:bg-sky-100 dark:hover:bg-sky-400/15',
-      tag: 'text-sky-500 dark:text-[#38bdf8]',
-      title: 'text-sky-900 dark:text-text-dark',
-      desc: 'text-sky-600 dark:text-sky-400'
-    }
-  },
-  {
-    key: 'referral' as const,
-    icon: Activity,
-    tag: '02 · Referral',
-    tagShort: 'Referral',
-    label: 'Give a Referral',
-    desc: 'Pass business to a member',
-    accentHex: '#22d3ee',
-    tagColor: '#0891b2',
-    submitLabel: 'Send Referral',
-    colors: {
-      bg: 'bg-cyan-50 dark:bg-cyan-400/8',
-      border: 'border-cyan-200 dark:border-cyan-400/20',
-      hover: 'hover:bg-cyan-100 dark:hover:bg-cyan-400/15',
-      tag: 'text-cyan-500 dark:text-[#22d3ee]',
-      title: 'text-cyan-900 dark:text-text-dark',
-      desc: 'text-cyan-600 dark:text-cyan-400'
-    }
-  },
-  {
-    key: 'closed' as const,
-    icon: DollarSign,
-    tag: '03 · Thank You',
-    tagShort: 'Thank You',
-    label: 'Closed Business',
-    desc: 'Thank a member for a closed deal',
-    accentHex: '#34d399',
-    tagColor: '#059669',
-    submitLabel: 'Submit',
-    colors: {
-      bg: 'bg-emerald-50 dark:bg-emerald-400/8',
-      border: 'border-emerald-200 dark:border-emerald-400/20',
-      hover: 'hover:bg-emerald-100 dark:hover:bg-emerald-400/15',
-      tag: 'text-emerald-500 dark:text-[#34d399]',
-      title: 'text-emerald-900 dark:text-text-dark',
-      desc: 'text-emerald-600 dark:text-emerald-400'
-    }
-  }
-] as const
-
-// ─── Sub-components ────────────────────────────────────────────────────────────
+import { useSounds } from '@/app/lib/hooks/useSounds'
+import { ACTIONS } from '@/app/lib/constants/dashboard.constants'
+import { Member, ModalKey, QuickActionsProps } from '@/types/dashboard.types'
+import { createAnchor } from '@/app/lib/actions/tyfcb/createAnchor'
 
 function MemberOptions({ members, showOutOfChapterMember }: { members: Member[]; showOutOfChapterMember?: boolean }) {
   return (
@@ -135,7 +59,6 @@ function QuickActionButton({ action, onClick }: { action: (typeof ACTIONS)[numbe
   )
 }
 
-// ─── Main ──────────────────────────────────────────────────────────────────────
 export default function QuickActions({ members, variant }: QuickActionsProps) {
   const session = useSession()
   const [activeModal, setActiveModal] = useState<ModalKey>(null)
@@ -167,15 +90,17 @@ export default function QuickActions({ members, variant }: QuickActionsProps) {
 
   const router = useRouter()
 
-  const { play } = useSoundEffect('/sound-effects/se-2.mp3', true)
+  const { play } = useSounds({ enabled: true, volume: 0.4 })
 
   function openModal(key: ModalKey) {
+    play('se9')
     setFormError(null)
     setActiveModal(key)
   }
 
   function closeModal() {
     if (isPending) return
+    play('se10')
     setActiveModal(null)
     setFormError(null)
   }
@@ -193,7 +118,7 @@ export default function QuickActions({ members, variant }: QuickActionsProps) {
       })
       setIsPending(false)
       if (!res.success) return setFormError(res.error ?? 'Something went wrong.')
-      play()
+      play('se2')
       router.refresh()
       setF2fMember('')
       setF2fNotes('')
@@ -216,7 +141,7 @@ export default function QuickActions({ members, variant }: QuickActionsProps) {
       })
       setIsPending(false)
       if (!res.success) return setFormError(res.error ?? 'Something went wrong.')
-      play()
+      play('se2')
       router.refresh()
       setRefTo('')
       setRefClient('')
@@ -239,7 +164,7 @@ export default function QuickActions({ members, variant }: QuickActionsProps) {
       })
       setIsPending(false)
       if (!res.success) return setFormError(res.error ?? 'Something went wrong.')
-      play()
+      play('se2')
       router.refresh()
       setClosedFrom('')
       setClosedAmount('')

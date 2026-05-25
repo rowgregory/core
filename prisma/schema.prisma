@@ -5,60 +5,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-}
-
-enum MembershipStatus {
-  PENDING
-  ACTIVE
-  INACTIVE
-  SUSPENDED
-  EXPIRED
-  CANCELLED
-  REJECTED
-  INITIAL_REVIEW
-  BACKGROUND_CHECK
-  FINAL_DECISION
-  FLAGGED
-
-  @@map("membership_status")
-}
-
-enum NotificationType {
-  APPLICATION_SUBMITTED
-  APPLICATION_APPROVED
-  APPLICATION_REJECTED
-  NEW_MEMBER
-  SYSTEM_ALERT
-  PARLEY_REQUEST
-  PARLEY_CONFIRMED
-  PARLEY_CANCELLED
-  PARLEY_COMPLETED
-  ANCHOR_REPORTED
-  ANCHOR_VERIFIED
-  ANCHOR_DISPUTED
-}
-
-enum EventStatus {
-  DRAFT
-  UPCOMING
-  ONGOING
-  COMPLETED
-  CANCELLED
-  POSTPONED
-}
-
-enum RendezvousStatus {
-  ACTIVE
-  REMOVED
-  CANCELLED
-}
-
-enum EventOrg {
-  LYNN_CHAMBER
-  NORTH_SHORE_LATINO
-  BOYS_AND_GIRLS_CLUB
-  TOUCHSTONE
-  OTHER
+  // directUrl = env("DIRECT_URL")
 }
 
 model Account {
@@ -184,22 +131,20 @@ model User {
   quarterlySubscriptionId  String?
 
   // ── Relations ─────────────────────────────────────────────────────────────
-  chapter           Chapter                    @relation(fields: [chapterId], references: [id])
+  chapter           Chapter         @relation(fields: [chapterId], references: [id])
   accounts          Account[]
   sessions          Session[]
   logs              Log[]
   orders            Order[]
   paymentMethods    PaymentMethod[]
   presenterQueue    PresenterQueue?
-  signOutEvents     SignOutEvent[]
-  visitorInvites    Visitor[]                  @relation("VisitorInvites")
-  givenCredits      Anchor[]                   @relation("AnchorGiver")
-  receivedCredits   Anchor[]                   @relation("AnchorReceiver")
-  requestedMeetings Parley[]                   @relation("ParleyRequester")
-  receivedMeetings  Parley[]                   @relation("ParleyRecipient")
-  giver             TreasureMap[]              @relation("TreasureMapGiver")
-  receiver          TreasureMap[]              @relation("TreasureMapReceiver")
-  reporter          SuspiciousActivityReport[] @relation("ReportedBy")
+  visitorInvites    Visitor[]       @relation("VisitorInvites")
+  givenCredits      Anchor[]        @relation("AnchorGiver")
+  receivedCredits   Anchor[]        @relation("AnchorReceiver")
+  requestedMeetings Parley[]        @relation("ParleyRequester")
+  receivedMeetings  Parley[]        @relation("ParleyRecipient")
+  giver             TreasureMap[]   @relation("TreasureMapGiver")
+  receiver          TreasureMap[]   @relation("TreasureMapReceiver")
   attendances       Attendance[]
 }
 
@@ -267,26 +212,24 @@ model Anchor {
 }
 
 model Chapter {
-  id                        String                     @id @default(cuid())
-  name                      String
-  location                  String
-  meetingDay                String
-  meetingTime               String
-  createdAt                 DateTime                   @default(now())
-  updatedAt                 DateTime                   @updatedAt
-  meetingFrequency          String                     @default("WEEKLY")
-  hasUnlockedBooty          Boolean                    @default(false)
-  hasUnlockedGrog           Boolean                    @default(false)
-  hasUnlockedMuster         Boolean                    @default(false)
-  anchors                   Anchor[]
-  events                    Event[]
-  parleys                   Parley[]
-  rendezvous                Rendezvous[]
-  treasureMaps              TreasureMap[]
-  users                     User[]
-  suspiciousActivityReports SuspiciousActivityReport[]
-  visitors                  Visitor[]
-  meetings                  Meeting[]
+  id                String        @id @default(cuid())
+  name              String
+  location          String
+  meetingDay        String
+  meetingTime       String
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  meetingFrequency  String        @default("WEEKLY")
+  hasUnlockedBooty  Boolean       @default(false)
+  hasUnlockedGrog   Boolean       @default(false)
+  hasUnlockedMuster Boolean       @default(false)
+  anchors           Anchor[]
+  events            Event[]
+  parleys           Parley[]
+  treasureMaps      TreasureMap[]
+  users             User[]
+  visitors          Visitor[]
+  meetings          Meeting[]
 }
 
 model Event {
@@ -300,16 +243,6 @@ model Event {
   chapterId    String
   chapter      Chapter     @relation(fields: [chapterId], references: [id])
   status       EventStatus @default(UPCOMING)
-}
-
-model Newsletter {
-  id                       String   @id @default(cuid())
-  firstName                String   @db.VarChar(255)
-  lastName                 String   @db.VarChar(255)
-  email                    String   @unique @db.VarChar(255)
-  agreedToPrivacyStatement Boolean  @default(false)
-  createdAt                DateTime @default(now())
-  updatedAt                DateTime @updatedAt
 }
 
 model Log {
@@ -352,35 +285,6 @@ model TreasureMap {
   @@index([createdAt])
 }
 
-model Rendezvous {
-  id                String           @id @default(cuid())
-  title             String
-  description       String?
-  type              String
-  startTime         DateTime
-  endTime           DateTime
-  isRecurring       Boolean          @default(false)
-  recurrencePattern String?
-  createdAt         DateTime         @default(now())
-  updatedAt         DateTime         @updatedAt
-  chapterId         String
-  status            RendezvousStatus @default(ACTIVE)
-  chapter           Chapter          @relation(fields: [chapterId], references: [id])
-}
-
-model SuspiciousActivityReport {
-  id          String   @id @default(cuid())
-  reportType  String // SPAM, INAPPROPRIATE, FRAUD, HARASSMENT, OTHER
-  description String
-  reporterId  String
-  reporter    User     @relation("ReportedBy", fields: [reporterId], references: [id])
-  chapterId   String
-  chapter     Chapter  @relation(fields: [chapterId], references: [id])
-  status      String   @default("PENDING") // PENDING, REVIEWED, RESOLVED
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
 model PresenterQueue {
   id        String   @id @default(cuid())
   userId    String   @unique
@@ -406,26 +310,17 @@ model CancelledMeeting {
 }
 
 model VisitorDay {
-  id               String   @id @default(cuid())
+  id               String    @id @default(cuid())
   date             DateTime
   chapterId        String
-  createdAt        DateTime @default(now())
+  createdAt        DateTime  @default(now())
   presenterName    String?
   presenterCompany String?
-  reactionCount    Int      @default(0)
+  reactionCount    Int       @default(0)
+  visitors         Visitor[]
 
   @@unique([chapterId, date])
   @@index([chapterId])
-}
-
-model SignOutEvent {
-  id        String   @id @default(cuid())
-  userId    String
-  createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id])
-
-  @@index([userId])
-  @@index([createdAt])
 }
 
 model Visitor {
@@ -444,6 +339,9 @@ model Visitor {
 
   invitedById String
   invitedBy   User   @relation("VisitorInvites", fields: [invitedById], references: [id])
+
+  visitorDayId String?
+  visitorDay   VisitorDay? @relation(fields: [visitorDayId], references: [id])
 }
 
 model Order {
@@ -461,6 +359,12 @@ model Order {
   cancelledAt        DateTime?
   createdAt          DateTime    @default(now())
   updatedAt          DateTime    @updatedAt
+  hostedInvoiceUrl   String?
+  invoicePdfUrl      String?
+  invoiceNumber      String?
+
+  meetingId String?
+  meeting   Meeting? @relation(fields: [meetingId], references: [id], onDelete: SetNull)
 
   user User @relation(fields: [userId], references: [id])
 
@@ -493,6 +397,7 @@ model Meeting {
   createdAt   DateTime     @default(now())
   chapter     Chapter      @relation(fields: [chapterId], references: [id])
   attendances Attendance[]
+  orders      Order[]
 
   @@unique([chapterId, date])
   @@index([chapterId])
@@ -511,12 +416,58 @@ model Attendance {
   @@index([userId])
 }
 
+enum MembershipStatus {
+  PENDING
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  EXPIRED
+  CANCELLED
+  REJECTED
+  INITIAL_REVIEW
+  BACKGROUND_CHECK
+  FINAL_DECISION
+  FLAGGED
+}
+
+enum EventStatus {
+  DRAFT
+  UPCOMING
+  ONGOING
+  COMPLETED
+  CANCELLED
+  POSTPONED
+}
+
+enum RendezvousStatus {
+  ACTIVE
+  REMOVED
+  CANCELLED
+}
+
+enum EventOrg {
+  LYNN_CHAMBER
+  NORTH_SHORE_LATINO
+  BOYS_AND_GIRLS_CLUB
+  TOUCHSTONE
+  JONAH_GROUP
+  OTHER
+}
+
+enum DisputeStatus {
+  PENDING
+  RESOLVED
+  REJECTED
+}
+
 enum OrderType {
   ANNUAL
   QUARTERLY
+  ATTENDANCE_CORRECTION
 }
 
 enum OrderStatus {
+  SCHEDULED
   ACTIVE
   CANCELLED
   PAST_DUE

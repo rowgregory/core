@@ -3,7 +3,7 @@
 import { FC } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
-import { IForm } from '@/types/forms'
+import { IForm } from '@/types/forms.types'
 import { formatPhone } from '@/app/lib/utils/phone.utils'
 
 const inputCls =

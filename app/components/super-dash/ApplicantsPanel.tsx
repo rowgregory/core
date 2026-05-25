@@ -1,11 +1,11 @@
-import { SuperUserApplicant } from '@/app/lib/actions/super-user/superUserActions'
 import { Panel } from '../common/Panel'
 import { SectionLabel } from '../common/SectionLabel'
 import { motion } from 'framer-motion'
-import { timeAgo } from '@/app/lib/utils/time.utils'
 import { ApplicantModal } from '../modals/ApplicantModal'
 import { useState } from 'react'
 import { SuperDashStatusBadge } from './SuperDashStatusBadge'
+import { SuperUserApplicant } from '@/types/super.types'
+import { timeAgo } from '@/app/lib/utils/date.utils'
 
 export function ApplicantsPanel({ applicants }: { applicants: SuperUserApplicant[] }) {
   const [selected, setSelected] = useState<SuperUserApplicant | null>(null)

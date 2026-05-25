@@ -1,7 +1,9 @@
-import { LinkedRecord } from './common'
-import { TEvent } from './event'
-import { ScheduledPresenter } from './presenter-queue'
-import { Visitor } from './visitor'
+import { TABS } from '@/app/lib/constants/dashboard.constants'
+import { UserAttendanceRow } from './attendance.types'
+import { LinkedRecord } from './common.types'
+import { TEvent } from './event.types'
+import { ScheduledPresenter } from './presenter-queue.types'
+import { Visitor } from './visitor.types'
 
 export interface ActivityItem {
   id: string
@@ -37,7 +39,11 @@ export interface MemberDashboardProps {
   members: any
   stats: DashboardStats
   recentActivity: ActivityItem[]
-  schedule: ScheduledPresenter[]
+  schedule: {
+    success: boolean
+    data?: ScheduledPresenter[]
+    error?: string
+  }
   linkedRecord: LinkedRecord
   events: TEvent[]
   visitors: Visitor[]
@@ -47,4 +53,31 @@ export interface MemberDashboardProps {
     quarterlyOrder: any
     paymentMethod: any
   }
+  attendances: {
+    success: boolean
+    data?: {
+      rows: UserAttendanceRow[]
+      attended: number
+      total: number
+    }
+    error?: string
+  }
+  exclusions: { reason: string; date: string }[]
 }
+
+export interface Member {
+  id: string
+  name: string
+  industry: string | null
+}
+
+export interface QuickActionsProps {
+  members: Member[]
+  variant: 'card' | 'compact'
+}
+
+export type ModalKey = 'f2f' | 'referral' | 'closed' | null
+
+export type Tab = (typeof TABS)[number]['key']
+
+export type ActivityType = 'MEETING' | 'REFERRAL' | 'CLOSED'

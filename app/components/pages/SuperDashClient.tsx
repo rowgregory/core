@@ -1,7 +1,6 @@
 'use client'
 
 import { Users, Activity, DollarSign, Clock, LogOut, LayoutDashboard, Logs } from 'lucide-react'
-import { SuperUserDashboardData, SuperUserEvent } from '@/app/lib/actions/super-user/superUserActions'
 import { signOut } from 'next-auth/react'
 import PresenterQueueManager from '../super-dash/PresenterQueueManager'
 import { AnchorsPanel } from '../super-dash/AnchorsPanel'
@@ -17,10 +16,11 @@ import { ApplicantsPanel } from '../super-dash/ApplicantsPanel'
 import { createTestUser } from '@/app/lib/actions/user/createTestUser'
 import { useRouter } from 'next/navigation'
 import { ChapterSettingsPanel } from '../super-dash/ChapterSettingsPanel'
-import { Chapter } from '@/types/user'
-import { QueueMember } from '@/types/presenter-queue'
+import { Chapter } from '@/types/user.types'
+import { QueueMember } from '@/types/presenter-queue.types'
 import { VisitorPanel } from '../super-dash/VisitorPanel'
 import { EventsPanel } from '../super-dash/EventsPanel'
+import { SuperUserDashboardData, SuperUserEvent } from '@/types/super.types'
 
 type TSuperDashClient = {
   data: SuperUserDashboardData
@@ -33,8 +33,6 @@ type TSuperDashClient = {
   chapter: Chapter
   events: SuperUserEvent[]
 }
-
-const sharedBtnStyles = `shrink-0 mt-1 flex items-center gap-2 h-9 px-4 border border-border-light dark:border-border-dark text-muted-light dark:text-muted-dark hover:text-primary-light dark:hover:text-primary-dark hover:border-primary-light dark:hover:border-primary-dark transition-colors text-f10 font-mono tracking-[0.15em] uppercase focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark`
 
 export default function SuperDashClient({
   data,
@@ -54,43 +52,56 @@ export default function SuperDashClient({
     <div className="min-h-screen bg-bg-light dark:bg-bg-dark">
       <div className="max-w-480 w-full mx-auto px-4 xs:px-6 pb-12">
         {/* ── Header ── */}
-        <FadeUp className="pt-7 pb-6 border-b border-border-light dark:border-border-dark mb-6">
-          <div className="flex items-end justify-between gap-4">
-            <div>
-              <p className="text-f10 font-mono tracking-[0.2em] uppercase text-primary-light dark:text-primary-dark mb-1">
-                Superuser
-              </p>
-              <h1 className="font-sora font-black text-[28px] text-text-light dark:text-text-dark tracking-tight leading-none">
-                Chapter Overview
-              </h1>
-            </div>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={async () => {
-                  await createTestUser()
-                  router.refresh()
-                }}
-                className={sharedBtnStyles}
-              >
-                Add Test User
-              </button>
-              <Link href="/super/attendance-history" className={sharedBtnStyles}>
-                <Users size={13} aria-hidden="true" />
-                Attendance History
-              </Link>
-              <Link href="/super/logs" className={sharedBtnStyles}>
-                <Logs size={13} aria-hidden="true" />
-                Logs
-              </Link>
-              <Link href="/dashboard" className={sharedBtnStyles}>
-                <LayoutDashboard size={13} aria-hidden="true" />
-                Dashboard
-              </Link>
-              <button onClick={() => signOut({ callbackUrl: '/auth/login' })} className={sharedBtnStyles}>
-                <LogOut size={13} aria-hidden="true" />
-                Sign Out
-              </button>
-            </div>
+        <FadeUp className="pt-5 sm:pt-7 pb-5 sm:pb-6 border-b border-border-light dark:border-border-dark mb-5 sm:mb-6">
+          {/* Title */}
+          <div className="mb-4">
+            <p className="text-f10 font-mono tracking-[0.2em] uppercase text-primary-light dark:text-primary-dark mb-1">
+              Superuser
+            </p>
+            <h1 className="font-sora font-black text-2xl sm:text-[28px] text-text-light dark:text-text-dark tracking-tight leading-none">
+              Chapter Overview
+            </h1>
+          </div>
+
+          {/* Actions */}
+          <div className="flex flex-wrap items-center gap-1.5">
+            <button
+              onClick={async () => {
+                await createTestUser()
+                router.refresh()
+              }}
+              className="inline-flex items-center gap-1 px-2.5 py-1.5 border border-border-light dark:border-border-dark text-[10px] font-mono tracking-[0.15em] uppercase text-text-light dark:text-text-dark hover:border-primary-light dark:hover:border-primary-dark hover:text-primary-light dark:hover:text-primary-dark transition-colors"
+            >
+              Add Test User
+            </button>
+            <Link
+              href="/super/attendance-history"
+              className="inline-flex items-center gap-1 px-2.5 py-1.5 border border-border-light dark:border-border-dark text-[10px] font-mono tracking-[0.15em] uppercase text-text-light dark:text-text-dark hover:border-primary-light dark:hover:border-primary-dark hover:text-primary-light dark:hover:text-primary-dark transition-colors"
+            >
+              <Users size={11} aria-hidden="true" />
+              Attendance
+            </Link>
+            <Link
+              href="/super/logs"
+              className="inline-flex items-center gap-1 px-2.5 py-1.5 border border-border-light dark:border-border-dark text-[10px] font-mono tracking-[0.15em] uppercase text-text-light dark:text-text-dark hover:border-primary-light dark:hover:border-primary-dark hover:text-primary-light dark:hover:text-primary-dark transition-colors"
+            >
+              <Logs size={11} aria-hidden="true" />
+              Logs
+            </Link>
+            <Link
+              href="/dashboard"
+              className="inline-flex items-center gap-1 px-2.5 py-1.5 border border-border-light dark:border-border-dark text-[10px] font-mono tracking-[0.15em] uppercase text-text-light dark:text-text-dark hover:border-primary-light dark:hover:border-primary-dark hover:text-primary-light dark:hover:text-primary-dark transition-colors"
+            >
+              <LayoutDashboard size={11} aria-hidden="true" />
+              Dashboard
+            </Link>
+            <button
+              onClick={() => signOut({ redirectTo: '/login' })}
+              className="inline-flex items-center gap-1 px-2.5 py-1.5 border border-border-light dark:border-border-dark text-[10px] font-mono tracking-[0.15em] uppercase text-text-light dark:text-text-dark hover:border-primary-light dark:hover:border-primary-dark hover:text-primary-light dark:hover:text-primary-dark transition-colors"
+            >
+              <LogOut size={11} aria-hidden="true" />
+              Sign Out
+            </button>
           </div>
         </FadeUp>
 

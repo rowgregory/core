@@ -1,4 +1,4 @@
-import { getUsers } from '@/app/lib/actions/getUsers'
+import { getUsers } from '@/app/lib/actions/user/getUsers'
 import AttendanceClient from './AttendanceClient'
 import { getTodayAttendance } from '@/app/lib/actions/meeting/getTodayAttendance'
 
