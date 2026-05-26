@@ -18,7 +18,7 @@ export function AnimatedHeadline() {
   }, [])
 
   return (
-    <span className="relative inline-block text-white whitespace-nowrap" style={{ perspective: '1200px' }}>
+    <span className="relative inline-block text-white xs:whitespace-nowrap" style={{ perspective: '1200px' }}>
       <span aria-hidden className="invisible inline-block">
         {WORDS.reduce((a, b) => (a.length > b.length ? a : b))}
       </span>
@@ -33,7 +33,7 @@ function WordCubes({ word, mode }: { word: string; mode: 'enter' | 'exit' }) {
   const letters = word.split('')
 
   return (
-    <span className="absolute left-0 top-0 inline-block">
+    <span className="absolute left-0 top-0 inline-block whitespace-nowrap">
       {letters.map((letter, i) => {
         const char = letter === ' ' ? '\u00A0' : letter
 

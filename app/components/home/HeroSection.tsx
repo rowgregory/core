@@ -19,7 +19,7 @@ const navLinkCls = (active: boolean) =>
 
 export default function HeroSection() {
   return (
-    <section className="relative h-screen">
+    <section className="relative min-h-screen">
       {/* ── Ocean Spline — full screen ── */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <Spline
@@ -30,17 +30,15 @@ export default function HeroSection() {
             height: '100%'
           }}
         />
-        {/* Dark overlay so text stays readable over the bright ocean */}
         <div className="absolute inset-0 bg-black/30 pointer-events-none z-10" />
-        {/* Bottom fade into page */}
         <div className="absolute inset-x-0 bottom-0 h-32 bg-linear-to-t from-bg-dark to-transparent pointer-events-none z-10" />
       </div>
 
       {/* ── Header — embedded ── */}
-      <div className="absolute inset-x-0 top-0 z-30 flex items-center justify-between px-6 h-18.5">
+      <div className="absolute inset-x-0 top-0 z-30 flex items-center justify-between px-3 sm:px-6 h-14 sm:h-18.5">
         <Link
           href="/"
-          className="font-sora font-black text-xl text-white tracking-tight hover:text-white/80 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          className="font-sora font-black text-lg sm:text-xl text-white tracking-tight hover:text-white/80 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
           aria-label="Coastal Referral Exchange — Home"
         >
           CORE<span className="text-primary-dark">.</span>
@@ -67,7 +65,7 @@ export default function HeroSection() {
           </Link>
         </nav>
 
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-2 sm:gap-5">
           <button
             onClick={() => store.dispatch(setOpenNavigationDrawer())}
             className="block md:hidden text-white hover:text-white/70 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
@@ -79,18 +77,22 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* ── Content — centered on desktop, bottom-left on laptop ── */}
-      <div className="relative z-20 h-full flex flex-col justify-end lg:justify-center px-6 sm:px-12 lg:px-20 max-w-3xl lg:max-w-none lg:w-1/2 pointer-events-none">
+      {/* ── Content — bottom on mobile, centered on lg ── */}
+      <div className="relative z-20 min-h-screen flex flex-col justify-end lg:justify-center px-4 sm:px-12 lg:px-20 max-w-3xl lg:max-w-none lg:w-1/2 pointer-events-none pt-20 pb-10 sm:pb-12">
         {/* Tag */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="flex items-center gap-3 mb-6"
+          className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6"
         >
-          <span className="block w-5 h-px bg-white/60 shrink-0" aria-hidden="true" />
-          <p className="text-f10 font-mono tracking-[0.25em] uppercase text-white/60">
-            Coastal Referral Exchange · Boston's North Shore
+          <span className="block w-4 sm:w-5 h-px bg-white/60 shrink-0" aria-hidden="true" />
+          <p className="text-[9px] sm:text-f10 font-mono tracking-[0.2em] sm:tracking-[0.25em] uppercase text-white/60 leading-tight">
+            <span className="inline-block whitespace-nowrap">Coastal Referral Exchange</span>
+            <span className="mx-1 sm:mx-1.5" aria-hidden="true">
+              ·
+            </span>
+            <span className="inline-block whitespace-nowrap">Boston's North Shore</span>
           </p>
         </motion.div>
 
@@ -99,9 +101,9 @@ export default function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="mb-5"
+          className="mb-4 sm:mb-5"
         >
-          <h1 className="font-sora font-black text-5xl sm:text-6xl lg:text-7xl leading-[1.05] tracking-tight drop-shadow-lg">
+          <h1 className="font-sora font-black text-[1.7rem] xs:text-[2.25rem] sm:text-6xl lg:text-7xl leading-[1.05] tracking-tight drop-shadow-lg">
             <AnimatedHeadline />
           </h1>
         </motion.div>
@@ -111,7 +113,7 @@ export default function HeroSection() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="font-nunito text-base sm:text-lg text-white/70 leading-relaxed max-w-sm mb-8 drop-shadow"
+          className="font-nunito text-sm sm:text-base lg:text-lg text-white/70 leading-relaxed max-w-sm mb-6 sm:mb-8 drop-shadow"
         >
           North Shore professionals meeting every Thursday at 7 AM. One seat per industry. No competition — only
           collaboration.
@@ -122,17 +124,17 @@ export default function HeroSection() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.5 }}
-          className="flex items-center gap-4 flex-wrap mb-12 pointer-events-auto"
+          className="flex flex-col xs:flex-row items-stretch xs:items-center gap-3 xs:gap-4 mb-8 sm:mb-12 pointer-events-auto"
         >
           <Link
             href="/login"
-            className="h-12 px-8 bg-white text-bg-dark font-sora font-bold text-sm tracking-wide hover:bg-white/90 active:bg-white/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 inline-flex items-center"
+            className="h-11 sm:h-12 px-6 sm:px-8 bg-white text-bg-dark font-sora font-bold text-xs sm:text-sm tracking-wide hover:bg-white/90 active:bg-white/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 inline-flex items-center justify-center"
           >
             Launch App
           </Link>
           <Link
             href="/application"
-            className="h-12 px-8 border border-white/40 text-white/80 font-sora font-bold text-sm tracking-wide hover:bg-white/10 hover:border-white/70 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white inline-flex items-center"
+            className="h-11 sm:h-12 px-6 sm:px-8 border border-white/40 text-white/80 font-sora font-bold text-xs sm:text-sm tracking-wide hover:bg-white/10 hover:border-white/70 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white inline-flex items-center justify-center"
           >
             Apply to Join →
           </Link>
@@ -143,7 +145,7 @@ export default function HeroSection() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.65 }}
-          className="flex items-center gap-8 sm:gap-12 pointer-events-none"
+          className="flex items-center gap-4 xs:gap-6 sm:gap-12 pointer-events-none"
         >
           {[
             { value: '14', label: 'Active Members' },
@@ -151,19 +153,22 @@ export default function HeroSection() {
             { value: '7AM', label: 'Every Thursday' }
           ].map(({ value, label }, i) => (
             <Fragment key={i}>
-              <div>
-                <p className="font-sora font-black text-2xl sm:text-3xl text-white leading-none drop-shadow">{value}</p>
-                <p className="text-f10 font-mono tracking-widest uppercase text-white/50 mt-1">{label}</p>
+              <div className="min-w-0">
+                <p className="font-sora font-black text-xl xs:text-2xl sm:text-3xl text-white leading-none drop-shadow">
+                  {value}
+                </p>
+                <p className="text-[8px] xs:text-[9px] sm:text-f10 font-mono tracking-[0.15em] sm:tracking-widest uppercase text-white sm:text-white/50 mt-1 leading-tight">
+                  {label}
+                </p>
               </div>
-              {i < 2 && <span key={`sep-${i}`} className="w-px h-8 bg-white/20 shrink-0" aria-hidden="true" />}
+              {i < 2 && <span key={`sep-${i}`} className="w-px h-7 sm:h-8 bg-white/20 shrink-0" aria-hidden="true" />}
             </Fragment>
           ))}
         </motion.div>
       </div>
 
-      {/* ── Right sidebar ── */}
+      {/* ── Right sidebar (desktop only) ── */}
       <div className="absolute right-6 sm:right-10 top-1/2 -translate-y-1/2 z-20 hidden lg:flex flex-col items-center gap-6">
-        {/* Scroll indicator */}
         <div className="flex flex-col items-center gap-2">
           <p className="text-[9px] font-mono tracking-[0.3em] uppercase text-white/40 rotate-90 mb-4">Scroll</p>
           <motion.div
@@ -173,10 +178,7 @@ export default function HeroSection() {
           />
         </div>
 
-        {/* Divider */}
         <div className="w-px h-8 bg-white/20" />
-
-        {/* Facebook */}
 
         <a
           href="https://facebook.com/coastalreferralexchange"
@@ -190,7 +192,8 @@ export default function HeroSection() {
           </svg>
         </a>
       </div>
-      <div className="absolute inset-x-0 h-[50%] bottom-0 bg-linear-to-t from-white dark:from-bg-dark via-transparent to-transparent/0 pointer-events-none z-10" />
+
+      <div className="absolute inset-x-0 h-[20%] sm:h-[50%] bottom-0 bg-linear-to-t from-white dark:from-bg-dark via-transparent to-transparent/0 pointer-events-none z-10" />
     </section>
   )
 }

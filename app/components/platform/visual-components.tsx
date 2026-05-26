@@ -119,8 +119,8 @@ export function DirectoryVisual() {
 // 3. Visitor Management: email envelope with auto-send animation
 export function VisitorVisual() {
   return (
-    <div className="w-full h-full flex items-center justify-center p-6">
-      <div className="w-full max-w-sm space-y-3">
+    <div className="w-full h-full flex items-center justify-center p-4 sm:p-6">
+      <div className="w-full max-w-sm space-y-2 sm:space-y-3">
         {[0, 1, 2].map((i) => (
           <motion.div
             key={i}
@@ -133,27 +133,29 @@ export function VisitorVisual() {
               repeatType: 'loop',
               repeatDelay: 2.5 - i * 0.8
             }}
-            className="border border-border-light dark:border-border-dark bg-bg-light dark:bg-bg-dark p-3 flex items-center gap-3"
+            className="border border-border-light dark:border-border-dark bg-bg-light dark:bg-bg-dark p-2 sm:p-3 flex items-center gap-2 sm:gap-3"
           >
-            <div className="w-8 h-8 border border-primary-light dark:border-primary-dark flex items-center justify-center shrink-0">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 border border-primary-light dark:border-primary-dark flex items-center justify-center shrink-0">
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
-                className="w-4 h-4 stroke-primary-light dark:stroke-primary-dark"
+                className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-primary-light dark:stroke-primary-dark"
                 strokeWidth="2"
               >
                 <path d="M3 8l9 6 9-6M3 8v10a2 2 0 002 2h14a2 2 0 002-2V8M3 8l2-2h14l2 2" />
               </svg>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-f10 font-mono tracking-[0.15em] uppercase text-muted-light dark:text-muted-dark truncate">
+              <p className="text-[9px] sm:text-f10 font-mono tracking-[0.12em] sm:tracking-[0.15em] uppercase text-muted-light dark:text-muted-dark truncate">
                 Invite Sent
               </p>
-              <p className="text-xs font-nunito text-text-light dark:text-text-dark truncate">
+              <p className="text-[11px] sm:text-xs font-nunito text-text-light dark:text-text-dark truncate">
                 {['Jane Smith', 'Marcus Lee', 'Anna Roy'][i]} · Thursday meeting
               </p>
             </div>
-            <span className="text-f10 font-mono text-primary-light dark:text-primary-dark shrink-0">✓</span>
+            <span className="text-[9px] sm:text-f10 font-mono text-primary-light dark:text-primary-dark shrink-0">
+              ✓
+            </span>
           </motion.div>
         ))}
       </div>
@@ -172,12 +174,12 @@ export function ReferralsVisual() {
   }, [])
 
   return (
-    <div className="w-full h-full flex items-center justify-center p-6">
-      <div className="w-full max-w-md flex items-center gap-3">
+    <div className="w-full h-full flex items-center justify-center p-4 sm:p-6">
+      <div className="w-full max-w-md flex items-center gap-2 sm:gap-3">
         {/* Sender */}
-        <div className="flex-1 border border-border-light dark:border-border-dark bg-bg-light dark:bg-bg-dark p-3 text-center">
-          <div className="w-8 h-8 mx-auto rounded-full bg-muted-light/30 dark:bg-muted-dark/30 mb-2" />
-          <p className="text-f10 font-mono tracking-[0.15em] uppercase text-muted-light dark:text-muted-dark">
+        <div className="flex-1 border border-border-light dark:border-border-dark bg-bg-light dark:bg-bg-dark p-2 sm:p-3 text-center">
+          <div className="w-7 h-7 sm:w-8 sm:h-8 mx-auto rounded-full bg-muted-light/30 dark:bg-muted-dark/30 mb-1.5 sm:mb-2" />
+          <p className="text-[9px] sm:text-f10 font-mono tracking-[0.12em] sm:tracking-[0.15em] uppercase text-muted-light dark:text-muted-dark">
             Member A
           </p>
         </div>
@@ -187,7 +189,7 @@ export function ReferralsVisual() {
           <motion.div
             animate={{ x: [0, 4, 0] }}
             transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-            className="text-primary-light dark:text-primary-dark font-mono text-xs"
+            className="text-primary-light dark:text-primary-dark font-mono text-[10px] sm:text-xs"
           >
             →
           </motion.div>
@@ -195,25 +197,25 @@ export function ReferralsVisual() {
             key={statusIdx}
             initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
-            className="border border-primary-light dark:border-primary-dark bg-primary-light/5 dark:bg-primary-dark/10 px-2 py-1"
+            className="border border-primary-light dark:border-primary-dark bg-primary-light/5 dark:bg-primary-dark/10 px-1.5 sm:px-2 py-1"
           >
-            <p className="text-[9px] font-mono tracking-[0.15em] uppercase text-primary-light dark:text-primary-dark whitespace-nowrap">
+            <p className="text-[8px] sm:text-[9px] font-mono tracking-widest sm:tracking-[0.15em] uppercase text-primary-light dark:text-primary-dark whitespace-nowrap">
               {statuses[statusIdx]}
             </p>
           </motion.div>
           <motion.div
             animate={{ x: [0, 4, 0] }}
             transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
-            className="text-primary-light dark:text-primary-dark font-mono text-xs"
+            className="text-primary-light dark:text-primary-dark font-mono text-[10px] sm:text-xs"
           >
             →
           </motion.div>
         </div>
 
         {/* Recipient */}
-        <div className="flex-1 border border-border-light dark:border-border-dark bg-bg-light dark:bg-bg-dark p-3 text-center">
-          <div className="w-8 h-8 mx-auto rounded-full bg-muted-light/30 dark:bg-muted-dark/30 mb-2" />
-          <p className="text-f10 font-mono tracking-[0.15em] uppercase text-muted-light dark:text-muted-dark">
+        <div className="flex-1 border border-border-light dark:border-border-dark bg-bg-light dark:bg-bg-dark p-2 sm:p-3 text-center">
+          <div className="w-7 h-7 sm:w-8 sm:h-8 mx-auto rounded-full bg-muted-light/30 dark:bg-muted-dark/30 mb-1.5 sm:mb-2" />
+          <p className="text-[9px] sm:text-f10 font-mono tracking-[0.12em] sm:tracking-[0.15em] uppercase text-muted-light dark:text-muted-dark">
             Member B
           </p>
         </div>
@@ -233,8 +235,8 @@ export function FaceToFaceVisual() {
   ]
 
   return (
-    <div className="w-full h-full flex items-center justify-center p-6 gap-6">
-      <div className="grid grid-cols-7 gap-1 w-44">
+    <div className="w-full h-full flex items-center justify-center p-4 sm:p-6 gap-3 sm:gap-6">
+      <div className="grid grid-cols-7 gap-1 w-32 sm:w-44 shrink-0">
         {cells.map((_, i) => {
           const isFilled = filled.includes(i)
           return (
@@ -256,17 +258,19 @@ export function FaceToFaceVisual() {
           )
         })}
       </div>
-      <div className="flex-1 max-w-40 space-y-2">
+      <div className="flex-1 min-w-0 max-w-40 space-y-1.5 sm:space-y-2">
         {leaders.map((l, i) => (
           <motion.div
             key={l.name}
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: i * 0.15 }}
-            className="border border-border-light dark:border-border-dark bg-bg-light dark:bg-bg-dark p-2 flex items-center justify-between"
+            className="border border-border-light dark:border-border-dark bg-bg-light dark:bg-bg-dark p-1.5 sm:p-2 flex items-center justify-between gap-2"
           >
             <p className="text-[10px] font-nunito text-text-light dark:text-text-dark truncate">{l.name}</p>
-            <p className="text-f10 font-mono font-bold text-primary-light dark:text-primary-dark">{l.count}</p>
+            <p className="text-[9px] sm:text-f10 font-mono font-bold text-primary-light dark:text-primary-dark shrink-0">
+              {l.count}
+            </p>
           </motion.div>
         ))}
       </div>

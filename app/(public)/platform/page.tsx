@@ -191,7 +191,7 @@ export default function PlatformPage() {
                           <span className="text-primary-light dark:text-primary-dark font-mono text-xs mt-1.5 shrink-0">
                             ▸
                           </span>
-                          <span>{b}</span>
+                          <span className="inline-block">{b}</span>
                         </li>
                       ))}
                     </ul>
@@ -205,10 +205,10 @@ export default function PlatformPage() {
                     transition={{ duration: 0.8 }}
                     className="relative"
                   >
-                    <div className="border border-border-light dark:border-border-dark bg-bg-light dark:bg-bg-dark min-h-70 sm:min-h-80 flex items-center justify-center">
+                    <div className="border border-border-light dark:border-border-dark bg-bg-light dark:bg-bg-dark min-h-60 xs:min-h-70 sm:min-h-80 flex items-center justify-center">
                       <Visual />
                     </div>
-                    <p className="text-f10 font-mono tracking-[0.2em] uppercase text-muted-light dark:text-muted-dark mt-3">
+                    <p className="text-[9px] sm:text-f10 font-mono tracking-[0.15em] sm:tracking-[0.2em] uppercase text-muted-light dark:text-muted-dark mt-2 sm:mt-3">
                       Live · Running in your browser
                     </p>
                   </motion.div>

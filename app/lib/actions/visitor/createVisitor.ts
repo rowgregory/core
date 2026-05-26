@@ -143,8 +143,9 @@ export async function createVisitor(input: CreateVisitorInput): Promise<{
     // Step 4: Log success (with note if email failed)
     if (context) {
       const emailNote = emailResult ? '' : ' (invite email failed to send)'
+      const visitTypeNote = visitorDay ? ' (Visitor Day)' : ' (regular meeting)'
       const logMessage = await buildLogMessage(
-        `added visitor ${firstName} ${lastName} (${email})${emailNote}`,
+        `added visitor ${firstName} ${lastName} (${email})${visitTypeNote}${emailNote}`,
         actor,
         context
       )
