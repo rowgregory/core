@@ -44,17 +44,9 @@ export function CancelledMeetingsPanel({ cancelledMeetings: initial }: { cancell
     setLoadingId(null)
   }
 
-  const cancelledSet = new Set(
-    cancelled?.map((c) => {
-      const d = new Date(c.date)
-      return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`
-    })
-  )
+  const cancelledSet = new Set(cancelled?.map((c) => c.date.slice(0, 10)))
 
-  const availableDates = upcomingDates.filter((d) => {
-    const key = toDateKey(new Date(d))
-    return !cancelledSet.has(key)
-  })
+  const availableDates = upcomingDates.filter((d) => !cancelledSet.has(d))
 
   return (
     <div className="border border-border-light dark:border-border-dark">
@@ -104,13 +96,15 @@ export function CancelledMeetingsPanel({ cancelledMeetings: initial }: { cancell
                     </option>
                     {availableDates.map((d) => (
                       <option key={d} value={d}>
-                        {new Date(d).toLocaleDateString('en-US', {
-                          weekday: 'long',
-                          month: 'long',
-                          day: 'numeric',
-                          year: 'numeric',
-                          timeZone: 'America/New_York'
-                        })}
+                        {(() => {
+                          const [y, m, day] = d.split('-').map(Number)
+                          return new Date(y, m - 1, day).toLocaleDateString('en-US', {
+                            weekday: 'long',
+                            month: 'long',
+                            day: 'numeric',
+                            year: 'numeric'
+                          })
+                        })()}
                       </option>
                     ))}
                   </select>
