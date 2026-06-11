@@ -4,7 +4,6 @@ import prisma from '@/prisma/client'
 import { chapterId } from '../../constants/api/chapterId'
 import { buildSchedule, getUpcomingMeetingDates } from '../../utils/presenter-engine.utils'
 import { getAllUpcomingThursdays } from '../../utils/attendance.utils'
-import { toDateKey } from '../../utils/date.utils'
 
 export async function getPresenterSchedule(): Promise<{
   success: boolean
@@ -50,7 +49,7 @@ export async function getPresenterSchedule(): Promise<{
     const data: ScheduledPresenter[] = allThursdays
       .slice(0, 24)
       .map((dateStr) => {
-        if (cancelledDates.some((d) => toDateKey(new Date(d)) === dateStr)) {
+        if (cancelledDates.some((d) => d.slice(0, 10) === dateStr)) {
           return {
             userId: null,
             name: 'No Meeting',
@@ -62,7 +61,7 @@ export async function getPresenterSchedule(): Promise<{
           }
         }
 
-        if (visitorDates.some((d) => toDateKey(new Date(d)) === dateStr)) {
+        if (visitorDates.some((d) => d.slice(0, 10) === dateStr)) {
           return {
             userId: null,
             name: 'Visitor Day',
