@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { presenterQueueTemplate } from '@/app/lib/email-templates/presenter-queue.template'
 import { chapterId } from '@/app/lib/constants/api/chapterId'
 import { buildSchedule, getUpcomingMeetingDates } from '@/app/lib/utils/presenter-engine.utils'
-import { fmtDate, toDateKey } from '@/app/lib/utils/date.utils'
+import { fmtDate } from '@/app/lib/utils/date.utils'
 import { getAllUpcomingThursdays } from '@/app/lib/utils/attendance.utils'
 
 const BATCH_SIZE = 2
@@ -52,7 +52,7 @@ async function sendPresenterQueue(req: NextRequest) {
 
     let scheduledIndex = 0
     const schedule = allThursdays.slice(0, 8).map((dateStr) => {
-      if (cancelledDates.some((d) => toDateKey(new Date(d)) === dateStr)) {
+      if (cancelledDates.some((d) => d.slice(0, 10) === dateStr)) {
         return {
           name: 'No Meeting',
           company: 'Cancelled',
@@ -61,7 +61,7 @@ async function sendPresenterQueue(req: NextRequest) {
           type: 'off' as const
         }
       }
-      if (visitorDates.some((d) => toDateKey(new Date(d)) === dateStr)) {
+      if (visitorDates.some((d) => d.slice(0, 10) === dateStr)) {
         return {
           name: 'Visitor Day',
           company: 'Open to guests',
