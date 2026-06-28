@@ -75,7 +75,7 @@ export async function createUser(input: CreateUserInput): Promise<CreateUserResp
     await Promise.all([
       resend.emails.send({
         from: `Coastal Referral Exchange <noreply@coastalreferralxchange.com>`,
-        to: 'sqysh@sqysh.io',
+        to: 'greg@sqysh.com',
         subject: `New Application — ${user.name}`,
         html: adminVisitorNotificationTemplate('Sqysh', user.name, user.email, `${BASE_URL}/super`)
       }),

@@ -164,7 +164,7 @@ export const membershipWelcomeTemplate = (
           <tr>
             <td style="padding: 0 32px 20px;">
               <p style="margin: 0; color: #64748b; font-size: 13px; line-height: 1.6;">
-                Questions? Contact <a href="mailto:greg@sqysh.io" style="color: #0284c7; text-decoration: none; font-weight: 600;">Sqysh</a>.
+                Questions? Contact <a href="mailto:greg@sqysh.com" style="color: #0284c7; text-decoration: none; font-weight: 600;">Sqysh</a>.
               </p>
             </td>
           </tr>

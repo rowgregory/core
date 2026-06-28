@@ -4,105 +4,118 @@ const sqyshGoogleReviewTemplate = (memberName: string) => `
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light only">
+  <meta name="supported-color-schemes" content="light">
   <title>Love Your Experience? Leave a Review!</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Quicksand:wght@500;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
   <style type="text/css">
-    @media (prefers-color-scheme: dark) {
-      .email-bg { background-color: #0f172a !important; }
-      .card-bg { background-color: #1e293b !important; }
-      .text-dark { color: #f1f5f9 !important; }
-      .text-gray { color: #cbd5e1 !important; }
-      .text-muted { color: #94a3b8 !important; }
-      .border-light { border-color: #334155 !important; }
-      .footer-bg { background-color: #0f172a !important; }
-      .appreciation-box { background-color: #1e3a4f !important; border-color: #10b981 !important; }
-      .appreciation-text { color: #86efac !important; }
-      .button-bg { background-color: #10b981 !important; }
-    }
+    :root { color-scheme: light only; supported-color-schemes: light; }
+    body, table, td { -webkit-text-size-adjust: 100%; }
   </style>
 </head>
-<body style="margin: 0; padding: 0; background-color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;" class="email-bg">
-  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #ffffff;" class="email-bg">
+<body style="margin: 0; padding: 0; background-color: #ffffff; font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #ffffff;">
     <tr>
-      <td style="padding: 20px;">
-        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 520px; margin: 0 auto; background: white; border-radius: 12px;" class="card-bg">
+      <td style="padding: 32px 20px;">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 520px; margin: 0 auto; background: #ffffff; border: 1px solid #e0f2fe; border-top: 3px solid #0284c7;">
+
+          <!-- Header -->
           <tr>
-            <td style="padding: 24px 20px; border-bottom: 1px solid #e2e8f0;" class="border-light">
-              <p style="margin: 0 0 4px 0; color: #64748b; font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;" class="text-muted">Sqysh</p>
-              <h1 style="margin: 0; color: #0f172a; font-size: 24px; font-weight: 600;" class="text-dark">We'd Love Your Feedback</h1>
+            <td style="padding: 30px 32px 22px;">
+              <p style="margin: 0 0 14px 0; color: #0284c7; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.2em; font-family: 'Quicksand', 'SF Mono', monospace;">
+                Coastal Referral Exchange
+              </p>
+              <!-- CORE. wordmark -->
+              <p style="margin: 0 0 12px 0; font-family: 'Sora', -apple-system, sans-serif; font-size: 22px; font-weight: 800; color: #0c1e2e; letter-spacing: -0.02em;">
+                CORE<span style="color: #0284c7;">.</span>
+              </p>
+              <h1 style="margin: 0; color: #0c1e2e; font-size: 26px; font-weight: 800; letter-spacing: -0.03em; font-family: 'Sora', -apple-system, sans-serif;">
+                Mind leaving a quick review?
+              </h1>
             </td>
           </tr>
-          <tr>
-            <td style="padding: 24px 20px;">
 
-              <!-- Greeting -->
-              <p style="margin: 0 0 20px 0; color: #334155; font-size: 16px; line-height: 1.6;" class="text-gray">
+          <!-- Divider -->
+          <tr>
+            <td style="padding: 0 32px;">
+              <div style="height: 1px; background-color: #e0f2fe; font-size: 0; line-height: 0;">&nbsp;</div>
+            </td>
+          </tr>
+
+          <!-- Body -->
+          <tr>
+            <td style="padding: 26px 32px;">
+
+              <p style="margin: 0 0 20px 0; color: #0c1e2e; font-size: 15px; line-height: 1.65; font-family: 'Nunito', sans-serif;">
                 Hi ${memberName},
               </p>
 
-              <!-- Message -->
-              <p style="margin: 0 0 20px 0; color: #334155; font-size: 16px; line-height: 1.6;" class="text-gray">
-                Thank you for choosing Sqysh for your software development needs!
+              <p style="margin: 0 0 18px 0; color: #64748b; font-size: 15px; line-height: 1.65; font-family: 'Nunito', sans-serif;">
+                Quick one — and thanks again for being part of the crew every week.
               </p>
 
-              <p style="margin: 0 0 24px 0; color: #334155; font-size: 16px; line-height: 1.6;" class="text-gray">
-                If you've had a great experience working with us, we'd love a quick Google review! It helps more businesses find us and keeps us building cool solutions for awesome clients like you.
+              <p style="margin: 0 0 26px 0; color: #64748b; font-size: 15px; line-height: 1.65; font-family: 'Nunito', sans-serif;">
+                If Sqysh has built something for you and you've been happy with it, would you mind dropping a quick Google review? It's genuinely the biggest way new folks find me, and it means a lot coming from people I actually know. Totally no pressure though — I'll still see you Thursday either way.
               </p>
 
-              <!-- CTA Button -->
+              <!-- CTA -->
               <table width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
-                  <td align="center" style="padding: 24px 0;">
-                    <a href="https://g.page/r/CQIcbfJ1n5hlEAI/review" 
-                       style="display: inline-block; padding: 14px 28px; background-color: #10b981; color: #ffffff; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px;" class="button-bg">
-                      Leave a Google Review
+                  <td align="center" style="padding: 4px 0 22px 0;">
+                    <a href="https://g.page/r/CQIcbfJ1n5hlEAI/review"
+                       style="display: inline-block; padding: 14px 32px; background-color: #0c1e2e; color: #ffffff; text-decoration: none; font-weight: 700; font-size: 14px; letter-spacing: 0.05em; font-family: 'Quicksand', -apple-system, sans-serif; border: 1px solid #0c1e2e;">
+                      Leave a Google Review &nbsp;&rarr;
                     </a>
                   </td>
                 </tr>
               </table>
 
               <!-- Fallback URL -->
-              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 16px 0 0 0;">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 0 0 4px 0;">
                 <tr>
                   <td align="center">
-                    <p style="margin: 0 0 8px 0; color: #94a3b8; font-size: 12px;" class="text-muted">
-                      Can't see the button? Copy and paste this URL into your browser:
+                    <p style="margin: 0 0 6px 0; color: #94a3b8; font-size: 11px; font-family: 'Nunito', sans-serif;">
+                      Button not working? Just paste this in your browser:
                     </p>
-                    <p style="margin: 0; color: #64748b; font-size: 12px; word-break: break-all;" class="text-gray">
+                    <p style="margin: 0; color: #0284c7; font-size: 11px; word-break: break-all; font-family: 'Quicksand', 'SF Mono', monospace;">
                       https://g.page/r/CQIcbfJ1n5hlEAI/review
                     </p>
                   </td>
                 </tr>
               </table>
 
-              <!-- Appreciation -->
-              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 24px 0;">
+              <!-- Appreciation: primary left border on surface tint -->
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-left: 3px solid #0284c7; background-color: #f0f9ff; margin: 26px 0 4px 0;">
                 <tr>
-                  <td style="padding: 16px; background: #ffffff; border: 2px solid #10b981; border-radius: 8px;" class="appreciation-box">
-                    <p style="margin: 0; color: #065f46; font-size: 14px; line-height: 1.6;" class="appreciation-text">
-                      <strong>Your feedback matters!</strong> Reviews help other businesses discover quality web development services and allow us to continue doing what we love.
+                  <td style="padding: 14px 16px;">
+                    <p style="margin: 0; color: #0c1e2e; font-size: 13px; line-height: 1.6; font-family: 'Nunito', sans-serif;">
+                      <strong>Seriously, thank you.</strong> Every review helps more people find me and lets me keep doing the work I love. You're the best.
                     </p>
                   </td>
                 </tr>
               </table>
 
               <!-- Closing -->
-              <p style="margin: 20px 0 0 0; color: #334155; font-size: 16px; line-height: 1.6;" class="text-gray">
-                Thank you for your support!<br>
-                <span style="color: #64748b; font-size: 14px;" class="text-muted">— Sqysh</span>
+              <p style="margin: 24px 0 0 0; color: #64748b; font-size: 15px; line-height: 1.65; font-family: 'Nunito', sans-serif;">
+                Appreciate you — see you Thursday!<br>
+                <span style="color: #94a3b8; font-size: 13px;">&mdash; Greg @ Sqysh</span>
               </p>
 
             </td>
           </tr>
+
+          <!-- Footer -->
           <tr>
-            <td style="padding: 20px; background: #ffffff; border-top: 1px solid #e2e8f0;" class="footer-bg border-light">
-              <p style="margin: 0 0 8px 0; color: #64748b; font-size: 12px; line-height: 1.5;" class="text-gray">
-                  Need assistance? Contact Sqysh.
+            <td style="padding: 18px 32px; border-top: 1px solid #e0f2fe;">
+              <p style="margin: 0 0 4px 0; color: #94a3b8; font-size: 11px; font-family: 'Quicksand', 'SF Mono', monospace; letter-spacing: 0.08em;">
+                Need assistance? Contact Sqysh.
               </p>
-              <p style="margin: 0; color: #94a3b8; font-size: 11px;" class="text-muted">
-                © 2026 Sqysh
+              <p style="margin: 0; color: #cbd5e1; font-size: 11px; font-family: 'Quicksand', 'SF Mono', monospace; letter-spacing: 0.08em;">
+                © 2026 Coastal Referral Exchange
               </p>
             </td>
           </tr>
+
         </table>
       </td>
     </tr>

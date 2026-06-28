@@ -358,7 +358,7 @@ export default function ProfileClient({ profile }: { profile: ProfileData }) {
             To update your primary email,{' '}
             <button
               onClick={() => {
-                setEmailTarget({ name: 'Sqysh', email: 'sqysh@sqysh.io' })
+                setEmailTarget({ name: 'Sqysh', email: 'greg@sqysh.com' })
                 setEmailBody('Hi Sqysh, I need to update my primary email to ')
               }}
               className="text-primary-light dark:text-primary-dark hover:underline"

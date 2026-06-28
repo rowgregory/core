@@ -82,7 +82,7 @@ export const applicationConfirmationTemplate = (firstName: string, userId: strin
               </table>
 
               <p style="margin: 0; color: #64748b; font-size: 13px; line-height: 1.6;">
-                Questions? Reply to this email or contact <a href="mailto:sqysh@sqysh.io" style="color: #0284c7; text-decoration: none; font-weight: 600;">Sqysh</a>.
+                Questions? Reply to this email or contact <a href="mailto:greg@sqysh.com" style="color: #0284c7; text-decoration: none; font-weight: 600;">Sqysh</a>.
               </p>
             </td>
           </tr>

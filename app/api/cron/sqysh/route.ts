@@ -7,6 +7,15 @@ import { Resend } from 'resend'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Members who've already left a Google review — they won't get the reminder.
+// Add emails here as people leave reviews, then redeploy. Lowercased + trimmed
+// on compare, so casing/whitespace here doesn't matter.
+// ─────────────────────────────────────────────────────────────────────────────
+const ALREADY_REVIEWED: string[] = ['kcasey@ccm.com', 'aturpin@zellikinsurance.com', 'ejonah@c21ne.com']
+
+const reviewedSet = new Set(ALREADY_REVIEWED.map((e) => e.trim().toLowerCase()))
+
 // Helper to get the correct base URL
 function getBaseUrl() {
   // Use custom domain in production, fallback to VERCEL_URL for previews
@@ -24,7 +33,11 @@ async function sendSqyshGoogleReviewReminders(req: NextRequest) {
   const normalizedUrl = `${baseUrl}/api/cron/sqysh`
 
   try {
-    const users = await prisma.user.findMany({ where: { membershipStatus: 'ACTIVE' } })
+    const activeUsers = await prisma.user.findMany({ where: { membershipStatus: 'ACTIVE' } })
+
+    // Drop anyone who already left a review.
+    const users = activeUsers.filter((u) => !reviewedSet.has(u.email.trim().toLowerCase()))
+    const skipped = activeUsers.length - users.length
 
     // Send emails with rate limiting (2 per second for Resend free tier)
     const results = []
@@ -69,13 +82,15 @@ async function sendSqyshGoogleReviewReminders(req: NextRequest) {
     // Log success
     await createLog('info', `Sqysh google review reminder emails sent`, {
       location: ['app route - POST /api/cron/sqysh'],
-      message: `Sent ${successful}/${users.length} sqysh google review reminder emails successfully`,
+      message: `Sent ${successful}/${users.length} sqysh google review reminder emails successfully (${skipped} skipped — already reviewed)`,
       name: 'SqyshGoogleReviewRemindersSent',
       timestamp: new Date().toISOString(),
       url: normalizedUrl,
       method: req.method,
       metadata: {
-        totalUsers: users.length,
+        totalActive: activeUsers.length,
+        eligible: users.length,
+        skippedAlreadyReviewed: skipped,
         successfulEmails: successful,
         failedEmails: failed,
         presenter: 'Sqysh',
@@ -101,8 +116,10 @@ async function sendSqyshGoogleReviewReminders(req: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: `Sqysh google review reminder sent to ${successful}/${users.length} active members`,
-      count: users.length,
+      message: `Sqysh google review reminder sent to ${successful}/${users.length} eligible members (${skipped} skipped — already reviewed)`,
+      totalActive: activeUsers.length,
+      eligible: users.length,
+      skipped,
       successful,
       failed
     })

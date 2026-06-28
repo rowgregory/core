@@ -19,7 +19,7 @@ export type CancelResult = {
   code?: CancelErrorCode
 }
 
-const SUPPORT_LINE = 'If this keeps happening, contact support at sqysh@sqysh.io.'
+const SUPPORT_LINE = 'If this keeps happening, contact support at greg@sqysh.com.'
 
 export async function cancelSubscriptions(): Promise<CancelResult> {
   const session = await auth()
