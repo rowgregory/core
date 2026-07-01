@@ -80,6 +80,7 @@ export default function DashboardClient({
             total={attendanceData.total}
             exclusions={exclusions}
             membership={membership}
+            memberCreatedAt={currentUser.createdAt}
           />
         </FadeUp>
 

@@ -8,12 +8,32 @@ import { buildYearOfThursdays } from '@/app/lib/utils/attendance.utils'
 import { AttendanceSquareEl } from './AttendanceSquareEl'
 import Link from 'next/link'
 import { History } from 'lucide-react'
-import { AttendancePanelProps } from '@/types/attendance.types'
 import { fmtDate } from '@/app/lib/utils/date.utils'
 import { store } from '@/app/lib/redux/store'
 import { setOpenMembershipPaymentSetupModal } from '@/app/lib/redux/slices/appSlice'
+import { UserAttendanceRow } from '@/types/attendance.types'
 
-export function AttendancePanel({ rows, attended, total, exclusions, membership }: AttendancePanelProps) {
+export interface AttendancePanelProps {
+  rows: UserAttendanceRow[]
+  attended: number
+  total: number
+  exclusions: { date: string; reason: string }[]
+  membership: {
+    annualOrder: any
+    quarterlyOrder: any
+    paymentMethod: any
+  }
+  memberCreatedAt: Date
+}
+
+export function AttendancePanel({
+  rows,
+  attended,
+  total,
+  exclusions,
+  membership,
+  memberCreatedAt
+}: AttendancePanelProps) {
   const quarterlyDone = !!membership.quarterlyOrder
   const annualDone = !!membership.annualOrder
   const bothDone = annualDone && quarterlyDone
@@ -23,7 +43,10 @@ export function AttendancePanel({ rows, attended, total, exclusions, membership 
 
   // Start the year from May 14, 2026 (when we started tracking attendance)
   const yearStart = useMemo(() => new Date(Date.UTC(2026, 4, 14)), [])
-  const squares = useMemo(() => buildYearOfThursdays(yearStart, rows, exclusions), [rows, exclusions, yearStart])
+  const squares = useMemo(
+    () => buildYearOfThursdays(yearStart, rows, exclusions, memberCreatedAt),
+    [yearStart, rows, exclusions, memberCreatedAt]
+  )
 
   const pct = total > 0 ? Math.round((attended / total) * 100) : 0
 

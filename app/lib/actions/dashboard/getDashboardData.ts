@@ -35,7 +35,8 @@ export async function getDashboardData() {
         hasAnnualSubscription: true,
         hasQuarterlySubscription: true,
         weeklyTreasureWishlist: true,
-        chapter: { select: { name: true } }
+        chapter: { select: { name: true } },
+        createdAt: true
       }
     })
     if (!user) return { success: false, error: 'User not found' }
@@ -118,7 +119,8 @@ export async function getDashboardData() {
           secondaryEmail: user.secondaryEmail,
           hasAnnualSubscription: user.hasAnnualSubscription,
           hasQuarterlySubscription: user.hasQuarterlySubscription,
-          weeklyTreasureWishlist: user.weeklyTreasureWishlist
+          weeklyTreasureWishlist: user.weeklyTreasureWishlist,
+          createdAt: user.createdAt
         },
         members,
         stats: {

@@ -35,6 +35,7 @@ export interface MemberDashboardProps {
     hasAnnualSubscription?: boolean
     hasQuarterlySubscription?: boolean
     weeklyTreasureWishlist?: string
+    createdAt?: Date
   }
   members: any
   stats: DashboardStats

@@ -4,7 +4,20 @@ import { useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { useSounds } from '@/app/lib/hooks/useSounds'
 
-export function YearHeatMap({ squares, setCorrectionRow }: { squares: AttendanceSquare[]; setCorrectionRow: any }) {
+// ── Helpers ──────────────────────────────────────────────────────────────
+// Parse the ISO date the same noon-anchored way fmtSquareLabel does, so the
+// day-of-month we print in the cell never drifts by a day across timezones.
+function dayOfMonth(iso: string): number {
+  return new Date(`${iso}T12:00:00`).getDate()
+}
+
+export function YearHeatMap({
+  squares,
+  setCorrectionRow
+}: {
+  squares: AttendanceSquare[]
+  setCorrectionRow: (row: { meetingId: string; date: string }) => void
+}) {
   // Group squares by month so we can label each month-row in the strip
   const grouped = useMemo(() => {
     const groups: { monthLabel: string; squares: AttendanceSquare[] }[] = []
@@ -28,6 +41,9 @@ export function YearHeatMap({ squares, setCorrectionRow }: { squares: Attendance
     for (const sq of squares) counts[sq.status]++
     return counts
   }, [squares])
+
+  // Has the member actually logged any real (non-future) activity yet?
+  const hasHistory = totals.attended + totals.reinstated + totals.missed > 0
 
   return (
     <div>
@@ -62,13 +78,13 @@ export function YearHeatMap({ squares, setCorrectionRow }: { squares: Attendance
       </div>
 
       {/* Grouped strip with month axis */}
-      <div className="flex flex-wrap gap-x-3 gap-y-3">
+      <div className="flex flex-wrap gap-x-4 gap-y-4">
         {grouped.map((group) => (
-          <div key={group.monthLabel} className="flex flex-col gap-1.5">
+          <div key={group.monthLabel} className="flex flex-col gap-2">
             <p className="text-[8px] font-mono tracking-[0.15em] uppercase text-muted-light dark:text-muted-dark">
               {group.monthLabel}
             </p>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1.5">
               {group.squares.map((sq, i) => (
                 <LargeHeatSquare key={`${sq.date}-${i}`} sq={sq} index={i} setCorrectionRow={setCorrectionRow} />
               ))}
@@ -76,6 +92,13 @@ export function YearHeatMap({ squares, setCorrectionRow }: { squares: Attendance
           </div>
         ))}
       </div>
+
+      {/* Empty-state hint — only when there's no real activity yet */}
+      {!hasHistory && (
+        <p className="mt-4 text-[10px] font-mono tracking-widest uppercase text-muted-light/70 dark:text-muted-dark/70">
+          Check in on a Thursday and your record starts filling in.
+        </p>
+      )}
 
       {/* Totals bar */}
       <div className="mt-5 pt-4 border-t border-border-light dark:border-border-dark grid grid-cols-2 sm:grid-cols-5 gap-3">
@@ -89,6 +112,7 @@ export function YearHeatMap({ squares, setCorrectionRow }: { squares: Attendance
   )
 }
 
+// ── Single cell ──────────────────────────────────────────────────────────
 function LargeHeatSquare({
   sq,
   index,
@@ -96,29 +120,47 @@ function LargeHeatSquare({
 }: {
   sq: AttendanceSquare
   index: number
-  setCorrectionRow: any
+  setCorrectionRow: (row: { meetingId?: string; date: string }) => void
 }) {
   const label = fmtSquareLabel(sq)
+  const day = dayOfMonth(sq.date)
   const { play } = useSounds({ enabled: true })
 
+  // Larger cell so a 2-digit date reads clearly; sharp corners (no radius).
   const baseClasses =
-    'w-4 h-4 sm:w-[18px] sm:h-[18px] shrink-0 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark'
+    'relative w-7 h-7 sm:w-8 sm:h-8 shrink-0 flex items-center justify-center transition-all ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light dark:focus-visible:ring-primary-dark'
 
-  let stateClass = ''
-  if (sq.status === 'attended') {
-    stateClass = 'bg-green-500 dark:bg-green-400 hover:scale-110'
-  } else if (sq.status === 'reinstated') {
-    stateClass = 'bg-amber-500 dark:bg-amber-400 hover:scale-110'
-  } else if (sq.status === 'missed') {
-    stateClass = 'bg-red-500 dark:bg-red-400 hover:scale-110'
-  } else if (sq.status === 'future') {
-    stateClass = 'bg-muted-light/15 dark:bg-muted-dark/15'
+  // Per-status surface + number color. Numbers stay legible in both modes.
+  let surfaceClass = ''
+  let numberClass = ''
+  switch (sq.status) {
+    case 'attended':
+      surfaceClass = 'bg-green-500 dark:bg-green-400 hover:scale-[1.08]'
+      numberClass = 'text-green-950 dark:text-green-950'
+      break
+    case 'reinstated':
+      surfaceClass = 'bg-amber-500 dark:bg-amber-400 hover:scale-[1.08]'
+      numberClass = 'text-amber-950 dark:text-amber-950'
+      break
+    case 'missed':
+      surfaceClass = 'bg-red-500 dark:bg-red-400 hover:scale-[1.08] cursor-pointer'
+      numberClass = 'text-red-950 dark:text-red-950'
+      break
+    case 'future':
+      surfaceClass = 'bg-muted-light/10 dark:bg-muted-dark/10 border border-border-light dark:border-border-dark'
+      numberClass = 'text-muted-light/50 dark:text-muted-dark/50'
+      break
+    default:
+      surfaceClass = ''
+      numberClass = ''
   }
 
   const todayRing = sq.isToday
     ? 'ring-1 ring-primary-light dark:ring-primary-dark ring-offset-1 ring-offset-bg-light dark:ring-offset-bg-dark'
     : ''
 
+  // Excluded / off week — bordered cell with a faint dot + dimmed date.
   if (sq.status === 'excluded') {
     return (
       <motion.div
@@ -127,9 +169,14 @@ function LargeHeatSquare({
         transition={{ duration: 0.2, delay: Math.min(index * 0.01, 0.3) }}
         title={label}
         aria-label={label}
-        className={`${baseClasses} ${todayRing} border border-border-light dark:border-border-dark flex items-center justify-center`}
+        className={`${baseClasses} ${todayRing} border border-dashed border-border-light dark:border-border-dark`}
       >
-        <span className="w-1 h-1 rounded-full bg-muted-light/50 dark:bg-muted-dark/50" aria-hidden="true" />
+        <span
+          className="text-[10px] font-mono leading-none text-muted-light/40 dark:text-muted-dark/40 line-through decoration-1"
+          aria-hidden="true"
+        >
+          {day}
+        </span>
       </motion.div>
     )
   }
@@ -147,11 +194,16 @@ function LargeHeatSquare({
       transition={{ duration: 0.2, delay: Math.min(index * 0.01, 0.3) }}
       title={label}
       aria-label={label}
-      className={`${baseClasses} ${stateClass} ${todayRing}`}
-    />
+      className={`${baseClasses} ${surfaceClass} ${todayRing}`}
+    >
+      <span className={`text-[10px] font-mono font-medium leading-none ${numberClass}`} aria-hidden="true">
+        {day}
+      </span>
+    </motion.div>
   )
 }
 
+// ── Totals cell ──────────────────────────────────────────────────────────
 function TotalCell({
   color,
   label,

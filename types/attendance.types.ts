@@ -24,18 +24,6 @@ export interface AttendanceHistoryClientProps {
   squares: AttendanceSquare[]
 }
 
-export interface AttendancePanelProps {
-  rows: UserAttendanceRow[]
-  attended: number
-  total: number
-  exclusions: { date: string; reason: string }[]
-  membership: {
-    annualOrder: any
-    quarterlyOrder: any
-    paymentMethod: any
-  }
-}
-
 export interface UserAttendanceRow {
   reinstated: boolean
   meetingId: string

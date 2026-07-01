@@ -28,7 +28,7 @@ export default async function AttendanceHistoryPage() {
 
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
-    select: { id: true, name: true, chapterId: true }
+    select: { id: true, name: true, chapterId: true, createdAt: true }
   })
 
   if (!user) redirect('/login')
@@ -58,7 +58,7 @@ export default async function AttendanceHistoryPage() {
         userName={user.name}
         rows={[]}
         summary={EMPTY_SUMMARY}
-        squares={buildYearOfThursdays(TRACKING_EPOCH, [], exclusions)}
+        squares={buildYearOfThursdays(TRACKING_EPOCH, [], exclusions, user.createdAt)}
       />
     )
   }
@@ -66,7 +66,7 @@ export default async function AttendanceHistoryPage() {
   const attendanceRows = attendanceResult.data.rows
   const rows = buildHistoryRows(attendanceRows, exclusions, corrections)
   const summary = computeSummary(rows)
-  const squares = buildYearOfThursdays(TRACKING_EPOCH, attendanceRows, exclusions)
+  const squares = buildYearOfThursdays(TRACKING_EPOCH, attendanceRows, exclusions, user.createdAt)
 
   return <AttendanceHistoryClient userName={user.name} rows={rows} summary={summary} squares={squares} />
 }

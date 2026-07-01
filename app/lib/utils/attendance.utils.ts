@@ -106,10 +106,21 @@ export function isExcludedThursday(d: Date, exclusionMap: Map<string, string>): 
 export function buildYearOfThursdays(
   from: Date,
   rows: AttendanceRow[],
-  exclusions: AttendanceExclusion[]
+  exclusions: AttendanceExclusion[],
+  memberCreatedAt: Date | string
 ): AttendanceSquare[] {
-  const start = new Date(from)
-  start.setUTCHours(0, 0, 0, 0)
+  // Start the grid at the LATER of chapter tracking start and when the member
+  // joined — so each member's heatmap begins fresh at their own week one,
+  // rather than showing greyed-out time before they existed.
+  const trackingStart = new Date(from)
+  trackingStart.setUTCHours(0, 0, 0, 0)
+
+  const joined = new Date(memberCreatedAt)
+  joined.setUTCHours(0, 0, 0, 0)
+
+  const start = joined > trackingStart ? new Date(joined) : new Date(trackingStart)
+
+  // Snap to the first Thursday on or after the start
   const dayShift = (4 - start.getUTCDay() + 7) % 7
   start.setUTCDate(start.getUTCDate() + dayShift)
 
