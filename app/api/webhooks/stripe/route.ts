@@ -184,7 +184,8 @@ export async function handleSubscriptionCreated(sub: Stripe.Subscription) {
     subId: sub.id,
     priceId,
     amount,
-    type
+    type,
+    status: sub.status
   })
 
   await pusher.trigger(`user-${user.id}`, 'subscription-confirmed', {

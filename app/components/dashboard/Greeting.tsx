@@ -23,7 +23,7 @@ export function Greeting({ currentUser }) {
             {today}
           </p>
 
-          <h1 className="font-sora font-black text-[22px] xs:text-[26px] sm:text-[30px] text-text-light dark:text-text-dark tracking-tight leading-[1.1] truncate">
+          <h1 className="font-black text-[22px] xs:text-[26px] sm:text-[30px] text-text-light dark:text-text-dark tracking-tight leading-[1.1] truncate">
             {greeting}, {firstName}.
           </h1>
         </div>

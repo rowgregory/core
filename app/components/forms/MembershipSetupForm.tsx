@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation'
 import { Lock } from 'lucide-react'
 import { RootState, useAppSelector } from '@/app/lib/redux/store'
 import { useSounds } from '@/app/lib/hooks/useSounds'
-import { createSubscriptions } from '@/app/lib/actions/stripe/createSubscriptions'
 
 interface MembershipSetupFormProps {
   onClose: () => void
@@ -14,6 +13,9 @@ interface MembershipSetupFormProps {
   joinDay: string
   setJoinDay: (v: string) => void
 }
+
+import { finalizeMembership } from '@/app/lib/actions/membership/finalizeMembership'
+import { startMembershipSetup } from '@/app/lib/actions/membership/startMembershipSetup'
 
 export function MembershipSetupForm({
   onClose,
@@ -48,27 +50,57 @@ export function MembershipSetupForm({
     setStatus('loading')
     setErrorMsg('')
 
-    const res = await createSubscriptions({
-      joinMonth: parseInt(joinMonth),
-      joinDay: parseInt(joinDay)
-    })
-
-    if (!res.success || !res.clientSecret) {
+    // 1. Create customer + SetupIntent (NO subscriptions yet)
+    const setupRes = await startMembershipSetup()
+    if (!setupRes.success || !setupRes.clientSecret) {
       setStatus('error')
-      setErrorMsg(res.error ?? 'Something went wrong.')
+      setErrorMsg(setupRes.error ?? 'Something went wrong.')
       return
     }
 
     const cardElement = elements.getElement(CardElement)
-    if (!cardElement) return
+    if (!cardElement) {
+      setStatus('error')
+      setErrorMsg('Card field not found.')
+      return
+    }
 
-    const { error } = await stripe.confirmCardSetup(res.clientSecret, {
+    // 2. Confirm the card — saves it to the customer
+    const { error, setupIntent } = await stripe.confirmCardSetup(setupRes.clientSecret, {
       payment_method: { card: cardElement }
     })
 
     if (error) {
       setStatus('error')
       setErrorMsg(error.message ?? 'Card setup failed.')
+      return
+    }
+
+    const paymentMethodId =
+      typeof setupIntent?.payment_method === 'string' ? setupIntent.payment_method : setupIntent?.payment_method?.id
+
+    if (!paymentMethodId) {
+      setStatus('error')
+      setErrorMsg('Card did not save correctly. Please try again.')
+      return
+    }
+
+    console.log('[membership] setupIntent result', {
+      status: setupIntent?.status,
+      paymentMethod: paymentMethodId, // ← extracted correctly?
+      error: error?.message
+    })
+
+    // 3. NOW create the subscriptions with the confirmed card as default
+    const finalizeRes = await finalizeMembership({
+      paymentMethodId,
+      joinMonth: parseInt(joinMonth),
+      joinDay: parseInt(joinDay)
+    })
+
+    if (!finalizeRes.success) {
+      setStatus('error')
+      setErrorMsg(finalizeRes.error ?? 'Failed to finish setup.')
       return
     }
 

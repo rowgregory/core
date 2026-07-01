@@ -28,7 +28,7 @@ export function ActiveMembershipCard({ membership, onEdit }: { membership: any; 
             <p className="text-[13px] font-nunito font-bold text-text-light dark:text-text-dark mt-1">$365 / year</p>
             <p className="text-f10 font-mono text-muted-light dark:text-muted-dark mt-1">
               {annualOrder.currentPeriodEnd ? (
-                <>Next renewal · {fmtDate(new Date(annualOrder.currentPeriodEnd).toISOString())}</>
+                <>Next renewal · {fmtDate(new Date(annualOrder.currentPeriodEnd).toISOString(), true)}</>
               ) : (
                 <>Awaiting first charge</>
               )}
@@ -43,7 +43,7 @@ export function ActiveMembershipCard({ membership, onEdit }: { membership: any; 
             <p className="text-[13px] font-nunito font-bold text-text-light dark:text-text-dark mt-1">$60 / quarter</p>
             <p className="text-f10 font-mono text-muted-light dark:text-muted-dark mt-1">
               {quarterlyOrder.currentPeriodEnd ? (
-                <>Next charge · {fmtDate(new Date(quarterlyOrder.currentPeriodEnd).toISOString())}</>
+                <>Next charge · {fmtDate(new Date(quarterlyOrder.currentPeriodEnd).toISOString(), true)}</>
               ) : (
                 <>First charge · Wednesday, July 1, 2026</>
               )}

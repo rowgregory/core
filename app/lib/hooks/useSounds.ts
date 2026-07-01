@@ -16,7 +16,8 @@ const SOUND_PATHS = {
   se12: '/sound-effects/se-12.mp3',
   se13: '/sound-effects/se-13.mp3',
   se14: '/sound-effects/se-14.mp3',
-  se15: '/sound-effects/se-15.mp3'
+  se15: '/sound-effects/se-15.mp3',
+  spin: '/sound-effects/wof/spin.mp3'
 } as const
 
 type SoundKey = keyof typeof SOUND_PATHS

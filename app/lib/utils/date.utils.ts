@@ -7,14 +7,14 @@ export function toDateKey(d: Date): string {
   return `${est.getFullYear()}-${String(est.getMonth() + 1).padStart(2, '0')}-${String(est.getDate()).padStart(2, '0')}`
 }
 
-export function fmtDate(iso: string) {
+export function fmtDate(iso: string, utc = false) {
   const d = iso.includes('T') ? new Date(iso) : new Date(`${iso}T12:00:00`)
   return d.toLocaleDateString('en-US', {
     weekday: 'long',
     month: 'long',
     day: 'numeric',
     year: 'numeric',
-    timeZone: 'America/New_York'
+    timeZone: utc ? 'UTC' : 'America/New_York'
   })
 }
 

@@ -55,9 +55,10 @@
   --color-on-dark: #94a3b8; /* slate-400 */
 
   /* ─── FONTS ──────────────────────────────────────────────────────────────── */
-  --font-sora: var(--font-sora);
+  /* --font-sora: var(--font-sora); */
   --font-quicksand: var(--font-quicksand);
   --font-nunito: var(--font-nunito);
+  --font-lobster: var(--font-lobsterTwo);
 
   /* ─── BREAKPOINTS ────────────────────────────────────────────────────────── */
   --breakpoint-xxs: 320px;

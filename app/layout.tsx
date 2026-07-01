@@ -1,6 +1,6 @@
 import './globals.css'
 import { SessionProvider } from 'next-auth/react'
-import { Sora } from 'next/font/google'
+import { Lobster_Two, Sora } from 'next/font/google'
 import { metadata as siteMetadata } from './metadata'
 import { GoogleAnalytics } from '@next/third-parties/google'
 import RootLayoutWrapper from './root-layout'
@@ -11,6 +11,13 @@ const sora = Sora({
   variable: '--font-sora',
   subsets: ['latin'],
   weight: ['200', '300', '400', '500', '600', '700', '800'],
+  display: 'swap',
+  preload: false
+})
+const lobsterTwo = Lobster_Two({
+  variable: '--font-sora',
+  subsets: ['latin'],
+  weight: ['400', '700'],
   display: 'swap',
   preload: false
 })
@@ -26,7 +33,7 @@ export default async function RootLayout({
         <meta property="fb:app_id" content="2265167933990680" />
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID!} />
       </head>
-      <body className={`${sora.variable} antialiased`}>
+      <body className={`${sora.variable} ${lobsterTwo.variable} antialiased`}>
         <SessionProvider>
           <RootLayoutWrapper>{children}</RootLayoutWrapper>
         </SessionProvider>
