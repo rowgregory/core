@@ -12,6 +12,10 @@ export default async function ActiveLayout({ children }: { children: React.React
     select: { membershipStatus: true }
   })
 
+  if (user?.membershipStatus === 'CANCELLED') {
+    redirect('/membership/cancelled')
+  }
+
   if (user?.membershipStatus !== 'ACTIVE') {
     redirect('/onboarding')
   }
