@@ -11,7 +11,7 @@ export async function deleteVisitor({ id }: { id: string }): Promise<{
   error?: string
 }> {
   const session = await auth()
-  if (!session?.user?.id || !session.user.isSuperUser) {
+  if (session.user.role !== 'SUPER_USER') {
     return { success: false, error: 'Unauthorized' }
   }
 

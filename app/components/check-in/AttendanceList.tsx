@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import Pusher from 'pusher-js'
+import { getPusherClient } from '@/app/lib/pusher/pusherClient'
 
 interface Attendee {
   name: string
@@ -18,15 +18,11 @@ export function AttendanceList({ initialAttendees, t }: AttendanceListProps) {
   const [attendees, setAttendees] = useState<Attendee[]>(initialAttendees)
 
   useEffect(() => {
-    const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
-      cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!
-    })
-
+    const pusher = getPusherClient()
     const channel = pusher.subscribe('meeting-attendance')
 
     channel.bind('check-in', (data: Attendee) => {
       setAttendees((prev) => {
-        // Avoid duplicates
         if (prev.some((a) => a.name === data.name)) return prev
         return [data, ...prev]
       })
@@ -34,8 +30,6 @@ export function AttendanceList({ initialAttendees, t }: AttendanceListProps) {
 
     return () => {
       channel.unbind_all()
-      pusher.unsubscribe('meeting-attendance')
-      pusher.disconnect()
     }
   }, [])
 

@@ -1,12 +1,12 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
-import Pusher from 'pusher-js'
 import { triggerReaction } from '@/app/lib/actions/triggerReaction'
 import { useRouter } from 'next/navigation'
 import { formatCurrency } from '@/app/lib/utils/currency.utils'
+import { getPusherClient } from '@/app/lib/pusher/pusherClient'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -107,16 +107,12 @@ export default function VisitorClient({
 }: VisitorClientProps) {
   const [floaters, setFloaters] = useState<FloatingEmoji[]>([])
   const [reactionCounts, setReactionCounts] = useState<Record<string, number>>({})
-  const pusherRef = useRef<Pusher | null>(null)
   const router = useRouter()
 
   // ── Pusher setup ──────────────────────────────────────────────────────────
   useEffect(() => {
-    pusherRef.current = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
-      cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!
-    })
-
-    const channel = pusherRef.current.subscribe('visitor-reactions')
+    const pusher = getPusherClient()
+    const channel = pusher.subscribe('visitor-reactions')
 
     channel.bind('reaction', (data: { emoji: string }) => {
       spawnFloater(data.emoji)
@@ -128,8 +124,6 @@ export default function VisitorClient({
 
     return () => {
       channel.unbind_all()
-      pusherRef.current?.unsubscribe('visitor-reactions')
-      pusherRef.current?.disconnect()
     }
   }, [])
 

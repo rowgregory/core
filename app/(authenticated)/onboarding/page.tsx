@@ -11,11 +11,11 @@ export default async function OnboardingPage() {
 
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
-    select: { hasAnnualSubscription: true, hasQuarterlySubscription: true, membershipStatus: true }
+    select: { membershipStatus: true }
   })
 
   // Already fully set up active members shouldn't be here
-  if (user?.hasAnnualSubscription && user?.hasQuarterlySubscription && user?.membershipStatus === 'ACTIVE') {
+  if (user?.membershipStatus === 'ACTIVE') {
     redirect('/dashboard')
   }
 

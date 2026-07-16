@@ -452,6 +452,7 @@ enum GameStatus {
 
 enum MembershipStatus {
   PENDING
+  APPROVED
   ACTIVE
   INACTIVE
   SUSPENDED

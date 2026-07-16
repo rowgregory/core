@@ -27,7 +27,7 @@ export async function handleGoogleCallback(user: NextAuthUser, account: Account)
     return false
   }
 
-  if (existingUser.membershipStatus !== 'ACTIVE') {
+  if (existingUser.membershipStatus === 'PENDING' || existingUser.membershipStatus === 'CANCELLED') {
     await createLog(
       'warning',
       `Google sign-in blocked — membership is ${existingUser.membershipStatus}: ${user.email}`,

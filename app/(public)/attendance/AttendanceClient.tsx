@@ -3,11 +3,11 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Check } from 'lucide-react'
-import Pusher from 'pusher-js'
 import { QRCodeSVG } from 'qrcode.react'
 import Picture from '@/app/components/common/Picture'
 import { useSounds } from '@/app/lib/hooks/useSounds'
 import { getInitials } from '@/app/lib/utils/shared.utils'
+import { getPusherClient } from '@/app/lib/pusher/pusherClient'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -301,9 +301,7 @@ export default function AttendanceClient({
   }
 
   useEffect(() => {
-    const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
-      cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!
-    })
+    const pusher = getPusherClient()
 
     const attendanceChannel = pusher.subscribe('meeting-attendance')
     attendanceChannel.bind('check-in', (data: { userId: string; checkedInAt: string }) => {
@@ -324,9 +322,6 @@ export default function AttendanceClient({
     return () => {
       attendanceChannel.unbind_all()
       reactionChannel.unbind_all()
-      pusher.unsubscribe('meeting-attendance')
-      pusher.unsubscribe('visitor-reactions')
-      pusher.disconnect()
     }
   }, [play])
 

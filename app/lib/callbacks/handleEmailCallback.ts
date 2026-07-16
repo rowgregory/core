@@ -19,7 +19,7 @@ export async function handleEmailCallback(user) {
     }
 
     // Account exists but membership is not ACTIVE
-    if (dbUser.membershipStatus !== 'ACTIVE') {
+    if (dbUser.membershipStatus === 'PENDING' || dbUser.membershipStatus === 'CANCELLED') {
       await createLog('warning', `Sign-in blocked — membership is ${dbUser.membershipStatus}: ${user.email}`, {
         location: ['auth.ts - signIn'],
         name: 'SignInBlockedInactiveMember',

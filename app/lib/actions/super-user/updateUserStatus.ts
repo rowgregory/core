@@ -7,13 +7,14 @@ import { chapterId } from '@/app/lib/constants/api/chapterId'
 import { Resend } from 'resend'
 import { memberAcceptedTemplate } from '../../email-templates/application-approved.template'
 import { memberRejectedTemplate } from '../../email-templates/application-rejected.template'
+import { MembershipStatus, UserRole } from '@prisma/client'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
-export async function updateUserStatus(userId: string, membershipStatus: 'ACTIVE' | 'REJECTED') {
+export async function updateUserStatus(userId: string, membershipStatus: MembershipStatus) {
   const session = await auth()
   if (!session?.user?.id) return { success: false, error: 'Unauthorized' }
-  if (!session.user.isSuperUser) return { success: false, error: 'Only superusers can update member status.' }
+  if (session.user.role !== 'SUPER_USER') return { success: false, error: 'Only superusers can update member status.' }
   if (!userId) return { success: false, error: 'User ID is required.' }
 
   const existingUser = await prisma.user.findFirst({
@@ -21,20 +22,23 @@ export async function updateUserStatus(userId: string, membershipStatus: 'ACTIVE
     select: { id: true, name: true, email: true }
   })
 
+  console.log('existingUser: ', existingUser)
+
   if (!existingUser) return { success: false, error: 'Member not found.' }
 
   const updateData =
     membershipStatus === 'ACTIVE'
       ? {
-          membershipStatus,
-          role: 'MEMBER',
+          membershipStatus: 'APPROVED' as MembershipStatus,
+          role: 'MEMBER' as UserRole,
           finalDecisionAt: new Date().toISOString(),
           isFinalDecisionMade: true,
           updatedAt: new Date()
         }
       : {
-          membershipStatus,
-          role: 'REJECTED',
+          membershipStatus: 'REJECTED' as MembershipStatus,
+          role: 'APPLICANT' as UserRole,
+          isFinalDecisionMade: true,
           rejectedAt: new Date().toISOString(),
           rejectedStep: 'REJECTED',
           isRejected: true,
@@ -43,19 +47,16 @@ export async function updateUserStatus(userId: string, membershipStatus: 'ACTIVE
 
   await prisma.user.update({ where: { id: userId }, data: updateData })
 
-  const baseUrl =
-    process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'https://coastalreferralxchange.com'
-
   if (membershipStatus === 'ACTIVE') {
     await resend.emails.send({
-      from: `Coastal Referral Exchange <noreply@coastalreferralxchange.com>`,
+      from: `Coastal Referral Exchange <membership@coastalreferralxchange.com>`,
       to: [existingUser.email],
       subject: "You've been accepted — welcome to Coastal Referral Exchange",
-      html: memberAcceptedTemplate(existingUser.name.split(' ')[0], `${baseUrl}/login`)
+      html: memberAcceptedTemplate(existingUser.name.split(' ')[0], `${process.env.NEXT_PUBLIC_SITE_URL}/login`)
     })
   } else {
     await resend.emails.send({
-      from: `Coastal Referral Exchange <noreply@coastalreferralxchange.com>`,
+      from: `Coastal Referral Exchange <membership@coastalreferralxchange.com>`,
       to: [existingUser.email],
       subject: 'Your application to Coastal Referral Exchange',
       html: memberRejectedTemplate(existingUser.name.split(' ')[0])

@@ -9,18 +9,8 @@ export default async function ActiveLayout({ children }: { children: React.React
 
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
-    select: { membershipStatus: true, hasAnnualSubscription: true, hasQuarterlySubscription: true }
+    select: { membershipStatus: true }
   })
-
-  // Cancelled members go to onboarding to re-subscribe
-  if (user?.membershipStatus === 'CANCELLED') {
-    redirect('/onboarding')
-  }
-
-  // Authenticated but hasn't finished billing setup → onboarding
-  // if (!user?.hasAnnualSubscription || !user?.hasQuarterlySubscription) {
-  //   redirect('/onboarding')
-  // }
 
   if (user?.membershipStatus !== 'ACTIVE') {
     redirect('/onboarding')

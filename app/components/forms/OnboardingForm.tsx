@@ -5,9 +5,9 @@ import { useRouter } from 'next/navigation'
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js'
 import { CreditCard, Lock, Loader2 } from 'lucide-react'
 import { createOnboardingSubscriptions } from '@/app/lib/actions/stripe/createOnboardingSubscriptions'
-import Pusher from 'pusher-js'
 import { useSession } from 'next-auth/react'
 import { RootState, useAppSelector } from '@/app/lib/redux/store'
+import { getPusherClient } from '@/app/lib/pusher/pusherClient'
 
 export default function OnboardingForm() {
   const router = useRouter()
@@ -25,9 +25,7 @@ export default function OnboardingForm() {
   const hasRouted = useRef(false)
 
   const setupPusherListener = () => {
-    const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
-      cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER
-    })
+    const pusher = getPusherClient()
     const channel = pusher.subscribe(`user-${userId}`)
 
     let annualConfirmed = false
@@ -50,7 +48,6 @@ export default function OnboardingForm() {
         hasRouted.current = true
         clearTimeout(timeout)
         channel.unbind_all()
-        pusher.unsubscribe(`user-${userId}`)
         router.push('/onboarding/welcome')
       }
     })

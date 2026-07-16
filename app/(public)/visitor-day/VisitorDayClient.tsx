@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Sun, Moon } from 'lucide-react'
 import dynamic from 'next/dynamic'
-import Pusher from 'pusher-js'
 import { QRCodeSVG } from 'qrcode.react'
+import { getPusherClient } from '@/app/lib/pusher/pusherClient'
 
 const Spline = dynamic(() => import('@splinetool/react-spline'), { ssr: false })
 
@@ -109,10 +109,7 @@ export default function VisitorDayTV({
   }
 
   useEffect(() => {
-    const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
-      cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!
-    })
-
+    const pusher = getPusherClient()
     const channel = pusher.subscribe('visitor-reactions')
 
     channel.bind('reaction', (data: { emoji: string; count: number }) => {
@@ -124,8 +121,6 @@ export default function VisitorDayTV({
 
     return () => {
       channel.unbind_all()
-      pusher.unsubscribe('visitor-reactions')
-      pusher.disconnect()
     }
   }, [])
 
