@@ -27,14 +27,14 @@ export const memberAcceptedTemplate = (firstName: string, dashboardUrl: string) 
               <p style="margin: 0 0 16px 0; color: #64748b; font-size: 14px; line-height: 1.6;">
                 Hi <strong style="color: #0c1e2e;">${firstName}</strong>,
               </p>
-              <p style="margin: 0 0 24px 0; color: #64748b; font-size: 14px; line-height: 1.6;">
-                We're excited to let you know that your application has been approved. Welcome to Coastal Referral Exchange — we look forward to seeing you on Thursday mornings.
-              </p>
+             <p style="margin: 0 0 24px 0; color: #64748b; font-size: 14px; line-height: 1.6;">
+                Your application has been approved. Click below to sign in and complete your membership setup — it only takes a minute.
+             </p>
               <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 0 0 24px 0;">
                 <tr>
                   <td>
                     <a href="${dashboardUrl}" style="display: inline-block; background-color: #0284c7; color: #ffffff; text-decoration: none; padding: 14px 32px; font-size: 14px; font-weight: 700; letter-spacing: 0.05em; font-family: -apple-system, BlinkMacSystemFont, sans-serif;">
-                      Go to Your Dashboard →
+                      Sign In to Get Started →
                     </a>
                   </td>
                 </tr>
