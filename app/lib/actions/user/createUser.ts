@@ -52,7 +52,6 @@ export async function createUser(input: CreateUserInput): Promise<CreateUserResp
         hasCompletedApplication: true,
         joinedAt: new Date(),
         expiresAt: calculateExpiresAt(),
-        tempId: '',
         chapter: {
           connect: {
             id: chapterId
