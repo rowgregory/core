@@ -47,6 +47,19 @@ export type SuperMemberEditData = {
   profileImage: string | null
   profileImageFilename: string | null
   yearsInBusiness?: string
+  hasAnnualSubscription: boolean
+  hasQuarterlySubscription: boolean
+  createdAt: string
+  lastLoginAt: string | null
+  paymentMethods: {
+    id: string
+    brand: string
+    last4: string
+    expMonth: number
+    expYear: number
+    isDefault: boolean
+    createdAt: string
+  }[]
   activity: {
     face2face: MemberParleyActivity[]
     tyfcb: MemberAnchorActivity[]
@@ -63,9 +76,8 @@ export async function getUserById(userId: string): Promise<{
     const session = await auth()
     if (!session?.user?.id) return { success: false, error: 'Unauthorized' }
 
-    // fetch alongside the user
-    const [user, face2face, tyfcb, referrals] = await Promise.all([
-      await prisma.user.findUnique({
+    const [user, face2face, tyfcb, referrals, paymentMethods] = await Promise.all([
+      prisma.user.findUnique({
         where: { id: userId },
         select: {
           id: true,
@@ -81,7 +93,11 @@ export async function getUserById(userId: string): Promise<{
           membershipStatus: true,
           profileImage: true,
           profileImageFilename: true,
-          yearsInBusiness: true
+          yearsInBusiness: true,
+          hasAnnualSubscription: true,
+          hasQuarterlySubscription: true,
+          createdAt: true,
+          lastLoginAt: true
         }
       }),
       prisma.parley.findMany({
@@ -123,6 +139,19 @@ export async function getUserById(userId: string): Promise<{
           receiver: { select: { name: true } },
           giverId: true
         }
+      }),
+      prisma.paymentMethod.findMany({
+        where: { userId },
+        orderBy: { createdAt: 'desc' },
+        select: {
+          id: true,
+          brand: true,
+          last4: true,
+          expMonth: true,
+          expYear: true,
+          isDefault: true,
+          createdAt: true
+        }
       })
     ])
 
@@ -143,6 +172,14 @@ export async function getUserById(userId: string): Promise<{
         profileImage: user.profileImage,
         profileImageFilename: user.profileImageFilename,
         yearsInBusiness: user.yearsInBusiness,
+        hasAnnualSubscription: user.hasAnnualSubscription,
+        hasQuarterlySubscription: user.hasQuarterlySubscription,
+        createdAt: user.createdAt.toISOString(),
+        lastLoginAt: user.lastLoginAt?.toISOString() ?? null,
+        paymentMethods: paymentMethods.map((pm) => ({
+          ...pm,
+          createdAt: pm.createdAt.toISOString()
+        })),
         activity: {
           face2face: face2face.map((p) => ({
             ...p,

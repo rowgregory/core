@@ -1,8 +1,10 @@
 'use server'
 
-// Shared. Creates a new game of a given type in LOBBY, wiping any prior game for
-// the chapter (one live game at a time). Seeds the initial `state` blob based on
-// type. Broadcasts GAME_RESET on the type's channel so screens re-fetch.
+/**
+  Shared. Creates a new game of a given type in LOBBY, wiping any prior game for
+  the chapter (one live game at a time). Seeds the initial `state` blob based on
+  type. Broadcasts GAME_RESET on the type's channel so screens re-fetch.
+ */
 
 import prisma from '@/prisma/client'
 import { auth } from '@/app/lib/auth'

@@ -14,7 +14,7 @@ export function ApplicantModal({ selected, setSelected }) {
 
   async function handleAccept() {
     setLoading('accept')
-    const res = await updateUserStatus(selected.id, 'ACTIVE')
+    const res = await updateUserStatus(selected.id, true)
     setLoading(null)
     if (res.success) {
       setSelected(null)
@@ -24,7 +24,7 @@ export function ApplicantModal({ selected, setSelected }) {
 
   async function handleReject() {
     setLoading('reject')
-    const res = await updateUserStatus(selected.id, 'REJECTED')
+    const res = await updateUserStatus(selected.id, false)
     setLoading(null)
     if (res.success) {
       setSelected(null)
@@ -98,7 +98,7 @@ export function ApplicantModal({ selected, setSelected }) {
                   { label: 'Email', value: selected.email },
                   { label: 'Phone', value: selected.phone ?? '—' },
                   { label: 'License number', value: selected.businessLicenseNumber || '—' },
-                  { label: 'Final decision at', value: fmtDate(selected.finalDecisionAt) || '—' },
+                  { label: 'Final decision at', value: fmtDate(selected?.finalDecisionAt) || '—' },
                   {
                     label: 'Applied',
                     value: new Date(selected.createdAt).toLocaleDateString('en-US', {

@@ -6,7 +6,7 @@ import LogsClient from '@/app/components/pages/SuperLogsClient'
 export default async function LogsPage() {
   const session = await auth()
   if (!session?.user) redirect('/login')
-  if (!session.user.isSuperUser) redirect('/dashboard')
+  if (session.user.role !== 'SUPER_USER') redirect('/dashboard')
 
   const result = await getLogs({ page: 1 })
 

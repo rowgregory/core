@@ -26,7 +26,7 @@ function nextThursdayISO(): string {
   return `${y}-${m}-${dd}`
 }
 
-export default function AttendanceHistoryClient({ members, rows }: AttendanceHistoryClientProps) {
+export default function AttendanceClient({ members, rows }: AttendanceHistoryClientProps) {
   const router = useRouter()
   const [date, setDate] = useState(nextThursdayISO())
   const [busy, setBusy] = useState(false)
